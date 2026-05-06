@@ -3,7 +3,12 @@
 > AI-native design system for humans and agents. Built on semantic CSS variables — no runtime magic, no hallucinations.
 
 [![MIT License](https://img.shields.io/badge/license-MIT-blue.svg)](LICENSE)
-[![usevyre.com](https://img.shields.io/badge/docs-usevyre.com-amber)](https://usevyre.com)
+[![Status](https://img.shields.io/badge/status-in%20development-orange)](https://usevyre.com)
+[![usevyre.com](https://img.shields.io/badge/site-usevyre.com-7c3aed)](https://usevyre.com)
+
+> ⚠️ **useVyre is currently in active development and not yet published to npm.**
+> Star or watch this repo to be notified when v1.0 launches.
+> Have feedback or ideas? [Open an issue →](https://github.com/gapra/usevyre/issues/new?labels=feedback&title=%5BFeedback%5D+)
 
 ---
 
@@ -25,65 +30,12 @@ Most design systems were built for humans reading documentation. useVyre is buil
 
 | Package | Description |
 |---------|-------------|
-| [`@vyre/tokens`](./packages/tokens) | DTCG-compliant design tokens → CSS variables, JS/TS, JSON |
-| [`@vyre/react`](./packages/react) | React + TypeScript components |
-| [`@vyre/vue`](./packages/vue) | Vue 3 + TypeScript components |
-| [`@vyre/ai-context`](./packages/ai-context) | Machine-readable context for LLM system prompts |
+| [`vyre/tokens`](./packages/tokens) | DTCG-compliant design tokens → CSS variables, JS/TS, JSON |
+| [`vyre/react`](./packages/react) | React + TypeScript components |
+| [`vyre/vue`](./packages/vue) | Vue 3 + TypeScript components |
+| [`vyre/ai-context`](./packages/ai-context) | Machine-readable context for LLM system prompts |
 
----
-
-## Quick Start
-
-```bash
-pnpm add @vyre/tokens @vyre/react
-```
-
-```css
-/* global.css */
-@import "@vyre/tokens/css";
-@import "@vyre/react/styles";
-```
-
-```tsx
-import { Button, Badge, Card, CardBody, Field, Input } from "@vyre/react"
-
-export function Example() {
-  return (
-    <Card variant="elevated">
-      <CardBody>
-        <Badge variant="teal" dot>Stable</Badge>
-        <Field label="Email" hint="We'll never share it.">
-          <Input type="email" placeholder="you@example.com" />
-        </Field>
-        <Button variant="accent">Get Started</Button>
-      </CardBody>
-    </Card>
-  )
-}
-```
-
----
-
-## AI Agent Setup
-
-Add useVyre context to your AI agent:
-
-**Cursor** — create `.cursor/rules/vyre.md`:
-```bash
-npx @vyre/ai-context init --cursor
-```
-
-**Claude Code** — add to `CLAUDE.md`:
-```bash
-npx @vyre/ai-context init --claude
-```
-
-**Windsurf** — create `.windsurf/rules/vyre.md`:
-```bash
-npx @vyre/ai-context init --windsurf
-```
-
-Or manually: copy `node_modules/@vyre/ai-context/dist/full-context.md` into your agent rules.
+> Packages are not yet published to npm. Installation instructions will be available at v1.0 launch.
 
 ---
 
@@ -113,6 +65,12 @@ usevyre/
 
 ---
 
+## Contributing
+
+This project is in early development. Feedback, ideas, and bug reports are very welcome — [open an issue](https://github.com/gapra/usevyre/issues) to get started.
+
+---
+
 ## License
 
-MIT © [Galih Pranowo](https://github.com/gapra)
+MIT © [Gapra](https://gapra.dev)
