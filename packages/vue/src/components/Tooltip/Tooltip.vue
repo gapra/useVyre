@@ -45,13 +45,14 @@ const props = withDefaults(
 
 const visible   = ref(false);
 const tooltipId = `vyre-tip-${Math.random().toString(36).slice(2, 7)}`;
-let   timer: ReturnType<typeof setTimeout> | null = null;
+let showTimer: ReturnType<typeof setTimeout> | null = null;
 
 function show() {
-  timer = setTimeout(() => { visible.value = true; }, props.delay);
+  if (showTimer) clearTimeout(showTimer);
+  showTimer = setTimeout(() => { visible.value = true; }, props.delay);
 }
 function hide() {
-  if (timer) clearTimeout(timer);
+  if (showTimer) { clearTimeout(showTimer); showTimer = null; }
   visible.value = false;
 }
 
@@ -92,6 +93,11 @@ const tooltipClasses  = computed(() => cn("vyre-tooltip", `vyre-tooltip--${props
 .vyre-tooltip-fade-enter-from,
 .vyre-tooltip-fade-leave-to {
   opacity: 0;
-  transform: scale(0.95);
+  transform: var(--_tt) scale(0.92);
+}
+.vyre-tooltip-fade-enter-to,
+.vyre-tooltip-fade-leave-from {
+  opacity: 1;
+  transform: var(--_tt) scale(1);
 }
 </style>

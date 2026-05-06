@@ -1,0 +1,167 @@
+---
+import DocsLayout       from "@/layouts/DocsLayout.astro";
+import ComponentPreview from "@/components/docs/ComponentPreview.astro";
+import PropsTable       from "@/components/docs/PropsTable.astro";
+import { AlertVariantsDemo, AlertNoTitleDemo, AlertDialogDemo, AlertDialogVariantsDemo } from "@/components/demos/Tier2Demo";
+
+const codeVariantsReact = `import { Alert } from "@vyre/react";
+
+{/* With title */}
+<Alert variant="info" title="Info">
+  Your export is being prepared. We'll notify you when it's ready.
+</Alert>
+
+<Alert variant="success" title="Saved!">
+  Changes saved successfully.
+</Alert>
+
+<Alert variant="warning" title="Heads up">
+  You're approaching your storage limit.
+</Alert>
+
+<Alert variant="danger" title="Error">
+  Failed to connect to the server.
+</Alert>`;
+
+const codeVariantsVue = `<script setup>
+import { Alert } from "@vyre/vue";
+</script>
+<template>
+  <Alert variant="success" title="Saved!">
+    Changes saved successfully.
+  </Alert>
+  <Alert variant="warning" title="Heads up">
+    You're approaching your storage limit.
+  </Alert>
+</template>`;
+
+const codeDismissibleReact = `const [visible, setVisible] = useState(true);
+
+{visible && (
+  <Alert variant="success" title="File uploaded" onClose={() => setVisible(false)}>
+    Your file has been processed successfully.
+  </Alert>
+)}`;
+
+const codeDismissibleVue = `<script setup>
+const visible = ref(true);
+</script>
+<template>
+  <Alert v-if="visible" variant="success" title="Saved!" @close="visible = false">
+    Your changes were saved.
+  </Alert>
+</template>`;
+
+const codeDialogReact = `import { AlertDialog, Button } from "@vyre/react";
+
+const [open, setOpen] = useState(false);
+
+<Button variant="danger" onClick={() => setOpen(true)}>Delete workspace</Button>
+
+<AlertDialog
+  open={open}
+  onOpenChange={setOpen}
+  title="Delete workspace?"
+  description="This action cannot be undone."
+  variant="danger"
+  confirmLabel="Delete workspace"
+  onConfirm={handleDelete}
+  onCancel={() => console.log("cancelled")}
+/>`;
+
+const codeDialogVue = `<script setup>
+import { AlertDialog, Button } from "@vyre/vue";
+const open = ref(false);
+</script>
+<template>
+  <Button variant="danger" @click="open = true">Delete workspace</Button>
+  <AlertDialog
+    v-model="open"
+    title="Delete workspace?"
+    description="This action cannot be undone."
+    variant="danger"
+    confirm-label="Delete workspace"
+    @confirm="handleDelete"
+  />
+</template>`;
+
+const alertProps = [
+  { name: "variant",  type: `"info" | "success" | "warning" | "danger"`,  default: `"info"`,   description: "Visual style and icon of the alert." },
+  { name: "title",    type: "string",                                       default: "—",        description: "Optional bold title above the description." },
+  { name: "onClose / @close", type: "() => void",                          default: "—",        description: "When provided, a dismiss ✕ button is rendered." },
+  { name: "#icon slot", type: "slot",                                       default: "—",        description: "Override the default variant icon." },
+  { name: "class / className", type: "string",                             default: "—",        description: "Additional CSS class." },
+];
+
+const dialogProps = [
+  { name: "open / v-model",   type: "boolean",                                               default: "—",            description: "Controlled open state." },
+  { name: "onOpenChange",     type: "(open: boolean) => void",                                default: "—",            description: "(React) Called on close." },
+  { name: "title",            type: "string",                                                 default: "—",            description: "Dialog heading." },
+  { name: "description",      type: "string",                                                 default: "—",            description: "Supporting body text below the title." },
+  { name: "variant",          type: `"danger" | "warning" | "info"`,                         default: `"danger"`,     description: "Icon and confirm button color." },
+  { name: "confirmLabel",     type: "string",                                                 default: `"Confirm"`,    description: "Label for the confirm action button." },
+  { name: "cancelLabel",      type: "string",                                                 default: `"Cancel"`,     description: "Label for the cancel button." },
+  { name: "onConfirm / @confirm", type: "() => void",                                        default: "—",            description: "Called when confirm button is clicked." },
+  { name: "onCancel / @cancel",   type: "() => void",                                        default: "—",            description: "Called when cancel/Escape/backdrop is triggered." },
+];
+---
+
+<DocsLayout title="Alert">
+  <div class="docs-header">
+    <div class="docs-header__meta">
+      <span class="vyre-badge vyre-badge--default">@vyre/react</span>
+      <span class="vyre-badge vyre-badge--default">@vyre/vue</span>
+      <span class="vyre-badge vyre-badge--teal">New</span>
+    </div>
+    <h1 class="docs-title">Alert</h1>
+    <p class="docs-lead">
+      Two components for communicating important information: <strong>Alert</strong> — an inline
+      status banner, and <strong>AlertDialog</strong> — a blocking confirmation modal for
+      destructive or critical actions.
+    </p>
+  </div>
+
+  <hr class="docs-divider" />
+
+  <h2 class="docs-h2">Variants</h2>
+  <p class="docs-p">
+    Four semantic variants each with a matching icon. Click the ✕ buttons to dismiss.
+  </p>
+  <ComponentPreview react={codeVariantsReact} vue={codeVariantsVue}>
+    <AlertVariantsDemo client:visible />
+  </ComponentPreview>
+
+  <h2 class="docs-h2">Without title</h2>
+  <p class="docs-p">
+    Omit <code>title</code> for a concise single-line alert.
+  </p>
+  <ComponentPreview react={`<Alert variant="info">\n  Your session will expire in 5 minutes.\n</Alert>`} vue={`<Alert variant="info">Your session will expire in 5 minutes.</Alert>`}>
+    <AlertNoTitleDemo client:visible />
+  </ComponentPreview>
+
+  <h2 class="docs-h2">AlertDialog — confirmation modal</h2>
+  <p class="docs-p">
+    <code>AlertDialog</code> renders as a portal overlay with focus trap and Escape support.
+    Always use it for destructive actions that cannot be undone.
+  </p>
+  <ComponentPreview react={codeDialogReact} vue={codeDialogVue}>
+    <AlertDialogDemo client:visible />
+  </ComponentPreview>
+
+  <h2 class="docs-h2">AlertDialog variants</h2>
+  <ComponentPreview react={`<AlertDialog variant="danger" title="Delete?" ... />\n<AlertDialog variant="warning" title="Proceed?" ... />\n<AlertDialog variant="info" title="Confirm?" ... />`} vue={`<AlertDialog variant="danger" title="Delete?" ... />`}>
+    <AlertDialogVariantsDemo client:visible />
+  </ComponentPreview>
+
+  <h2 class="docs-h2">Alert props</h2>
+  <PropsTable props={alertProps} />
+
+  <h2 class="docs-h2">AlertDialog props</h2>
+  <PropsTable props={dialogProps} />
+
+  <div class="docs-pagination">
+    <a href="/docs/components/dropdown-menu" class="docs-pagination__link docs-pagination__link--prev">
+      ← Dropdown Menu
+    </a>
+  </div>
+</DocsLayout>

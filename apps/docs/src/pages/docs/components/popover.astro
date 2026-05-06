@@ -1,0 +1,127 @@
+---
+import DocsLayout       from "@/layouts/DocsLayout.astro";
+import ComponentPreview from "@/components/docs/ComponentPreview.astro";
+import PropsTable       from "@/components/docs/PropsTable.astro";
+import { PopoverBasicDemo, PopoverPlacementDemo } from "@/components/demos/Tier2Demo";
+
+const codeBasicReact = `import { Popover, Button } from "@vyre/react";
+
+const [open, setOpen] = useState(false);
+
+<Popover
+  open={open}
+  onOpenChange={setOpen}
+  trigger={<Button variant="secondary">Open Popover</Button>}
+>
+  <p>Popover content goes here.</p>
+  <Button size="sm" variant="ghost" onClick={() => setOpen(false)}>Close</Button>
+</Popover>`;
+
+const codeBasicVue = `<script setup>
+import { Popover, Button } from "@vyre/vue";
+const open = ref(false);
+</script>
+<template>
+  <Popover v-model="open">
+    <template #trigger>
+      <Button variant="secondary">Open Popover</Button>
+    </template>
+    <p>Popover content goes here.</p>
+    <Button size="sm" variant="ghost" @click="open = false">Close</Button>
+  </Popover>
+</template>`;
+
+const codeUncontrolledReact = `{/* Omit open/onOpenChange for uncontrolled (toggle managed internally) */}
+<Popover trigger={<Button variant="ghost">Info</Button>}>
+  <p>Uncontrolled popover — no state needed.</p>
+</Popover>`;
+
+const codeUncontrolledVue = `<Popover>
+  <template #trigger>
+    <Button variant="ghost">Info</Button>
+  </template>
+  <p>Uncontrolled popover — no v-model needed.</p>
+</Popover>`;
+
+const codePlacementReact = `{/* Side only — defaults to center alignment */}
+<Popover placement="top"    trigger={<Button>Top</Button>}>...</Popover>
+<Popover placement="bottom" trigger={<Button>Bottom</Button>}>...</Popover>
+<Popover placement="left"   trigger={<Button>Left</Button>}>...</Popover>
+<Popover placement="right"  trigger={<Button>Right</Button>}>...</Popover>
+
+{/* Side + alignment */}
+<Popover placement="top-start"    trigger={<Button>top-start</Button>}>...</Popover>
+<Popover placement="bottom-end"   trigger={<Button>bottom-end</Button>}>...</Popover>
+<Popover placement="right-start"  trigger={<Button>right-start</Button>}>...</Popover>`;
+
+const codePlacementVue = `<Popover placement="top">
+  <template #trigger><Button size="sm">Top</Button></template>
+  ...
+</Popover>`;
+
+const props = [
+  { name: "trigger",        type: "ReactElement",                             default: "—",          description: "(React) The anchor element. Passed as a prop." },
+  { name: "#trigger slot",  type: "slot",                                     default: "—",          description: "(Vue) The anchor element. Use the named slot." },
+  { name: "open",           type: "boolean",                                  default: "—",          description: "Controlled open state. Omit for uncontrolled." },
+  { name: "onOpenChange / v-model", type: "(open: boolean) => void",          default: "—",          description: "Called when open state changes." },
+  { name: "placement",      type: `"top" | "top-start" | "top-end" | "bottom" | "bottom-start" | "bottom-end" | "left" | "left-start" | "left-end" | "right" | "right-start" | "right-end"`, default: `"bottom"`, description: "Side and alignment of the popover relative to the trigger." },
+  { name: "closeOnOutside", type: "boolean",                                  default: "true",       description: "Close when clicking outside the popover." },
+  { name: "class / className", type: "string",                                default: "—",          description: "Additional CSS class on the popover panel." },
+];
+---
+
+<DocsLayout title="Popover">
+  <div class="docs-header">
+    <div class="docs-header__meta">
+      <span class="vyre-badge vyre-badge--default">@vyre/react</span>
+      <span class="vyre-badge vyre-badge--default">@vyre/vue</span>
+      <span class="vyre-badge vyre-badge--teal">New</span>
+    </div>
+    <h1 class="docs-title">Popover</h1>
+    <p class="docs-lead">
+      A floating content panel anchored to a trigger element. Supports controlled and
+      uncontrolled usage, 4 placements, keyboard dismiss, and outside-click close.
+    </p>
+  </div>
+
+  <hr class="docs-divider" />
+
+  <h2 class="docs-h2">Basic</h2>
+  <p class="docs-p">
+    Pass a <code>trigger</code> prop (React) or use the <code>#trigger</code> slot (Vue).
+    The popover opens on click and closes on outside click or Escape.
+  </p>
+  <ComponentPreview react={codeBasicReact} vue={codeBasicVue}>
+    <PopoverBasicDemo client:visible />
+  </ComponentPreview>
+
+  <h2 class="docs-h2">Uncontrolled</h2>
+  <p class="docs-p">
+    Omit <code>open</code> / <code>onOpenChange</code> (React) or <code>v-model</code> (Vue)
+    to let the popover manage its own open state.
+  </p>
+  <ComponentPreview react={codeUncontrolledReact} vue={codeUncontrolledVue}>
+    <PopoverBasicDemo client:visible />
+  </ComponentPreview>
+
+  <h2 class="docs-h2">Placement</h2>
+  <p class="docs-p">
+    12 placement options: 4 sides × 3 alignments (<code>start</code>, center, <code>end</code>).
+    Positions are computed in JS so the popover always appears on the correct side of the trigger.
+  </p>
+  <ComponentPreview react={codePlacementReact} vue={codePlacementVue}>
+    <PopoverPlacementDemo client:visible />
+  </ComponentPreview>
+
+  <h2 class="docs-h2">Props</h2>
+  <PropsTable props={props} />
+
+  <div class="docs-pagination">
+    <a href="/docs/components/skeleton" class="docs-pagination__link docs-pagination__link--prev">
+      ← Skeleton
+    </a>
+    <a href="/docs/components/dropdown-menu" class="docs-pagination__link docs-pagination__link--next">
+      Dropdown Menu →
+    </a>
+  </div>
+</DocsLayout>

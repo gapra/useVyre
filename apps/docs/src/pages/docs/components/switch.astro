@@ -1,0 +1,66 @@
+---
+import DocsLayout       from "@/layouts/DocsLayout.astro";
+import ComponentPreview from "@/components/docs/ComponentPreview.astro";
+import PropsTable       from "@/components/docs/PropsTable.astro";
+import { SwitchDemo } from "@/components/demos/Tier1Demos";
+
+const codeBasicReact = `import { Switch } from "@vyre/react";
+
+// Uncontrolled
+<Switch defaultChecked />
+
+// Controlled
+const [on, setOn] = useState(false);
+<Switch checked={on} onCheckedChange={setOn} />`;
+
+const codeBasicVue = `<script setup>
+import { Switch } from "@vyre/vue";
+const on = ref(false);
+</script>
+<template>
+  <!-- Uncontrolled -->
+  <Switch :default-checked="true" />
+
+  <!-- Controlled -->
+  <Switch v-model="on" />
+</template>`;
+
+const props = [
+  { name: "checked",          type: "boolean",               default: "—",     description: "Controlled on/off state." },
+  { name: "defaultChecked",   type: "boolean",               default: "false", description: "Initial state (uncontrolled)." },
+  { name: "disabled",         type: "boolean",               default: "false", description: "Disables the switch." },
+  { name: "size",             type: `"sm" | "md"`,           default: `"md"`,  description: "Switch size." },
+  { name: "onCheckedChange",  type: "(v: boolean) => void",  default: "—",     description: "React only. Called when the state changes." },
+  { name: "class",            type: "string",                default: "—",     description: "Additional CSS class." },
+];
+---
+
+<DocsLayout title="Switch">
+  <div class="docs-header">
+    <div class="docs-header__meta">
+      <span class="vyre-badge vyre-badge--default">@vyre/react</span>
+      <span class="vyre-badge vyre-badge--default">@vyre/vue</span>
+    </div>
+    <h1 class="docs-title">Switch</h1>
+    <p class="docs-lead">
+      A toggle control rendered as <code>role="switch"</code> with full keyboard support.
+      Works controlled or uncontrolled.
+    </p>
+  </div>
+
+  <hr class="docs-divider" />
+
+  <h2 class="docs-h2">States & sizes</h2>
+  <ComponentPreview react={codeBasicReact} vue={codeBasicVue}>
+    <SwitchDemo client:visible />
+  </ComponentPreview>
+
+  <h2 class="docs-h2">Props</h2>
+  <PropsTable props={props} />
+
+  <div class="docs-pagination">
+    <a href="/docs/components/slider" class="docs-pagination__link docs-pagination__link--prev">
+      ← Slider
+    </a>
+  </div>
+</DocsLayout>

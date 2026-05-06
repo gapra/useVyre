@@ -20,7 +20,7 @@
  * </template>
  */
 
-import { onMounted, onUnmounted } from "vue";
+import { onUnmounted } from "vue";
 import { useToast } from "../../composables/useToast";
 import type { ToastItem } from "../../composables/useToast";
 

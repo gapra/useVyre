@@ -1,0 +1,119 @@
+---
+import DocsLayout       from "@/layouts/DocsLayout.astro";
+import ComponentPreview from "@/components/docs/ComponentPreview.astro";
+import PropsTable       from "@/components/docs/PropsTable.astro";
+import { ModalBasicDemo, ModalSizesDemo } from "@/components/demos/ModalDemo";
+
+const codeBasicReact = `import { useState } from "react";
+import { Modal, ModalHeader, ModalBody, ModalFooter, Button } from "@vyre/react";
+
+function Example() {
+  const [open, setOpen] = useState(false);
+  return (
+    <>
+      <Button variant="accent" onClick={() => setOpen(true)}>Open modal</Button>
+      <Modal open={open} onClose={() => setOpen(false)}>
+        <ModalHeader>
+          <h2>Confirm deletion</h2>
+        </ModalHeader>
+        <ModalBody>
+          <p>This action cannot be undone.</p>
+        </ModalBody>
+        <ModalFooter>
+          <Button variant="ghost" onClick={() => setOpen(false)}>Cancel</Button>
+          <Button variant="danger">Delete</Button>
+        </ModalFooter>
+      </Modal>
+    </>
+  );
+}`;
+
+const codeBasicVue = `<script setup>
+import { ref } from "vue";
+import { Modal, ModalHeader, ModalBody, ModalFooter, Button } from "@vyre/vue";
+const open = ref(false);
+</script>
+<template>
+  <Button variant="accent" @click="open = true">Open modal</Button>
+  <Modal :open="open" @close="open = false">
+    <ModalHeader>
+      <h2>Confirm deletion</h2>
+    </ModalHeader>
+    <ModalBody>
+      <p>This action cannot be undone.</p>
+    </ModalBody>
+    <ModalFooter>
+      <Button variant="ghost" @click="open = false">Cancel</Button>
+      <Button variant="danger">Delete</Button>
+    </ModalFooter>
+  </Modal>
+</template>`;
+
+const codeSizesReact = `<Modal open={open} onClose={close} size="sm">...</Modal>
+<Modal open={open} onClose={close} size="md">...</Modal>  {/* default */}
+<Modal open={open} onClose={close} size="lg">...</Modal>
+<Modal open={open} onClose={close} size="full">...</Modal>`;
+
+const codeSizesVue = `<Modal :open="open" @close="open = false" size="sm">...</Modal>
+<Modal :open="open" @close="open = false" size="md">...</Modal>
+<Modal :open="open" @close="open = false" size="lg">...</Modal>
+<Modal :open="open" @close="open = false" size="full">...</Modal>`;
+
+const props = [
+  { name: "open",            type: "boolean",               default: "—",     description: "Controls visibility. Required." },
+  { name: "onClose / @close", type: "() => void",           default: "—",     description: "Called when the user dismisses the modal (Escape key or backdrop click)." },
+  { name: "size",            type: `"sm" | "md" | "lg" | "full"`, default: `"md"`, description: "Modal width." },
+  { name: "closeOnBackdrop", type: "boolean",               default: "true",  description: "Close when clicking the backdrop." },
+  { name: "closeOnEsc",      type: "boolean",               default: "true",  description: "Close when pressing Escape." },
+  { name: "class / className", type: "string",              default: "—",     description: "Additional CSS class on the modal panel." },
+];
+---
+
+<DocsLayout title="Modal">
+  <div class="docs-header">
+    <div class="docs-header__meta">
+      <span class="vyre-badge vyre-badge--default">@vyre/react</span>
+      <span class="vyre-badge vyre-badge--default">@vyre/vue</span>
+    </div>
+    <h1 class="docs-title">Modal</h1>
+    <p class="docs-lead">
+      An accessible dialog overlay rendered via <code>Teleport</code> / <code>Portal</code> to
+      <code>&lt;body&gt;</code>. Traps focus, closes on Escape, and blocks background scroll.
+    </p>
+  </div>
+
+  <hr class="docs-divider" />
+
+  <h2 class="docs-h2">Basic</h2>
+  <ComponentPreview react={codeBasicReact} vue={codeBasicVue}>
+    <ModalBasicDemo client:visible />
+  </ComponentPreview>
+
+  <h2 class="docs-h2">Sizes</h2>
+  <p class="docs-p">
+    Use the <code>size</code> prop to control the modal panel width.
+    <code>"full"</code> fills the entire viewport.
+  </p>
+  <ComponentPreview react={codeSizesReact} vue={codeSizesVue}>
+    <ModalSizesDemo client:visible />
+  </ComponentPreview>
+
+  <h2 class="docs-h2">Accessibility</h2>
+  <p class="docs-p">
+    Modal renders <code>role="dialog"</code> with <code>aria-modal="true"</code>.
+    Focus is trapped inside and returns to the trigger element on close.
+    Keyboard: <kbd>Escape</kbd> closes, <kbd>Tab</kbd> cycles through focusable elements.
+  </p>
+
+  <h2 class="docs-h2">Props</h2>
+  <PropsTable props={props} />
+
+  <div class="docs-pagination">
+    <a href="/docs/components/input" class="docs-pagination__link docs-pagination__link--prev">
+      ← Input
+    </a>
+    <a href="/docs/components/select" class="docs-pagination__link docs-pagination__link--next">
+      Select →
+    </a>
+  </div>
+</DocsLayout>

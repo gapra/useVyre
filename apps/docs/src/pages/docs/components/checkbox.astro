@@ -1,0 +1,86 @@
+---
+import DocsLayout       from "@/layouts/DocsLayout.astro";
+import ComponentPreview from "@/components/docs/ComponentPreview.astro";
+import CodeTabs        from "@/components/docs/CodeTabs.astro";
+import PropsTable       from "@/components/docs/PropsTable.astro";
+import { CheckboxDemo } from "@/components/demos/Tier1Demos";
+
+const codeBasicReact = `import { Checkbox } from "@vyre/react";
+
+// Uncontrolled
+<Checkbox id="terms" defaultChecked />
+
+// Controlled
+const [checked, setChecked] = useState(false);
+<Checkbox
+  id="terms"
+  checked={checked}
+  onCheckedChange={setChecked}
+/>`;
+
+const codeBasicVue = `<script setup>
+import { Checkbox } from "@vyre/vue";
+const checked = ref(false);
+</script>
+<template>
+  <!-- Uncontrolled -->
+  <Checkbox id="terms" :default-checked="true" />
+
+  <!-- Controlled -->
+  <Checkbox id="terms" v-model="checked" />
+</template>`;
+
+const codeIndeterminateReact = `<Checkbox indeterminate defaultChecked />`;
+const codeIndeterminateVue   = `<Checkbox :indeterminate="true" :default-checked="true" />`;
+
+const props = [
+  { name: "checked",         type: "boolean",               default: "—",     description: "Controlled checked state." },
+  { name: "defaultChecked",  type: "boolean",               default: "—",     description: "Initial checked state (uncontrolled)." },
+  { name: "indeterminate",   type: "boolean",               default: "false", description: "Shows the indeterminate (dash) icon and sets input.indeterminate." },
+  { name: "disabled",        type: "boolean",               default: "false", description: "Disables the checkbox." },
+  { name: "size",            type: `"sm" | "md"`,           default: `"md"`,  description: "Checkbox size." },
+  { name: "id",              type: "string",                default: "—",     description: "HTML id — link to a <label> for accessibility." },
+  { name: "onCheckedChange", type: "(v: boolean) => void",  default: "—",     description: "React only. Called on change." },
+  { name: "class",           type: "string",                default: "—",     description: "Additional CSS class." },
+];
+---
+
+<DocsLayout title="Checkbox">
+  <div class="docs-header">
+    <div class="docs-header__meta">
+      <span class="vyre-badge vyre-badge--default">@vyre/react</span>
+      <span class="vyre-badge vyre-badge--default">@vyre/vue</span>
+    </div>
+    <h1 class="docs-title">Checkbox</h1>
+    <p class="docs-lead">
+      A styled checkbox input that supports checked, unchecked, indeterminate, and disabled states.
+      Works controlled or uncontrolled.
+    </p>
+  </div>
+
+  <hr class="docs-divider" />
+
+  <h2 class="docs-h2">States</h2>
+  <ComponentPreview react={codeBasicReact} vue={codeBasicVue}>
+    <CheckboxDemo client:visible />
+  </ComponentPreview>
+
+  <h2 class="docs-h2">Indeterminate</h2>
+  <p class="docs-p">
+    Set <code>indeterminate</code> to show a dash icon. Useful for parent checkboxes in a tree
+    where only some children are selected.
+  </p>
+  <CodeTabs react={codeIndeterminateReact} vue={codeIndeterminateVue} />
+
+  <h2 class="docs-h2">Props</h2>
+  <PropsTable props={props} />
+
+  <div class="docs-pagination">
+    <a href="/docs/components/avatar" class="docs-pagination__link docs-pagination__link--prev">
+      ← Avatar
+    </a>
+    <a href="/docs/components/label" class="docs-pagination__link docs-pagination__link--next">
+      Label →
+    </a>
+  </div>
+</DocsLayout>

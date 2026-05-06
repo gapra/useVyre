@@ -19,8 +19,8 @@ export default function HeroDemo() {
             Components with built-in AI context. Zero hallucinations.
           </p>
           <div style={{ display: "flex", gap: 8 }}>
-            <Button variant="accent" size="sm">Get started</Button>
-            <Button variant="ghost" size="sm">View on GitHub</Button>
+            <Button variant="accent" size="sm">Button</Button>
+            <Button variant="ghost" size="sm">Button Variant</Button>
           </div>
         </CardBody>
       </Card>

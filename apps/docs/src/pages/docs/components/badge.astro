@@ -1,0 +1,92 @@
+---
+import DocsLayout       from "@/layouts/DocsLayout.astro";
+import ComponentPreview from "@/components/docs/ComponentPreview.astro";
+import PropsTable       from "@/components/docs/PropsTable.astro";
+
+const codeVariantsReact = `import { Badge } from "@vyre/react";
+
+<Badge variant="default">Default</Badge>
+<Badge variant="accent">Accent</Badge>
+<Badge variant="teal">Teal</Badge>
+<Badge variant="success">Success</Badge>
+<Badge variant="warning">Warning</Badge>
+<Badge variant="danger">Danger</Badge>`;
+
+const codeVariantsVue = `<script setup>
+import { Badge } from "@vyre/vue";
+</script>
+<template>
+  <Badge variant="default">Default</Badge>
+  <Badge variant="accent">Accent</Badge>
+  <Badge variant="teal">Teal</Badge>
+  <Badge variant="success">Success</Badge>
+  <Badge variant="warning">Warning</Badge>
+  <Badge variant="danger">Danger</Badge>
+</template>`;
+
+const codeDotReact = `<Badge variant="success" dot>Online</Badge>
+<Badge variant="warning" dot>Degraded</Badge>
+<Badge variant="danger"  dot>Outage</Badge>`;
+
+const codeDotVue = `<Badge variant="success" dot>Online</Badge>
+<Badge variant="warning" dot>Degraded</Badge>
+<Badge variant="danger"  dot>Outage</Badge>`;
+
+const props = [
+  { name: "variant", type: `"default" | "accent" | "teal" | "success" | "warning" | "danger"`, default: `"default"`, description: "Colour style of the badge." },
+  { name: "dot",     type: "boolean",  default: "false", description: "Shows a small status dot before the label text." },
+  { name: "class / className", type: "string", default: "—", description: "Additional CSS class." },
+];
+---
+
+<DocsLayout title="Badge">
+  <div class="docs-header">
+    <div class="docs-header__meta">
+      <span class="vyre-badge vyre-badge--default">@vyre/react</span>
+      <span class="vyre-badge vyre-badge--default">@vyre/vue</span>
+    </div>
+    <h1 class="docs-title">Badge</h1>
+    <p class="docs-lead">
+      Small inline label used to indicate status, categories, or counts. Supports six colour
+      variants and an optional status dot.
+    </p>
+  </div>
+
+  <hr class="docs-divider" />
+
+  <h2 class="docs-h2">Variants</h2>
+  <ComponentPreview react={codeVariantsReact} vue={codeVariantsVue}>
+    <div style="display:flex;gap:8px;flex-wrap:wrap;align-items:center">
+      <span class="vyre-badge vyre-badge--default">Default</span>
+      <span class="vyre-badge vyre-badge--accent">Accent</span>
+      <span class="vyre-badge vyre-badge--teal">Teal</span>
+      <span class="vyre-badge vyre-badge--success">Success</span>
+      <span class="vyre-badge vyre-badge--warning">Warning</span>
+      <span class="vyre-badge vyre-badge--danger">Danger</span>
+    </div>
+  </ComponentPreview>
+
+  <h2 class="docs-h2">With status dot</h2>
+  <p class="docs-p">
+    Add <code>dot</code> to show a pulsing status indicator — useful for live system status displays.
+  </p>
+  <ComponentPreview react={codeDotReact} vue={codeDotVue}>
+    <div style="display:flex;gap:8px;align-items:center">
+      <span class="vyre-badge vyre-badge--success"><span class="vyre-badge__dot" aria-hidden="true"></span>Online</span>
+      <span class="vyre-badge vyre-badge--warning"><span class="vyre-badge__dot" aria-hidden="true"></span>Degraded</span>
+      <span class="vyre-badge vyre-badge--danger"><span class="vyre-badge__dot" aria-hidden="true"></span>Outage</span>
+    </div>
+  </ComponentPreview>
+
+  <h2 class="docs-h2">Props</h2>
+  <PropsTable props={props} />
+
+  <div class="docs-pagination">
+    <a href="/docs/components/button" class="docs-pagination__link docs-pagination__link--prev">
+      ← Button
+    </a>
+    <a href="/docs/components/card" class="docs-pagination__link docs-pagination__link--next">
+      Card →
+    </a>
+  </div>
+</DocsLayout>

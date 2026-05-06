@@ -1,0 +1,85 @@
+---
+import DocsLayout       from "@/layouts/DocsLayout.astro";
+import ComponentPreview from "@/components/docs/ComponentPreview.astro";
+import CodeTabs        from "@/components/docs/CodeTabs.astro";
+import PropsTable       from "@/components/docs/PropsTable.astro";
+import { LabelDemo } from "@/components/demos/Tier1Demos";
+
+const codeBasicReact = `import { Label } from "@vyre/react";
+
+<Label htmlFor="email">Email address</Label>
+<Label htmlFor="password" required>Password</Label>
+<Label htmlFor="notes" disabled>Disabled field</Label>`;
+
+const codeBasicVue = `<script setup>
+import { Label } from "@vyre/vue";
+</script>
+<template>
+  <Label for="email">Email address</Label>
+  <Label for="password" required>Password</Label>
+  <Label for="notes" disabled>Disabled field</Label>
+</template>`;
+
+const codeWithInputReact = `import { Label, Input } from "@vyre/react";
+
+<div style={{ display: "flex", flexDirection: "column", gap: 6 }}>
+  <Label htmlFor="email" required>Email</Label>
+  <Input id="email" type="email" placeholder="you@example.com" />
+</div>`;
+
+const codeWithInputVue = `<script setup>
+import { Label, Input } from "@vyre/vue";
+</script>
+<template>
+  <div style="display:flex;flex-direction:column;gap:6px">
+    <Label for="email" required>Email</Label>
+    <Input id="email" type="email" placeholder="you@example.com" />
+  </div>
+</template>`;
+
+const props = [
+  { name: "htmlFor",  type: "string",   default: "—",     description: "React: links label to input by id. Vue: use the native `for` attribute." },
+  { name: "required", type: "boolean",  default: "false", description: "Shows a red asterisk (*) after the label text." },
+  { name: "disabled", type: "boolean",  default: "false", description: "Reduces opacity to indicate the associated field is disabled." },
+  { name: "class",    type: "string",   default: "—",     description: "Additional CSS class." },
+];
+---
+
+<DocsLayout title="Label">
+  <div class="docs-header">
+    <div class="docs-header__meta">
+      <span class="vyre-badge vyre-badge--default">@vyre/react</span>
+      <span class="vyre-badge vyre-badge--default">@vyre/vue</span>
+    </div>
+    <h1 class="docs-title">Label</h1>
+    <p class="docs-lead">
+      A semantic <code>&lt;label&gt;</code> element with built-in required indicator and
+      disabled visual state. Always pair with a form control via <code>htmlFor</code>.
+    </p>
+  </div>
+
+  <hr class="docs-divider" />
+
+  <h2 class="docs-h2">Variants</h2>
+  <ComponentPreview react={codeBasicReact} vue={codeBasicVue}>
+    <LabelDemo client:visible />
+  </ComponentPreview>
+
+  <h2 class="docs-h2">With input</h2>
+  <p class="docs-p">
+    Pair <code>Label</code> with an <code>Input</code> using matching <code>htmlFor</code> / <code>id</code> attributes.
+  </p>
+  <CodeTabs react={codeWithInputReact} vue={codeWithInputVue} />
+
+  <h2 class="docs-h2">Props</h2>
+  <PropsTable props={props} />
+
+  <div class="docs-pagination">
+    <a href="/docs/components/checkbox" class="docs-pagination__link docs-pagination__link--prev">
+      ← Checkbox
+    </a>
+    <a href="/docs/components/progress" class="docs-pagination__link docs-pagination__link--next">
+      Progress →
+    </a>
+  </div>
+</DocsLayout>

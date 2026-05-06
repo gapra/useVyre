@@ -1,0 +1,114 @@
+---
+import DocsLayout       from "@/layouts/DocsLayout.astro";
+import ComponentPreview from "@/components/docs/ComponentPreview.astro";
+import PropsTable       from "@/components/docs/PropsTable.astro";
+
+const codeBasicReact = `import { Card, CardHeader, CardBody, CardFooter, Button, Badge } from "@vyre/react";
+
+<Card>
+  <CardHeader>
+    <Badge variant="teal">Component</Badge>
+    <h3>Card title</h3>
+  </CardHeader>
+  <CardBody>
+    <p>Card body content goes here.</p>
+  </CardBody>
+  <CardFooter>
+    <Button variant="ghost" size="sm">Cancel</Button>
+    <Button variant="accent" size="sm">Confirm</Button>
+  </CardFooter>
+</Card>`;
+
+const codeBasicVue = `<script setup>
+import { Card, CardHeader, CardBody, CardFooter, Button, Badge } from "@vyre/vue";
+</script>
+<template>
+  <Card>
+    <CardHeader>
+      <Badge variant="teal">Component</Badge>
+      <h3>Card title</h3>
+    </CardHeader>
+    <CardBody>
+      <p>Card body content goes here.</p>
+    </CardBody>
+    <CardFooter>
+      <Button variant="ghost" size="sm">Cancel</Button>
+      <Button variant="accent" size="sm">Confirm</Button>
+    </CardFooter>
+  </Card>
+</template>`;
+
+const codeVariantsReact = `<Card variant="default">Default</Card>
+<Card variant="elevated">Elevated (shadow)</Card>
+<Card variant="outlined">Outlined (border)</Card>`;
+
+const codeVariantsVue = `<Card variant="default">Default</Card>
+<Card variant="elevated">Elevated (shadow)</Card>
+<Card variant="outlined">Outlined (border)</Card>`;
+
+const cardProps = [
+  { name: "variant",   type: `"default" | "elevated" | "outlined"`, default: `"default"`, description: "Visual style of the card surface." },
+  { name: "class / className", type: "string", default: "—", description: "Additional CSS class." },
+];
+
+const sectionProps = [
+  { name: "class / className", type: "string", default: "—", description: "Additional CSS class on the section element." },
+];
+---
+
+<DocsLayout title="Card">
+  <div class="docs-header">
+    <div class="docs-header__meta">
+      <span class="vyre-badge vyre-badge--default">@vyre/react</span>
+      <span class="vyre-badge vyre-badge--default">@vyre/vue</span>
+    </div>
+    <h1 class="docs-title">Card</h1>
+    <p class="docs-lead">
+      A contained surface for grouping related content. Composed of optional
+      <code>CardHeader</code>, <code>CardBody</code>, and <code>CardFooter</code> sub-components.
+    </p>
+  </div>
+
+  <hr class="docs-divider" />
+
+  <h2 class="docs-h2">Anatomy</h2>
+  <ComponentPreview react={codeBasicReact} vue={codeBasicVue}>
+    <div class="vyre-card" style="max-width:360px;width:100%">
+      <div class="vyre-card__header">
+        <span class="vyre-badge vyre-badge--teal">Component</span>
+        <h3 style="margin:8px 0 0;font-size:1rem;font-weight:600">Card title</h3>
+      </div>
+      <div class="vyre-card__body">
+        <p style="margin:0;font-size:0.875rem;opacity:0.75">Card body content goes here.</p>
+      </div>
+      <div class="vyre-card__footer">
+        <button class="vyre-btn vyre-btn--ghost vyre-btn--sm"><span class="vyre-btn__label">Cancel</span></button>
+        <button class="vyre-btn vyre-btn--accent vyre-btn--sm"><span class="vyre-btn__label">Confirm</span></button>
+      </div>
+    </div>
+  </ComponentPreview>
+
+  <h2 class="docs-h2">Variants</h2>
+  <ComponentPreview react={codeVariantsReact} vue={codeVariantsVue}>
+    <div style="display:flex;gap:12px;flex-wrap:wrap;align-items:flex-start">
+      <div class="vyre-card" style="width:140px;padding:16px;font-size:0.8rem">Default</div>
+      <div class="vyre-card vyre-card--elevated" style="width:140px;padding:16px;font-size:0.8rem">Elevated</div>
+      <div class="vyre-card vyre-card--outlined" style="width:140px;padding:16px;font-size:0.8rem">Outlined</div>
+    </div>
+  </ComponentPreview>
+
+  <h2 class="docs-h2">Card props</h2>
+  <PropsTable props={cardProps} />
+
+  <h2 class="docs-h2">CardHeader / CardBody / CardFooter props</h2>
+  <PropsTable props={sectionProps} />
+
+  <div class="docs-pagination">
+    <a href="/docs/components/badge" class="docs-pagination__link docs-pagination__link--prev">
+      ← Badge
+    </a>
+    <a href="/docs/components/input" class="docs-pagination__link docs-pagination__link--next">
+      Input →
+    </a>
+  </div>
+</DocsLayout>

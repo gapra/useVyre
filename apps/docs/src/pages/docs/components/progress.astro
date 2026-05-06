@@ -1,0 +1,80 @@
+---
+import DocsLayout       from "@/layouts/DocsLayout.astro";
+import ComponentPreview from "@/components/docs/ComponentPreview.astro";
+import PropsTable       from "@/components/docs/PropsTable.astro";
+import { ProgressDemo, ProgressSizesDemo } from "@/components/demos/Tier1Demos";
+
+const codeBasicReact = `import { Progress } from "@vyre/react";
+
+<Progress value={30} />
+<Progress value={65} variant="accent" />
+<Progress value={90} variant="success" />
+<Progress value={45} variant="danger" />
+<Progress indeterminate />`;
+
+const codeBasicVue = `<script setup>
+import { Progress } from "@vyre/vue";
+</script>
+<template>
+  <Progress :value="30" />
+  <Progress :value="65" variant="accent" />
+  <Progress :value="90" variant="success" />
+  <Progress :value="45" variant="danger" />
+  <Progress :indeterminate="true" />
+</template>`;
+
+const codeSizesReact = `<Progress value={60} size="sm" variant="accent" />
+<Progress value={60} size="md" variant="accent" />
+<Progress value={60} size="lg" variant="accent" />`;
+
+const codeSizesVue = `<Progress :value="60" size="sm" variant="accent" />
+<Progress :value="60" size="md" variant="accent" />
+<Progress :value="60" size="lg" variant="accent" />`;
+
+const props = [
+  { name: "value",         type: "number",                                                       default: "—",        description: "Current value. Omit when using indeterminate." },
+  { name: "max",           type: "number",                                                       default: "100",      description: "Maximum value." },
+  { name: "indeterminate", type: "boolean",                                                      default: "false",    description: "Shows an animated pulse instead of a fill bar." },
+  { name: "size",          type: `"sm" | "md" | "lg"`,                                           default: `"md"`,     description: "Bar height." },
+  { name: "variant",       type: `"default" | "accent" | "teal" | "success" | "danger"`,         default: `"default"`, description: "Fill colour." },
+  { name: "class",         type: "string",                                                       default: "—",        description: "Additional CSS class." },
+];
+---
+
+<DocsLayout title="Progress">
+  <div class="docs-header">
+    <div class="docs-header__meta">
+      <span class="vyre-badge vyre-badge--default">@vyre/react</span>
+      <span class="vyre-badge vyre-badge--default">@vyre/vue</span>
+    </div>
+    <h1 class="docs-title">Progress</h1>
+    <p class="docs-lead">
+      Displays the completion status of a task. Supports deterministic fill, five colour variants,
+      three sizes, and an indeterminate animated mode.
+    </p>
+  </div>
+
+  <hr class="docs-divider" />
+
+  <h2 class="docs-h2">Variants</h2>
+  <ComponentPreview react={codeBasicReact} vue={codeBasicVue}>
+    <ProgressDemo client:visible />
+  </ComponentPreview>
+
+  <h2 class="docs-h2">Sizes</h2>
+  <ComponentPreview react={codeSizesReact} vue={codeSizesVue}>
+    <ProgressSizesDemo client:visible />
+  </ComponentPreview>
+
+  <h2 class="docs-h2">Props</h2>
+  <PropsTable props={props} />
+
+  <div class="docs-pagination">
+    <a href="/docs/components/label" class="docs-pagination__link docs-pagination__link--prev">
+      ← Label
+    </a>
+    <a href="/docs/components/separator" class="docs-pagination__link docs-pagination__link--next">
+      Separator →
+    </a>
+  </div>
+</DocsLayout>
