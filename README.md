@@ -30,18 +30,12 @@ Most design systems were built for humans reading documentation. useVyre is buil
 
 | Package | Description |
 |---------|-------------|
-| [`@vyre/tokens`](./packages/tokens) | DTCG-compliant design tokens → CSS variables, JS/TS, JSON |
-| [`@vyre/react`](./packages/react) | React + TypeScript components |
-| [`@vyre/vue`](./packages/vue) | Vue 3 + TypeScript components |
-| [`@vyre/ai-context`](./packages/ai-context) | Machine-readable context for LLM system prompts |
+| [`vyre/tokens`](./packages/tokens) | DTCG-compliant design tokens → CSS variables, JS/TS, JSON |
+| [`vyre/react`](./packages/react) | React + TypeScript components |
+| [`vyre/vue`](./packages/vue) | Vue 3 + TypeScript components |
+| [`vyre/ai-context`](./packages/ai-context) | Machine-readable context for LLM system prompts |
 
 > Packages are not yet published to npm. Installation instructions will be available at v1.0 launch.
-
----
-
-## Preview
-
-The docs site preview is available at [preview.usevyre.com](https://preview.usevyre.com) — showing components, tokens, and AI context in action.
 
 ---
 
