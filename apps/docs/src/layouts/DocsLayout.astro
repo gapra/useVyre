@@ -1,0 +1,36 @@
+---
+import BaseLayout   from "./BaseLayout.astro";
+import TopNav       from "@/components/layout/TopNav.astro";
+import Sidebar      from "@/components/layout/Sidebar.astro";
+
+export interface Props {
+  title:       string;
+  description?: string;
+}
+
+const { title, description } = Astro.props;
+const pathname = Astro.url.pathname;
+---
+
+<BaseLayout title={title} description={description}>
+  <div class="docs-root">
+    <TopNav />
+
+    <div class="docs-body">
+      <aside class="docs-sidebar">
+        <Sidebar currentPath={pathname} />
+      </aside>
+
+      <main class="docs-content" id="main-content">
+        <article class="docs-article">
+          <slot />
+        </article>
+      </main>
+
+      <!-- Table of contents slot (optional per-page) -->
+      <aside class="docs-toc">
+        <slot name="toc" />
+      </aside>
+    </div>
+  </div>
+</BaseLayout>

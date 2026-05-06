@@ -1,0 +1,14 @@
+/*
+ * @vyre/vue — Component Styles
+ *
+ * useVyre component CSS classes are framework-agnostic.
+ * This file re-exports the same styles used by @vyre/react.
+ *
+ * USAGE:
+ *   import "@vyre/tokens/css";         ← design tokens (required)
+ *   import "@vyre/vue/styles";         ← component styles (required)
+ *
+ * If you are already using @vyre/react in the same project,
+ * import only one of the two — the CSS classes are identical.
+ */
+@import "@vyre/react/styles";

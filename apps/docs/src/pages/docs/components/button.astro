@@ -1,0 +1,174 @@
+---
+import DocsLayout        from "@/layouts/DocsLayout.astro";
+import ComponentPreview  from "@/components/docs/ComponentPreview.astro";
+import PropsTable        from "@/components/docs/PropsTable.astro";
+import { ButtonVariantsDemo, ButtonSizesDemo, ButtonStatesDemo } from "@/components/demos/ButtonDemo";
+
+const codeVariantsReact = `import { Button } from "@vyre/react";
+
+<Button variant="primary">Primary</Button>
+<Button variant="secondary">Secondary</Button>
+<Button variant="ghost">Ghost</Button>
+<Button variant="accent">Accent</Button>
+<Button variant="teal">Teal</Button>
+<Button variant="danger">Danger</Button>`;
+
+const codeVariantsVue = `<script setup>
+import { Button } from "@vyre/vue";
+</script>
+<template>
+  <Button variant="primary">Primary</Button>
+  <Button variant="secondary">Secondary</Button>
+  <Button variant="ghost">Ghost</Button>
+  <Button variant="accent">Accent</Button>
+  <Button variant="teal">Teal</Button>
+  <Button variant="danger">Danger</Button>
+</template>`;
+
+const codeSizesReact = `<Button variant="accent" size="sm">Small</Button>
+<Button variant="accent" size="md">Medium</Button>
+<Button variant="accent" size="lg">Large</Button>`;
+
+const codeSizesVue = `<Button variant="accent" size="sm">Small</Button>
+<Button variant="accent" size="md">Medium</Button>
+<Button variant="accent" size="lg">Large</Button>`;
+
+const codeStatesReact = `<Button variant="accent">Default</Button>
+<Button variant="accent" loading>Loading</Button>
+<Button variant="accent" disabled>Disabled</Button>`;
+
+const codeStatesVue = `<Button variant="accent">Default</Button>
+<Button variant="accent" :loading="true">Loading</Button>
+<Button variant="accent" :disabled="true">Disabled</Button>`;
+
+const codeIconReact = `import { Button } from "@vyre/react";
+import { Search } from "lucide-react"; // any icon library
+
+// Icon before label
+<Button variant="secondary" leftIcon={<Search size={14} />}>
+  Search
+</Button>
+
+// Icon only (use size="icon" + aria-label)
+<Button variant="ghost" size="icon" aria-label="Search">
+  <Search size={16} />
+</Button>
+
+// As anchor link
+<Button as="a" href="/docs" variant="accent">
+  Read Docs
+</Button>`;
+
+const codeIconVue = `<script setup>
+import { Button } from "@vyre/vue";
+</script>
+<template>
+  <!-- Icon before label -->
+  <Button variant="secondary">
+    <template #left-icon>
+      <SearchIcon />
+    </template>
+    Search
+  </Button>
+
+  <!-- Icon only -->
+  <Button variant="ghost" size="icon" aria-label="Search">
+    <SearchIcon />
+  </Button>
+
+  <!-- As anchor -->
+  <Button as="a" href="/docs" variant="accent">
+    Read Docs
+  </Button>
+</template>`;
+
+const props = [
+  { name: "variant",   type: `"primary" | "secondary" | "ghost" | "accent" | "teal" | "danger"`, default: `"secondary"`, description: "Visual style variant." },
+  { name: "size",      type: `"sm" | "md" | "lg" | "icon"`,  default: `"md"`,       description: "Size scale. Use icon for square icon-only buttons." },
+  { name: "loading",   type: "boolean",   default: "false",    description: "Shows spinner and disables interaction." },
+  { name: "disabled",  type: "boolean",   default: "false",    description: "Disables the button." },
+  { name: "as",        type: "ElementType / string", default: `"button"`, description: 'Render as a different element. Use "a" for link buttons.' },
+  { name: "leftIcon",  type: "ReactNode", default: "—",        description: "React only. Icon rendered before the label." },
+  { name: "rightIcon", type: "ReactNode", default: "—",        description: "React only. Icon rendered after the label." },
+  { name: "className", type: "string",    default: "—",        description: "Additional CSS class names." },
+];
+---
+
+<DocsLayout title="Button">
+  <div class="docs-header">
+    <div class="docs-header__meta">
+      <span class="vyre-badge vyre-badge--default">@vyre/react</span>
+      <span class="vyre-badge vyre-badge--default">@vyre/vue</span>
+    </div>
+    <h1 class="docs-title">Button</h1>
+    <p class="docs-lead">
+      Triggers actions and navigation. Supports 6 variants, 4 sizes,
+      loading state, icons, and polymorphic rendering via <code>as</code>.
+    </p>
+  </div>
+
+  <hr class="docs-divider" />
+
+  <!-- Variants -->
+  <h2 class="docs-h2">Variants</h2>
+  <ComponentPreview react={codeVariantsReact} vue={codeVariantsVue}>
+    <ButtonVariantsDemo client:visible />
+  </ComponentPreview>
+
+  <!-- Sizes -->
+  <h2 class="docs-h2">Sizes</h2>
+  <ComponentPreview react={codeSizesReact} vue={codeSizesVue}>
+    <ButtonSizesDemo client:visible />
+  </ComponentPreview>
+
+  <!-- States -->
+  <h2 class="docs-h2">States</h2>
+  <ComponentPreview react={codeStatesReact} vue={codeStatesVue}>
+    <ButtonStatesDemo client:visible />
+  </ComponentPreview>
+
+  <!-- Icons + polymorphic -->
+  <h2 class="docs-h2">Icons & polymorphic</h2>
+  <p class="docs-p">
+    Use <code>leftIcon</code> / <code>rightIcon</code> props in React, or named slots
+    <code>#left-icon</code> / <code>#right-icon</code> in Vue. Pass <code>as="a"</code>
+    to render as an anchor while keeping all button styles.
+  </p>
+  <ComponentPreview react={codeIconReact} vue={codeIconVue} bg="transparent">
+    <!-- static display — icons require a real icon lib -->
+    <div style="display:flex;gap:10px;flex-wrap:wrap;align-items:center;">
+      <button class="vyre-btn vyre-btn--secondary vyre-btn--md">
+        <span class="vyre-btn__icon vyre-btn__icon--left" aria-hidden="true">
+          <svg width="14" height="14" viewBox="0 0 14 14" fill="none">
+            <circle cx="6" cy="6" r="4" stroke="currentColor" stroke-width="1.5"/>
+            <path d="M9.5 9.5L12 12" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/>
+          </svg>
+        </span>
+        <span class="vyre-btn__label">Search</span>
+      </button>
+      <button class="vyre-btn vyre-btn--ghost vyre-btn--icon" aria-label="Search">
+        <svg width="16" height="16" viewBox="0 0 14 14" fill="none">
+          <circle cx="6" cy="6" r="4" stroke="currentColor" stroke-width="1.5"/>
+          <path d="M9.5 9.5L12 12" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/>
+        </svg>
+      </button>
+      <a href="#" class="vyre-btn vyre-btn--accent vyre-btn--md">
+        <span class="vyre-btn__label">Read Docs</span>
+      </a>
+    </div>
+  </ComponentPreview>
+
+  <!-- Props -->
+  <h2 class="docs-h2">Props</h2>
+  <PropsTable props={props} />
+
+  <!-- Nav -->
+  <div class="docs-pagination">
+    <a href="/docs/getting-started" class="docs-pagination__link docs-pagination__link--prev">
+      ← Getting Started
+    </a>
+    <a href="/docs/components/badge" class="docs-pagination__link docs-pagination__link--next">
+      Badge →
+    </a>
+  </div>
+</DocsLayout>

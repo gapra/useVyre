@@ -1,0 +1,6 @@
+{
+  "buildCommand": "pnpm --filter @vyre/tokens build && pnpm --filter @vyre/docs build",
+  "outputDirectory": "apps/docs/dist",
+  "installCommand": "pnpm install",
+  "framework": "astro"
+}

@@ -1,0 +1,21 @@
+{
+  "name": "@vyre/ai-context",
+  "version": "0.1.0",
+  "description": "useVyre AI context — inject into LLM system prompts to eliminate UI hallucinations",
+  "keywords": ["design-system", "ai", "llm", "context", "vyre"],
+  "license": "MIT",
+  "type": "module",
+  "exports": {
+    ".":              "./dist/index.js",
+    "./cursor":       "./dist/cursor-rules.md",
+    "./claude":       "./dist/claude-context.md",
+    "./windsurf":     "./dist/windsurf-rules.md",
+    "./copilot":      "./dist/copilot-instructions.md",
+    "./full":         "./dist/full-context.md"
+  },
+  "files": ["dist"],
+  "scripts": {
+    "build": "node scripts/build.js",
+    "clean": "rm -rf dist"
+  }
+}

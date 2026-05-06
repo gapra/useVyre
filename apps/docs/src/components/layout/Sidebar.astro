@@ -1,0 +1,39 @@
+---
+import { navigation } from "@/data/nav";
+
+export interface Props {
+  currentPath: string;
+}
+
+const { currentPath } = Astro.props;
+---
+
+<nav class="sidebar" aria-label="Docs navigation">
+  {navigation.map((section) => (
+    <div class="sidebar__section">
+      <p class="sidebar__heading">{section.title}</p>
+      <ul class="sidebar__list" role="list">
+        {section.items.map((item) => {
+          const isActive = currentPath === item.href ||
+            currentPath.startsWith(item.href + "/");
+          return (
+            <li>
+              <a
+                href={item.href}
+                class:list={["sidebar__link", { "sidebar__link--active": isActive }]}
+                aria-current={isActive ? "page" : undefined}
+              >
+                {item.title}
+                {item.badge && (
+                  <span class="vyre-badge vyre-badge--accent" style="font-size:0.6rem;padding:1px 6px;">
+                    {item.badge}
+                  </span>
+                )}
+              </a>
+            </li>
+          );
+        })}
+      </ul>
+    </div>
+  ))}
+</nav>

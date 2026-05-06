@@ -1,0 +1,53 @@
+{
+  "name": "@vyre/vue",
+  "version": "0.1.0",
+  "description": "useVyre design system — Vue 3 components, AI-native, zero-runtime styling",
+  "keywords": ["design-system", "vue", "vue3", "components", "ai-native", "vyre"],
+  "homepage": "https://usevyre.com/docs/vue",
+  "repository": { "type": "git", "url": "https://github.com/gapra/usevyre" },
+  "license": "MIT",
+  "type": "module",
+  "main":   "./src/index.ts",
+  "module": "./src/index.ts",
+  "types":  "./src/index.ts",
+  "exports": {
+    ".": {
+      "import": "./src/index.ts",
+      "types":  "./src/index.ts"
+    },
+    "./styles": "./src/styles/components.css"
+  },
+  "publishConfig": {
+    "main":   "./dist/index.cjs",
+    "module": "./dist/index.js",
+    "types":  "./dist/index.d.ts",
+    "exports": {
+      ".": {
+        "import":  "./dist/index.js",
+        "require": "./dist/index.cjs",
+        "types":   "./dist/index.d.ts"
+      },
+      "./styles": "./src/styles/components.css"
+    }
+  },
+  "files": ["dist", "src/styles"],
+  "scripts": {
+    "build":     "vue-tsc --declaration --emitDeclarationOnly && vite build",
+    "dev":       "vite build --watch",
+    "typecheck": "vue-tsc --noEmit",
+    "clean":     "rm -rf dist"
+  },
+  "peerDependencies": {
+    "vue": ">=3.3.0"
+  },
+  "devDependencies": {
+    "@vitejs/plugin-vue": "^5.0.0",
+    "typescript": "^5.4.0",
+    "vite": "^5.0.0",
+    "vue": "^3.4.0",
+    "vue-tsc": "^2.0.0"
+  },
+  "dependencies": {
+    "@vyre/tokens": "workspace:*"
+  }
+}

@@ -1,0 +1,29 @@
+{
+  "name": "usevyre",
+  "private": true,
+  "description": "useVyre — AI-native design system for humans and agents",
+  "workspaces": [
+    "packages/*",
+    "apps/*"
+  ],
+  "scripts": {
+    "build":       "pnpm -r build",
+    "dev":         "pnpm -r --parallel dev",
+    "dev:docs":    "pnpm --filter @vyre/tokens build && pnpm --filter @vyre/docs dev",
+    "build:docs":  "pnpm --filter @vyre/tokens build && pnpm --filter @vyre/docs build",
+    "typecheck":   "pnpm -r typecheck",
+    "clean":       "pnpm -r clean && rm -rf node_modules",
+    "changeset":   "changeset",
+    "version":     "changeset version",
+    "release":     "pnpm build && changeset publish"
+  },
+  "devDependencies": {
+    "@changesets/cli": "^2.27.0",
+    "typescript": "^5.4.0"
+  },
+  "engines": {
+    "node": ">=18.0.0",
+    "pnpm": ">=9.0.0"
+  },
+  "packageManager": "pnpm@9.0.0"
+}

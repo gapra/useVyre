@@ -1,0 +1,52 @@
+---
+// CSS imports — Vite/Astro bundles these automatically
+import "@vyre/tokens/css";        // design tokens (CSS variables)
+import "@vyre/react/styles";      // component styles (framework-agnostic)
+import "@/styles/docs.css";       // docs site-specific styles
+import EarlyAccessBanner from "@/components/layout/EarlyAccessBanner.astro";
+
+export interface Props {
+  title:        string;
+  description?: string;
+}
+
+const { title, description = "AI-native design system for React and Vue. Zero hallucinations." } = Astro.props;
+const canonical = new URL(Astro.url.pathname, Astro.site);
+---
+
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="description" content={description} />
+    <link rel="canonical" href={canonical} />
+    <title>{title} — useVyre</title>
+
+    <!-- FOUC prevention: apply saved theme before first paint -->
+    <script is:inline>
+      (function () {
+        try {
+          var saved = localStorage.getItem("vyre-theme");
+          if (saved === "dark" || saved === "light") {
+            document.documentElement.setAttribute("data-theme", saved);
+          }
+          // If no saved preference, CSS @media handles it — no attribute needed
+        } catch (_) {}
+      })();
+    </script>
+
+    <!-- Favicons -->
+    <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+
+    <!-- Open Graph -->
+    <meta property="og:title"       content={`${title} — useVyre`} />
+    <meta property="og:description" content={description} />
+    <meta property="og:type"        content="website" />
+    <meta property="og:url"         content={canonical} />
+  </head>
+  <body>
+    <EarlyAccessBanner />
+    <slot />
+  </body>
+</html>

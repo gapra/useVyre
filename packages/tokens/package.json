@@ -1,0 +1,23 @@
+{
+  "name": "@vyre/tokens",
+  "version": "0.1.0",
+  "description": "useVyre design tokens — CSS variables, JS/TS, and DTCG-compliant JSON",
+  "keywords": ["design-system", "design-tokens", "css-variables", "ai-native", "vyre"],
+  "homepage": "https://usevyre.com/docs/tokens",
+  "repository": { "type": "git", "url": "https://github.com/gapra/usevyre" },
+  "license": "MIT",
+  "type": "module",
+  "exports": {
+    ".":          "./dist/index.js",
+    "./css":      "./dist/vyre.css",
+    "./css/base": "./dist/base.css",
+    "./json":     "./dist/tokens.json",
+    "./js":       "./dist/tokens.js"
+  },
+  "files": ["dist"],
+  "scripts": {
+    "build": "node scripts/build.js",
+    "dev":   "node scripts/build.js --watch",
+    "clean": "rm -rf dist"
+  }
+}
