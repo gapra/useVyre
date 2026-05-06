@@ -47,3 +47,38 @@ const id = `ct-${Math.random().toString(36).slice(2, 7)}`;
     )}
   </div>
 </div>
+
+<script>
+  document.querySelectorAll(".cp").forEach((cp) => {
+    const tabs     = cp.querySelectorAll<HTMLButtonElement>(".cp__tab");
+    const panels   = cp.querySelectorAll<HTMLElement>(".cp__panel");
+    const copyBtn  = cp.querySelector<HTMLButtonElement>(".cp__copy");
+    const copyLabel = copyBtn?.querySelector<HTMLElement>(".cp__copy-label");
+
+    tabs.forEach((tab) => {
+      tab.addEventListener("click", () => {
+        tabs.forEach((t) => {
+          t.classList.remove("cp__tab--active");
+          t.setAttribute("aria-selected", "false");
+        });
+        panels.forEach((p) => { p.hidden = true; });
+        tab.classList.add("cp__tab--active");
+        tab.setAttribute("aria-selected", "true");
+        const panel = document.getElementById(tab.dataset.target!);
+        if (panel) panel.hidden = false;
+      });
+    });
+
+    copyBtn?.addEventListener("click", async () => {
+      const activeTab = cp.querySelector<HTMLButtonElement>(".cp__tab--active");
+      const panelId   = activeTab?.dataset.target;
+      const panelEl   = panelId ? document.getElementById(panelId) : null;
+      const code      = panelEl?.querySelector("code")?.textContent ?? copyBtn?.dataset.copy ?? "";
+      await navigator.clipboard.writeText(code);
+      if (copyLabel) {
+        copyLabel.textContent = "Copied!";
+        setTimeout(() => { copyLabel.textContent = "Copy"; }, 2000);
+      }
+    });
+  });
+</script>

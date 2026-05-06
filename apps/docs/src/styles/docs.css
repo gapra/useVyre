@@ -1024,3 +1024,38 @@ pre code { background: none; padding: 0; color: inherit; font-size: inherit; }
   .cs-title { font-size: var(--vyre-typography-font-size-3xl); }
   .cs-nav   { padding: var(--vyre-spacing-4) var(--vyre-spacing-5); }
 }
+
+/* ── Token table ──────────────────────────────────────────────── */
+.docs-table-wrapper {
+  overflow-x: auto;
+  margin: 0 0 var(--vyre-spacing-6);
+  border-radius: var(--vyre-radius-lg);
+  border: 1px solid var(--vyre-color-semantic-border);
+}
+
+.docs-table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: var(--vyre-typography-font-size-sm);
+}
+
+.docs-table th {
+  text-align: left;
+  padding: var(--vyre-spacing-2) var(--vyre-spacing-4);
+  background: var(--vyre-color-semantic-surface);
+  color: var(--vyre-color-semantic-text-secondary);
+  font-weight: var(--vyre-typography-font-weight-medium);
+  font-size: var(--vyre-typography-font-size-xs);
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  border-bottom: 1px solid var(--vyre-color-semantic-border);
+}
+
+.docs-table td {
+  padding: var(--vyre-spacing-2) var(--vyre-spacing-4);
+  border-bottom: 1px solid var(--vyre-color-semantic-border-subtle);
+  vertical-align: middle;
+}
+
+.docs-table tr:last-child td { border-bottom: none; }
+.docs-table tr:hover td { background: var(--vyre-color-semantic-surface); }
