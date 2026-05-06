@@ -1,0 +1,11 @@
+{
+  "name": "useVyre",
+  "short_name": "useVyre",
+  "description": "AI-native design system for React and Vue",
+  "icons": [
+    { "src": "/favicon.svg", "sizes": "any", "type": "image/svg+xml" }
+  ],
+  "theme_color": "#7c3aed",
+  "background_color": "#ffffff",
+  "display": "browser"
+}
