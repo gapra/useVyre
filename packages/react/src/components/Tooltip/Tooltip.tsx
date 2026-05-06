@@ -30,7 +30,6 @@
 
 import React, { useState, useRef, useId, useCallback } from "react";
 import { cn } from "../../utils/cn";
-import type { BaseProps } from "../../types";
 
 export type TooltipPlacement = "top" | "bottom" | "left" | "right";
 
@@ -43,6 +42,8 @@ export interface TooltipProps {
   className?: string;
 }
 
+const ANIM_OUT_MS = 120;
+
 export const Tooltip: React.FC<TooltipProps> = ({
   content,
   placement = "top",
@@ -50,49 +51,44 @@ export const Tooltip: React.FC<TooltipProps> = ({
   children,
   className,
 }) => {
-  const [visible, setVisible] = useState(false);
-  const timerRef = useRef<ReturnType<typeof setTimeout> | null>(null);
-  const tooltipId = useId();
+  const [state, setState] = useState<"hidden" | "visible" | "leaving">("hidden");
+  const showTimer  = useRef<ReturnType<typeof setTimeout> | null>(null);
+  const leaveTimer = useRef<ReturnType<typeof setTimeout> | null>(null);
+  const tooltipId  = useId();
 
   const show = useCallback(() => {
-    timerRef.current = setTimeout(() => setVisible(true), delay);
+    if (leaveTimer.current) { clearTimeout(leaveTimer.current); leaveTimer.current = null; }
+    showTimer.current = setTimeout(() => setState("visible"), delay);
   }, [delay]);
 
   const hide = useCallback(() => {
-    if (timerRef.current) clearTimeout(timerRef.current);
-    setVisible(false);
+    if (showTimer.current) { clearTimeout(showTimer.current); showTimer.current = null; }
+    setState("leaving");
+    leaveTimer.current = setTimeout(() => setState("hidden"), ANIM_OUT_MS);
   }, []);
 
   const child = React.Children.only(children);
 
   const trigger = React.cloneElement(child, {
-    onMouseEnter: (e: React.MouseEvent) => {
-      show();
-      child.props.onMouseEnter?.(e);
-    },
-    onMouseLeave: (e: React.MouseEvent) => {
-      hide();
-      child.props.onMouseLeave?.(e);
-    },
-    onFocus: (e: React.FocusEvent) => {
-      setVisible(true);
-      child.props.onFocus?.(e);
-    },
-    onBlur: (e: React.FocusEvent) => {
-      hide();
-      child.props.onBlur?.(e);
-    },
-    "aria-describedby": visible ? tooltipId : undefined,
+    onMouseEnter: (e: React.MouseEvent) => { show(); child.props.onMouseEnter?.(e); },
+    onMouseLeave: (e: React.MouseEvent) => { hide(); child.props.onMouseLeave?.(e); },
+    onFocus:      (e: React.FocusEvent) => { setState("visible"); child.props.onFocus?.(e); },
+    onBlur:       (e: React.FocusEvent) => { hide(); child.props.onBlur?.(e); },
+    "aria-describedby": state !== "hidden" ? tooltipId : undefined,
   });
 
   return (
     <span className={cn("vyre-tooltip-wrapper", className)}>
       {trigger}
-      {visible && (
+      {state !== "hidden" && (
         <span
           id={tooltipId}
           role="tooltip"
-          className={cn("vyre-tooltip", `vyre-tooltip--${placement}`)}
+          className={cn(
+            "vyre-tooltip",
+            `vyre-tooltip--${placement}`,
+            state === "leaving" && "vyre-tooltip--leaving",
+          )}
           data-placement={placement}
         >
           {content}

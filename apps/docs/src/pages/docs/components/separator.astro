@@ -1,0 +1,74 @@
+---
+import DocsLayout       from "@/layouts/DocsLayout.astro";
+import ComponentPreview from "@/components/docs/ComponentPreview.astro";
+import PropsTable       from "@/components/docs/PropsTable.astro";
+import { SeparatorDemo } from "@/components/demos/Tier1Demos";
+
+const codeBasicReact = `import { Separator } from "@vyre/react";
+
+// Horizontal (default)
+<p>Above</p>
+<Separator />
+<p>Below</p>
+
+// Vertical — wrap in a flex row
+<div style={{ display: "flex", gap: 12, alignItems: "center" }}>
+  <span>Left</span>
+  <Separator orientation="vertical" style={{ height: 20 }} />
+  <span>Right</span>
+</div>`;
+
+const codeBasicVue = `<script setup>
+import { Separator } from "@vyre/vue";
+</script>
+<template>
+  <p>Above</p>
+  <Separator />
+  <p>Below</p>
+
+  <div style="display:flex;gap:12px;align-items:center">
+    <span>Left</span>
+    <Separator orientation="vertical" style="height:20px" />
+    <span>Right</span>
+  </div>
+</template>`;
+
+const props = [
+  { name: "orientation", type: `"horizontal" | "vertical"`, default: `"horizontal"`, description: "Direction of the separator line." },
+  { name: "decorative",  type: "boolean",                   default: "false",        description: "Hides from assistive technology (role=none)." },
+  { name: "class",       type: "string",                    default: "—",            description: "Additional CSS class." },
+];
+---
+
+<DocsLayout title="Separator">
+  <div class="docs-header">
+    <div class="docs-header__meta">
+      <span class="vyre-badge vyre-badge--default">@vyre/react</span>
+      <span class="vyre-badge vyre-badge--default">@vyre/vue</span>
+    </div>
+    <h1 class="docs-title">Separator</h1>
+    <p class="docs-lead">
+      A thin visual divider rendered as an accessible <code>&lt;hr&gt;</code>.
+      Works horizontally and vertically inside flex containers.
+    </p>
+  </div>
+
+  <hr class="docs-divider" />
+
+  <h2 class="docs-h2">Horizontal & vertical</h2>
+  <ComponentPreview react={codeBasicReact} vue={codeBasicVue}>
+    <SeparatorDemo client:visible />
+  </ComponentPreview>
+
+  <h2 class="docs-h2">Props</h2>
+  <PropsTable props={props} />
+
+  <div class="docs-pagination">
+    <a href="/docs/components/progress" class="docs-pagination__link docs-pagination__link--prev">
+      ← Progress
+    </a>
+    <a href="/docs/components/skeleton" class="docs-pagination__link docs-pagination__link--next">
+      Skeleton →
+    </a>
+  </div>
+</DocsLayout>

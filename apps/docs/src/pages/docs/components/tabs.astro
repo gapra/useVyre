@@ -1,0 +1,121 @@
+---
+import DocsLayout       from "@/layouts/DocsLayout.astro";
+import ComponentPreview from "@/components/docs/ComponentPreview.astro";
+import PropsTable       from "@/components/docs/PropsTable.astro";
+import { TabsBasicDemo, TabsControlledDemo } from "@/components/demos/SelectTabsDemo";
+
+const codeBasicReact = `import { Tabs, TabList, Tab, TabPanels, TabPanel } from "@vyre/react";
+
+<Tabs defaultValue="overview">
+  <TabList>
+    <Tab value="overview">Overview</Tab>
+    <Tab value="tokens">Tokens</Tab>
+    <Tab value="usage" disabled>Usage</Tab>
+  </TabList>
+  <TabPanels>
+    <TabPanel value="overview">
+      <p>Overview content here.</p>
+    </TabPanel>
+    <TabPanel value="tokens">
+      <p>Token reference here.</p>
+    </TabPanel>
+  </TabPanels>
+</Tabs>`;
+
+const codeBasicVue = `<script setup>
+import { Tabs, TabList, Tab, TabPanels, TabPanel } from "@vyre/vue";
+</script>
+<template>
+  <Tabs default-value="overview">
+    <TabList>
+      <Tab value="overview">Overview</Tab>
+      <Tab value="tokens">Tokens</Tab>
+      <Tab value="usage" disabled>Usage</Tab>
+    </TabList>
+    <TabPanels>
+      <TabPanel value="overview">
+        <p>Overview content here.</p>
+      </TabPanel>
+      <TabPanel value="tokens">
+        <p>Token reference here.</p>
+      </TabPanel>
+    </TabPanels>
+  </Tabs>
+</template>`;
+
+const codeControlledReact = `const [tab, setTab] = useState("overview");
+
+<Tabs value={tab} onChange={setTab}>
+  ...
+</Tabs>`;
+
+const codeControlledVue = `const tab = ref("overview");
+
+<Tabs v-model="tab">
+  ...
+</Tabs>`;
+
+const tabsProps = [
+  { name: "defaultValue", type: "string",               default: "—",  description: "Initially active tab (uncontrolled)." },
+  { name: "value",        type: "string",               default: "—",  description: "Controlled active tab." },
+  { name: "onChange",     type: "(value: string) => void", default: "—", description: "React only. Called when the active tab changes." },
+  { name: "class / className", type: "string",          default: "—",  description: "Additional CSS class." },
+];
+
+const tabProps = [
+  { name: "value",    type: "string",  default: "—",     description: "Unique identifier matching a TabPanel value." },
+  { name: "disabled", type: "boolean", default: "false", description: "Prevents selection and skips keyboard navigation." },
+];
+---
+
+<DocsLayout title="Tabs">
+  <div class="docs-header">
+    <div class="docs-header__meta">
+      <span class="vyre-badge vyre-badge--default">@vyre/react</span>
+      <span class="vyre-badge vyre-badge--default">@vyre/vue</span>
+    </div>
+    <h1 class="docs-title">Tabs</h1>
+    <p class="docs-lead">
+      Accessible tab navigation following WAI-ARIA <em>Tabs</em> pattern. Supports keyboard
+      navigation, disabled tabs, and controlled or uncontrolled active state.
+    </p>
+  </div>
+
+  <hr class="docs-divider" />
+
+  <h2 class="docs-h2">Basic</h2>
+  <ComponentPreview react={codeBasicReact} vue={codeBasicVue}>
+    <TabsBasicDemo client:visible />
+  </ComponentPreview>
+
+  <h2 class="docs-h2">Controlled</h2>
+  <p class="docs-p">
+    Pass <code>value</code> + <code>onChange</code> (React) atau <code>v-model</code> (Vue)
+    untuk mengontrol tab aktif dari luar.
+  </p>
+  <ComponentPreview react={codeControlledReact} vue={codeControlledVue}>
+    <TabsControlledDemo client:visible />
+  </ComponentPreview>
+
+  <h2 class="docs-h2">Keyboard navigation</h2>
+  <p class="docs-p">
+    <kbd>←</kbd> <kbd>→</kbd> move between tabs.
+    <kbd>Home</kbd> / <kbd>End</kbd> jump to the first/last tab.
+    <kbd>Tab</kbd> moves focus into the active panel.
+  </p>
+
+  <h2 class="docs-h2">Tabs props</h2>
+  <PropsTable props={tabsProps} />
+
+  <h2 class="docs-h2">Tab props</h2>
+  <PropsTable props={tabProps} />
+
+  <div class="docs-pagination">
+    <a href="/docs/components/select" class="docs-pagination__link docs-pagination__link--prev">
+      ← Select
+    </a>
+    <a href="/docs/components/toast" class="docs-pagination__link docs-pagination__link--next">
+      Toast →
+    </a>
+  </div>
+</DocsLayout>

@@ -1,0 +1,124 @@
+---
+import DocsLayout       from "@/layouts/DocsLayout.astro";
+import ComponentPreview from "@/components/docs/ComponentPreview.astro";
+import CodeTabs        from "@/components/docs/CodeTabs.astro";
+import PropsTable       from "@/components/docs/PropsTable.astro";
+import { ToastDemo } from "@/components/demos/SelectTabsDemo";
+
+const codeSetupReact = `// 1. Wrap your app root once
+import { ToastProvider } from "@vyre/react";
+
+<ToastProvider>
+  <App />
+</ToastProvider>`;
+
+const codeSetupVue = `<!-- 1. Place ToastViewport once in your app root (App.vue or layout) -->
+<script setup>
+import { ToastViewport } from "@vyre/vue";
+</script>
+<template>
+  <RouterView />
+  <ToastViewport />
+</template>`;
+
+const codeUsageReact = `import { useToast } from "@vyre/react";
+
+function SaveButton() {
+  const { toast } = useToast();
+  return (
+    <Button onClick={() => toast({ title: "Saved!", variant: "success" })}>
+      Save
+    </Button>
+  );
+}`;
+
+const codeUsageVue = `<script setup>
+import { useToast } from "@vyre/vue";
+const { toast } = useToast();
+</script>
+<template>
+  <Button @click="toast({ title: 'Saved!', variant: 'success' })">
+    Save
+  </Button>
+</template>`;
+
+const codeVariantsReact = `toast({ title: "Saved",            variant: "success" });
+toast({ title: "Heads up",         variant: "warning" });
+toast({ title: "Something failed", variant: "danger" });
+toast({ title: "FYI",              variant: "default" });
+
+// With description
+toast({
+  title: "Deployment complete",
+  description: "v1.2.0 is now live.",
+  variant: "success",
+});
+
+// Stays until dismissed
+toast({ title: "Processing…", duration: Infinity });`;
+
+const codeVariantsVue = `// same API — useToast() returns { toast, dismiss }
+toast({ title: "Saved",            variant: "success" });
+toast({ title: "Heads up",         variant: "warning" });
+toast({ title: "Something failed", variant: "danger" });
+
+toast({
+  title: "Deployment complete",
+  description: "v1.2.0 is now live.",
+  variant: "success",
+});`;
+
+const toastInputProps = [
+  { name: "title",       type: "string",                                       default: "—",      description: "Primary message shown in bold." },
+  { name: "description", type: "string",                                       default: "—",      description: "Secondary detail text below the title." },
+  { name: "variant",     type: `"default" | "success" | "warning" | "danger"`, default: `"default"`, description: "Colour style." },
+  { name: "duration",    type: "number",                                       default: "4000",   description: "Auto-dismiss delay in ms. Pass Infinity to keep until dismissed." },
+];
+---
+
+<DocsLayout title="Toast">
+  <div class="docs-header">
+    <div class="docs-header__meta">
+      <span class="vyre-badge vyre-badge--default">@vyre/react</span>
+      <span class="vyre-badge vyre-badge--default">@vyre/vue</span>
+    </div>
+    <h1 class="docs-title">Toast</h1>
+    <p class="docs-lead">
+      Imperative notification system. Call <code>toast()</code> from anywhere in your app —
+      no prop drilling required. Messages stack in the top-right corner and auto-dismiss after
+      4 seconds.
+    </p>
+  </div>
+
+  <hr class="docs-divider" />
+
+  <h2 class="docs-h2">Setup</h2>
+  <p class="docs-p">
+    React: wrap your app root with <code>ToastProvider</code> once.
+    Vue: place <code>ToastViewport</code> once in your app root or layout component.
+  </p>
+  <CodeTabs react={codeSetupReact} vue={codeSetupVue} />
+
+  <h2 class="docs-h2">Usage</h2>
+  <p class="docs-p">
+    Call <code>useToast()</code> inside any component to get the <code>toast()</code> function.
+  </p>
+  <CodeTabs react={codeUsageReact} vue={codeUsageVue} />
+
+  <h2 class="docs-h2">Variants & options</h2>
+  <ComponentPreview react={codeVariantsReact} vue={codeVariantsVue}>
+    <ToastDemo client:visible />
+  </ComponentPreview>
+
+  <h2 class="docs-h2">toast() options</h2>
+  <PropsTable props={toastInputProps} />
+
+  <div class="docs-pagination">
+    <a href="/docs/components/tabs" class="docs-pagination__link docs-pagination__link--prev">
+      ← Tabs
+    </a>
+    <a href="/docs/components/tooltip" class="docs-pagination__link docs-pagination__link--next">
+      Tooltip →
+    </a>
+  </div>
+</DocsLayout>

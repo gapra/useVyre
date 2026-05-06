@@ -1,0 +1,141 @@
+---
+import DocsLayout       from "@/layouts/DocsLayout.astro";
+import ComponentPreview from "@/components/docs/ComponentPreview.astro";
+import PropsTable       from "@/components/docs/PropsTable.astro";
+
+const codeBasicReact = `import { Input } from "@vyre/react";
+
+<Input placeholder="Enter your email" type="email" />
+<Input placeholder="With left icon" leftIcon={<SearchIcon />} />
+<Input placeholder="With right icon" rightIcon={<EyeIcon />} />
+<Input placeholder="Disabled" disabled />`;
+
+const codeBasicVue = `<script setup>
+import { Input } from "@vyre/vue";
+</script>
+<template>
+  <Input placeholder="Enter your email" type="email" />
+  <Input placeholder="With left icon">
+    <template #left><SearchIcon /></template>
+  </Input>
+  <Input placeholder="Disabled" disabled />
+</template>`;
+
+const codeFieldReact = `import { Field, Input } from "@vyre/react";
+
+<Field label="Email" htmlFor="email" hint="We'll never share it.">
+  <Input id="email" type="email" placeholder="you@example.com" />
+</Field>
+
+<Field label="Password" htmlFor="pwd" state="error" hint="Minimum 8 characters.">
+  <Input id="pwd" type="password" />
+</Field>`;
+
+const codeFieldVue = `<script setup>
+import { Field, Input } from "@vyre/vue";
+</script>
+<template>
+  <Field label="Email" html-for="email" hint="We'll never share it.">
+    <Input id="email" type="email" placeholder="you@example.com" />
+  </Field>
+
+  <Field label="Password" html-for="pwd" state="error" hint="Minimum 8 characters.">
+    <Input id="pwd" type="password" />
+  </Field>
+</template>`;
+
+const codeTextareaReact = `import { Textarea } from "@vyre/react";
+
+<Textarea placeholder="Add a description..." rows={4} />`;
+
+const codeTextareaVue = `<Textarea placeholder="Add a description..." :rows="4" />`;
+
+const inputProps = [
+  { name: "size",      type: `"sm" | "md" | "lg"`, default: `"md"`,  description: "Input height scale." },
+  { name: "leftIcon",  type: "ReactNode",           default: "—",     description: "React only. Icon rendered inside the left of the input." },
+  { name: "rightIcon", type: "ReactNode",           default: "—",     description: "React only. Icon rendered inside the right of the input." },
+  { name: "disabled",  type: "boolean",             default: "false", description: "Disables the input." },
+  { name: "class / className", type: "string",      default: "—",     description: "Additional CSS class." },
+  { name: "…rest",     type: "HTMLInputAttributes",  default: "—",     description: "All native input attributes (type, placeholder, value, onChange, etc.)." },
+];
+
+const fieldProps = [
+  { name: "label",   type: "string",                          default: "—",     description: "Label text above the input." },
+  { name: "htmlFor", type: "string",                          default: "—",     description: "Links label to the input id." },
+  { name: "hint",    type: "string",                          default: "—",     description: "Helper text below the input. Rendered as alert when state is error." },
+  { name: "state",   type: `"idle" | "error" | "success"`,   default: `"idle"`, description: "Changes colour and icon of the hint text." },
+  { name: "required",type: "boolean",                         default: "false", description: "Shows asterisk on the label." },
+];
+---
+
+<DocsLayout title="Input">
+  <div class="docs-header">
+    <div class="docs-header__meta">
+      <span class="vyre-badge vyre-badge--default">@vyre/react</span>
+      <span class="vyre-badge vyre-badge--default">@vyre/vue</span>
+    </div>
+    <h1 class="docs-title">Input</h1>
+    <p class="docs-lead">
+      Text input with optional left/right icon slots and three size variants.
+      Pair with <code>Field</code> for a labelled form control with validation states,
+      or use <code>Textarea</code> for multi-line input.
+    </p>
+  </div>
+
+  <hr class="docs-divider" />
+
+  <h2 class="docs-h2">Basic</h2>
+  <ComponentPreview react={codeBasicReact} vue={codeBasicVue}>
+    <div style="display:flex;flex-direction:column;gap:10px;width:100%;max-width:340px">
+      <div class="vyre-input-wrapper vyre-input-wrapper--md">
+        <input class="vyre-input vyre-input--md" placeholder="Enter your email" type="email" />
+      </div>
+      <div class="vyre-input-wrapper vyre-input-wrapper--md">
+        <input class="vyre-input vyre-input--md" placeholder="Disabled" disabled />
+      </div>
+    </div>
+  </ComponentPreview>
+
+  <h2 class="docs-h2">With Field wrapper</h2>
+  <p class="docs-p">
+    Wrap any input with <code>Field</code> to get a label, hint text, and validation state styling.
+  </p>
+  <ComponentPreview react={codeFieldReact} vue={codeFieldVue}>
+    <div style="display:flex;flex-direction:column;gap:16px;width:100%;max-width:340px">
+      <div class="vyre-field">
+        <label class="vyre-field__label" for="demo-email">Email</label>
+        <div class="vyre-input-wrapper vyre-input-wrapper--md">
+          <input id="demo-email" class="vyre-input vyre-input--md" type="email" placeholder="you@example.com" />
+        </div>
+        <span class="vyre-field__hint">We'll never share it.</span>
+      </div>
+      <div class="vyre-field vyre-field--error">
+        <label class="vyre-field__label" for="demo-pwd">Password</label>
+        <div class="vyre-input-wrapper vyre-input-wrapper--md">
+          <input id="demo-pwd" class="vyre-input vyre-input--md" type="password" />
+        </div>
+        <span class="vyre-field__hint" role="alert">Minimum 8 characters.</span>
+      </div>
+    </div>
+  </ComponentPreview>
+
+  <h2 class="docs-h2">Textarea</h2>
+  <ComponentPreview react={codeTextareaReact} vue={codeTextareaVue}>
+    <textarea class="vyre-textarea vyre-textarea--md" placeholder="Add a description..." rows="4" style="width:100%;max-width:340px;resize:vertical"></textarea>
+  </ComponentPreview>
+
+  <h2 class="docs-h2">Input props</h2>
+  <PropsTable props={inputProps} />
+
+  <h2 class="docs-h2">Field props</h2>
+  <PropsTable props={fieldProps} />
+
+  <div class="docs-pagination">
+    <a href="/docs/components/card" class="docs-pagination__link docs-pagination__link--prev">
+      ← Card
+    </a>
+    <a href="/docs/components/modal" class="docs-pagination__link docs-pagination__link--next">
+      Modal →
+    </a>
+  </div>
+</DocsLayout>

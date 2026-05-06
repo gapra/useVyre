@@ -1,0 +1,115 @@
+---
+import DocsLayout       from "@/layouts/DocsLayout.astro";
+import ComponentPreview from "@/components/docs/ComponentPreview.astro";
+import PropsTable       from "@/components/docs/PropsTable.astro";
+import { TooltipPlacementDemo, TooltipDelayDemo } from "@/components/demos/SelectTabsDemo";
+
+const codeBasicReact = `import { Tooltip, Button } from "@vyre/react";
+
+<Tooltip content="Copy to clipboard">
+  <Button variant="ghost" size="icon" aria-label="Copy">
+    <CopyIcon />
+  </Button>
+</Tooltip>`;
+
+const codeBasicVue = `<script setup>
+import { Tooltip, Button } from "@vyre/vue";
+</script>
+<template>
+  <Tooltip content="Copy to clipboard">
+    <Button variant="ghost" size="icon" aria-label="Copy">
+      <CopyIcon />
+    </Button>
+  </Tooltip>
+</template>`;
+
+const codePlacementReact = `<Tooltip content="Appears above" placement="top">
+  <Button variant="secondary">Top</Button>
+</Tooltip>
+
+<Tooltip content="Appears below" placement="bottom">
+  <Button variant="secondary">Bottom</Button>
+</Tooltip>
+
+<Tooltip content="Appears left" placement="left">
+  <Button variant="secondary">Left</Button>
+</Tooltip>
+
+<Tooltip content="Appears right" placement="right">
+  <Button variant="secondary">Right</Button>
+</Tooltip>`;
+
+const codePlacementVue = `<Tooltip content="Appears above" placement="top">
+  <Button variant="secondary">Top</Button>
+</Tooltip>
+
+<Tooltip content="Appears below" placement="bottom">
+  <Button variant="secondary">Bottom</Button>
+</Tooltip>`;
+
+const codeDelayReact = `{/* Custom delay */}
+<Tooltip content="Fast" delay={0}>
+  <Button variant="secondary">No delay</Button>
+</Tooltip>
+
+<Tooltip content="Slow" delay={800}>
+  <Button variant="secondary">800ms delay</Button>
+</Tooltip>`;
+
+const codeDelayVue = `<Tooltip content="Fast" :delay="0">
+  <Button variant="secondary">No delay</Button>
+</Tooltip>
+
+<Tooltip content="Slow" :delay="800">
+  <Button variant="secondary">800ms delay</Button>
+</Tooltip>`;
+
+const props = [
+  { name: "content",   type: "string | ReactNode",                    default: "—",      description: "Tooltip text or content." },
+  { name: "placement", type: `"top" | "bottom" | "left" | "right"`,  default: `"top"`,  description: "Preferred position relative to the trigger." },
+  { name: "delay",     type: "number",                                default: "300",    description: "Delay in ms before showing on hover." },
+  { name: "class / className", type: "string",                        default: "—",      description: "Additional CSS class on the tooltip bubble." },
+];
+---
+
+<DocsLayout title="Tooltip">
+  <div class="docs-header">
+    <div class="docs-header__meta">
+      <span class="vyre-badge vyre-badge--default">@vyre/react</span>
+      <span class="vyre-badge vyre-badge--default">@vyre/vue</span>
+    </div>
+    <h1 class="docs-title">Tooltip</h1>
+    <p class="docs-lead">
+      A floating label that appears on hover or focus. Wraps any single focusable element
+      as the trigger. Accessible via <code>aria-describedby</code>.
+    </p>
+  </div>
+
+  <hr class="docs-divider" />
+
+  <h2 class="docs-h2">Placement</h2>
+  <p class="docs-p">
+    Hover each button to see the tooltip. Tooltip will flip automatically if there isn't enough
+    space in the preferred direction.
+  </p>
+  <ComponentPreview react={codePlacementReact} vue={codePlacementVue}>
+    <TooltipPlacementDemo client:visible />
+  </ComponentPreview>
+
+  <h2 class="docs-h2">Delay</h2>
+  <ComponentPreview react={codeDelayReact} vue={codeDelayVue}>
+    <TooltipDelayDemo client:visible />
+  </ComponentPreview>
+
+  <h2 class="docs-h2">Props</h2>
+  <PropsTable props={props} />
+
+  <div class="docs-pagination">
+    <a href="/docs/components/toast" class="docs-pagination__link docs-pagination__link--prev">
+      ← Toast
+    </a>
+    <a href="/docs/components/accordion" class="docs-pagination__link docs-pagination__link--next">
+      Accordion →
+    </a>
+  </div>
+</DocsLayout>

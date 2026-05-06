@@ -18,6 +18,15 @@
  * - Select         — Accessible dropdown with keyboard navigation
  * - Tabs           — Tab navigation (+ TabList, Tab, TabPanels, TabPanel)
  * - Tooltip        — Hover/focus tooltip with placement options
+ * - Accordion      — Collapsible sections (+ AccordionItem, AccordionTrigger, AccordionContent)
+ * - Avatar         — User avatar with image fallback and status dot
+ * - Checkbox       — Checkbox input with indeterminate state
+ * - Switch         — Toggle switch (on/off)
+ * - Slider         — Range input with custom track
+ * - Progress       — Linear progress bar with indeterminate mode
+ * - Separator      — Horizontal/vertical divider
+ * - Label          — Standalone form label
+ * - Skeleton       — Loading placeholder with pulse animation
  *
  * CSS must be imported separately:
  * import "@vyre/tokens/css";           ← design tokens (required)
@@ -34,6 +43,15 @@ export { ToastProvider, useToast }                          from "./components/T
 export { Select }                                           from "./components/Select/Select";
 export { Tabs, TabList, Tab, TabPanels, TabPanel }          from "./components/Tabs/Tabs";
 export { Tooltip }                                          from "./components/Tooltip/Tooltip";
+export { Accordion, AccordionItem, AccordionTrigger, AccordionContent } from "./components/Accordion/Accordion";
+export { Avatar }                                           from "./components/Avatar/Avatar";
+export { Checkbox }                                         from "./components/Checkbox/Checkbox";
+export { Switch }                                           from "./components/Switch/Switch";
+export { Slider }                                           from "./components/Slider/Slider";
+export { Progress }                                         from "./components/Progress/Progress";
+export { Separator }                                        from "./components/Separator/Separator";
+export { Label }                                            from "./components/Label/Label";
+export { Skeleton }                                         from "./components/Skeleton/Skeleton";
 
 // ── Types ─────────────────────────────────────────────────────
 export type { ButtonProps }                                 from "./components/Button/Button";
@@ -45,6 +63,15 @@ export type { ToastInput, ToastVariant }                    from "./components/T
 export type { SelectProps, SelectOption, SelectSize }       from "./components/Select/Select";
 export type { TabsProps, TabListProps, TabProps, TabPanelsProps, TabPanelProps } from "./components/Tabs/Tabs";
 export type { TooltipProps, TooltipPlacement }              from "./components/Tooltip/Tooltip";
+export type { AccordionProps, AccordionItemProps, AccordionTriggerProps, AccordionContentProps } from "./components/Accordion/Accordion";
+export type { AvatarProps }                                 from "./components/Avatar/Avatar";
+export type { CheckboxProps }                               from "./components/Checkbox/Checkbox";
+export type { SwitchProps }                                 from "./components/Switch/Switch";
+export type { SliderProps }                                 from "./components/Slider/Slider";
+export type { ProgressProps }                               from "./components/Progress/Progress";
+export type { SeparatorProps }                              from "./components/Separator/Separator";
+export type { LabelProps }                                  from "./components/Label/Label";
+export type { SkeletonProps }                               from "./components/Skeleton/Skeleton";
 
 // ── Shared types ──────────────────────────────────────────────
 export type { Variant, Size, FieldState, BadgeVariant, BaseProps } from "./types";

@@ -1,0 +1,111 @@
+---
+import DocsLayout       from "@/layouts/DocsLayout.astro";
+import ComponentPreview from "@/components/docs/ComponentPreview.astro";
+import PropsTable       from "@/components/docs/PropsTable.astro";
+import { AvatarSizesDemo, AvatarStatusDemo, AvatarFallbackDemo } from "@/components/demos/Tier1Demos";
+
+const codeSizesReact = `import { Avatar } from "@vyre/react";
+
+<Avatar size="sm" fallback="GP" />
+<Avatar size="md" fallback="GP" />
+<Avatar size="lg" fallback="GP" />
+<Avatar size="xl" fallback="GP" />`;
+
+const codeSizesVue = `<script setup>
+import { Avatar } from "@vyre/vue";
+</script>
+<template>
+  <Avatar size="sm" fallback="GP" />
+  <Avatar size="md" fallback="GP" />
+  <Avatar size="lg" fallback="GP" />
+  <Avatar size="xl" fallback="GP" />
+</template>`;
+
+const codeStatusReact = `<Avatar fallback="ON" status="online" />
+<Avatar fallback="BZ" status="busy" />
+<Avatar fallback="AW" status="away" />
+<Avatar fallback="OF" status="offline" />`;
+
+const codeStatusVue = `<Avatar fallback="ON" status="online" />
+<Avatar fallback="BZ" status="busy" />
+<Avatar fallback="AW" status="away" />
+<Avatar fallback="OF" status="offline" />`;
+
+const codeFallbackReact = `<!-- Image loads successfully -->
+<Avatar src="https://..." alt="User" fallback="U1" />
+
+<!-- Image fails → shows fallback initials -->
+<Avatar src="https://broken-url..." alt="Broken" fallback="BR" />
+
+<!-- No src → shows fallback immediately -->
+<Avatar fallback="GP" />`;
+
+const codeFallbackVue = `<!-- Image loads successfully -->
+<Avatar src="https://..." alt="User" fallback="U1" />
+
+<!-- Image fails → shows fallback initials -->
+<Avatar src="https://broken-url..." alt="Broken" fallback="BR" />
+
+<!-- No src → shows fallback immediately -->
+<Avatar fallback="GP" />`;
+
+const props = [
+  { name: "src",      type: "string",                                    default: "—",       description: "Image URL. Falls back to initials on error." },
+  { name: "alt",      type: "string",                                    default: "—",       description: "Alt text for the image." },
+  { name: "fallback", type: "string",                                    default: "—",       description: "1–2 character initials shown when image is unavailable." },
+  { name: "size",     type: `"sm" | "md" | "lg" | "xl"`,                default: `"md"`,    description: "Avatar diameter." },
+  { name: "status",  type: `"online" | "offline" | "busy" | "away"`,    default: "—",       description: "Status indicator dot shown at the bottom-right." },
+  { name: "class",   type: "string",                                     default: "—",       description: "Additional CSS class." },
+];
+---
+
+<DocsLayout title="Avatar">
+  <div class="docs-header">
+    <div class="docs-header__meta">
+      <span class="vyre-badge vyre-badge--default">@vyre/react</span>
+      <span class="vyre-badge vyre-badge--default">@vyre/vue</span>
+    </div>
+    <h1 class="docs-title">Avatar</h1>
+    <p class="docs-lead">
+      Displays a user's profile photo with graceful fallback to initials.
+      Supports four sizes and an optional status indicator.
+    </p>
+  </div>
+
+  <hr class="docs-divider" />
+
+  <h2 class="docs-h2">Sizes</h2>
+  <ComponentPreview react={codeSizesReact} vue={codeSizesVue}>
+    <AvatarSizesDemo client:visible />
+  </ComponentPreview>
+
+  <h2 class="docs-h2">Status indicator</h2>
+  <p class="docs-p">
+    Add a <code>status</code> prop to show an indicator dot: <code>online</code>, <code>busy</code>,
+    <code>away</code>, or <code>offline</code>.
+  </p>
+  <ComponentPreview react={codeStatusReact} vue={codeStatusVue}>
+    <AvatarStatusDemo client:visible />
+  </ComponentPreview>
+
+  <h2 class="docs-h2">Image & fallback</h2>
+  <p class="docs-p">
+    If <code>src</code> fails to load or is not provided, the component automatically shows the
+    <code>fallback</code> initials.
+  </p>
+  <ComponentPreview react={codeFallbackReact} vue={codeFallbackVue}>
+    <AvatarFallbackDemo client:visible />
+  </ComponentPreview>
+
+  <h2 class="docs-h2">Props</h2>
+  <PropsTable props={props} />
+
+  <div class="docs-pagination">
+    <a href="/docs/components/accordion" class="docs-pagination__link docs-pagination__link--prev">
+      ← Accordion
+    </a>
+    <a href="/docs/components/checkbox" class="docs-pagination__link docs-pagination__link--next">
+      Checkbox →
+    </a>
+  </div>
+</DocsLayout>

@@ -1,0 +1,109 @@
+---
+import DocsLayout       from "@/layouts/DocsLayout.astro";
+import ComponentPreview from "@/components/docs/ComponentPreview.astro";
+import PropsTable       from "@/components/docs/PropsTable.astro";
+import { SelectBasicDemo, SelectSizesDemo } from "@/components/demos/SelectTabsDemo";
+
+const codeBasicReact = `import { Select } from "@vyre/react";
+
+const frameworks = [
+  { value: "react", label: "React" },
+  { value: "vue",   label: "Vue" },
+  { value: "svelte",label: "Svelte", disabled: true },
+];
+
+// Uncontrolled
+<Select options={frameworks} placeholder="Select framework" />
+
+// Controlled
+const [val, setVal] = useState("");
+<Select
+  options={frameworks}
+  value={val}
+  onChange={setVal}
+  placeholder="Select framework"
+/>`;
+
+const codeBasicVue = `<script setup>
+import { Select } from "@vyre/vue";
+const frameworks = [
+  { value: "react", label: "React" },
+  { value: "vue",   label: "Vue" },
+  { value: "svelte",label: "Svelte", disabled: true },
+];
+const selected = ref("");
+</script>
+<template>
+  <Select
+    :options="frameworks"
+    v-model="selected"
+    placeholder="Select framework"
+  />
+</template>`;
+
+const codeFieldReact = `import { Field, Select } from "@vyre/react";
+
+<Field label="Framework" htmlFor="fw" state="error" hint="Required.">
+  <Select id="fw" options={frameworks} placeholder="Pick one" />
+</Field>`;
+
+const codeFieldVue = `<Field label="Framework" html-for="fw" state="error" hint="Required.">
+  <Select id="fw" :options="frameworks" placeholder="Pick one" />
+</Field>`;
+
+const props = [
+  { name: "options",      type: "{ value: string; label: string; disabled?: boolean }[]", default: "—",     description: "List of selectable options." },
+  { name: "value",        type: "string",                default: "—",     description: "Controlled selected value." },
+  { name: "defaultValue", type: "string",                default: "—",     description: "Initial value (uncontrolled)." },
+  { name: "placeholder",  type: "string",                default: "—",     description: "Text shown when nothing is selected." },
+  { name: "onChange",     type: "(value: string) => void", default: "—",   description: "React only. Called when selection changes." },
+  { name: "disabled",     type: "boolean",               default: "false", description: "Disables the select." },
+  { name: "size",         type: `"sm" | "md" | "lg"`,   default: `"md"`,  description: "Select height." },
+  { name: "class / className", type: "string",           default: "—",     description: "Additional CSS class." },
+];
+---
+
+<DocsLayout title="Select">
+  <div class="docs-header">
+    <div class="docs-header__meta">
+      <span class="vyre-badge vyre-badge--default">@vyre/react</span>
+      <span class="vyre-badge vyre-badge--default">@vyre/vue</span>
+    </div>
+    <h1 class="docs-title">Select</h1>
+    <p class="docs-lead">
+      An accessible dropdown with keyboard navigation, controlled and uncontrolled modes,
+      and per-option disabled state. Built from scratch — no native <code>&lt;select&gt;</code>.
+    </p>
+  </div>
+
+  <hr class="docs-divider" />
+
+  <h2 class="docs-h2">Basic</h2>
+  <ComponentPreview react={codeBasicReact} vue={codeBasicVue}>
+    <SelectBasicDemo client:visible />
+  </ComponentPreview>
+
+  <h2 class="docs-h2">Sizes</h2>
+  <ComponentPreview react={codeFieldReact} vue={codeFieldVue}>
+    <SelectSizesDemo client:visible />
+  </ComponentPreview>
+
+  <h2 class="docs-h2">Keyboard navigation</h2>
+  <p class="docs-p">
+    <kbd>Space</kbd> / <kbd>Enter</kbd> opens the listbox.
+    <kbd>↑</kbd> <kbd>↓</kbd> move between options.
+    <kbd>Enter</kbd> selects. <kbd>Escape</kbd> closes without selection.
+  </p>
+
+  <h2 class="docs-h2">Props</h2>
+  <PropsTable props={props} />
+
+  <div class="docs-pagination">
+    <a href="/docs/components/modal" class="docs-pagination__link docs-pagination__link--prev">
+      ← Modal
+    </a>
+    <a href="/docs/components/tabs" class="docs-pagination__link docs-pagination__link--next">
+      Tabs →
+    </a>
+  </div>
+</DocsLayout>
