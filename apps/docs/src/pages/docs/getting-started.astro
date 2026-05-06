@@ -2,8 +2,12 @@
 import DocsLayout from "@/layouts/DocsLayout.astro";
 import { Code }   from "astro:components";
 
-const installReact = `npm install @vyre/react @vyre/tokens`;
-const installVue   = `npm install @vyre/vue @vyre/tokens`;
+const installReact = `# Coming soon — not yet published to npm
+# Star the repo to be notified: https://github.com/gapra/usevyre
+npm install @vyre/react @vyre/tokens`;
+const installVue   = `# Coming soon — not yet published to npm
+# Star the repo to be notified: https://github.com/gapra/usevyre
+npm install @vyre/vue @vyre/tokens`;
 
 const setupReact = `// main.tsx or your entry file
 import "@vyre/tokens/css";        // ← design tokens
@@ -94,6 +98,11 @@ $(cat node_modules/@vyre/tokens/dist/ai-context.md)`;
   <hr class="docs-divider" />
 
   <h2 class="docs-h2">Installation</h2>
+
+  <div class="docs-callout docs-callout--accent">
+    <strong>Not yet on npm.</strong> useVyre is under active development and packages are not published yet.
+    <a href="https://github.com/gapra/usevyre" target="_blank" rel="noopener noreferrer">Star the repo</a> to be notified when v1.0 launches.
+  </div>
 
   <div class="docs-tabs" id="install-tabs">
     <div class="docs-tabs__bar" role="tablist">
