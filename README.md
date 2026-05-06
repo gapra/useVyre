@@ -65,6 +65,38 @@ usevyre/
 
 ---
 
+## Local Development
+
+Run the docs site locally to browse all component examples and live demos.
+
+**Prerequisites:** Node.js ≥ 18, pnpm ≥ 9
+
+```bash
+# 1. Clone and install
+git clone https://github.com/gapra/usevyre.git
+cd usevyre
+pnpm install
+
+# 2. Build design tokens (required — components import CSS variables from here)
+pnpm --filter @vyre/tokens build
+
+# 3. Start the docs dev server
+SITE_MODE=live pnpm --filter @vyre/docs dev
+```
+
+Open `http://localhost:4321` in your browser.
+
+> **Why `SITE_MODE=live`?** Without it the landing page shows a coming-soon screen.
+> All `/docs/*` pages are accessible either way.
+
+**Shortcut** — tokens build + dev server in one command:
+
+```bash
+SITE_MODE=live pnpm dev:docs
+```
+
+---
+
 ## Contributing
 
 This project is in early development. Feedback, ideas, and bug reports are very welcome — [open an issue](https://github.com/gapra/usevyre/issues) to get started.
