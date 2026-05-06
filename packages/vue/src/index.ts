@@ -18,6 +18,19 @@
  * - Select         — Accessible dropdown with keyboard nav (v-model)
  * - Tabs           — Tab navigation with v-model (+ TabList, Tab, TabPanels, TabPanel)
  * - Tooltip        — Hover/focus tooltip with placement options
+ * - Accordion      — Collapsible sections (+ AccordionItem, AccordionTrigger, AccordionContent)
+ * - Avatar         — User avatar with fallback initials and status indicator
+ * - Checkbox       — Checkbox input with indeterminate state support
+ * - Switch         — Toggle switch (role="switch")
+ * - Progress       — Progress bar with indeterminate mode
+ * - Slider         — Range slider with custom visual track
+ * - Separator      — Horizontal or vertical divider
+ * - Label          — Form label with required indicator
+ * - Skeleton       — Loading placeholder (rect, circle, text variants)
+ * - Popover        — Floating content panel anchored to a trigger (v-model)
+ * - DropdownMenu   — Contextual action menu (+ DropdownItem, DropdownSeparator)
+ * - Alert          — Inline status banner (info/success/warning/danger)
+ * - AlertDialog    — Blocking confirmation modal (v-model)
  *
  * CSS must be imported separately:
  * import "@vyre/tokens/css";           ← design tokens (required)
@@ -45,7 +58,30 @@ export { default as TabList }       from "./components/Tabs/TabList.vue";
 export { default as Tab }           from "./components/Tabs/Tab.vue";
 export { default as TabPanels }     from "./components/Tabs/TabPanels.vue";
 export { default as TabPanel }      from "./components/Tabs/TabPanel.vue";
-export { default as Tooltip }       from "./components/Tooltip/Tooltip.vue";
+export { default as Tooltip }           from "./components/Tooltip/Tooltip.vue";
+export { default as Accordion }         from "./components/Accordion/Accordion.vue";
+export { default as AccordionItem }     from "./components/Accordion/AccordionItem.vue";
+export { default as AccordionTrigger }  from "./components/Accordion/AccordionTrigger.vue";
+export { default as AccordionContent }  from "./components/Accordion/AccordionContent.vue";
+export { default as Avatar }            from "./components/Avatar/Avatar.vue";
+export { default as Checkbox }          from "./components/Checkbox/Checkbox.vue";
+export { default as Switch }            from "./components/Switch/Switch.vue";
+export { default as Progress }          from "./components/Progress/Progress.vue";
+export { default as Slider }            from "./components/Slider/Slider.vue";
+export { default as Separator }         from "./components/Separator/Separator.vue";
+export { default as Label }             from "./components/Label/Label.vue";
+export { default as Skeleton }          from "./components/Skeleton/Skeleton.vue";
+export { default as Popover }           from "./components/Popover/Popover.vue";
+export { default as DropdownMenu }           from "./components/DropdownMenu/DropdownMenu.vue";
+export { default as DropdownItem }           from "./components/DropdownMenu/DropdownItem.vue";
+export { default as DropdownLabel }          from "./components/DropdownMenu/DropdownLabel.vue";
+export { default as DropdownSeparator }      from "./components/DropdownMenu/DropdownSeparator.vue";
+export { default as DropdownCheckboxItem }   from "./components/DropdownMenu/DropdownCheckboxItem.vue";
+export { default as DropdownRadioGroup }     from "./components/DropdownMenu/DropdownRadioGroup.vue";
+export { default as DropdownRadioItem }      from "./components/DropdownMenu/DropdownRadioItem.vue";
+export { default as DropdownSub }            from "./components/DropdownMenu/DropdownSub.vue";
+export { default as Alert }             from "./components/Alert/Alert.vue";
+export { default as AlertDialog }       from "./components/Alert/AlertDialog.vue";
 
 // ── Composables ───────────────────────────────────────────────
 export { useToast }                 from "./composables/useToast";

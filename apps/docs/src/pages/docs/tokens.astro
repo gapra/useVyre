@@ -1,0 +1,209 @@
+---
+import DocsLayout from "@/layouts/DocsLayout.astro";
+import { Code }   from "astro:components";
+
+const codeImportCss = `/* Import once at your app entry */
+import "@vyre/tokens/css";
+
+/* Then use anywhere in CSS */
+.my-button {
+  background: var(--vyre-color-semantic-accent);
+  color:      var(--vyre-color-semantic-accent-foreground);
+  padding:    var(--vyre-spacing-2) var(--vyre-spacing-4);
+  font-size:  var(--vyre-typography-font-size-sm);
+  border-radius: var(--vyre-border-radius-md);
+}`;
+
+const codeImportJs = `import { tokens } from "@vyre/tokens";
+
+// Typed JS object — useful for runtime theming or Storybook
+console.log(tokens.color.semantic.accent); // "#7c3aed"`;
+
+const codeTheme = `<!-- Light (explicit) -->
+<html data-theme="light">
+
+<!-- Dark (explicit) -->
+<html data-theme="dark">
+
+<!-- Auto — follows prefers-color-scheme (default) -->
+<html>`;
+
+type TokenRow = { token: string; light: string; dark: string; usage: string };
+
+const colorTokens: TokenRow[] = [
+  { token: "--vyre-color-semantic-background",       light: "#ffffff",  dark: "#09090b",  usage: "Page/app background" },
+  { token: "--vyre-color-semantic-surface",           light: "#fafafa",  dark: "#18181b",  usage: "Cards, panels, sidebars" },
+  { token: "--vyre-color-semantic-surface-raised",    light: "#f4f4f5",  dark: "#27272a",  usage: "Dropdowns, popovers" },
+  { token: "--vyre-color-semantic-surface-overlay",   light: "#ffffff",  dark: "#333338",  usage: "Modals, tooltips" },
+  { token: "--vyre-color-semantic-border",            light: "#e4e4e7",  dark: "#3f3f46",  usage: "Default borders" },
+  { token: "--vyre-color-semantic-border-subtle",     light: "#ebebec",  dark: "#27272a",  usage: "Section dividers" },
+  { token: "--vyre-color-semantic-border-strong",     light: "#a1a1aa",  dark: "#71717a",  usage: "Focus rings, selected" },
+  { token: "--vyre-color-semantic-text-primary",      light: "#09090b",  dark: "#fafafa",  usage: "Headings, body" },
+  { token: "--vyre-color-semantic-text-secondary",    light: "#52525b",  dark: "#a1a1aa",  usage: "Descriptions, subtitles" },
+  { token: "--vyre-color-semantic-text-muted",        light: "#a1a1aa",  dark: "#71717a",  usage: "Placeholders, timestamps" },
+  { token: "--vyre-color-semantic-text-disabled",     light: "#d1d1d6",  dark: "#3f3f46",  usage: "Disabled state" },
+  { token: "--vyre-color-semantic-text-inverse",      light: "#ffffff",  dark: "#09090b",  usage: "Text on dark/accent bg" },
+  { token: "--vyre-color-semantic-accent",            light: "#7c3aed",  dark: "#a78bfa",  usage: "Brand CTAs, highlights" },
+  { token: "--vyre-color-semantic-accent-hover",      light: "#6d28d9",  dark: "#8b5cf6",  usage: "Hover on accent" },
+  { token: "--vyre-color-semantic-accent-foreground", light: "#ffffff",  dark: "#ffffff",  usage: "Text on accent bg" },
+  { token: "--vyre-color-semantic-accent-subtle",     light: "#f5f3ff",  dark: "rgba(167,139,250,0.1)", usage: "Badge backgrounds" },
+  { token: "--vyre-color-semantic-teal",              light: "#14b8a6",  dark: "#2dd4bf",  usage: "Secondary accent, code" },
+  { token: "--vyre-color-semantic-teal-hover",        light: "#0d9488",  dark: "#14b8a6",  usage: "Hover on teal" },
+  { token: "--vyre-color-semantic-teal-subtle",       light: "rgba(20,184,166,.08)", dark: "rgba(20,184,166,.1)", usage: "Teal badge bg" },
+  { token: "--vyre-color-semantic-success",           light: "#16a34a",  dark: "#4ade80",  usage: "Success states" },
+  { token: "--vyre-color-semantic-success-subtle",    light: "#f0fdf4",  dark: "rgba(74,222,128,.08)", usage: "Success badge bg" },
+  { token: "--vyre-color-semantic-warning",           light: "#f59e0b",  dark: "#fbbf24",  usage: "Warnings, beta" },
+  { token: "--vyre-color-semantic-warning-subtle",    light: "#fffbeb",  dark: "rgba(251,191,36,.08)", usage: "Warning badge bg" },
+  { token: "--vyre-color-semantic-danger",            light: "#dc2626",  dark: "#f87171",  usage: "Errors, destructive" },
+  { token: "--vyre-color-semantic-danger-hover",      light: "#ef4444",  dark: "#ef4444",  usage: "Hover on danger" },
+  { token: "--vyre-color-semantic-danger-subtle",     light: "#fef2f2",  dark: "rgba(248,113,113,.08)", usage: "Danger badge bg" },
+];
+
+type SpacingRow = { token: string; value: string };
+const spacingTokens: SpacingRow[] = [
+  { token: "--vyre-spacing-1",  value: "4px"  },
+  { token: "--vyre-spacing-2",  value: "8px"  },
+  { token: "--vyre-spacing-3",  value: "12px" },
+  { token: "--vyre-spacing-4",  value: "16px" },
+  { token: "--vyre-spacing-5",  value: "20px" },
+  { token: "--vyre-spacing-6",  value: "24px" },
+  { token: "--vyre-spacing-8",  value: "32px" },
+  { token: "--vyre-spacing-10", value: "40px" },
+  { token: "--vyre-spacing-12", value: "48px" },
+];
+
+type TypographyRow = { token: string; value: string; usage: string };
+const typographyTokens: TypographyRow[] = [
+  { token: "--vyre-typography-font-size-2xs", value: "0.625rem",  usage: "Tiny labels" },
+  { token: "--vyre-typography-font-size-xs",  value: "0.6875rem", usage: "Badge text, captions" },
+  { token: "--vyre-typography-font-size-sm",  value: "0.8125rem", usage: "Default UI, buttons" },
+  { token: "--vyre-typography-font-size-md",  value: "0.9375rem", usage: "Body text" },
+  { token: "--vyre-typography-font-size-lg",  value: "1.125rem",  usage: "Large body, small headings" },
+  { token: "--vyre-typography-font-size-xl",  value: "1.375rem",  usage: "Section headings" },
+  { token: "--vyre-typography-font-size-2xl", value: "1.75rem",   usage: "Page headings" },
+  { token: "--vyre-typography-font-size-3xl", value: "2.25rem",   usage: "Large headings" },
+  { token: "--vyre-typography-font-size-4xl", value: "3rem",      usage: "Hero headings" },
+];
+---
+
+<DocsLayout title="Tokens">
+  <div class="docs-header">
+    <h1 class="docs-title">Tokens</h1>
+    <p class="docs-lead">
+      Design tokens are the single source of truth for all visual decisions in useVyre.
+      They are CSS custom properties that automatically adapt to light and dark themes.
+    </p>
+  </div>
+
+  <hr class="docs-divider" />
+
+  <div class="docs-callout docs-callout--accent">
+    <strong>Rule:</strong> Always use semantic tokens (<code>--vyre-color-semantic-*</code>),
+    never primitive tokens (<code>--vyre-color-primitive-*</code>). Semantic tokens adapt to
+    the theme — primitive tokens are fixed raw values.
+  </div>
+
+  <h2 class="docs-h2">Import</h2>
+  <Code code={codeImportCss} lang="ts" theme="github-dark" />
+  <Code code={codeImportJs} lang="ts" theme="github-dark" />
+
+  <h2 class="docs-h2">Theme system</h2>
+  <p class="docs-p">
+    Set <code>data-theme</code> on the <code>&lt;html&gt;</code> element to control the theme.
+    Without it, the theme follows <code>prefers-color-scheme</code>.
+  </p>
+  <Code code={codeTheme} lang="html" theme="github-dark" />
+
+  <h2 class="docs-h2">Color tokens</h2>
+  <p class="docs-p">
+    Semantic color tokens — use these in all component styles and custom CSS.
+  </p>
+
+  <div class="docs-table-wrapper">
+    <table class="docs-table">
+      <thead>
+        <tr>
+          <th>Token</th>
+          <th>Light</th>
+          <th>Dark</th>
+          <th>Usage</th>
+        </tr>
+      </thead>
+      <tbody>
+        {colorTokens.map(({ token, light, dark, usage }) => (
+          <tr>
+            <td><code>{token}</code></td>
+            <td>
+              <span class="docs-token-swatch" style={`background:${light}`} />
+              <code style="font-size:0.7rem;opacity:0.7">{light}</code>
+            </td>
+            <td>
+              <span class="docs-token-swatch docs-token-swatch--dark" style={`background:${dark}`} />
+              <code style="font-size:0.7rem;opacity:0.7">{dark}</code>
+            </td>
+            <td style="opacity:0.75;font-size:0.8125rem">{usage}</td>
+          </tr>
+        ))}
+      </tbody>
+    </table>
+  </div>
+
+  <h2 class="docs-h2">Spacing tokens</h2>
+  <div class="docs-table-wrapper">
+    <table class="docs-table">
+      <thead>
+        <tr><th>Token</th><th>Value</th><th>Preview</th></tr>
+      </thead>
+      <tbody>
+        {spacingTokens.map(({ token, value }) => (
+          <tr>
+            <td><code>{token}</code></td>
+            <td><code>{value}</code></td>
+            <td>
+              <span style={`display:inline-block;height:12px;background:var(--vyre-color-semantic-accent);border-radius:2px;width:${value};vertical-align:middle`} />
+            </td>
+          </tr>
+        ))}
+      </tbody>
+    </table>
+  </div>
+
+  <h2 class="docs-h2">Typography tokens</h2>
+  <div class="docs-table-wrapper">
+    <table class="docs-table">
+      <thead>
+        <tr><th>Token</th><th>Value</th><th>Usage</th></tr>
+      </thead>
+      <tbody>
+        {typographyTokens.map(({ token, value, usage }) => (
+          <tr>
+            <td><code>{token}</code></td>
+            <td><code>{value}</code></td>
+            <td style="opacity:0.75;font-size:0.8125rem">{usage}</td>
+          </tr>
+        ))}
+      </tbody>
+    </table>
+  </div>
+
+  <div class="docs-pagination">
+    <a href="/docs/ai-context" class="docs-pagination__link docs-pagination__link--prev">
+      ← AI Context
+    </a>
+    <a href="/docs/components/button" class="docs-pagination__link docs-pagination__link--next">
+      Button →
+    </a>
+  </div>
+</DocsLayout>
+
+<style>
+.docs-token-swatch {
+  display: inline-block;
+  width: 14px;
+  height: 14px;
+  border-radius: 3px;
+  border: 1px solid var(--vyre-color-semantic-border);
+  vertical-align: middle;
+  margin-right: 6px;
+}
+</style>

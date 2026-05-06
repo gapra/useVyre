@@ -1,0 +1,108 @@
+---
+import DocsLayout       from "@/layouts/DocsLayout.astro";
+import ComponentPreview from "@/components/docs/ComponentPreview.astro";
+import PropsTable       from "@/components/docs/PropsTable.astro";
+import { AccordionDemo } from "@/components/demos/Tier1Demos";
+import { AccordionSingleDemo, AccordionMultipleDemo } from "@/components/demos/SelectTabsDemo";
+
+const codeBasicReact = `import {
+  Accordion, AccordionItem, AccordionTrigger, AccordionContent
+} from "@vyre/react";
+
+<Accordion type="single" defaultValue="item-1">
+  <AccordionItem value="item-1">
+    <AccordionTrigger>What is useVyre?</AccordionTrigger>
+    <AccordionContent>
+      An AI-native design system built for minimal hallucinations.
+    </AccordionContent>
+  </AccordionItem>
+  <AccordionItem value="item-2">
+    <AccordionTrigger>Which frameworks?</AccordionTrigger>
+    <AccordionContent>React and Vue 3.</AccordionContent>
+  </AccordionItem>
+</Accordion>`;
+
+const codeBasicVue = `<script setup>
+import {
+  Accordion, AccordionItem, AccordionTrigger, AccordionContent
+} from "@vyre/vue";
+</script>
+<template>
+  <Accordion type="single" default-value="item-1">
+    <AccordionItem value="item-1">
+      <AccordionTrigger>What is useVyre?</AccordionTrigger>
+      <AccordionContent>
+        An AI-native design system built for minimal hallucinations.
+      </AccordionContent>
+    </AccordionItem>
+    <AccordionItem value="item-2">
+      <AccordionTrigger>Which frameworks?</AccordionTrigger>
+      <AccordionContent>React and Vue 3.</AccordionContent>
+    </AccordionItem>
+  </Accordion>
+</template>`;
+
+const codeMultipleReact = `<Accordion type="multiple" defaultValue={["item-1", "item-2"]}>
+  ...
+</Accordion>`;
+
+const codeMultipleVue = `<Accordion type="multiple" :default-value="['item-1', 'item-2']">
+  ...
+</Accordion>`;
+
+const accordionProps = [
+  { name: "type",          type: `"single" | "multiple"`,   default: `"single"`, description: "Allow one or multiple items open at once." },
+  { name: "defaultValue",  type: "string | string[]",        default: "—",        description: "Initially open item(s). Uncontrolled." },
+  { name: "modelValue",    type: "string | string[]",        default: "—",        description: "Controlled open state. Use v-model / value prop." },
+  { name: "class",         type: "string",                   default: "—",        description: "Additional CSS class." },
+];
+
+const itemProps = [
+  { name: "value",  type: "string",  default: "—",  description: "Unique identifier for this item." },
+  { name: "class",  type: "string",  default: "—",  description: "Additional CSS class." },
+];
+---
+
+<DocsLayout title="Accordion">
+  <div class="docs-header">
+    <div class="docs-header__meta">
+      <span class="vyre-badge vyre-badge--default">@vyre/react</span>
+      <span class="vyre-badge vyre-badge--default">@vyre/vue</span>
+    </div>
+    <h1 class="docs-title">Accordion</h1>
+    <p class="docs-lead">
+      Collapsible sections that show and hide content. Supports single and multiple open modes,
+      controlled and uncontrolled state.
+    </p>
+  </div>
+
+  <hr class="docs-divider" />
+
+  <h2 class="docs-h2">Single (default)</h2>
+  <ComponentPreview react={codeBasicReact} vue={codeBasicVue}>
+    <AccordionSingleDemo client:visible />
+  </ComponentPreview>
+
+  <h2 class="docs-h2">Multiple open</h2>
+  <p class="docs-p">
+    Set <code>type="multiple"</code> to allow lebih dari satu item terbuka sekaligus.
+  </p>
+  <ComponentPreview react={codeMultipleReact} vue={codeMultipleVue}>
+    <AccordionMultipleDemo client:visible />
+  </ComponentPreview>
+
+  <h2 class="docs-h2">Accordion props</h2>
+  <PropsTable props={accordionProps} />
+
+  <h2 class="docs-h2">AccordionItem props</h2>
+  <PropsTable props={itemProps} />
+
+  <div class="docs-pagination">
+    <a href="/docs/components/tooltip" class="docs-pagination__link docs-pagination__link--prev">
+      ← Tooltip
+    </a>
+    <a href="/docs/components/avatar" class="docs-pagination__link docs-pagination__link--next">
+      Avatar →
+    </a>
+  </div>
+</DocsLayout>

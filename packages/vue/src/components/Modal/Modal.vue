@@ -54,7 +54,8 @@ const FOCUSABLE = [
   "input:not([disabled])", "select:not([disabled])", '[tabindex]:not([tabindex="-1"])',
 ].join(",");
 
-let containerEl: HTMLElement | null = null;
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
+let containerEl: any = null;
 let prevOverflow = "";
 
 function handleEsc(e: KeyboardEvent) {
@@ -63,10 +64,11 @@ function handleEsc(e: KeyboardEvent) {
 
 function trapFocus(e: KeyboardEvent) {
   if (e.key !== "Tab" || !containerEl) return;
-  const focusable = Array.from(containerEl.querySelectorAll<HTMLElement>(FOCUSABLE));
+  const el = containerEl as HTMLElement;
+  const focusable: HTMLElement[] = Array.from(el.querySelectorAll(FOCUSABLE));
   if (!focusable.length) return;
-  const first = focusable[0];
-  const last  = focusable[focusable.length - 1];
+  const first = focusable[0] as HTMLElement;
+  const last  = focusable[focusable.length - 1] as HTMLElement;
   if (e.shiftKey && document.activeElement === first) {
     e.preventDefault(); last.focus();
   } else if (!e.shiftKey && document.activeElement === last) {
@@ -107,7 +109,7 @@ const modalClasses = (extra?: string) =>
   <Teleport to="body">
     <div v-if="open" class="vyre-modal-backdrop" role="presentation" @click="onBackdropClick">
       <div
-        :ref="(el) => { containerEl = el as HTMLElement }"
+        :ref="(el) => { containerEl = el }"
         :class="modalClasses()"
         role="dialog"
         aria-modal="true"

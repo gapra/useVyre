@@ -1,0 +1,75 @@
+---
+import DocsLayout       from "@/layouts/DocsLayout.astro";
+import ComponentPreview from "@/components/docs/ComponentPreview.astro";
+import PropsTable       from "@/components/docs/PropsTable.astro";
+import { SkeletonDemo } from "@/components/demos/Tier1Demos";
+
+const codeBasicReact = `import { Skeleton } from "@vyre/react";
+
+// Avatar + text card placeholder
+<div style={{ display: "flex", gap: 12, alignItems: "center" }}>
+  <Skeleton variant="circle" width={40} height={40} />
+  <div style={{ display: "flex", flexDirection: "column", gap: 6 }}>
+    <Skeleton variant="text" width={180} />
+    <Skeleton variant="text" width={120} />
+  </div>
+</div>
+
+// Image placeholder
+<Skeleton variant="rect" width="100%" height={120} />`;
+
+const codeBasicVue = `<script setup>
+import { Skeleton } from "@vyre/vue";
+</script>
+<template>
+  <div style="display:flex;gap:12px;align-items:center">
+    <Skeleton variant="circle" :width="40" :height="40" />
+    <div style="display:flex;flex-direction:column;gap:6px">
+      <Skeleton variant="text" :width="180" />
+      <Skeleton variant="text" :width="120" />
+    </div>
+  </div>
+
+  <Skeleton variant="rect" width="100%" :height="120" />
+</template>`;
+
+const props = [
+  { name: "variant", type: `"rect" | "circle" | "text"`, default: `"rect"`, description: "Shape of the placeholder. Text auto-sets height for single lines." },
+  { name: "width",   type: "number | string",             default: "—",     description: "Width in px (number) or any CSS unit (string)." },
+  { name: "height",  type: "number | string",             default: "—",     description: "Height in px (number) or any CSS unit (string)." },
+  { name: "class",   type: "string",                      default: "—",     description: "Additional CSS class." },
+];
+---
+
+<DocsLayout title="Skeleton">
+  <div class="docs-header">
+    <div class="docs-header__meta">
+      <span class="vyre-badge vyre-badge--default">@vyre/react</span>
+      <span class="vyre-badge vyre-badge--default">@vyre/vue</span>
+    </div>
+    <h1 class="docs-title">Skeleton</h1>
+    <p class="docs-lead">
+      Animated loading placeholder. Use to match the shape of content before it loads —
+      reduces perceived wait time and prevents layout shift.
+    </p>
+  </div>
+
+  <hr class="docs-divider" />
+
+  <h2 class="docs-h2">Card placeholder</h2>
+  <ComponentPreview react={codeBasicReact} vue={codeBasicVue}>
+    <SkeletonDemo client:visible />
+  </ComponentPreview>
+
+  <h2 class="docs-h2">Props</h2>
+  <PropsTable props={props} />
+
+  <div class="docs-pagination">
+    <a href="/docs/components/separator" class="docs-pagination__link docs-pagination__link--prev">
+      ← Separator
+    </a>
+    <a href="/docs/components/slider" class="docs-pagination__link docs-pagination__link--next">
+      Slider →
+    </a>
+  </div>
+</DocsLayout>

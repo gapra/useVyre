@@ -1,0 +1,172 @@
+---
+import DocsLayout from "@/layouts/DocsLayout.astro";
+import CodeTabs   from "@/components/docs/CodeTabs.astro";
+import { Code }   from "astro:components";
+
+const codeInstallReact = `# Packages not yet published — coming soon
+# Star the repo to be notified: https://github.com/gapra/usevyre
+
+# When published:
+npm install ...
+# or
+pnpm add ...`;
+
+const codeInstallVue = `# Packages not yet published — coming soon
+# Star the repo to be notified: https://github.com/gapra/usevyre
+
+# When published:
+npm install ...
+# or
+pnpm add ...`;
+
+const codeSetupReact = `// main.tsx — import once at your app entry point
+import "@vyre/tokens/css";      // ← design tokens (required)
+import "@vyre/react/styles";    // ← component styles (required)
+
+import { StrictMode } from "react";
+import { createRoot } from "react-dom/client";
+import { ToastProvider } from "@vyre/react";
+import App from "./App";
+
+createRoot(document.getElementById("root")!).render(
+  <StrictMode>
+    <ToastProvider>
+      <App />
+    </ToastProvider>
+  </StrictMode>
+);`;
+
+const codeSetupVue = `// main.ts — import once at your app entry point
+import "@vyre/tokens/css";      // ← design tokens (required)
+import "@vyre/vue/styles";      // ← component styles (required)
+
+import { createApp } from "vue";
+import App from "./App.vue";
+
+createApp(App).mount("#app");`;
+
+const codeSetupVueViewport = `<!-- App.vue — place ToastViewport once in the layout -->
+<script setup lang="ts">
+import { ToastViewport } from "@vyre/vue";
+</script>
+<template>
+  <RouterView />
+  <ToastViewport />
+</template>`;
+
+const codeUsageReact = `import { Button, Badge, Card, CardHeader, CardBody } from "@vyre/react";
+import { useToast } from "@vyre/react";
+
+export function ProfileCard() {
+  const { toast } = useToast();
+  return (
+    <Card variant="elevated">
+      <CardHeader>
+        <Badge variant="success">Active</Badge>
+      </CardHeader>
+      <CardBody>
+        <Button
+          variant="accent"
+          onClick={() => toast({ title: "Saved!", variant: "success" })}
+        >
+          Save changes
+        </Button>
+      </CardBody>
+    </Card>
+  );
+}`;
+
+const codeUsageVue = `<script setup lang="ts">
+import { Button, Badge, Card, CardHeader, CardBody } from "@vyre/vue";
+import { useToast } from "@vyre/vue";
+const { toast } = useToast();
+</script>
+
+<template>
+  <Card variant="elevated">
+    <CardHeader>
+      <Badge variant="success">Active</Badge>
+    </CardHeader>
+    <CardBody>
+      <Button
+        variant="accent"
+        @click="toast({ title: 'Saved!', variant: 'success' })"
+      >
+        Save changes
+      </Button>
+    </CardBody>
+  </Card>
+</template>`;
+
+const codeLocalDev = `# Clone the repo
+git clone https://github.com/gapra/usevyre.git
+cd usevyre
+
+# Install dependencies
+pnpm install
+
+# Build packages
+pnpm --filter @vyre/tokens build
+
+# Run docs site locally
+SITE_MODE=live pnpm --filter @vyre/docs dev`;
+---
+
+<DocsLayout title="Installation">
+  <div class="docs-header">
+    <h1 class="docs-title">Installation</h1>
+    <p class="docs-lead">
+      Set up useVyre in your React or Vue 3 project. Import the tokens and styles once,
+      then import components anywhere.
+    </p>
+  </div>
+
+  <hr class="docs-divider" />
+
+  <div class="docs-callout docs-callout--accent">
+    <strong>Not yet published to npm.</strong> useVyre is under active development.
+    <a href="https://github.com/gapra/usevyre" target="_blank" rel="noopener noreferrer">Star the repo</a>
+    to be notified when packages are available.
+  </div>
+
+  <h2 class="docs-h2">Install packages</h2>
+  <p class="docs-p">
+    You need two packages: the framework adapter (<code>@vyre/react</code> or <code>@vyre/vue</code>)
+    and the shared design tokens (<code>@vyre/tokens</code>).
+  </p>
+  <CodeTabs react={codeInstallReact} vue={codeInstallVue} />
+
+  <h2 class="docs-h2">Import styles</h2>
+  <p class="docs-p">
+    Add these two imports at your app entry point. Order matters — tokens must come before component styles.
+  </p>
+  <CodeTabs react={codeSetupReact} vue={codeSetupVue} />
+
+  <h2 class="docs-h2">Vue: add ToastViewport</h2>
+  <p class="docs-p">
+    In Vue, place <code>ToastViewport</code> once in your root layout. This is where toast notifications
+    will be rendered.
+  </p>
+  <Code code={codeSetupVueViewport} lang="vue" theme="github-dark" />
+
+  <h2 class="docs-h2">Usage</h2>
+  <p class="docs-p">
+    Import components directly from the package — no registration or plugin required.
+  </p>
+  <CodeTabs react={codeUsageReact} vue={codeUsageVue} />
+
+  <h2 class="docs-h2">Local development</h2>
+  <p class="docs-p">
+    To run the docs site locally or contribute to useVyre:
+  </p>
+  <Code code={codeLocalDev} lang="bash" theme="github-dark" />
+
+  <div class="docs-pagination">
+    <a href="/docs/getting-started" class="docs-pagination__link docs-pagination__link--prev">
+      ← Getting Started
+    </a>
+    <a href="/docs/ai-context" class="docs-pagination__link docs-pagination__link--next">
+      AI Context →
+    </a>
+  </div>
+</DocsLayout>

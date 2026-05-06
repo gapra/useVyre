@@ -1,0 +1,184 @@
+---
+import DocsLayout from "@/layouts/DocsLayout.astro";
+import CodeTabs   from "@/components/docs/CodeTabs.astro";
+import { Code }   from "astro:components";
+
+const codeClaudeMd = `# CLAUDE.md (or .cursor/rules / AGENTS.md)
+
+## Design System: useVyre
+
+### Token naming convention
+--vyre-[category]-[subcategory]-[variant]
+
+### Theme system
+- Light theme: :root or [data-theme="light"]
+- Dark theme: [data-theme="dark"]
+- Auto: follows prefers-color-scheme when no data-theme is set
+- Semantic tokens adapt automatically — never branch on theme manually
+
+### Semantic color tokens (always use these, never primitive)
+--vyre-color-semantic-background       — Page background
+--vyre-color-semantic-surface          — Cards, panels
+--vyre-color-semantic-surface-raised   — Dropdowns, popovers
+--vyre-color-semantic-surface-overlay  — Modals, tooltips
+--vyre-color-semantic-border           — Default borders
+--vyre-color-semantic-border-subtle    — Low-contrast dividers
+--vyre-color-semantic-border-strong    — Focus rings, selected
+--vyre-color-semantic-text-primary     — Headings, body
+--vyre-color-semantic-text-secondary   — Subtitles, descriptions
+--vyre-color-semantic-text-muted       — Placeholders, helper text
+--vyre-color-semantic-text-disabled    — Disabled state
+--vyre-color-semantic-text-inverse     — Text on dark/accent bg
+--vyre-color-semantic-accent           — Brand CTAs, focus rings
+--vyre-color-semantic-accent-hover     — Hover on accent
+--vyre-color-semantic-accent-foreground — Text on accent bg
+--vyre-color-semantic-accent-subtle    — Badge backgrounds
+--vyre-color-semantic-teal             — Secondary accent, code
+--vyre-color-semantic-success          — Confirmations
+--vyre-color-semantic-warning          — Warnings, beta
+--vyre-color-semantic-danger           — Errors, destructive
+
+### Styling rules
+1. NEVER use --vyre-color-primitive-* in components
+2. ALWAYS use semantic tokens for color decisions
+3. Interactive hover states: use -hover suffix tokens
+4. Low-opacity backgrounds: use -subtle suffix tokens
+5. Text hierarchy: text-primary > text-secondary > text-muted > text-disabled
+6. Text on colored bg: use text-inverse or accent-foreground
+
+### Component data attributes
+data-variant="primary|secondary|ghost|accent|teal|danger"
+data-size="sm|md|lg|icon"
+data-state="error|success|warning|idle"
+data-checked — boolean presence attribute (Switch, Checkbox)
+data-disabled — boolean presence attribute
+data-indeterminate — boolean presence attribute (Checkbox)
+data-placement="top|bottom|left|right" — Tooltip
+
+### React import pattern
+import { Button, Badge, Card, CardHeader, CardBody, CardFooter } from "@vyre/react";
+import { Input, Field, Textarea, Select } from "@vyre/react";
+import { Modal, ModalHeader, ModalBody, ModalFooter } from "@vyre/react";
+import { Tabs, TabList, Tab, TabPanels, TabPanel } from "@vyre/react";
+import { Tooltip, ToastProvider, useToast } from "@vyre/react";
+import { Accordion, AccordionItem, AccordionTrigger, AccordionContent } from "@vyre/react";
+import { Avatar, Checkbox, Switch, Progress, Slider } from "@vyre/react";
+import { Separator, Label, Skeleton } from "@vyre/react";
+
+### Vue import pattern
+import { Button, Badge, Card, CardHeader, CardBody, CardFooter } from "@vyre/vue";
+import { Input, Field, Textarea, Select } from "@vyre/vue";
+import { Modal, ModalHeader, ModalBody, ModalFooter } from "@vyre/vue";
+import { Tabs, TabList, Tab, TabPanels, TabPanel } from "@vyre/vue";
+import { Tooltip, ToastViewport, useToast } from "@vyre/vue";
+import { Accordion, AccordionItem, AccordionTrigger, AccordionContent } from "@vyre/vue";
+import { Avatar, Checkbox, Switch, Progress, Slider } from "@vyre/vue";
+import { Separator, Label, Skeleton } from "@vyre/vue";
+
+### Key behavioral differences React vs Vue
+- React: controlled state via value+onChange / checked+onCheckedChange / onValueChange
+- Vue: controlled state via v-model (modelValue + update:modelValue)
+- React: Toast needs <ToastProvider> wrapping the app
+- Vue: Toast needs <ToastViewport> placed once in layout
+- React: Modal closes via onClose prop
+- Vue: Modal closes via @close event`;
+
+const codeClaudeReadFile = `# In CLAUDE.md, reference the generated file directly:
+See @packages/tokens/dist/ai-context.md for the full token reference.`;
+
+const codeCursorRules = `# .cursor/rules
+# Paste the contents of packages/tokens/dist/ai-context.md here,
+# or reference it with @packages/tokens/dist/ai-context.md`;
+
+const codeTokensImport = `// Access tokens in JS/TS
+import { tokens } from "@vyre/tokens";
+
+// e.g. read a token value at runtime
+console.log(tokens.color.semantic.accent); // "#7c3aed" (light)`;
+---
+
+<DocsLayout title="AI Context">
+  <div class="docs-header">
+    <div class="docs-header__meta">
+      <span class="vyre-badge vyre-badge--teal">AI-native</span>
+    </div>
+    <h1 class="docs-title">AI Context</h1>
+    <p class="docs-lead">
+      The real power of useVyre is predictability. Add the AI context file to your agent's
+      rules so it generates correct, type-safe component code on the first try - no invented
+      props, no hallucinated variants.
+    </p>
+  </div>
+
+  <hr class="docs-divider" />
+
+  <div class="docs-callout docs-callout--teal">
+    <strong>Why this matters:</strong> Without context, AI agents invent props that don't exist -
+    <code>color="blue"</code> instead of <code>variant="accent"</code>,
+    <code>type="error"</code> instead of <code>state="error"</code>. With the context file,
+    they get it right every time.
+  </div>
+
+  <h2 class="docs-h2">Option 1 — Paste into CLAUDE.md / .cursor/rules</h2>
+  <p class="docs-p">
+    Copy the block below into your <code>CLAUDE.md</code>, <code>.cursor/rules</code>,
+    or <code>AGENTS.md</code>. This covers every token, import pattern, prop name,
+    and behavioral difference between the React and Vue adapters.
+  </p>
+  <Code code={codeClaudeMd} lang="markdown" theme="github-dark" />
+
+  <h2 class="docs-h2">Option 2 — Reference the generated file</h2>
+  <p class="docs-p">
+    After building the tokens package (<code>pnpm --filter @vyre/tokens build</code>),
+    a full context file is generated at <code>packages/tokens/dist/ai-context.md</code>.
+    Reference it directly in Claude Code or Cursor:
+  </p>
+  <CodeTabs react={codeClaudeReadFile} vue={codeCursorRules} />
+
+  <h2 class="docs-h2">Access tokens in JavaScript</h2>
+  <p class="docs-p">
+    The tokens package also exports a typed JS object for runtime use:
+  </p>
+  <Code code={codeTokensImport} lang="ts" theme="github-dark" />
+
+  <h2 class="docs-h2">What the context tells your agent</h2>
+
+  <div style="display:flex;flex-direction:column;gap:12px;margin:16px 0">
+    <div class="vyre-card" style="padding:16px 20px">
+      <p style="margin:0 0 4px;font-weight:600;font-size:0.875rem">Token naming</p>
+      <p style="margin:0;font-size:0.8125rem;opacity:0.7">
+        <code>--vyre-color-semantic-accent</code> not <code>#7c3aed</code>.
+        Semantic tokens adapt to light/dark automatically.
+      </p>
+    </div>
+    <div class="vyre-card" style="padding:16px 20px">
+      <p style="margin:0 0 4px;font-weight:600;font-size:0.875rem">Exact prop names</p>
+      <p style="margin:0;font-size:0.8125rem;opacity:0.7">
+        <code>variant="accent"</code> not <code>color="purple"</code>.
+        <code>onCheckedChange</code> not <code>onChange</code>.
+      </p>
+    </div>
+    <div class="vyre-card" style="padding:16px 20px">
+      <p style="margin:0 0 4px;font-weight:600;font-size:0.875rem">React vs Vue differences</p>
+      <p style="margin:0;font-size:0.8125rem;opacity:0.7">
+        React uses <code>checked + onCheckedChange</code>.
+        Vue uses <code>v-model</code>. Toast setup differs per framework.
+      </p>
+    </div>
+    <div class="vyre-card" style="padding:16px 20px">
+      <p style="margin:0 0 4px;font-weight:600;font-size:0.875rem">Import paths</p>
+      <p style="margin:0;font-size:0.8125rem;opacity:0.7">
+        Every component and its exact named export, so the agent never guesses the import.
+      </p>
+    </div>
+  </div>
+
+  <div class="docs-pagination">
+    <a href="/docs/installation" class="docs-pagination__link docs-pagination__link--prev">
+      ← Installation
+    </a>
+    <a href="/docs/tokens" class="docs-pagination__link docs-pagination__link--next">
+      Tokens →
+    </a>
+  </div>
+</DocsLayout>
