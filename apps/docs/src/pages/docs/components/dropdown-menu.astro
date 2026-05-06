@@ -1,0 +1,226 @@
+---
+import DocsLayout       from "@/layouts/DocsLayout.astro";
+import ComponentPreview from "@/components/docs/ComponentPreview.astro";
+import PropsTable       from "@/components/docs/PropsTable.astro";
+import {
+  DropdownBasicDemo,
+  DropdownCheckboxDemo,
+  DropdownRadioDemo,
+  DropdownEndDemo,
+} from "@/components/demos/Tier2Demo";
+
+const codeBasicReact = `import {
+  DropdownMenu, DropdownItem, DropdownSeparator,
+  DropdownLabel, DropdownSub, Button,
+} from "@vyre/react";
+
+<DropdownMenu trigger={<Button variant="secondary">Actions</Button>}>
+  <DropdownLabel>File</DropdownLabel>
+  <DropdownItem icon={<EditIcon />} shortcut="⌘E" onSelect={handleEdit}>Edit</DropdownItem>
+  <DropdownItem icon={<CopyIcon />} shortcut="⌘D" onSelect={handleDuplicate}>Duplicate</DropdownItem>
+  <DropdownSub trigger="Share" icon={<ShareIcon />}>
+    <DropdownItem onSelect={handleEmail}>Email</DropdownItem>
+    <DropdownItem onSelect={handleLink}>Copy link</DropdownItem>
+  </DropdownSub>
+  <DropdownSeparator />
+  <DropdownItem variant="danger" icon={<TrashIcon />} onSelect={handleDelete}>Delete</DropdownItem>
+</DropdownMenu>`;
+
+const codeBasicVue = `<script setup>
+import {
+  DropdownMenu, DropdownItem, DropdownSeparator,
+  DropdownLabel, DropdownSub, Button,
+} from "@vyre/vue";
+</script>
+<template>
+  <DropdownMenu>
+    <template #trigger><Button variant="secondary">Actions</Button></template>
+    <DropdownLabel>File</DropdownLabel>
+    <DropdownItem shortcut="⌘E" @select="handleEdit">Edit</DropdownItem>
+    <DropdownItem shortcut="⌘D" @select="handleDuplicate">Duplicate</DropdownItem>
+    <DropdownSub trigger="Share">
+      <DropdownItem @select="handleEmail">Email</DropdownItem>
+      <DropdownItem @select="handleLink">Copy link</DropdownItem>
+    </DropdownSub>
+    <DropdownSeparator />
+    <DropdownItem variant="danger" @select="handleDelete">Delete</DropdownItem>
+  </DropdownMenu>
+</template>`;
+
+const codeCheckboxReact = `import { DropdownMenu, DropdownCheckboxItem, DropdownLabel, DropdownSeparator } from "@vyre/react";
+
+const [showToolbar, setShowToolbar] = useState(true);
+const [showPanel,   setShowPanel]   = useState(false);
+
+<DropdownMenu trigger={<Button variant="secondary">View</Button>}>
+  <DropdownLabel>Toggle panels</DropdownLabel>
+  <DropdownSeparator />
+  <DropdownCheckboxItem checked={showToolbar} onCheckedChange={setShowToolbar}>
+    Toolbar
+  </DropdownCheckboxItem>
+  <DropdownCheckboxItem checked={showPanel} onCheckedChange={setShowPanel}>
+    Side Panel
+  </DropdownCheckboxItem>
+</DropdownMenu>`;
+
+const codeCheckboxVue = `<script setup>
+import { DropdownMenu, DropdownCheckboxItem, DropdownLabel, DropdownSeparator } from "@vyre/vue";
+const showToolbar = ref(true);
+const showPanel   = ref(false);
+</script>
+<template>
+  <DropdownMenu>
+    <template #trigger><Button variant="secondary">View</Button></template>
+    <DropdownLabel>Toggle panels</DropdownLabel>
+    <DropdownSeparator />
+    <DropdownCheckboxItem v-model:checked="showToolbar">Toolbar</DropdownCheckboxItem>
+    <DropdownCheckboxItem v-model:checked="showPanel">Side Panel</DropdownCheckboxItem>
+  </DropdownMenu>
+</template>`;
+
+const codeRadioReact = `import { DropdownMenu, DropdownRadioGroup, DropdownRadioItem, DropdownLabel } from "@vyre/react";
+
+const [theme, setTheme] = useState("system");
+
+<DropdownMenu trigger={<Button variant="secondary">Theme: {theme}</Button>}>
+  <DropdownLabel>Appearance</DropdownLabel>
+  <DropdownRadioGroup value={theme} onValueChange={setTheme}>
+    <DropdownRadioItem value="light">Light</DropdownRadioItem>
+    <DropdownRadioItem value="dark">Dark</DropdownRadioItem>
+    <DropdownRadioItem value="system">System</DropdownRadioItem>
+  </DropdownRadioGroup>
+</DropdownMenu>`;
+
+const codeRadioVue = `<script setup>
+import { DropdownMenu, DropdownRadioGroup, DropdownRadioItem } from "@vyre/vue";
+const theme = ref("system");
+</script>
+<template>
+  <DropdownMenu>
+    <template #trigger><Button variant="secondary">Theme: {{ theme }}</Button></template>
+    <DropdownRadioGroup v-model="theme">
+      <DropdownRadioItem value="light">Light</DropdownRadioItem>
+      <DropdownRadioItem value="dark">Dark</DropdownRadioItem>
+      <DropdownRadioItem value="system">System</DropdownRadioItem>
+    </DropdownRadioGroup>
+  </DropdownMenu>
+</template>`;
+
+const codePlacementReact = `<DropdownMenu placement="bottom-start" trigger={<Button>bottom-start</Button>}>...</DropdownMenu>
+<DropdownMenu placement="bottom-end"  trigger={<Button>bottom-end</Button>}>...</DropdownMenu>`;
+
+const codePlacementVue = `<DropdownMenu placement="bottom-end">
+  <template #trigger><Button>bottom-end</Button></template>
+  ...
+</DropdownMenu>`;
+
+const menuProps = [
+  { name: "trigger",       type: "ReactElement",                                                    default: "—",              description: "(React) The trigger button. Passed as a prop." },
+  { name: "#trigger slot", type: "slot",                                                            default: "—",              description: "(Vue) The trigger button. Use the named slot." },
+  { name: "placement",     type: `"bottom-start" | "bottom-end" | "top-start" | "top-end"`,        default: `"bottom-start"`, description: "Position relative to the trigger." },
+  { name: "class / className", type: "string",                                                      default: "—",              description: "Additional CSS class on the menu panel." },
+];
+
+const itemProps = [
+  { name: "onSelect / @select", type: "() => void",                         default: "—",         description: "Called when item is clicked. Menu closes automatically." },
+  { name: "disabled",           type: "boolean",                             default: "false",     description: "Prevents selection and dims the item." },
+  { name: "variant",            type: `"default" | "danger"`,               default: `"default"`, description: "Danger variant renders the item in red." },
+  { name: "icon",               type: "ReactNode / #icon slot",              default: "—",         description: "Icon displayed to the left of the label." },
+  { name: "shortcut",           type: "string",                              default: "—",         description: 'Keyboard hint displayed on the right (e.g. "⌘K").' },
+];
+
+const checkboxProps = [
+  { name: "checked",                   type: "boolean",          default: "—",    description: "Controlled checked state." },
+  { name: "onCheckedChange / v-model:checked", type: "(v: boolean) => void", default: "—", description: "Called when item is toggled." },
+  { name: "disabled",                  type: "boolean",          default: "false", description: "Prevents interaction." },
+  { name: "shortcut",                  type: "string",           default: "—",    description: "Keyboard hint on the right." },
+];
+
+const radioGroupProps = [
+  { name: "value / v-model",    type: "string",                default: "—", description: "Currently selected value." },
+  { name: "onValueChange",      type: "(value: string) => void", default: "—", description: "(React) Called when selection changes." },
+];
+
+const subProps = [
+  { name: "trigger",   type: "ReactNode / string",    default: "—",       description: "Label shown in the parent menu for the submenu trigger." },
+  { name: "icon",      type: "ReactNode",             default: "—",       description: "Optional icon to the left of the trigger label." },
+  { name: "placement", type: `"right" | "left"`,      default: `"right"`, description: "Which side the submenu opens on." },
+  { name: "disabled",  type: "boolean",               default: "false",   description: "Prevents the submenu from opening." },
+];
+---
+
+<DocsLayout title="Dropdown Menu">
+  <div class="docs-header">
+    <div class="docs-header__meta">
+      <span class="vyre-badge vyre-badge--default">@vyre/react</span>
+      <span class="vyre-badge vyre-badge--default">@vyre/vue</span>
+    </div>
+    <h1 class="docs-title">Dropdown Menu</h1>
+    <p class="docs-lead">
+      A contextual action menu anchored to a trigger. Supports icons, keyboard shortcuts,
+      labels, separators, submenus, checkbox items, radio groups, and full keyboard navigation
+      (Arrow keys, Home, End, Escape).
+    </p>
+  </div>
+
+  <hr class="docs-divider" />
+
+  <h2 class="docs-h2">Basic with submenu</h2>
+  <p class="docs-p">
+    Compose <code>DropdownItem</code>, <code>DropdownLabel</code>, <code>DropdownSeparator</code>,
+    and <code>DropdownSub</code> inside <code>DropdownMenu</code>. Hover "Share" to open the nested submenu.
+  </p>
+  <ComponentPreview react={codeBasicReact} vue={codeBasicVue}>
+    <DropdownBasicDemo client:visible />
+  </ComponentPreview>
+
+  <h2 class="docs-h2">Checkbox items</h2>
+  <p class="docs-p">
+    Use <code>DropdownCheckboxItem</code> for toggle options that don't close the menu after selection.
+  </p>
+  <ComponentPreview react={codeCheckboxReact} vue={codeCheckboxVue}>
+    <DropdownCheckboxDemo client:visible />
+  </ComponentPreview>
+
+  <h2 class="docs-h2">Radio group</h2>
+  <p class="docs-p">
+    Wrap <code>DropdownRadioItem</code> inside <code>DropdownRadioGroup</code> for exclusive
+    single-selection options.
+  </p>
+  <ComponentPreview react={codeRadioReact} vue={codeRadioVue}>
+    <DropdownRadioDemo client:visible />
+  </ComponentPreview>
+
+  <h2 class="docs-h2">Placement</h2>
+  <p class="docs-p">
+    <code>bottom-start</code> aligns the menu's left edge to the trigger's left edge.
+    <code>bottom-end</code> aligns to the right edge (useful for menus inside right-aligned toolbars).
+  </p>
+  <ComponentPreview react={codePlacementReact} vue={codePlacementVue}>
+    <DropdownEndDemo client:visible />
+  </ComponentPreview>
+
+  <h2 class="docs-h2">DropdownMenu props</h2>
+  <PropsTable props={menuProps} />
+
+  <h2 class="docs-h2">DropdownItem props</h2>
+  <PropsTable props={itemProps} />
+
+  <h2 class="docs-h2">DropdownCheckboxItem props</h2>
+  <PropsTable props={checkboxProps} />
+
+  <h2 class="docs-h2">DropdownRadioGroup props</h2>
+  <PropsTable props={radioGroupProps} />
+
+  <h2 class="docs-h2">DropdownSub props</h2>
+  <PropsTable props={subProps} />
+
+  <div class="docs-pagination">
+    <a href="/docs/components/popover" class="docs-pagination__link docs-pagination__link--prev">
+      ← Popover
+    </a>
+    <a href="/docs/components/alert" class="docs-pagination__link docs-pagination__link--next">
+      Alert →
+    </a>
+  </div>
+</DocsLayout>

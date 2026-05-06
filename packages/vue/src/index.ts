@@ -27,6 +27,10 @@
  * - Separator      — Horizontal or vertical divider
  * - Label          — Form label with required indicator
  * - Skeleton       — Loading placeholder (rect, circle, text variants)
+ * - Popover        — Floating content panel anchored to a trigger (v-model)
+ * - DropdownMenu   — Contextual action menu (+ DropdownItem, DropdownSeparator)
+ * - Alert          — Inline status banner (info/success/warning/danger)
+ * - AlertDialog    — Blocking confirmation modal (v-model)
  *
  * CSS must be imported separately:
  * import "@vyre/tokens/css";           ← design tokens (required)
@@ -67,6 +71,17 @@ export { default as Slider }            from "./components/Slider/Slider.vue";
 export { default as Separator }         from "./components/Separator/Separator.vue";
 export { default as Label }             from "./components/Label/Label.vue";
 export { default as Skeleton }          from "./components/Skeleton/Skeleton.vue";
+export { default as Popover }           from "./components/Popover/Popover.vue";
+export { default as DropdownMenu }           from "./components/DropdownMenu/DropdownMenu.vue";
+export { default as DropdownItem }           from "./components/DropdownMenu/DropdownItem.vue";
+export { default as DropdownLabel }          from "./components/DropdownMenu/DropdownLabel.vue";
+export { default as DropdownSeparator }      from "./components/DropdownMenu/DropdownSeparator.vue";
+export { default as DropdownCheckboxItem }   from "./components/DropdownMenu/DropdownCheckboxItem.vue";
+export { default as DropdownRadioGroup }     from "./components/DropdownMenu/DropdownRadioGroup.vue";
+export { default as DropdownRadioItem }      from "./components/DropdownMenu/DropdownRadioItem.vue";
+export { default as DropdownSub }            from "./components/DropdownMenu/DropdownSub.vue";
+export { default as Alert }             from "./components/Alert/Alert.vue";
+export { default as AlertDialog }       from "./components/Alert/AlertDialog.vue";
 
 // ── Composables ───────────────────────────────────────────────
 export { useToast }                 from "./composables/useToast";

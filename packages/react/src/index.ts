@@ -27,6 +27,10 @@
  * - Separator      — Horizontal/vertical divider
  * - Label          — Standalone form label
  * - Skeleton       — Loading placeholder with pulse animation
+ * - Popover        — Floating content panel anchored to a trigger
+ * - DropdownMenu   — Contextual action menu (+ DropdownItem, DropdownSeparator)
+ * - Alert          — Inline status banner (info/success/warning/danger)
+ * - AlertDialog    — Blocking confirmation modal
  *
  * CSS must be imported separately:
  * import "@vyre/tokens/css";           ← design tokens (required)
@@ -52,6 +56,14 @@ export { Progress }                                         from "./components/P
 export { Separator }                                        from "./components/Separator/Separator";
 export { Label }                                            from "./components/Label/Label";
 export { Skeleton }                                         from "./components/Skeleton/Skeleton";
+export { Popover }                                          from "./components/Popover/Popover";
+export {
+  DropdownMenu, DropdownItem, DropdownSeparator,
+  DropdownLabel, DropdownCheckboxItem,
+  DropdownRadioGroup, DropdownRadioItem,
+  DropdownSub,
+}                                                           from "./components/DropdownMenu/DropdownMenu";
+export { Alert, AlertDialog }                               from "./components/Alert/Alert";
 
 // ── Types ─────────────────────────────────────────────────────
 export type { ButtonProps }                                 from "./components/Button/Button";
@@ -72,6 +84,13 @@ export type { ProgressProps }                               from "./components/P
 export type { SeparatorProps }                              from "./components/Separator/Separator";
 export type { LabelProps }                                  from "./components/Label/Label";
 export type { SkeletonProps }                               from "./components/Skeleton/Skeleton";
+export type { PopoverProps, PopoverPlacement, PopoverSide, PopoverAlign } from "./components/Popover/Popover";
+export type {
+  DropdownMenuProps, DropdownItemProps, DropdownPlacement,
+  DropdownCheckboxItemProps, DropdownRadioGroupProps,
+  DropdownRadioItemProps, DropdownSubProps,
+}                                                           from "./components/DropdownMenu/DropdownMenu";
+export type { AlertProps, AlertDialogProps, AlertVariant }  from "./components/Alert/Alert";
 
 // ── Shared types ──────────────────────────────────────────────
 export type { Variant, Size, FieldState, BadgeVariant, BaseProps } from "./types";

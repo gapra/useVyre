@@ -47,4 +47,12 @@ export const navigation: NavSection[] = [
       { title: "Switch",    href: "/docs/components/switch"    },
     ],
   },
+  {
+    title: "Tier 2",
+    items: [
+      { title: "Popover",       href: "/docs/components/popover"       },
+      { title: "Dropdown Menu", href: "/docs/components/dropdown-menu" },
+      { title: "Alert",         href: "/docs/components/alert"         },
+    ],
+  },
 ];
