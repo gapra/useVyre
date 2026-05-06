@@ -2,203 +2,272 @@
 import BaseLayout from "@/layouts/BaseLayout.astro";
 import TopNav     from "@/components/layout/TopNav.astro";
 import HeroDemo   from "@/components/demos/HeroDemo";
+import { SITE_MODE } from "@/config";
+
+const isLive = SITE_MODE === "live";
 ---
 
 <BaseLayout title="AI-native design system for React and Vue">
-  <TopNav />
 
-  <!-- ── HERO ──────────────────────────────────────────────────── -->
-  <section class="hero">
-    <div class="hero__inner">
-      <div class="hero__content">
-        <div class="hero__eyebrow">
-          <span class="vyre-badge vyre-badge--teal">Open source</span>
-          <span class="hero__eyebrow-text">React + Vue · Zero runtime</span>
-        </div>
+  {isLive && <TopNav />}
 
-        <h1 class="hero__title">
-          The design system<br/>
-          <span class="hero__title-accent">AI agents understand</span>
-        </h1>
-
-        <p class="hero__description">
-          useVyre ships semantic tokens, accessible components, and inline AI context blocks.
-          Every variant, every prop — documented for agents so they stop hallucinating your UI.
-        </p>
-
-        <div class="hero__actions">
-          <a href="/docs/getting-started" class="vyre-btn vyre-btn--accent vyre-btn--lg">
-            Get started
-          </a>
+  {/* ── COMING SOON ────────────────────────────────────────── */}
+  {!isLive && (
+    <div class="cs-root">
+      <header class="cs-nav">
+        <a href="/" class="cs-logo" aria-label="useVyre home">
+          <span class="cs-logo__mark">◆</span>
+          <span class="cs-logo__name">useVyre</span>
+        </a>
+        <div class="cs-nav__actions">
           <a
             href="https://github.com/gapra/usevyre"
-            class="vyre-btn vyre-btn--secondary vyre-btn--lg"
-            target="_blank" rel="noopener noreferrer"
+            class="cs-github"
+            target="_blank"
+            rel="noopener noreferrer"
+            aria-label="GitHub"
           >
-            <span class="vyre-btn__label">GitHub</span>
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
+              <path d="M12 2C6.477 2 2 6.484 2 12.017c0 4.425 2.865 8.18 6.839 9.504.5.092.682-.217.682-.483 0-.237-.008-.868-.013-1.703-2.782.605-3.369-1.343-3.369-1.343-.454-1.158-1.11-1.466-1.11-1.466-.908-.62.069-.608.069-.608 1.003.07 1.531 1.032 1.531 1.032.892 1.53 2.341 1.088 2.91.832.092-.647.35-1.088.636-1.338-2.22-.253-4.555-1.113-4.555-4.951 0-1.093.39-1.988 1.029-2.688-.103-.253-.446-1.272.098-2.65 0 0 .84-.27 2.75 1.026A9.564 9.564 0 0112 6.844c.85.004 1.705.115 2.504.337 1.909-1.296 2.747-1.027 2.747-1.027.546 1.379.202 2.398.1 2.651.64.7 1.028 1.595 1.028 2.688 0 3.848-2.339 4.695-4.566 4.943.359.309.678.92.678 1.855 0 1.338-.012 2.419-.012 2.747 0 .268.18.58.688.482A10.019 10.019 0 0022 12.017C22 6.484 17.522 2 12 2z"/>
+            </svg>
+            GitHub
+          </a>
+        </div>
+      </header>
+
+      <main class="cs-main">
+        <div class="cs-badge">
+          <span class="cs-badge__dot"></span>
+          In development
+        </div>
+
+        <h1 class="cs-title">
+          The design system<br/>
+          <span class="cs-title__accent">AI agents understand</span>
+        </h1>
+
+        <p class="cs-description">
+          useVyre is an AI-native design system for React and Vue — built to eliminate
+          AI hallucinations in frontend development. Semantic tokens, accessible components,
+          and inline AI context blocks that tell your agent exactly what to generate.
+        </p>
+
+        <div class="cs-pills">
+          <span class="cs-pill">React + Vue</span>
+          <span class="cs-pill">Zero runtime CSS</span>
+          <span class="cs-pill">DTCG tokens</span>
+          <span class="cs-pill">WAI-ARIA</span>
+          <span class="cs-pill">Open source</span>
+        </div>
+
+        <div class="cs-actions">
+          <a
+            href="https://github.com/gapra/usevyre"
+            class="vyre-btn vyre-btn--primary vyre-btn--lg"
+            target="_blank"
+            rel="noopener noreferrer"
+          >
+            Follow on GitHub
+          </a>
+          <a
+            href="https://github.com/gapra/usevyre/issues/new?labels=feedback&title=%5BFeedback%5D+"
+            class="vyre-btn vyre-btn--secondary vyre-btn--lg"
+            target="_blank"
+            rel="noopener noreferrer"
+          >
+            Share feedback
           </a>
         </div>
 
-        <p class="hero__install">
-          <code>npm install @vyre/react @vyre/tokens</code>
+        <p class="cs-hint">
+          Built by <a href="https://gapra.dev/" target="_blank" rel="noopener noreferrer">Gapra</a> · MIT License
         </p>
-      </div>
+      </main>
+    </div>
+  )}
 
-      <div class="hero__visual">
-        <HeroDemo client:visible />
+  {/* ── FULL LANDING (LIVE MODE) ────────────────────────────── */}
+  {isLive && (
+    <>
+      <section class="hero">
+        <div class="hero__inner">
+          <div class="hero__content">
+            <div class="hero__eyebrow">
+              <span class="vyre-badge vyre-badge--teal">Open source</span>
+              <span class="hero__eyebrow-text">React + Vue · Zero runtime</span>
+            </div>
 
-        <!-- AI Context preview -->
-        <div class="hero__context-card">
-          <p class="hero__context-label">AI CONTEXT</p>
-          <pre class="hero__context-code"><code>variant = "primary"|"secondary"|"ghost"|
+            <h1 class="hero__title">
+              The design system<br/>
+              <span class="hero__title-accent">AI agents understand</span>
+            </h1>
+
+            <p class="hero__description">
+              useVyre ships semantic tokens, accessible components, and inline AI context blocks.
+              Every variant, every prop — documented for agents so they stop hallucinating your UI.
+            </p>
+
+            <div class="hero__actions">
+              <a href="/docs/getting-started" class="vyre-btn vyre-btn--accent vyre-btn--lg">
+                Get started
+              </a>
+              <a
+                href="https://github.com/gapra/usevyre"
+                class="vyre-btn vyre-btn--secondary vyre-btn--lg"
+                target="_blank" rel="noopener noreferrer"
+              >
+                GitHub
+              </a>
+            </div>
+
+            <p class="hero__install">
+              <code>npm install @vyre/react @vyre/tokens</code>
+            </p>
+          </div>
+
+          <div class="hero__visual">
+            <HeroDemo client:visible />
+            <div class="hero__context-card">
+              <p class="hero__context-label">AI CONTEXT</p>
+              <pre class="hero__context-code"><code>variant = "primary"|"secondary"|"ghost"|
           "accent"|"teal"|"danger"
 size     = "sm"|"md"|"lg"|"icon"
 loading  = boolean</code></pre>
+            </div>
+          </div>
         </div>
-      </div>
-    </div>
-  </section>
+      </section>
 
-  <!-- ── PROBLEM ────────────────────────────────────────────────── -->
-  <section class="problem">
-    <div class="section-inner">
-      <h2 class="problem__title">AI coding agents break on design systems.</h2>
-      <p class="problem__body">
-        When you ask Copilot or Claude to build UI, they invent class names, guess props,
-        and hallucinate variants that don't exist. The reason: design systems are built for humans,
-        not for language models.
-      </p>
-      <p class="problem__body">
-        useVyre is built with AI agents as a first-class consumer. Every component carries
-        an inline context block that tells the agent exactly what props, variants, and patterns
-        are valid — and nothing else.
-      </p>
-    </div>
-  </section>
-
-  <!-- ── FEATURES ───────────────────────────────────────────────── -->
-  <section class="features">
-    <div class="section-inner">
-      <h2 class="section-title">Built different</h2>
-      <div class="feature-grid">
-
-        <div class="feature-card">
-          <div class="feature-card__icon">◈</div>
-          <h3 class="feature-card__title">Semantic tokens</h3>
-          <p class="feature-card__body">
-            <code>--vyre-color-semantic-accent</code> not <code>--amber-400</code>.
-            Token names describe intent. AI reads intent, not hex values.
+      <section class="problem">
+        <div class="section-inner">
+          <h2 class="problem__title">AI coding agents break on design systems.</h2>
+          <p class="problem__body">
+            When you ask Copilot or Claude to build UI, they invent class names, guess props,
+            and hallucinate variants that don't exist. The reason: design systems are built for humans,
+            not for language models.
+          </p>
+          <p class="problem__body">
+            useVyre is built with AI agents as a first-class consumer. Every component carries
+            an inline context block that tells the agent exactly what props, variants, and patterns
+            are valid — and nothing else.
           </p>
         </div>
+      </section>
 
-        <div class="feature-card">
-          <div class="feature-card__icon">⌥</div>
-          <h3 class="feature-card__title">Inline AI context</h3>
-          <p class="feature-card__body">
-            Every component has a structured comment block listing all valid props and variants.
-            Inject it into <code>CLAUDE.md</code>, <code>.cursor/rules</code>, or <code>AGENTS.md</code>.
+      <section class="features">
+        <div class="section-inner">
+          <h2 class="section-title">Built different</h2>
+          <div class="feature-grid">
+            <div class="feature-card">
+              <div class="feature-card__icon">◈</div>
+              <h3 class="feature-card__title">Semantic tokens</h3>
+              <p class="feature-card__body">
+                <code>--vyre-color-semantic-accent</code> not <code>--amber-400</code>.
+                Token names describe intent. AI reads intent, not hex values.
+              </p>
+            </div>
+            <div class="feature-card">
+              <div class="feature-card__icon">⌥</div>
+              <h3 class="feature-card__title">Inline AI context</h3>
+              <p class="feature-card__body">
+                Every component has a structured comment block listing all valid props and variants.
+                Inject it into <code>CLAUDE.md</code>, <code>.cursor/rules</code>, or <code>AGENTS.md</code>.
+              </p>
+            </div>
+            <div class="feature-card">
+              <div class="feature-card__icon">◉</div>
+              <h3 class="feature-card__title">Zero runtime</h3>
+              <p class="feature-card__body">
+                Pure CSS variables. Works in React, Vue, Svelte, plain HTML — anywhere.
+                No JS bundle overhead. No framework lock-in.
+              </p>
+            </div>
+            <div class="feature-card">
+              <div class="feature-card__icon">⬡</div>
+              <h3 class="feature-card__title">React + Vue</h3>
+              <p class="feature-card__body">
+                <code>@vyre/react</code> and <code>@vyre/vue</code> — identical API,
+                identical CSS classes, one design system.
+              </p>
+            </div>
+            <div class="feature-card">
+              <div class="feature-card__icon">⌘</div>
+              <h3 class="feature-card__title">DTCG tokens</h3>
+              <p class="feature-card__body">
+                W3C Design Token Community Group 2025 format. Interoperable with Figma,
+                Style Dictionary, and any other token toolchain.
+              </p>
+            </div>
+            <div class="feature-card">
+              <div class="feature-card__icon">◎</div>
+              <h3 class="feature-card__title">Accessible first</h3>
+              <p class="feature-card__body">
+                WAI-ARIA patterns, focus management, keyboard navigation — built in,
+                not bolted on.
+              </p>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <section class="showcase">
+        <div class="section-inner">
+          <h2 class="section-title">Components that speak agent</h2>
+          <p class="section-subtitle">
+            11 components across React and Vue. Every one ships with an AI context block.
+          </p>
+          <div class="showcase-grid">
+            {[
+              { name: "Button",  variants: "primary · secondary · ghost · accent · teal · danger" },
+              { name: "Badge",   variants: "default · accent · teal · success · warning · danger" },
+              { name: "Card",    variants: "default · elevated · outlined · ghost · accent" },
+              { name: "Input",   variants: "sm · md · lg · with icons" },
+              { name: "Modal",   variants: "sm · md · lg · full · focus trap" },
+              { name: "Select",  variants: "keyboard nav · controlled · uncontrolled" },
+              { name: "Tabs",    variants: "WAI-ARIA · keyboard nav · controlled" },
+              { name: "Toast",   variants: "default · success · warning · danger" },
+              { name: "Tooltip", variants: "top · bottom · left · right · delay" },
+            ].map((c) => (
+              <a href={`/docs/components/${c.name.toLowerCase()}`} class="showcase-item">
+                <span class="showcase-item__name">{c.name}</span>
+                <span class="showcase-item__variants">{c.variants}</span>
+              </a>
+            ))}
+          </div>
+        </div>
+      </section>
+
+      <section class="cta">
+        <div class="section-inner cta__inner">
+          <h2 class="cta__title">Stop prompting. Start shipping.</h2>
+          <p class="cta__body">
+            Add useVyre to your project and let your AI agent build correct UI on the first try.
+          </p>
+          <div class="cta__actions">
+            <a href="/docs/getting-started" class="vyre-btn vyre-btn--accent vyre-btn--lg">
+              Read the docs
+            </a>
+            <a href="/docs/ai-context" class="vyre-btn vyre-btn--secondary vyre-btn--lg">
+              Set up AI context
+            </a>
+          </div>
+        </div>
+      </section>
+
+      <footer class="footer">
+        <div class="section-inner footer__inner">
+          <p class="footer__copy">
+            Built by <a href="https://gapra.dev/" target="_blank" rel="noopener noreferrer">Gapra</a>.
+            MIT License.
+          </p>
+          <p class="footer__links">
+            <a href="https://github.com/gapra/usevyre" target="_blank" rel="noopener noreferrer">GitHub</a>
+            <a href="/docs/getting-started">Docs</a>
+            <a href="/docs/tokens">Tokens</a>
           </p>
         </div>
+      </footer>
+    </>
+  )}
 
-        <div class="feature-card">
-          <div class="feature-card__icon">◉</div>
-          <h3 class="feature-card__title">Zero runtime</h3>
-          <p class="feature-card__body">
-            Pure CSS variables. Works in React, Vue, Svelte, plain HTML — anywhere.
-            No JS bundle overhead. No framework lock-in.
-          </p>
-        </div>
-
-        <div class="feature-card">
-          <div class="feature-card__icon">⬡</div>
-          <h3 class="feature-card__title">React + Vue</h3>
-          <p class="feature-card__body">
-            <code>@vyre/react</code> and <code>@vyre/vue</code> — identical API,
-            identical CSS classes, one design system. Same agent context for both.
-          </p>
-        </div>
-
-        <div class="feature-card">
-          <div class="feature-card__icon">⌘</div>
-          <h3 class="feature-card__title">DTCG tokens</h3>
-          <p class="feature-card__body">
-            W3C Design Token Community Group 2025 format. Interoperable with Figma,
-            Style Dictionary, and any other token toolchain.
-          </p>
-        </div>
-
-        <div class="feature-card">
-          <div class="feature-card__icon">◎</div>
-          <h3 class="feature-card__title">Accessible first</h3>
-          <p class="feature-card__body">
-            WAI-ARIA patterns, focus management, keyboard navigation — built in,
-            not bolted on. Agents generate accessible UI without extra prompting.
-          </p>
-        </div>
-
-      </div>
-    </div>
-  </section>
-
-  <!-- ── COMPONENT SHOWCASE ─────────────────────────────────────── -->
-  <section class="showcase">
-    <div class="section-inner">
-      <h2 class="section-title">Components that speak agent</h2>
-      <p class="section-subtitle">
-        11 components across React and Vue. Every one ships with an AI context block.
-      </p>
-
-      <div class="showcase-grid">
-        {[
-          { name: "Button",  variants: "primary · secondary · ghost · accent · teal · danger" },
-          { name: "Badge",   variants: "default · accent · teal · success · warning · danger" },
-          { name: "Card",    variants: "default · elevated · outlined · ghost · accent" },
-          { name: "Input",   variants: "sm · md · lg · with icons" },
-          { name: "Modal",   variants: "sm · md · lg · full · focus trap" },
-          { name: "Select",  variants: "keyboard nav · controlled · uncontrolled" },
-          { name: "Tabs",    variants: "WAI-ARIA · keyboard nav · controlled" },
-          { name: "Toast",   variants: "default · success · warning · danger" },
-          { name: "Tooltip", variants: "top · bottom · left · right · delay" },
-        ].map((c) => (
-          <a href={`/docs/components/${c.name.toLowerCase()}`} class="showcase-item">
-            <span class="showcase-item__name">{c.name}</span>
-            <span class="showcase-item__variants">{c.variants}</span>
-          </a>
-        ))}
-      </div>
-    </div>
-  </section>
-
-  <!-- ── CTA ────────────────────────────────────────────────────── -->
-  <section class="cta">
-    <div class="section-inner cta__inner">
-      <h2 class="cta__title">Stop prompting. Start shipping.</h2>
-      <p class="cta__body">
-        Add useVyre to your project and let your AI agent build correct UI on the first try.
-      </p>
-      <div class="cta__actions">
-        <a href="/docs/getting-started" class="vyre-btn vyre-btn--accent vyre-btn--lg">
-          Read the docs
-        </a>
-        <a href="/docs/ai-context" class="vyre-btn vyre-btn--secondary vyre-btn--lg">
-          Set up AI context
-        </a>
-      </div>
-    </div>
-  </section>
-
-  <!-- ── FOOTER ─────────────────────────────────────────────────── -->
-  <footer class="footer">
-    <div class="section-inner footer__inner">
-      <p class="footer__copy">
-        Built by <a href="https://gapra.dev/" target="_blank" rel="noopener noreferrer">Gapra</a>.
-        MIT License.
-      </p>
-      <p class="footer__links">
-        <a href="https://github.com/gapra/usevyre" target="_blank" rel="noopener noreferrer">GitHub</a>
-        <a href="/docs/getting-started">Docs</a>
-        <a href="/docs/tokens">Tokens</a>
-      </p>
-    </div>
-  </footer>
 </BaseLayout>

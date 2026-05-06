@@ -875,3 +875,152 @@ pre code { background: none; padding: 0; color: inherit; font-size: inherit; }
 }
 
 .footer__links a:hover { color: var(--vyre-color-semantic-text-secondary); }
+
+/* ── COMING SOON PAGE ────────────────────────────────────────── */
+.cs-root {
+  min-height: 100dvh;
+  display: flex;
+  flex-direction: column;
+  background: var(--vyre-color-semantic-background);
+}
+
+.cs-nav {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: var(--vyre-spacing-5) var(--vyre-spacing-8);
+  border-bottom: 1px solid var(--vyre-color-semantic-border-subtle);
+}
+
+.cs-logo {
+  display: flex;
+  align-items: center;
+  gap: var(--vyre-spacing-2);
+  font-size: var(--vyre-typography-font-size-md);
+  font-weight: var(--vyre-typography-font-weight-semibold);
+  color: var(--vyre-color-semantic-text-primary);
+}
+
+.cs-logo__mark { color: var(--vyre-color-semantic-accent); }
+
+.cs-github {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--vyre-spacing-2);
+  font-size: var(--vyre-typography-font-size-sm);
+  color: var(--vyre-color-semantic-text-secondary);
+  padding: var(--vyre-spacing-2) var(--vyre-spacing-3);
+  border-radius: var(--vyre-border-radius-md);
+  border: 1px solid var(--vyre-color-semantic-border);
+  transition: color var(--vyre-transition-duration-fast) var(--vyre-transition-easing-out),
+              border-color var(--vyre-transition-duration-fast) var(--vyre-transition-easing-out),
+              background var(--vyre-transition-duration-fast) var(--vyre-transition-easing-out);
+}
+.cs-github:hover {
+  color: var(--vyre-color-semantic-text-primary);
+  border-color: var(--vyre-color-semantic-border-strong);
+  background: var(--vyre-color-semantic-surface-raised);
+}
+
+.cs-main {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+  padding: var(--vyre-spacing-20) var(--vyre-spacing-6);
+  max-width: 640px;
+  margin: 0 auto;
+  width: 100%;
+}
+
+.cs-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--vyre-spacing-2);
+  font-family: var(--vyre-typography-font-family-mono);
+  font-size: var(--vyre-typography-font-size-xs);
+  font-weight: var(--vyre-typography-font-weight-medium);
+  color: var(--vyre-color-semantic-accent);
+  background: var(--vyre-color-semantic-accent-subtle);
+  border: 1px solid var(--vyre-color-semantic-accent-subtle-border);
+  padding: var(--vyre-spacing-1) var(--vyre-spacing-3);
+  border-radius: var(--vyre-border-radius-full);
+  margin-bottom: var(--vyre-spacing-6);
+  letter-spacing: 0.03em;
+}
+
+.cs-badge__dot {
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  background: var(--vyre-color-semantic-accent);
+  animation: cs-pulse 2s ease-in-out infinite;
+}
+
+@keyframes cs-pulse {
+  0%, 100% { opacity: 1; }
+  50%       { opacity: 0.4; }
+}
+
+.cs-title {
+  font-family: var(--vyre-typography-font-family-display);
+  font-size: var(--vyre-typography-font-size-4xl);
+  font-weight: 700;
+  line-height: var(--vyre-typography-line-height-tight);
+  color: var(--vyre-color-semantic-text-primary);
+  margin: 0 0 var(--vyre-spacing-5);
+}
+
+.cs-title__accent { color: var(--vyre-color-semantic-accent); }
+
+.cs-description {
+  font-size: var(--vyre-typography-font-size-md);
+  color: var(--vyre-color-semantic-text-secondary);
+  line-height: var(--vyre-typography-line-height-relaxed);
+  margin: 0 0 var(--vyre-spacing-8);
+}
+
+.cs-pills {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--vyre-spacing-2);
+  justify-content: center;
+  margin-bottom: var(--vyre-spacing-8);
+}
+
+.cs-pill {
+  font-family: var(--vyre-typography-font-family-mono);
+  font-size: var(--vyre-typography-font-size-xs);
+  color: var(--vyre-color-semantic-text-muted);
+  background: var(--vyre-color-semantic-surface-raised);
+  border: 1px solid var(--vyre-color-semantic-border);
+  padding: var(--vyre-spacing-1) var(--vyre-spacing-3);
+  border-radius: var(--vyre-border-radius-full);
+}
+
+.cs-actions {
+  display: flex;
+  gap: var(--vyre-spacing-3);
+  flex-wrap: wrap;
+  justify-content: center;
+  margin-bottom: var(--vyre-spacing-10);
+}
+
+.cs-hint {
+  font-size: var(--vyre-typography-font-size-sm);
+  color: var(--vyre-color-semantic-text-muted);
+  margin: 0;
+}
+
+.cs-hint a {
+  color: var(--vyre-color-semantic-text-secondary);
+  transition: color var(--vyre-transition-duration-fast) var(--vyre-transition-easing-out);
+}
+.cs-hint a:hover { color: var(--vyre-color-semantic-text-primary); }
+
+@media (max-width: 480px) {
+  .cs-title { font-size: var(--vyre-typography-font-size-3xl); }
+  .cs-nav   { padding: var(--vyre-spacing-4) var(--vyre-spacing-5); }
+}
