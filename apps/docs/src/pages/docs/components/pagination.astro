@@ -1,0 +1,142 @@
+---
+import DocsLayout       from "@/layouts/DocsLayout.astro";
+import ComponentPreview from "@/components/docs/ComponentPreview.astro";
+import PropsTable       from "@/components/docs/PropsTable.astro";
+import { PaginationBasicDemo, PaginationManyPagesDemo, PaginationInfoDemo } from "@/components/demos/Tier2Demo";
+
+const codeBasicReact = `import { Pagination } from "@vyre/react";
+
+const [page, setPage] = useState(1);
+
+<Pagination
+  page={page}
+  totalPages={10}
+  onPageChange={setPage}
+/>`;
+
+const codeBasicVue = `<script setup>
+import { Pagination } from "@vyre/vue";
+const page = ref(1);
+</script>
+<template>
+  <Pagination v-model="page" :total-pages="10" />
+</template>`;
+
+const codeSiblingsReact = `{/* Show 2 page siblings on each side of the current page */}
+<Pagination
+  page={page}
+  totalPages={20}
+  onPageChange={setPage}
+  siblings={2}
+/>`;
+
+const codeInfoReact = `{/* Showing x–y of total, computed from totalItems + pageSize */}
+<Pagination
+  page={page}
+  totalPages={totalPages}
+  onPageChange={setPage}
+  showInfo
+  totalItems={98}
+  pageSize={10}
+/>
+
+{/* Without edge buttons */}
+<Pagination
+  page={page}
+  totalPages={totalPages}
+  onPageChange={setPage}
+  showInfo
+  showEdges={false}
+  totalItems={98}
+  pageSize={10}
+/>`;
+
+const codeInfoVue = `<!-- Showing x–y of total, computed from totalItems + pageSize -->
+<Pagination
+  v-model="page"
+  :total-pages="totalPages"
+  show-info
+  :total-items="98"
+  :page-size="10"
+/>
+
+<!-- Without edge buttons -->
+<Pagination
+  v-model="page"
+  :total-pages="totalPages"
+  show-info
+  :show-edges="false"
+  :total-items="98"
+  :page-size="10"
+/>`;
+
+const paginationProps = [
+  { name: "page / v-model",   type: "number",                     default: "—",     description: "Current page (1-indexed)." },
+  { name: "totalPages",       type: "number",                     default: "—",     description: "Total number of pages." },
+  { name: "onPageChange",     type: "(page: number) => void",     default: "—",     description: "(React) Called when the user navigates to a new page." },
+  { name: "siblings",         type: "number",                     default: "1",     description: "Number of page buttons shown on each side of the current page." },
+  { name: "showEdges",        type: "boolean",                    default: "true",  description: "Show first/last page jump buttons (⟪ / ⟫)." },
+  { name: "showInfo",         type: "boolean",                    default: "false", description: "Show a 'Showing x–y of total' label on the left in a space-between row layout." },
+  { name: "totalItems",       type: "number",                     default: "—",     description: "Total record count. Used with pageSize to compute the x–y range in the info label." },
+  { name: "pageSize",         type: "number",                     default: "—",     description: "Records per page. Used with totalItems to compute the x–y range." },
+  { name: "class / className", type: "string",                    default: "—",     description: "Additional CSS class on the root element." },
+];
+---
+
+<DocsLayout title="Pagination">
+  <div class="docs-header">
+    <div class="docs-header__meta">
+      <span class="vyre-badge vyre-badge--default">@vyre/react</span>
+      <span class="vyre-badge vyre-badge--default">@vyre/vue</span>
+    </div>
+    <h1 class="docs-title">Pagination</h1>
+    <p class="docs-lead">
+      A page navigation control with smart ellipsis truncation. Automatically hides out-of-range
+      page numbers and replaces them with <code>…</code> dots while always keeping the first and
+      last pages visible.
+    </p>
+  </div>
+
+  <hr class="docs-divider" />
+
+  <h2 class="docs-h2">Basic</h2>
+  <p class="docs-p">
+    Fully controlled — provide <code>page</code> and <code>onPageChange</code> (React) or
+    <code>v-model</code> (Vue).
+  </p>
+  <ComponentPreview react={codeBasicReact} vue={codeBasicVue}>
+    <PaginationBasicDemo client:visible />
+  </ComponentPreview>
+
+  <h2 class="docs-h2">Many pages with siblings</h2>
+  <p class="docs-p">
+    Use <code>siblings</code> to control how many page buttons appear around the current page.
+    The component automatically inserts <code>…</code> where pages are skipped.
+  </p>
+  <ComponentPreview react={codeSiblingsReact} vue={`<Pagination v-model="page" :total-pages="20" :siblings="2" />`}>
+    <PaginationManyPagesDemo client:visible />
+  </ComponentPreview>
+
+  <h2 class="docs-h2">With info label</h2>
+  <p class="docs-p">
+    Add <code>showInfo</code> to switch to a full-width row layout with a
+    <em>Showing x–y of total</em> label on the left and controls on the right.
+    Provide <code>totalItems</code> + <code>pageSize</code> for the exact range;
+    omit them to fall back to <em>Page x of y</em>.
+  </p>
+  <ComponentPreview react={codeInfoReact} vue={codeInfoVue}>
+    <PaginationInfoDemo client:visible />
+  </ComponentPreview>
+
+  <h2 class="docs-h2">Props</h2>
+  <PropsTable props={paginationProps} />
+
+  <div class="docs-pagination">
+    <a href="/docs/components/breadcrumb" class="docs-pagination__link docs-pagination__link--prev">
+      ← Breadcrumb
+    </a>
+    <a href="/docs/components/table" class="docs-pagination__link docs-pagination__link--next">
+      Table →
+    </a>
+  </div>
+</DocsLayout>

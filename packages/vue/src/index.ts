@@ -31,6 +31,10 @@
  * - DropdownMenu   — Contextual action menu (+ DropdownItem, DropdownSeparator)
  * - Alert          — Inline status banner (info/success/warning/danger)
  * - AlertDialog    — Blocking confirmation modal (v-model)
+ * - Sheet          — Slide-in panel overlay (+ SheetHeader, SheetBody, SheetFooter)
+ * - Breadcrumb     — Navigation trail (+ BreadcrumbItem)
+ * - Pagination     — Page navigation control (v-model)
+ * - Table          — Data table (+ TableHead, TableBody, TableRow, TableHeader, TableCell, TableCaption)
  *
  * CSS must be imported separately:
  * import "@vyre/tokens/css";           ← design tokens (required)
@@ -82,6 +86,20 @@ export { default as DropdownRadioItem }      from "./components/DropdownMenu/Dro
 export { default as DropdownSub }            from "./components/DropdownMenu/DropdownSub.vue";
 export { default as Alert }             from "./components/Alert/Alert.vue";
 export { default as AlertDialog }       from "./components/Alert/AlertDialog.vue";
+export { default as Sheet }             from "./components/Sheet/Sheet.vue";
+export { default as SheetHeader }       from "./components/Sheet/SheetHeader.vue";
+export { default as SheetBody }         from "./components/Sheet/SheetBody.vue";
+export { default as SheetFooter }       from "./components/Sheet/SheetFooter.vue";
+export { default as Breadcrumb }        from "./components/Breadcrumb/Breadcrumb.vue";
+export { default as BreadcrumbItem }    from "./components/Breadcrumb/BreadcrumbItem.vue";
+export { default as Pagination }        from "./components/Pagination/Pagination.vue";
+export { default as Table }             from "./components/Table/Table.vue";
+export { default as TableHead }         from "./components/Table/TableHead.vue";
+export { default as TableBody }         from "./components/Table/TableBody.vue";
+export { default as TableRow }          from "./components/Table/TableRow.vue";
+export { default as TableHeader }       from "./components/Table/TableHeader.vue";
+export { default as TableCell }         from "./components/Table/TableCell.vue";
+export { default as TableCaption }      from "./components/Table/TableCaption.vue";
 
 // ── Composables ───────────────────────────────────────────────
 export { useToast }                 from "./composables/useToast";

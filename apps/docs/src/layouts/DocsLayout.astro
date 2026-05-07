@@ -13,6 +13,20 @@ const pathname = Astro.url.pathname;
 ---
 
 <BaseLayout title={title} description={description}>
+  <script>
+    const SIDEBAR_KEY = "vyre-sidebar-scroll";
+
+    const sidebar = document.querySelector(".docs-sidebar");
+    if (sidebar) {
+      const saved = sessionStorage.getItem(SIDEBAR_KEY);
+      if (saved) sidebar.scrollTop = Number(saved);
+    }
+
+    window.addEventListener("beforeunload", () => {
+      const el = document.querySelector(".docs-sidebar");
+      if (el) sessionStorage.setItem(SIDEBAR_KEY, String(el.scrollTop));
+    });
+  </script>
   <div class="docs-root">
     <TopNav />
 

@@ -1,0 +1,105 @@
+---
+import DocsLayout       from "@/layouts/DocsLayout.astro";
+import ComponentPreview from "@/components/docs/ComponentPreview.astro";
+import PropsTable       from "@/components/docs/PropsTable.astro";
+import { SheetBasicDemo, SheetSidesDemo } from "@/components/demos/Tier2Demo";
+
+const codeBasicReact = `import { Sheet, SheetHeader, SheetBody, SheetFooter, Button } from "@vyre/react";
+
+const [open, setOpen] = useState(false);
+
+<Button onClick={() => setOpen(true)}>Open Sheet</Button>
+
+<Sheet open={open} onClose={() => setOpen(false)} side="right">
+  <SheetHeader>
+    <h2>Edit profile</h2>
+    <p>Make changes to your profile information.</p>
+  </SheetHeader>
+  <SheetBody>
+    {/* form content */}
+  </SheetBody>
+  <SheetFooter>
+    <Button variant="secondary" onClick={() => setOpen(false)}>Cancel</Button>
+    <Button variant="primary"   onClick={() => setOpen(false)}>Save changes</Button>
+  </SheetFooter>
+</Sheet>`;
+
+const codeBasicVue = `<script setup>
+import { Sheet, SheetHeader, SheetBody, SheetFooter, Button } from "@vyre/vue";
+const open = ref(false);
+</script>
+<template>
+  <Button @click="open = true">Open Sheet</Button>
+  <Sheet v-model="open" side="right">
+    <SheetHeader>
+      <h2>Edit profile</h2>
+    </SheetHeader>
+    <SheetBody>
+      <!-- form content -->
+    </SheetBody>
+    <SheetFooter>
+      <Button variant="secondary" @click="open = false">Cancel</Button>
+      <Button variant="primary"   @click="open = false">Save changes</Button>
+    </SheetFooter>
+  </Sheet>
+</template>`;
+
+const codeSidesReact = `<Sheet open={open} onClose={handleClose} side="left">...</Sheet>
+<Sheet open={open} onClose={handleClose} side="top">...</Sheet>
+<Sheet open={open} onClose={handleClose} side="bottom">...</Sheet>`;
+
+const sheetProps = [
+  { name: "open / v-model",    type: "boolean",                                          default: "—",         description: "Controlled open state." },
+  { name: "onClose / @close",  type: "() => void",                                       default: "—",         description: "(React) Called when sheet should close." },
+  { name: "side",              type: `"right" | "left" | "top" | "bottom"`,              default: `"right"`,   description: "Which edge the sheet slides in from." },
+  { name: "size",              type: `"sm" | "md" | "lg" | "full"`,                      default: `"md"`,      description: "Width (or height) of the sheet panel." },
+  { name: "closeOnBackdrop",   type: "boolean",                                           default: "true",      description: "Close when clicking outside the panel." },
+  { name: "closeOnEsc",        type: "boolean",                                           default: "true",      description: "Close when pressing Escape." },
+  { name: "class / className", type: "string",                                            default: "—",         description: "Additional CSS class on the panel." },
+];
+---
+
+<DocsLayout title="Sheet">
+  <div class="docs-header">
+    <div class="docs-header__meta">
+      <span class="vyre-badge vyre-badge--default">@vyre/react</span>
+      <span class="vyre-badge vyre-badge--default">@vyre/vue</span>
+    </div>
+    <h1 class="docs-title">Sheet</h1>
+    <p class="docs-lead">
+      A slide-in panel overlay anchored to an edge of the viewport. Built on a portal with focus
+      trap and keyboard support. Use it for forms, detail views, filters, or navigation drawers.
+    </p>
+  </div>
+
+  <hr class="docs-divider" />
+
+  <h2 class="docs-h2">Basic</h2>
+  <p class="docs-p">
+    Compose <code>SheetHeader</code>, <code>SheetBody</code>, and <code>SheetFooter</code> inside
+    <code>Sheet</code>. The body scrolls independently when content overflows.
+  </p>
+  <ComponentPreview react={codeBasicReact} vue={codeBasicVue}>
+    <SheetBasicDemo client:visible />
+  </ComponentPreview>
+
+  <h2 class="docs-h2">Sides</h2>
+  <p class="docs-p">
+    The <code>side</code> prop controls which edge the panel slides in from.
+  </p>
+  <ComponentPreview react={codeSidesReact} vue={`<Sheet v-model="open" side="left">...</Sheet>`}>
+    <SheetSidesDemo client:visible />
+  </ComponentPreview>
+
+  <h2 class="docs-h2">Props — Sheet</h2>
+  <PropsTable props={sheetProps} />
+
+  <div class="docs-pagination">
+    <a href="/docs/components/alert" class="docs-pagination__link docs-pagination__link--prev">
+      ← Alert
+    </a>
+    <a href="/docs/components/breadcrumb" class="docs-pagination__link docs-pagination__link--next">
+      Breadcrumb →
+    </a>
+  </div>
+</DocsLayout>

@@ -31,6 +31,10 @@
  * - DropdownMenu   — Contextual action menu (+ DropdownItem, DropdownSeparator)
  * - Alert          — Inline status banner (info/success/warning/danger)
  * - AlertDialog    — Blocking confirmation modal
+ * - Sheet          — Slide-in panel overlay (+ SheetHeader, SheetBody, SheetFooter)
+ * - Breadcrumb     — Navigation trail (+ BreadcrumbItem)
+ * - Pagination     — Page navigation control
+ * - Table          — Data table (+ TableHead, TableBody, TableRow, TableHeader, TableCell, TableCaption)
  *
  * CSS must be imported separately:
  * import "@vyre/tokens/css";           ← design tokens (required)
@@ -64,6 +68,13 @@ export {
   DropdownSub,
 }                                                           from "./components/DropdownMenu/DropdownMenu";
 export { Alert, AlertDialog }                               from "./components/Alert/Alert";
+export { Sheet, SheetHeader, SheetBody, SheetFooter }       from "./components/Sheet/Sheet";
+export { Breadcrumb, BreadcrumbItem }                       from "./components/Breadcrumb/Breadcrumb";
+export { Pagination }                                       from "./components/Pagination/Pagination";
+export {
+  Table, TableHead, TableBody, TableRow,
+  TableHeader, TableCell, TableCaption,
+}                                                           from "./components/Table/Table";
 
 // ── Types ─────────────────────────────────────────────────────
 export type { ButtonProps }                                 from "./components/Button/Button";
@@ -91,6 +102,13 @@ export type {
   DropdownRadioItemProps, DropdownSubProps,
 }                                                           from "./components/DropdownMenu/DropdownMenu";
 export type { AlertProps, AlertDialogProps, AlertVariant }  from "./components/Alert/Alert";
+export type { SheetProps, SheetSectionProps, SheetSide, SheetSize } from "./components/Sheet/Sheet";
+export type { BreadcrumbProps, BreadcrumbItemProps }        from "./components/Breadcrumb/Breadcrumb";
+export type { PaginationProps }                             from "./components/Pagination/Pagination";
+export type {
+  TableProps, TableRowProps, TableHeaderProps,
+  TableCellProps,
+}                                                           from "./components/Table/Table";
 
 // ── Shared types ──────────────────────────────────────────────
 export type { Variant, Size, FieldState, BadgeVariant, BaseProps } from "./types";
