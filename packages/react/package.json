@@ -1,41 +1,52 @@
 {
   "name": "@usevyre/react",
-  "version": "0.1.0",
+  "version": "0.1.1",
   "description": "useVyre React components — AI-native, accessible, zero-runtime styling",
-  "keywords": ["design-system", "react", "components", "ai-native", "vyre"],
+  "keywords": [
+    "design-system",
+    "react",
+    "components",
+    "ai-native",
+    "vyre"
+  ],
   "homepage": "https://usevyre.com/docs/getting-started",
-  "repository": { "type": "git", "url": "https://github.com/gapra/usevyre" },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/gapra/usevyre"
+  },
   "license": "MIT",
   "type": "module",
-  "main":   "./src/index.ts",
+  "main": "./src/index.ts",
   "module": "./src/index.ts",
-  "types":  "./src/index.ts",
+  "types": "./src/index.ts",
   "exports": {
     ".": {
       "import": "./src/index.ts",
-      "types":  "./src/index.ts"
+      "types": "./src/index.ts"
     },
     "./styles": "./src/styles/components.css"
   },
   "publishConfig": {
-    "main":   "./dist/index.cjs",
+    "main": "./dist/index.cjs",
     "module": "./dist/index.js",
-    "types":  "./dist/index.d.ts",
+    "types": "./dist/index.d.ts",
     "exports": {
       ".": {
-        "import":  "./dist/index.js",
+        "import": "./dist/index.js",
         "require": "./dist/index.cjs",
-        "types":   "./dist/index.d.ts"
+        "types": "./dist/index.d.ts"
       },
       "./styles": "./src/styles/components.css"
     }
   },
-  "files": ["dist"],
+  "files": [
+    "dist"
+  ],
   "scripts": {
-    "build":     "vite build && tsc --project tsconfig.build.json",
-    "dev":       "vite build --watch",
+    "build": "vite build && tsc --project tsconfig.build.json",
+    "dev": "vite build --watch",
     "typecheck": "tsc --noEmit",
-    "clean":     "rm -rf dist"
+    "clean": "rm -rf dist"
   },
   "peerDependencies": {
     "react": ">=18.0.0",
