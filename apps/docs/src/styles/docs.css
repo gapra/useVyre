@@ -1067,3 +1067,16 @@ pre code { background: none; padding: 0; color: inherit; font-size: inherit; }
 
 .docs-table tr:last-child td { border-bottom: none; }
 .docs-table tr:hover td { background: var(--vyre-color-semantic-surface); }
+
+.docs-pre {
+  background: var(--vyre-color-semantic-surface-raised);
+  border: 1px solid var(--vyre-color-semantic-border-subtle);
+  border-radius: var(--vyre-radius-md);
+  padding: var(--vyre-spacing-4);
+  overflow-x: auto;
+  margin: 0 0 var(--vyre-spacing-6);
+  font-family: var(--vyre-typography-font-family-mono);
+  font-size: var(--vyre-typography-font-size-sm);
+  line-height: 1.7;
+  color: var(--vyre-color-semantic-text-muted);
+}

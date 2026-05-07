@@ -110,6 +110,22 @@ export { default as CommandSeparator }  from "./components/Command/CommandSepara
 export { default as CommandDialog }     from "./components/Command/CommandDialog.vue";
 export { default as Calendar }          from "./components/Calendar/Calendar.vue";
 export { default as DatePicker }        from "./components/Calendar/DatePicker.vue";
+export { default as Text }              from "./components/Typography/Typography.vue";
+export { default as Heading }           from "./components/Typography/Heading.vue";
+export { default as Lead }              from "./components/Typography/Lead.vue";
+export { default as VyreCode }          from "./components/Typography/Code.vue";
+export { default as Blockquote }        from "./components/Typography/Blockquote.vue";
+export { default as AppLayout }         from "./components/Sidebar/AppLayout.vue";
+export { default as AppShell }          from "./components/Sidebar/AppShell.vue";
+export { default as AppBar }            from "./components/Sidebar/AppBar.vue";
+export { default as SidebarTrigger }    from "./components/Sidebar/SidebarTrigger.vue";
+export { default as PageContent }       from "./components/Sidebar/PageContent.vue";
+export { default as Sidebar }           from "./components/Sidebar/Sidebar.vue";
+export { default as SidebarHeader }     from "./components/Sidebar/SidebarHeader.vue";
+export { default as SidebarContent }    from "./components/Sidebar/SidebarContent.vue";
+export { default as SidebarSection }    from "./components/Sidebar/SidebarSection.vue";
+export { default as SidebarItem }       from "./components/Sidebar/SidebarItem.vue";
+export { default as SidebarFooter }     from "./components/Sidebar/SidebarFooter.vue";
 
 // ── Composables ───────────────────────────────────────────────
 export { useToast }                 from "./composables/useToast";

@@ -1,0 +1,169 @@
+---
+import DocsLayout       from "@/layouts/DocsLayout.astro";
+import ComponentPreview from "@/components/docs/ComponentPreview.astro";
+import PropsTable       from "@/components/docs/PropsTable.astro";
+import {
+  TypographyHeadingDemo,
+  TypographyTextDemo,
+  TypographyCodeDemo,
+} from "@/components/demos/Tier2Demo";
+
+const codeHeadingReact = `import { Heading } from "@vyre/react";
+
+<Heading as="h1" size="3xl">Page title</Heading>
+<Heading as="h2" size="2xl">Section title</Heading>
+<Heading as="h3" size="xl">Subsection</Heading>
+<Heading as="h4" size="lg">Card heading</Heading>`;
+
+const codeHeadingVue = `<script setup>
+import { Heading } from "@vyre/vue";
+</script>
+<template>
+  <Heading as="h1" size="3xl">Page title</Heading>
+  <Heading as="h2" size="2xl">Section title</Heading>
+  <Heading as="h3" size="xl">Subsection</Heading>
+  <Heading as="h4" size="lg">Card heading</Heading>
+</template>`;
+
+const codeTextReact = `import { Text, Lead } from "@vyre/react";
+
+<Lead>Introductory paragraph with larger, muted text.</Lead>
+<Text>Default body text.</Text>
+<Text color="muted">Secondary information.</Text>
+<Text color="accent">Highlighted content.</Text>
+<Text color="danger">Error message.</Text>
+<Text weight="semibold">Semibold weight.</Text>
+<Text mono>monospace value</Text>
+<Text size="xs" color="muted">Caption text.</Text>`;
+
+const codeTextVue = `<script setup>
+import { Text, Lead } from "@vyre/vue";
+</script>
+<template>
+  <Lead>Introductory paragraph with larger, muted text.</Lead>
+  <Text>Default body text.</Text>
+  <Text color="muted">Secondary information.</Text>
+  <Text color="accent">Highlighted content.</Text>
+  <Text weight="semibold">Semibold weight.</Text>
+  <Text mono>monospace value</Text>
+</template>`;
+
+const codeCodeReact = `import { Text, Code, Blockquote } from "@vyre/react";
+
+// Inline code
+<Text>Run <Code>npm install @vyre/react</Code> to install.</Text>
+
+// Block code
+<Code block>{\`import { Button } from "@vyre/react";
+
+export default function App() {
+  return <Button variant="accent">Get started</Button>;
+}\`}</Code>
+
+// Blockquote
+<Blockquote>
+  Design is not just what it looks like. Design is how it works.
+</Blockquote>`;
+
+const codeCodeVue = `<script setup>
+import { Text, VyreCode, Blockquote } from "@vyre/vue";
+</script>
+<template>
+  <!-- Inline code -->
+  <Text>Run <VyreCode>npm install @vyre/vue</VyreCode> to install.</Text>
+
+  <!-- Block code -->
+  <VyreCode :block="true">
+import { Button } from "@vyre/vue";
+  </VyreCode>
+
+  <!-- Blockquote -->
+  <Blockquote>
+    Design is not just what it looks like. Design is how it works.
+  </Blockquote>
+</template>`;
+
+const headingProps = [
+  { name: "as",       type: '"h1"|"h2"|"h3"|"h4"|"h5"|"h6"',           default: '"h2"',    description: "HTML element to render." },
+  { name: "size",     type: '"xs"|"sm"|"md"|"lg"|"xl"|"2xl"|"3xl"',    default: '"md"',    description: "Font size of the heading." },
+  { name: "weight",   type: '"normal"|"medium"|"semibold"|"bold"',      default: '"bold"',  description: "Font weight." },
+  { name: "color",    type: '"default"|"muted"|"accent"|"danger"|"success"|"warning"', default: '"default"', description: "Text color." },
+  { name: "truncate", type: "boolean",                                   default: "false",   description: "Truncate overflow text with an ellipsis." },
+  { name: "class / className", type: "string",                           default: "—",       description: "Additional CSS class." },
+];
+
+const textProps = [
+  { name: "as",       type: '"p"|"span"|"div"|"label"|"li"|"dt"|"dd"', default: '"p"',     description: "HTML element to render." },
+  { name: "size",     type: '"xs"|"sm"|"md"|"lg"|"xl"',                default: '"md"',    description: "Font size." },
+  { name: "weight",   type: '"normal"|"medium"|"semibold"|"bold"',      default: "—",       description: "Font weight override." },
+  { name: "color",    type: '"default"|"muted"|"accent"|"danger"|"success"|"warning"', default: '"default"', description: "Text color." },
+  { name: "truncate", type: "boolean",                                   default: "false",   description: "Truncate overflow with ellipsis." },
+  { name: "mono",     type: "boolean",                                   default: "false",   description: "Use monospace font family." },
+  { name: "class / className", type: "string",                           default: "—",       description: "Additional CSS class." },
+];
+
+const codeProps = [
+  { name: "block",    type: "boolean",  default: "false", description: "Renders as a <pre><code> block instead of inline <code>." },
+  { name: "class / className", type: "string", default: "—", description: "Additional CSS class." },
+];
+---
+
+<DocsLayout title="Typography">
+  <div class="docs-header">
+    <div class="docs-header__meta">
+      <span class="vyre-badge vyre-badge--default">@vyre/react</span>
+      <span class="vyre-badge vyre-badge--default">@vyre/vue</span>
+    </div>
+    <h1 class="docs-title">Typography</h1>
+    <p class="docs-lead">
+      Semantic text components built on design tokens. Use <code>Heading</code> for titles,
+      <code>Text</code> for body copy, <code>Lead</code> for introductory paragraphs,
+      <code>Code</code> for inline and block code, and <code>Blockquote</code> for quoted content.
+      All components are polymorphic — render any HTML element via the <code>as</code> prop.
+    </p>
+  </div>
+
+  <hr class="docs-divider" />
+
+  <h2 class="docs-h2">Heading</h2>
+  <p class="docs-p">
+    Six size variants mapped to <code>--vyre-typography-font-size-*</code> tokens.
+    Use <code>as</code> to control the rendered HTML element independently from visual size.
+  </p>
+  <ComponentPreview react={codeHeadingReact} vue={codeHeadingVue}>
+    <TypographyHeadingDemo client:visible />
+  </ComponentPreview>
+
+  <h2 class="docs-h2">Text & Lead</h2>
+  <p class="docs-p">
+    <code>Text</code> covers all body copy use cases — size, weight, color, and font family.
+    <code>Lead</code> is a shortcut for introductory paragraphs.
+  </p>
+  <ComponentPreview react={codeTextReact} vue={codeTextVue}>
+    <TypographyTextDemo client:visible />
+  </ComponentPreview>
+
+  <h2 class="docs-h2">Code & Blockquote</h2>
+  <p class="docs-p">
+    <code>Code</code> renders inline by default. Add <code>block</code> for a <code>&lt;pre&gt;</code> code block.
+    <code>Blockquote</code> adds a left accent border for quoted content.
+  </p>
+  <ComponentPreview react={codeCodeReact} vue={codeCodeVue}>
+    <TypographyCodeDemo client:visible />
+  </ComponentPreview>
+
+  <h2 class="docs-h2">Props — Heading</h2>
+  <PropsTable props={headingProps} />
+
+  <h2 class="docs-h2">Props — Text</h2>
+  <PropsTable props={textProps} />
+
+  <h2 class="docs-h2">Props — Code</h2>
+  <PropsTable props={codeProps} />
+
+  <div class="docs-pagination">
+    <a href="/docs/components/tooltip" class="docs-pagination__link docs-pagination__link--prev">
+      ← Tooltip
+    </a>
+  </div>
+</DocsLayout>
