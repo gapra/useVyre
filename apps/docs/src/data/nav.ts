@@ -53,6 +53,10 @@ export const navigation: NavSection[] = [
       { title: "Popover",       href: "/docs/components/popover"       },
       { title: "Dropdown Menu", href: "/docs/components/dropdown-menu" },
       { title: "Alert",         href: "/docs/components/alert"         },
+      { title: "Sheet",         href: "/docs/components/sheet"         },
+      { title: "Breadcrumb",    href: "/docs/components/breadcrumb"    },
+      { title: "Pagination",    href: "/docs/components/pagination"    },
+      { title: "Table",         href: "/docs/components/table"         },
     ],
   },
 ];

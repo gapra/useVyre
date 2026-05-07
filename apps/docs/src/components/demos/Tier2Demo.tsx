@@ -6,6 +6,10 @@ import {
   DropdownCheckboxItem, DropdownRadioGroup, DropdownRadioItem, DropdownSub,
 } from "@vyre/react";
 import { Alert, AlertDialog } from "@vyre/react";
+import { Sheet, SheetHeader, SheetBody, SheetFooter } from "@vyre/react";
+import { Breadcrumb, BreadcrumbItem } from "@vyre/react";
+import { Pagination } from "@vyre/react";
+import { Table, TableHead, TableBody, TableRow, TableHeader, TableCell, TableCaption } from "@vyre/react";
 
 // ── Popover demos ─────────────────────────────────────────────
 
@@ -245,6 +249,248 @@ export function AlertDialogVariantsDemo() {
         variant={active ?? "info"}
         confirmLabel={active === "danger" ? "Delete" : "Confirm"}
       />
+    </div>
+  );
+}
+
+// ── Sheet demos ───────────────────────────────────────────────
+
+export function SheetBasicDemo() {
+  const [open, setOpen] = useState(false);
+  return (
+    <div style={{ display: "flex", justifyContent: "center", padding: "24px 0" }}>
+      <Button variant="secondary" onClick={() => setOpen(true)}>Open Sheet</Button>
+      <Sheet open={open} onClose={() => setOpen(false)} side="right">
+        <SheetHeader>
+          <h2 style={{ margin: 0, fontSize: "1.125rem", fontWeight: 600 }}>Edit profile</h2>
+          <p style={{ margin: "4px 0 0", fontSize: "0.875rem", opacity: 0.6 }}>
+            Make changes to your profile information.
+          </p>
+        </SheetHeader>
+        <SheetBody>
+          <p style={{ margin: 0, fontSize: "0.875rem", opacity: 0.7 }}>
+            Form content goes here. The sheet scrolls independently if content overflows.
+          </p>
+        </SheetBody>
+        <SheetFooter>
+          <Button variant="secondary" onClick={() => setOpen(false)}>Cancel</Button>
+          <Button variant="primary" onClick={() => setOpen(false)}>Save changes</Button>
+        </SheetFooter>
+      </Sheet>
+    </div>
+  );
+}
+
+export function SheetSidesDemo() {
+  const [side, setSide] = useState<"right" | "left" | "top" | "bottom" | null>(null);
+  const sides = ["right", "left", "top", "bottom"] as const;
+  return (
+    <div style={{ display: "flex", gap: 8, flexWrap: "wrap", justifyContent: "center", padding: "24px 0" }}>
+      {sides.map((s) => (
+        <Button key={s} variant="secondary" size="sm" onClick={() => setSide(s)}>
+          {s}
+        </Button>
+      ))}
+      {side && (
+        <Sheet open={true} onClose={() => setSide(null)} side={side}>
+          <SheetHeader>
+            <h2 style={{ margin: 0, fontSize: "1.125rem", fontWeight: 600 }}>
+              Sheet — {side}
+            </h2>
+          </SheetHeader>
+          <SheetBody>
+            <p style={{ margin: 0, fontSize: "0.875rem", opacity: 0.7 }}>
+              Slides in from the {side}.
+            </p>
+          </SheetBody>
+          <SheetFooter>
+            <Button variant="secondary" onClick={() => setSide(null)}>Close</Button>
+          </SheetFooter>
+        </Sheet>
+      )}
+    </div>
+  );
+}
+
+// ── Breadcrumb demos ──────────────────────────────────────────
+
+export function BreadcrumbBasicDemo() {
+  return (
+    <div style={{ padding: "24px 0" }}>
+      <Breadcrumb>
+        <BreadcrumbItem href="#">Home</BreadcrumbItem>
+        <BreadcrumbItem href="#">Components</BreadcrumbItem>
+        <BreadcrumbItem current>Breadcrumb</BreadcrumbItem>
+      </Breadcrumb>
+    </div>
+  );
+}
+
+export function BreadcrumbCustomSeparatorDemo() {
+  return (
+    <div style={{ display: "flex", flexDirection: "column", gap: 16, padding: "24px 0" }}>
+      <Breadcrumb separator="›">
+        <BreadcrumbItem href="#">Dashboard</BreadcrumbItem>
+        <BreadcrumbItem href="#">Settings</BreadcrumbItem>
+        <BreadcrumbItem current>Profile</BreadcrumbItem>
+      </Breadcrumb>
+      <Breadcrumb separator="·">
+        <BreadcrumbItem href="#">Docs</BreadcrumbItem>
+        <BreadcrumbItem href="#">API</BreadcrumbItem>
+        <BreadcrumbItem current>Reference</BreadcrumbItem>
+      </Breadcrumb>
+    </div>
+  );
+}
+
+// ── Pagination demos ──────────────────────────────────────────
+
+export function PaginationBasicDemo() {
+  const [page, setPage] = useState(1);
+  return (
+    <div style={{ display: "flex", flexDirection: "column", alignItems: "center", gap: 12, padding: "24px 0" }}>
+      <Pagination page={page} totalPages={10} onPageChange={setPage} />
+      <p style={{ margin: 0, fontSize: "0.8125rem", opacity: 0.6 }}>Page {page} of 10</p>
+    </div>
+  );
+}
+
+export function PaginationManyPagesDemo() {
+  const [page, setPage] = useState(7);
+  return (
+    <div style={{ display: "flex", flexDirection: "column", alignItems: "center", gap: 12, padding: "24px 0" }}>
+      <Pagination page={page} totalPages={20} onPageChange={setPage} siblings={2} />
+      <p style={{ margin: 0, fontSize: "0.8125rem", opacity: 0.6 }}>Page {page} of 20 · siblings=2</p>
+    </div>
+  );
+}
+
+export function PaginationInfoDemo() {
+  const [page, setPage] = useState(1);
+  const totalItems = 98;
+  const pageSize   = 10;
+  const totalPages = Math.ceil(totalItems / pageSize);
+  return (
+    <div style={{ display: "flex", flexDirection: "column", gap: 24, padding: "24px 0" }}>
+      <Pagination
+        page={page}
+        totalPages={totalPages}
+        onPageChange={setPage}
+        showInfo
+        totalItems={totalItems}
+        pageSize={pageSize}
+      />
+      <Pagination
+        page={page}
+        totalPages={totalPages}
+        onPageChange={setPage}
+        showInfo
+        showEdges={false}
+        totalItems={totalItems}
+        pageSize={pageSize}
+      />
+    </div>
+  );
+}
+
+// ── Table demos ───────────────────────────────────────────────
+
+const users = [
+  { id: 1, name: "Alice Johnson", role: "Admin",    email: "alice@example.com",  status: "Active"   },
+  { id: 2, name: "Bob Smith",     role: "Editor",   email: "bob@example.com",    status: "Active"   },
+  { id: 3, name: "Carol White",   role: "Viewer",   email: "carol@example.com",  status: "Inactive" },
+  { id: 4, name: "Dave Brown",    role: "Editor",   email: "dave@example.com",   status: "Active"   },
+];
+
+export function TableBasicDemo() {
+  const [sortDir, setSortDir] = useState<"asc" | "desc" | null>(null);
+  const sorted = [...users].sort((a, b) =>
+    sortDir === "asc" ? a.name.localeCompare(b.name) :
+    sortDir === "desc" ? b.name.localeCompare(a.name) : 0
+  );
+  const toggleSort = () => setSortDir(d => d === "asc" ? "desc" : d === "desc" ? null : "asc");
+  return (
+    <div style={{ overflowX: "auto", padding: "16px 0" }}>
+      <Table hoverable>
+        <TableHead>
+          <TableRow>
+            <TableHeader sortable sortDir={sortDir} onSort={toggleSort}>Name</TableHeader>
+            <TableHeader>Role</TableHeader>
+            <TableHeader>Email</TableHeader>
+            <TableHeader align="center">Status</TableHeader>
+          </TableRow>
+        </TableHead>
+        <TableBody>
+          {sorted.map((u) => (
+            <TableRow key={u.id}>
+              <TableCell>{u.name}</TableCell>
+              <TableCell>{u.role}</TableCell>
+              <TableCell>{u.email}</TableCell>
+              <TableCell align="center">
+                <span style={{
+                  display: "inline-block",
+                  padding: "2px 8px",
+                  borderRadius: 999,
+                  fontSize: "0.75rem",
+                  fontWeight: 500,
+                  background: u.status === "Active" ? "var(--color-success-subtle)" : "var(--color-neutral-100)",
+                  color: u.status === "Active" ? "var(--color-success-text)" : "var(--color-neutral-500)",
+                }}>{u.status}</span>
+              </TableCell>
+            </TableRow>
+          ))}
+        </TableBody>
+        <TableCaption>Team members — click Name to sort</TableCaption>
+      </Table>
+    </div>
+  );
+}
+
+export function TableVariantsDemo() {
+  return (
+    <div style={{ display: "flex", flexDirection: "column", gap: 24, padding: "16px 0" }}>
+      <div>
+        <p style={{ margin: "0 0 8px", fontSize: "0.8125rem", fontWeight: 600, opacity: 0.6 }}>Striped</p>
+        <Table striped>
+          <TableHead>
+            <TableRow>
+              <TableHeader>Name</TableHeader>
+              <TableHeader>Role</TableHeader>
+              <TableHeader>Status</TableHeader>
+            </TableRow>
+          </TableHead>
+          <TableBody>
+            {users.slice(0, 3).map((u) => (
+              <TableRow key={u.id}>
+                <TableCell>{u.name}</TableCell>
+                <TableCell>{u.role}</TableCell>
+                <TableCell>{u.status}</TableCell>
+              </TableRow>
+            ))}
+          </TableBody>
+        </Table>
+      </div>
+      <div>
+        <p style={{ margin: "0 0 8px", fontSize: "0.8125rem", fontWeight: 600, opacity: 0.6 }}>Bordered + Compact</p>
+        <Table bordered compact>
+          <TableHead>
+            <TableRow>
+              <TableHeader>Name</TableHeader>
+              <TableHeader>Role</TableHeader>
+              <TableHeader>Status</TableHeader>
+            </TableRow>
+          </TableHead>
+          <TableBody>
+            {users.slice(0, 3).map((u) => (
+              <TableRow key={u.id}>
+                <TableCell>{u.name}</TableCell>
+                <TableCell>{u.role}</TableCell>
+                <TableCell>{u.status}</TableCell>
+              </TableRow>
+            ))}
+          </TableBody>
+        </Table>
+      </div>
     </div>
   );
 }
