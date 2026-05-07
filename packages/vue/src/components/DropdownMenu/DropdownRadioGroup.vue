@@ -1,9 +1,6 @@
 <script setup lang="ts">
 import { provide } from "vue";
-import type { InjectionKey } from "vue";
-
-export interface RadioCtx { value: string; onValueChange: (v: string) => void; }
-export const RADIO_KEY: InjectionKey<RadioCtx> = Symbol("vyre-dropdown-radio");
+import { RADIO_KEY } from "./radio-context";
 
 const props = defineProps<{ modelValue: string }>();
 const emit  = defineEmits<{ (e: "update:modelValue", val: string): void }>();

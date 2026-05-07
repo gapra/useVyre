@@ -36,12 +36,7 @@
 
 import { ref, computed, watch, nextTick } from "vue";
 import { cn } from "../../utils/cn";
-
-export interface SelectOption {
-  value:     string;
-  label:     string;
-  disabled?: boolean;
-}
+import type { SelectOption } from "./types";
 
 type SelectSize = "sm" | "md" | "lg";
 

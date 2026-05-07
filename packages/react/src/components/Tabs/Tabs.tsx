@@ -1,11 +1,11 @@
 /**
- * @vyre/react — Tabs
+ * @usevyre/react — Tabs
  *
  * AI CONTEXT:
  * ┌─────────────────────────────────────────────────────────┐
  * │ Components: Tabs + TabList + Tab + TabPanels + TabPanel │
  * │ Import:     import { Tabs, TabList, Tab,                │
- * │             TabPanels, TabPanel } from "@vyre/react"    │
+ * │             TabPanels, TabPanel } from "@usevyre/react"    │
  * │                                                         │
  * │ Tabs props:                                             │
  * │   defaultValue = string (uncontrolled)                  │

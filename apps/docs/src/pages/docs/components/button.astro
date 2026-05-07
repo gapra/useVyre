@@ -4,7 +4,7 @@ import ComponentPreview  from "@/components/docs/ComponentPreview.astro";
 import PropsTable        from "@/components/docs/PropsTable.astro";
 import { ButtonVariantsDemo, ButtonSizesDemo, ButtonStatesDemo } from "@/components/demos/ButtonDemo";
 
-const codeVariantsReact = `import { Button } from "@vyre/react";
+const codeVariantsReact = `import { Button } from "@usevyre/react";
 
 <Button variant="primary">Primary</Button>
 <Button variant="secondary">Secondary</Button>
@@ -14,7 +14,7 @@ const codeVariantsReact = `import { Button } from "@vyre/react";
 <Button variant="danger">Danger</Button>`;
 
 const codeVariantsVue = `<script setup>
-import { Button } from "@vyre/vue";
+import { Button } from "@usevyre/vue";
 </script>
 <template>
   <Button variant="primary">Primary</Button>
@@ -41,7 +41,7 @@ const codeStatesVue = `<Button variant="accent">Default</Button>
 <Button variant="accent" :loading="true">Loading</Button>
 <Button variant="accent" :disabled="true">Disabled</Button>`;
 
-const codeIconReact = `import { Button } from "@vyre/react";
+const codeIconReact = `import { Button } from "@usevyre/react";
 import { Search } from "lucide-react"; // any icon library
 
 // Icon before label
@@ -60,7 +60,7 @@ import { Search } from "lucide-react"; // any icon library
 </Button>`;
 
 const codeIconVue = `<script setup>
-import { Button } from "@vyre/vue";
+import { Button } from "@usevyre/vue";
 </script>
 <template>
   <!-- Icon before label -->
@@ -97,8 +97,8 @@ const props = [
 <DocsLayout title="Button">
   <div class="docs-header">
     <div class="docs-header__meta">
-      <span class="vyre-badge vyre-badge--default">@vyre/react</span>
-      <span class="vyre-badge vyre-badge--default">@vyre/vue</span>
+      <span class="vyre-badge vyre-badge--default">@usevyre/react</span>
+      <span class="vyre-badge vyre-badge--default">@usevyre/vue</span>
     </div>
     <h1 class="docs-title">Button</h1>
     <p class="docs-lead">

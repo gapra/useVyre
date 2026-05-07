@@ -1,11 +1,11 @@
 /**
- * @vyre/react — Breadcrumb
+ * @usevyre/react — Breadcrumb
  *
  * AI CONTEXT:
  * ┌─────────────────────────────────────────────────────────┐
  * │ Components: Breadcrumb + BreadcrumbItem + BreadcrumbSeparator│
  * │ Import:     import { Breadcrumb, BreadcrumbItem,        │
- * │             BreadcrumbSeparator } from "@vyre/react"    │
+ * │             BreadcrumbSeparator } from "@usevyre/react"    │
  * │                                                         │
  * │ Breadcrumb props:                                       │
  * │   separator = ReactNode (default: "/")                  │

@@ -4,7 +4,7 @@ import ComponentPreview from "@/components/docs/ComponentPreview.astro";
 import PropsTable       from "@/components/docs/PropsTable.astro";
 import { TabsBasicDemo, TabsControlledDemo } from "@/components/demos/SelectTabsDemo";
 
-const codeBasicReact = `import { Tabs, TabList, Tab, TabPanels, TabPanel } from "@vyre/react";
+const codeBasicReact = `import { Tabs, TabList, Tab, TabPanels, TabPanel } from "@usevyre/react";
 
 <Tabs defaultValue="overview">
   <TabList>
@@ -23,7 +23,7 @@ const codeBasicReact = `import { Tabs, TabList, Tab, TabPanels, TabPanel } from 
 </Tabs>`;
 
 const codeBasicVue = `<script setup>
-import { Tabs, TabList, Tab, TabPanels, TabPanel } from "@vyre/vue";
+import { Tabs, TabList, Tab, TabPanels, TabPanel } from "@usevyre/vue";
 </script>
 <template>
   <Tabs default-value="overview">
@@ -71,8 +71,8 @@ const tabProps = [
 <DocsLayout title="Tabs">
   <div class="docs-header">
     <div class="docs-header__meta">
-      <span class="vyre-badge vyre-badge--default">@vyre/react</span>
-      <span class="vyre-badge vyre-badge--default">@vyre/vue</span>
+      <span class="vyre-badge vyre-badge--default">@usevyre/react</span>
+      <span class="vyre-badge vyre-badge--default">@usevyre/vue</span>
     </div>
     <h1 class="docs-title">Tabs</h1>
     <p class="docs-lead">

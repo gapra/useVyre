@@ -1,9 +1,9 @@
 /**
- * @vyre/vue — Main export
+ * @usevyre/vue — Main export
  *
  * AI CONTEXT:
  * All useVyre Vue 3 components are exported from this single entry point.
- * Import pattern: import { Button, Badge, ... } from "@vyre/vue"
+ * Import pattern: import { Button, Badge, ... } from "@usevyre/vue"
  *
  * Available components:
  * - Button         — Interactive actions and CTAs
@@ -29,8 +29,8 @@
  * - Skeleton       — Loading placeholder (rect, circle, text variants)
  *
  * CSS must be imported separately:
- * import "@vyre/tokens/css";           ← design tokens (required)
- * import "@vyre/vue/styles";           ← component styles (required)
+ * import "@usevyre/tokens/css";           ← design tokens (required)
+ * import "@usevyre/vue/styles";           ← component styles (required)
  */
 export { default as Button } from "./components/Button/Button.vue";
 export { default as Badge } from "./components/Badge/Badge.vue";

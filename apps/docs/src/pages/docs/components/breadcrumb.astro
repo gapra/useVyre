@@ -4,7 +4,7 @@ import ComponentPreview from "@/components/docs/ComponentPreview.astro";
 import PropsTable       from "@/components/docs/PropsTable.astro";
 import { BreadcrumbBasicDemo, BreadcrumbCustomSeparatorDemo } from "@/components/demos/Tier2Demo";
 
-const codeBasicReact = `import { Breadcrumb, BreadcrumbItem } from "@vyre/react";
+const codeBasicReact = `import { Breadcrumb, BreadcrumbItem } from "@usevyre/react";
 
 <Breadcrumb>
   <BreadcrumbItem href="/">Home</BreadcrumbItem>
@@ -13,7 +13,7 @@ const codeBasicReact = `import { Breadcrumb, BreadcrumbItem } from "@vyre/react"
 </Breadcrumb>`;
 
 const codeBasicVue = `<script setup>
-import { Breadcrumb, BreadcrumbItem } from "@vyre/vue";
+import { Breadcrumb, BreadcrumbItem } from "@usevyre/vue";
 </script>
 <template>
   <Breadcrumb>
@@ -55,8 +55,8 @@ const itemProps = [
 <DocsLayout title="Breadcrumb">
   <div class="docs-header">
     <div class="docs-header__meta">
-      <span class="vyre-badge vyre-badge--default">@vyre/react</span>
-      <span class="vyre-badge vyre-badge--default">@vyre/vue</span>
+      <span class="vyre-badge vyre-badge--default">@usevyre/react</span>
+      <span class="vyre-badge vyre-badge--default">@usevyre/vue</span>
     </div>
     <h1 class="docs-title">Breadcrumb</h1>
     <p class="docs-lead">

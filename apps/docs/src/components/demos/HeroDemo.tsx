@@ -1,4 +1,4 @@
-import { Button, Badge, Card, CardBody } from "@vyre/react";
+import { Button, Badge, Card, CardBody } from "@usevyre/react";
 
 export default function HeroDemo() {
   return (

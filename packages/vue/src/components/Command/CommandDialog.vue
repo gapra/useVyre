@@ -1,6 +1,5 @@
 <script setup lang="ts">
-import { onMounted, onUnmounted, watch } from "vue";
-import { cn } from "../../utils/cn";
+import { onUnmounted, watch } from "vue";
 
 const props = withDefaults(defineProps<{
   open: boolean;

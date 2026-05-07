@@ -12,8 +12,7 @@
 
 import { provide, ref, computed } from "vue";
 import { cn } from "../../utils/cn";
-
-export const APP_LAYOUT_KEY = Symbol("vyre-app-layout");
+import { APP_LAYOUT_KEY } from "./context";
 
 const props = withDefaults(defineProps<{
   defaultCollapsed?: boolean;

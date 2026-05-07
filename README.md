@@ -54,10 +54,10 @@ Most design systems were built for humans reading documentation. useVyre is buil
 ```
 usevyre/
 ├── packages/
-│   ├── tokens/          @vyre/tokens
-│   ├── react/           @vyre/react
-│   ├── vue/             @vyre/vue
-│   └── ai-context/      @vyre/ai-context
+│   ├── tokens/          @usevyre/tokens
+│   ├── react/           @usevyre/react
+│   ├── vue/             @usevyre/vue
+│   └── ai-context/      @usevyre/ai-context
 ├── apps/
 │   └── docs/            usevyre.com documentation site
 └── README.md
@@ -78,10 +78,10 @@ cd usevyre
 pnpm install
 
 # 2. Build design tokens (required — components import CSS variables from here)
-pnpm --filter @vyre/tokens build
+pnpm --filter @usevyre/tokens build
 
 # 3. Start the docs dev server
-SITE_MODE=live pnpm --filter @vyre/docs dev
+SITE_MODE=live pnpm --filter @usevyre/docs dev
 ```
 
 Open `http://localhost:4321` in your browser.

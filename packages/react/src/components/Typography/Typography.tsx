@@ -1,10 +1,10 @@
 /**
- * @vyre/react — Typography
+ * @usevyre/react — Typography
  *
  * AI CONTEXT:
  * ┌──────────────────────────────────────────────────────────────┐
  * │ Components: Text · Heading · Code · Blockquote · Lead       │
- * │ Import:     import { Text, Heading, ... } from "@vyre/react" │
+ * │ Import:     import { Text, Heading, ... } from "@usevyre/react" │
  * │                                                              │
  * │ Text props:                                                  │
  * │   as       = "p"(default)|"span"|"div"|"label"|"li"|"dt"|"dd"│
@@ -27,7 +27,7 @@
  * <Heading as="h1" size="3xl">Page title</Heading>
  * <Text color="muted">Supporting description.</Text>
  * <Lead>Introductory paragraph with larger text.</Lead>
- * <Code>npm install @vyre/react</Code>
+ * <Code>npm install @usevyre/react</Code>
  * <Blockquote>A meaningful quote.</Blockquote>
  */
 
@@ -64,7 +64,7 @@ export const Text = React.forwardRef<HTMLElement, TextProps>(
   }, ref) => {
     return (
       <Tag
-        ref={ref as React.Ref<HTMLParagraphElement>}
+        ref={ref as never}
         className={cn(
           "vyre-text",
           size !== "md" && `vyre-text--${size}`,

@@ -7,7 +7,7 @@ import { TableBasicDemo, TableVariantsDemo } from "@/components/demos/Tier2Demo"
 const codeBasicReact = `import {
   Table, TableHead, TableBody, TableRow,
   TableHeader, TableCell, TableCaption
-} from "@vyre/react";
+} from "@usevyre/react";
 
 const [sortDir, setSortDir] = useState<"asc" | "desc" | null>(null);
 
@@ -37,7 +37,7 @@ const codeBasicVue = `<script setup>
 import {
   Table, TableHead, TableBody, TableRow,
   TableHeader, TableCell, TableCaption
-} from "@vyre/vue";
+} from "@usevyre/vue";
 
 const sortDir = ref(null);
 const toggleSort = () => {
@@ -104,8 +104,8 @@ const rowProps = [
 <DocsLayout title="Table">
   <div class="docs-header">
     <div class="docs-header__meta">
-      <span class="vyre-badge vyre-badge--default">@vyre/react</span>
-      <span class="vyre-badge vyre-badge--default">@vyre/vue</span>
+      <span class="vyre-badge vyre-badge--default">@usevyre/react</span>
+      <span class="vyre-badge vyre-badge--default">@usevyre/vue</span>
     </div>
     <h1 class="docs-title">Table</h1>
     <p class="docs-lead">

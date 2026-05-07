@@ -56,24 +56,24 @@ data-indeterminate — boolean presence attribute (Checkbox)
 data-placement="top|bottom|left|right" — Tooltip
 
 ### React import pattern
-import { Button, Badge, Card, CardHeader, CardBody, CardFooter } from "@vyre/react";
-import { Input, Field, Textarea, Select } from "@vyre/react";
-import { Modal, ModalHeader, ModalBody, ModalFooter } from "@vyre/react";
-import { Tabs, TabList, Tab, TabPanels, TabPanel } from "@vyre/react";
-import { Tooltip, ToastProvider, useToast } from "@vyre/react";
-import { Accordion, AccordionItem, AccordionTrigger, AccordionContent } from "@vyre/react";
-import { Avatar, Checkbox, Switch, Progress, Slider } from "@vyre/react";
-import { Separator, Label, Skeleton } from "@vyre/react";
+import { Button, Badge, Card, CardHeader, CardBody, CardFooter } from "@usevyre/react";
+import { Input, Field, Textarea, Select } from "@usevyre/react";
+import { Modal, ModalHeader, ModalBody, ModalFooter } from "@usevyre/react";
+import { Tabs, TabList, Tab, TabPanels, TabPanel } from "@usevyre/react";
+import { Tooltip, ToastProvider, useToast } from "@usevyre/react";
+import { Accordion, AccordionItem, AccordionTrigger, AccordionContent } from "@usevyre/react";
+import { Avatar, Checkbox, Switch, Progress, Slider } from "@usevyre/react";
+import { Separator, Label, Skeleton } from "@usevyre/react";
 
 ### Vue import pattern
-import { Button, Badge, Card, CardHeader, CardBody, CardFooter } from "@vyre/vue";
-import { Input, Field, Textarea, Select } from "@vyre/vue";
-import { Modal, ModalHeader, ModalBody, ModalFooter } from "@vyre/vue";
-import { Tabs, TabList, Tab, TabPanels, TabPanel } from "@vyre/vue";
-import { Tooltip, ToastViewport, useToast } from "@vyre/vue";
-import { Accordion, AccordionItem, AccordionTrigger, AccordionContent } from "@vyre/vue";
-import { Avatar, Checkbox, Switch, Progress, Slider } from "@vyre/vue";
-import { Separator, Label, Skeleton } from "@vyre/vue";
+import { Button, Badge, Card, CardHeader, CardBody, CardFooter } from "@usevyre/vue";
+import { Input, Field, Textarea, Select } from "@usevyre/vue";
+import { Modal, ModalHeader, ModalBody, ModalFooter } from "@usevyre/vue";
+import { Tabs, TabList, Tab, TabPanels, TabPanel } from "@usevyre/vue";
+import { Tooltip, ToastViewport, useToast } from "@usevyre/vue";
+import { Accordion, AccordionItem, AccordionTrigger, AccordionContent } from "@usevyre/vue";
+import { Avatar, Checkbox, Switch, Progress, Slider } from "@usevyre/vue";
+import { Separator, Label, Skeleton } from "@usevyre/vue";
 
 ### Key behavioral differences React vs Vue
 - React: controlled state via value+onChange / checked+onCheckedChange / onValueChange
@@ -91,7 +91,7 @@ const codeCursorRules = `# .cursor/rules
 # or reference it with @packages/tokens/dist/ai-context.md`;
 
 const codeTokensImport = `// Access tokens in JS/TS
-import { tokens } from "@vyre/tokens";
+import { tokens } from "@usevyre/tokens";
 
 // e.g. read a token value at runtime
 console.log(tokens.color.semantic.accent); // "#7c3aed" (light)`;
@@ -129,7 +129,7 @@ console.log(tokens.color.semantic.accent); // "#7c3aed" (light)`;
 
   <h2 class="docs-h2">Option 2 — Reference the generated file</h2>
   <p class="docs-p">
-    After building the tokens package (<code>pnpm --filter @vyre/tokens build</code>),
+    After building the tokens package (<code>pnpm --filter @usevyre/tokens build</code>),
     a full context file is generated at <code>packages/tokens/dist/ai-context.md</code>.
     Reference it directly in Claude Code or Cursor:
   </p>

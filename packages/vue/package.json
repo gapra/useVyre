@@ -1,5 +1,5 @@
 {
-  "name": "@vyre/vue",
+  "name": "@usevyre/vue",
   "version": "0.1.0",
   "description": "useVyre design system — Vue 3 components, AI-native, zero-runtime styling",
   "keywords": ["design-system", "vue", "vue3", "components", "ai-native", "vyre"],
@@ -48,6 +48,6 @@
     "vue-tsc": "^2.0.0"
   },
   "dependencies": {
-    "@vyre/tokens": "workspace:*"
+    "@usevyre/tokens": "workspace:*"
   }
 }

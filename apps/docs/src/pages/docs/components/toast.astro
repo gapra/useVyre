@@ -6,7 +6,7 @@ import PropsTable       from "@/components/docs/PropsTable.astro";
 import { ToastDemo } from "@/components/demos/SelectTabsDemo";
 
 const codeSetupReact = `// 1. Wrap your app root once
-import { ToastProvider } from "@vyre/react";
+import { ToastProvider } from "@usevyre/react";
 
 <ToastProvider>
   <App />
@@ -14,14 +14,14 @@ import { ToastProvider } from "@vyre/react";
 
 const codeSetupVue = `<!-- 1. Place ToastViewport once in your app root (App.vue or layout) -->
 <script setup>
-import { ToastViewport } from "@vyre/vue";
+import { ToastViewport } from "@usevyre/vue";
 </script>
 <template>
   <RouterView />
   <ToastViewport />
 </template>`;
 
-const codeUsageReact = `import { useToast } from "@vyre/react";
+const codeUsageReact = `import { useToast } from "@usevyre/react";
 
 function SaveButton() {
   const { toast } = useToast();
@@ -33,7 +33,7 @@ function SaveButton() {
 }`;
 
 const codeUsageVue = `<script setup>
-import { useToast } from "@vyre/vue";
+import { useToast } from "@usevyre/vue";
 const { toast } = useToast();
 </script>
 <template>
@@ -79,8 +79,8 @@ const toastInputProps = [
 <DocsLayout title="Toast">
   <div class="docs-header">
     <div class="docs-header__meta">
-      <span class="vyre-badge vyre-badge--default">@vyre/react</span>
-      <span class="vyre-badge vyre-badge--default">@vyre/vue</span>
+      <span class="vyre-badge vyre-badge--default">@usevyre/react</span>
+      <span class="vyre-badge vyre-badge--default">@usevyre/vue</span>
     </div>
     <h1 class="docs-title">Toast</h1>
     <p class="docs-lead">

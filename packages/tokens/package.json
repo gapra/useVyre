@@ -1,5 +1,5 @@
 {
-  "name": "@vyre/tokens",
+  "name": "@usevyre/tokens",
   "version": "0.1.0",
   "description": "useVyre design tokens — CSS variables, JS/TS, and DTCG-compliant JSON",
   "keywords": ["design-system", "design-tokens", "css-variables", "ai-native", "vyre"],

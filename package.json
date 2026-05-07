@@ -9,8 +9,8 @@
   "scripts": {
     "build":       "pnpm -r build",
     "dev":         "pnpm -r --parallel dev",
-    "dev:docs":    "pnpm --filter @vyre/tokens build && pnpm --filter @vyre/docs dev",
-    "build:docs":  "pnpm --filter @vyre/tokens build && pnpm --filter @vyre/docs build",
+    "dev:docs":    "pnpm --filter @usevyre/tokens build && pnpm --filter @usevyre/docs dev",
+    "build:docs":  "pnpm --filter @usevyre/tokens build && pnpm --filter @usevyre/docs build",
     "typecheck":   "pnpm -r typecheck",
     "clean":       "pnpm -r clean && rm -rf node_modules",
     "changeset":   "changeset",

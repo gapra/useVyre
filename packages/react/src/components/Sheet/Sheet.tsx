@@ -1,11 +1,11 @@
 /**
- * @vyre/react — Sheet
+ * @usevyre/react — Sheet
  *
  * AI CONTEXT:
  * ┌─────────────────────────────────────────────────────────┐
  * │ Components: Sheet + SheetHeader + SheetBody + SheetFooter│
  * │ Import:     import { Sheet, SheetHeader, SheetBody,     │
- * │             SheetFooter } from "@vyre/react"            │
+ * │             SheetFooter } from "@usevyre/react"            │
  * │                                                         │
  * │ Sheet props:                                            │
  * │   open            = boolean (controlled)                │

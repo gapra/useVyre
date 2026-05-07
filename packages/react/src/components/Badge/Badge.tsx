@@ -1,10 +1,10 @@
 /**
- * @vyre/react — Badge
+ * @usevyre/react — Badge
  *
  * AI CONTEXT:
  * ┌─────────────────────────────────────────────────────────┐
  * │ Component:  Badge                                       │
- * │ Import:     import { Badge } from "@vyre/react"         │
+ * │ Import:     import { Badge } from "@usevyre/react"         │
  * │                                                         │
  * │ Props:                                                  │
  * │   variant = "default"|"accent"|"teal"|                  │

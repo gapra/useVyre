@@ -12,7 +12,7 @@ import {
 const codeBasicReact = `import {
   DropdownMenu, DropdownItem, DropdownSeparator,
   DropdownLabel, DropdownSub, Button,
-} from "@vyre/react";
+} from "@usevyre/react";
 
 <DropdownMenu trigger={<Button variant="secondary">Actions</Button>}>
   <DropdownLabel>File</DropdownLabel>
@@ -30,7 +30,7 @@ const codeBasicVue = `<script setup>
 import {
   DropdownMenu, DropdownItem, DropdownSeparator,
   DropdownLabel, DropdownSub, Button,
-} from "@vyre/vue";
+} from "@usevyre/vue";
 </script>
 <template>
   <DropdownMenu>
@@ -47,7 +47,7 @@ import {
   </DropdownMenu>
 </template>`;
 
-const codeCheckboxReact = `import { DropdownMenu, DropdownCheckboxItem, DropdownLabel, DropdownSeparator } from "@vyre/react";
+const codeCheckboxReact = `import { DropdownMenu, DropdownCheckboxItem, DropdownLabel, DropdownSeparator } from "@usevyre/react";
 
 const [showToolbar, setShowToolbar] = useState(true);
 const [showPanel,   setShowPanel]   = useState(false);
@@ -64,7 +64,7 @@ const [showPanel,   setShowPanel]   = useState(false);
 </DropdownMenu>`;
 
 const codeCheckboxVue = `<script setup>
-import { DropdownMenu, DropdownCheckboxItem, DropdownLabel, DropdownSeparator } from "@vyre/vue";
+import { DropdownMenu, DropdownCheckboxItem, DropdownLabel, DropdownSeparator } from "@usevyre/vue";
 const showToolbar = ref(true);
 const showPanel   = ref(false);
 </script>
@@ -78,7 +78,7 @@ const showPanel   = ref(false);
   </DropdownMenu>
 </template>`;
 
-const codeRadioReact = `import { DropdownMenu, DropdownRadioGroup, DropdownRadioItem, DropdownLabel } from "@vyre/react";
+const codeRadioReact = `import { DropdownMenu, DropdownRadioGroup, DropdownRadioItem, DropdownLabel } from "@usevyre/react";
 
 const [theme, setTheme] = useState("system");
 
@@ -92,7 +92,7 @@ const [theme, setTheme] = useState("system");
 </DropdownMenu>`;
 
 const codeRadioVue = `<script setup>
-import { DropdownMenu, DropdownRadioGroup, DropdownRadioItem } from "@vyre/vue";
+import { DropdownMenu, DropdownRadioGroup, DropdownRadioItem } from "@usevyre/vue";
 const theme = ref("system");
 </script>
 <template>
@@ -152,8 +152,8 @@ const subProps = [
 <DocsLayout title="Dropdown Menu">
   <div class="docs-header">
     <div class="docs-header__meta">
-      <span class="vyre-badge vyre-badge--default">@vyre/react</span>
-      <span class="vyre-badge vyre-badge--default">@vyre/vue</span>
+      <span class="vyre-badge vyre-badge--default">@usevyre/react</span>
+      <span class="vyre-badge vyre-badge--default">@usevyre/vue</span>
     </div>
     <h1 class="docs-title">Dropdown Menu</h1>
     <p class="docs-lead">

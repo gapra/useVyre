@@ -4,7 +4,7 @@ import ComponentPreview from "@/components/docs/ComponentPreview.astro";
 import PropsTable       from "@/components/docs/PropsTable.astro";
 import { SliderDemo } from "@/components/demos/Tier1Demos";
 
-const codeBasicReact = `import { Slider } from "@vyre/react";
+const codeBasicReact = `import { Slider } from "@usevyre/react";
 
 // Uncontrolled
 <Slider defaultValue={40} />
@@ -14,7 +14,7 @@ const [vol, setVol] = useState(40);
 <Slider value={vol} onValueChange={setVol} />`;
 
 const codeBasicVue = `<script setup>
-import { Slider } from "@vyre/vue";
+import { Slider } from "@usevyre/vue";
 const vol = ref(40);
 </script>
 <template>
@@ -49,8 +49,8 @@ const props = [
 <DocsLayout title="Slider">
   <div class="docs-header">
     <div class="docs-header__meta">
-      <span class="vyre-badge vyre-badge--default">@vyre/react</span>
-      <span class="vyre-badge vyre-badge--default">@vyre/vue</span>
+      <span class="vyre-badge vyre-badge--default">@usevyre/react</span>
+      <span class="vyre-badge vyre-badge--default">@usevyre/vue</span>
     </div>
     <h1 class="docs-title">Slider</h1>
     <p class="docs-lead">
