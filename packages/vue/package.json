@@ -3,7 +3,7 @@
   "version": "0.1.0",
   "description": "useVyre design system — Vue 3 components, AI-native, zero-runtime styling",
   "keywords": ["design-system", "vue", "vue3", "components", "ai-native", "vyre"],
-  "homepage": "https://usevyre.com/docs/vue",
+  "homepage": "https://usevyre.com/docs/getting-started",
   "repository": { "type": "git", "url": "https://github.com/gapra/usevyre" },
   "license": "MIT",
   "type": "module",

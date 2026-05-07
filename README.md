@@ -3,12 +3,8 @@
 > AI-native design system for humans and agents. Built on semantic CSS variables — no runtime magic, no hallucinations.
 
 [![MIT License](https://img.shields.io/badge/license-MIT-blue.svg)](LICENSE)
-[![Status](https://img.shields.io/badge/status-in%20development-orange)](https://usevyre.com)
+[![npm](https://img.shields.io/npm/v/@usevyre/react)](https://www.npmjs.com/package/@usevyre/react)
 [![usevyre.com](https://img.shields.io/badge/site-usevyre.com-7c3aed)](https://usevyre.com)
-
-> ⚠️ **useVyre is currently in active development and not yet published to npm.**
-> Star or watch this repo to be notified when v1.0 launches.
-> Have feedback or ideas? [Open an issue →](https://github.com/gapra/usevyre/issues/new?labels=feedback&title=%5BFeedback%5D+)
 
 ---
 
@@ -28,14 +24,34 @@ Most design systems were built for humans reading documentation. useVyre is buil
 
 ## Packages
 
-| Package | Description |
-|---------|-------------|
-| [`vyre/tokens`](./packages/tokens) | DTCG-compliant design tokens → CSS variables, JS/TS, JSON |
-| [`vyre/react`](./packages/react) | React + TypeScript components |
-| [`vyre/vue`](./packages/vue) | Vue 3 + TypeScript components |
-| [`vyre/ai-context`](./packages/ai-context) | Machine-readable context for LLM system prompts |
+| Package | Version | Description |
+|---------|---------|-------------|
+| [`@usevyre/tokens`](./packages/tokens) | [![npm](https://img.shields.io/npm/v/@usevyre/tokens)](https://www.npmjs.com/package/@usevyre/tokens) | DTCG-compliant design tokens → CSS variables, JS/TS, JSON |
+| [`@usevyre/react`](./packages/react) | [![npm](https://img.shields.io/npm/v/@usevyre/react)](https://www.npmjs.com/package/@usevyre/react) | React + TypeScript components |
+| [`@usevyre/vue`](./packages/vue) | [![npm](https://img.shields.io/npm/v/@usevyre/vue)](https://www.npmjs.com/package/@usevyre/vue) | Vue 3 + TypeScript components |
+| [`@usevyre/ai-context`](./packages/ai-context) | [![npm](https://img.shields.io/npm/v/@usevyre/ai-context)](https://www.npmjs.com/package/@usevyre/ai-context) | Machine-readable context for LLM system prompts |
 
-> Packages are not yet published to npm. Installation instructions will be available at v1.0 launch.
+---
+
+## Quick Start
+
+```bash
+# React
+npm install @usevyre/tokens @usevyre/react
+
+# Vue 3
+npm install @usevyre/tokens @usevyre/vue
+```
+
+```ts
+// Import once at your app entry point
+import "@usevyre/tokens/css";     // design tokens (required)
+import "@usevyre/react/styles";   // component styles
+
+import { Button, Badge, Card } from "@usevyre/react";
+```
+
+Full setup guide → [usevyre.com/docs/installation](https://usevyre.com/docs/installation)
 
 ---
 
