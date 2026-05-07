@@ -84,6 +84,22 @@ export type {
   CalendarProps, CalendarSingleProps, CalendarRangeProps,
   CalendarMultipleProps, CalendarBaseProps, DatePickerProps, CalendarMode,
 }                                                           from "./components/Calendar/Calendar";
+export { Text, Heading, Lead, Code, Blockquote }            from "./components/Typography/Typography";
+export type {
+  TextProps, HeadingProps, LeadProps, CodeProps, BlockquoteProps,
+}                                                           from "./components/Typography/Typography";
+export {
+  AppLayout, AppShell, AppBar, PageContent, SidebarTrigger,
+  Sidebar, SidebarHeader, SidebarContent,
+  SidebarSection, SidebarItem, SidebarFooter,
+  useAppLayout,
+}                                                           from "./components/Sidebar/Sidebar";
+export type {
+  AppLayoutProps, AppShellProps, AppBarProps,
+  PageContentProps, SidebarTriggerProps,
+  SidebarProps, SidebarHeaderProps, SidebarContentProps,
+  SidebarSectionProps, SidebarItemProps, SidebarFooterProps,
+}                                                           from "./components/Sidebar/Sidebar";
 
 // ── Types ─────────────────────────────────────────────────────
 export type { ButtonProps }                                 from "./components/Button/Button";

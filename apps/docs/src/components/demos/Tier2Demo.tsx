@@ -15,6 +15,12 @@ import {
   CommandGroup, CommandItem, CommandSeparator, CommandDialog,
 } from "@vyre/react";
 import { Calendar, DatePicker } from "@vyre/react";
+import { Text, Heading, Lead, Code, Blockquote } from "@vyre/react";
+import {
+  AppLayout, AppShell, AppBar, PageContent, SidebarTrigger,
+  Sidebar, SidebarHeader, SidebarContent,
+  SidebarSection, SidebarItem, SidebarFooter,
+} from "@vyre/react";
 
 // ── Popover demos ─────────────────────────────────────────────
 
@@ -662,6 +668,182 @@ export function DatePickerDemo() {
         <label style={{ fontSize: "13px", fontWeight: 500, color: "var(--vyre-color-semantic-text-muted)" }}>Date range</label>
         <DatePicker mode="range" value={range} onChange={setRange} placeholder="Pick a range" />
       </div>
+    </div>
+  );
+}
+
+// ── Typography demos ───────────────────────────────────────────
+
+export function TypographyHeadingDemo() {
+  return (
+    <div style={{ display: "flex", flexDirection: "column", gap: "12px" }}>
+      <Heading as="h1" size="3xl">The quick brown fox</Heading>
+      <Heading as="h2" size="2xl">The quick brown fox</Heading>
+      <Heading as="h3" size="xl">The quick brown fox</Heading>
+      <Heading as="h4" size="lg">The quick brown fox</Heading>
+      <Heading as="h5" size="md">The quick brown fox</Heading>
+      <Heading as="h6" size="sm">The quick brown fox</Heading>
+    </div>
+  );
+}
+
+export function TypographyTextDemo() {
+  return (
+    <div style={{ display: "flex", flexDirection: "column", gap: "10px" }}>
+      <Lead>Lead text — introductory paragraph with slightly larger, muted text.</Lead>
+      <Text>Default body text — the standard paragraph style.</Text>
+      <Text color="muted">Muted text — used for secondary information.</Text>
+      <Text color="accent">Accent text — draws attention to key content.</Text>
+      <Text color="danger">Danger text — errors and destructive actions.</Text>
+      <Text color="success">Success text — confirmations and positive outcomes.</Text>
+      <Text weight="semibold">Semibold weight text.</Text>
+      <Text mono>Monospace text — for technical values and code references.</Text>
+      <Text size="xs" color="muted">Extra small text — captions and metadata.</Text>
+    </div>
+  );
+}
+
+export function TypographyCodeDemo() {
+  return (
+    <div style={{ display: "flex", flexDirection: "column", gap: "12px" }}>
+      <Text>
+        Install the package: <Code>npm install @vyre/react</Code>
+      </Text>
+      <Blockquote>
+        Design is not just what it looks like and feels like. Design is how it works. — Steve Jobs
+      </Blockquote>
+      <Code block>{`import { Button } from "@vyre/react";
+
+export default function App() {
+  return <Button variant="accent">Get started</Button>;
+}`}</Code>
+    </div>
+  );
+}
+
+// ── Sidebar demos ──────────────────────────────────────────────
+
+function HomeIcon() {
+  return <svg width="16" height="16" viewBox="0 0 16 16" fill="none"><path d="M2 6.5L8 2l6 4.5V14a1 1 0 01-1 1H3a1 1 0 01-1-1V6.5z" stroke="currentColor" strokeWidth="1.3" strokeLinejoin="round"/><path d="M6 15V9h4v6" stroke="currentColor" strokeWidth="1.3" strokeLinejoin="round"/></svg>;
+}
+function UsersIcon() {
+  return <svg width="16" height="16" viewBox="0 0 16 16" fill="none"><circle cx="6" cy="5" r="2.5" stroke="currentColor" strokeWidth="1.3"/><path d="M1 13.5c0-2.485 2.239-4.5 5-4.5s5 2.015 5 4.5" stroke="currentColor" strokeWidth="1.3" strokeLinecap="round"/><path d="M11 7a2.5 2.5 0 100-5M15 13.5c0-2.485-2.015-4.5-4.5-4.5" stroke="currentColor" strokeWidth="1.3" strokeLinecap="round"/></svg>;
+}
+function SettingsIcon2() {
+  return <svg width="16" height="16" viewBox="0 0 16 16" fill="none"><circle cx="8" cy="8" r="2" stroke="currentColor" strokeWidth="1.3"/><path d="M8 1v2M8 13v2M1 8h2M13 8h2M3.05 3.05l1.42 1.42M11.53 11.53l1.42 1.42M3.05 12.95l1.42-1.42M11.53 4.47l1.42-1.42" stroke="currentColor" strokeWidth="1.3" strokeLinecap="round"/></svg>;
+}
+function BellIcon() {
+  return <svg width="16" height="16" viewBox="0 0 16 16" fill="none"><path d="M8 1.5a5 5 0 00-5 5v3l-1.5 2h13L13 9.5v-3a5 5 0 00-5-5z" stroke="currentColor" strokeWidth="1.3" strokeLinejoin="round"/><path d="M6.5 13.5a1.5 1.5 0 003 0" stroke="currentColor" strokeWidth="1.3" strokeLinecap="round"/></svg>;
+}
+
+export function SidebarDemo() {
+  const [active, setActive] = useState("dashboard");
+  return (
+    <div style={{ display: "flex", height: "320px", border: "1px solid var(--vyre-color-semantic-border)", borderRadius: "var(--vyre-radius-lg)", overflow: "hidden" }}>
+      <Sidebar>
+        <SidebarHeader title="My App" logo={<svg width="24" height="24" viewBox="0 0 24 24" fill="var(--vyre-color-semantic-accent)"><rect width="24" height="24" rx="6"/><path d="M7 12l4 4 6-6" stroke="white" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/></svg>} />
+        <SidebarContent>
+          <SidebarSection label="Main">
+            <SidebarItem icon={<HomeIcon />} active={active === "dashboard"} onClick={() => setActive("dashboard")}>Dashboard</SidebarItem>
+            <SidebarItem icon={<UsersIcon />} active={active === "users"} onClick={() => setActive("users")}>Users</SidebarItem>
+            <SidebarItem icon={<BellIcon />} badge={3} active={active === "notif"} onClick={() => setActive("notif")}>Notifications</SidebarItem>
+          </SidebarSection>
+        </SidebarContent>
+        <SidebarFooter>
+          <SidebarItem icon={<SettingsIcon2 />} active={active === "settings"} onClick={() => setActive("settings")}>Settings</SidebarItem>
+        </SidebarFooter>
+      </Sidebar>
+      <div style={{ flex: 1, padding: "24px", background: "var(--vyre-color-semantic-surface)" }}>
+        <Heading size="md">{active.charAt(0).toUpperCase() + active.slice(1)}</Heading>
+        <Text color="muted" style={{ marginTop: "8px" }}>Content for the {active} page.</Text>
+      </div>
+    </div>
+  );
+}
+
+export function SidebarCollapsibleDemo() {
+  const [active, setActive] = useState("dashboard");
+  return (
+    <div style={{ height: "280px", border: "1px solid var(--vyre-color-semantic-border)", borderRadius: "var(--vyre-radius-lg)", overflow: "hidden" }}>
+      <AppLayout defaultCollapsed={false} style={{ height: "100%", minHeight: "unset" }}>
+        <Sidebar>
+          <SidebarHeader title="App" logo={<svg width="24" height="24" viewBox="0 0 24 24" fill="var(--vyre-color-semantic-accent)"><rect width="24" height="24" rx="6"/><path d="M7 12l4 4 6-6" stroke="white" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/></svg>} />
+          <SidebarContent>
+            <SidebarSection>
+              <SidebarItem icon={<HomeIcon />} active={active === "dashboard"} onClick={() => setActive("dashboard")}>Dashboard</SidebarItem>
+              <SidebarItem icon={<UsersIcon />} active={active === "users"} onClick={() => setActive("users")}>Users</SidebarItem>
+              <SidebarItem icon={<BellIcon />} badge={3} active={active === "notif"} onClick={() => setActive("notif")}>Notifications</SidebarItem>
+            </SidebarSection>
+          </SidebarContent>
+          <SidebarFooter>
+            <SidebarItem icon={<SettingsIcon2 />} active={active === "settings"} onClick={() => setActive("settings")}>Settings</SidebarItem>
+          </SidebarFooter>
+        </Sidebar>
+        <AppShell>
+          <AppBar>
+            <SidebarTrigger />
+            <Text size="sm" weight="medium">Click trigger to collapse</Text>
+          </AppBar>
+          <PageContent>
+            <Text color="muted" size="sm">Active: {active}</Text>
+          </PageContent>
+        </AppShell>
+      </AppLayout>
+    </div>
+  );
+}
+
+const pages: Record<string, { title: string; description: string }> = {
+  dashboard: { title: "Dashboard", description: "Overview of your workspace activity and key metrics." },
+  users:     { title: "Users",     description: "Manage team members, roles, and access permissions." },
+  notif:     { title: "Notifications", description: "3 unread notifications from the last 24 hours." },
+  settings:  { title: "Settings", description: "Configure your workspace preferences and integrations." },
+};
+
+const AppLogo = () => (
+  <svg width="28" height="28" viewBox="0 0 28 28" fill="var(--vyre-color-semantic-accent)">
+    <rect width="28" height="28" rx="7"/>
+    <path d="M8 14l5 5 7-8" stroke="white" strokeWidth="2.2" strokeLinecap="round" strokeLinejoin="round"/>
+  </svg>
+);
+
+export function SidebarLayoutDemo() {
+  const [active, setActive] = useState("dashboard");
+  const page = pages[active];
+  return (
+    <div style={{ height: "400px", border: "1px solid var(--vyre-color-semantic-border)", borderRadius: "var(--vyre-radius-lg)", overflow: "hidden" }}>
+      <AppLayout style={{ height: "100%", minHeight: "unset" }}>
+        <Sidebar>
+          <SidebarHeader title="Workspace" logo={<AppLogo />} />
+          <SidebarContent>
+            <SidebarSection label="Main">
+              <SidebarItem icon={<HomeIcon />} active={active === "dashboard"} onClick={() => setActive("dashboard")}>Dashboard</SidebarItem>
+              <SidebarItem icon={<UsersIcon />} active={active === "users"} onClick={() => setActive("users")}>Users</SidebarItem>
+              <SidebarItem icon={<BellIcon />} badge={3} active={active === "notif"} onClick={() => setActive("notif")}>Notifications</SidebarItem>
+            </SidebarSection>
+          </SidebarContent>
+          <SidebarFooter>
+            <SidebarItem icon={<SettingsIcon2 />} active={active === "settings"} onClick={() => setActive("settings")}>Settings</SidebarItem>
+          </SidebarFooter>
+        </Sidebar>
+        <AppShell>
+          <AppBar>
+            <SidebarTrigger />
+            <Text size="sm" weight="semibold">{page.title}</Text>
+          </AppBar>
+          <PageContent>
+            <Text color="muted" style={{ marginBottom: "20px" }}>{page.description}</Text>
+            <div style={{ display: "grid", gridTemplateColumns: "repeat(3, 1fr)", gap: "12px" }}>
+              {["Total users", "Active now", "Revenue"].map((label, i) => (
+                <div key={label} style={{ padding: "16px", background: "var(--vyre-color-semantic-surface-raised)", borderRadius: "var(--vyre-radius-md)", border: "1px solid var(--vyre-color-semantic-border-subtle)" }}>
+                  <Text size="xs" color="muted">{label}</Text>
+                  <Heading size="lg" style={{ marginTop: "4px" }}>{["1,284", "42", "$9.4k"][i]}</Heading>
+                </div>
+              ))}
+            </div>
+          </PageContent>
+        </AppShell>
+      </AppLayout>
     </div>
   );
 }

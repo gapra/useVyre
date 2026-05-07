@@ -1,0 +1,341 @@
+---
+import DocsLayout       from "@/layouts/DocsLayout.astro";
+import ComponentPreview from "@/components/docs/ComponentPreview.astro";
+import PropsTable       from "@/components/docs/PropsTable.astro";
+import { SidebarDemo, SidebarCollapsibleDemo, SidebarLayoutDemo } from "@/components/demos/Tier2Demo";
+
+const codeBasicReact = `import {
+  Sidebar, SidebarHeader, SidebarContent,
+  SidebarSection, SidebarItem, SidebarFooter,
+} from "@vyre/react";
+
+const [active, setActive] = useState("dashboard");
+
+<Sidebar>
+  <SidebarHeader title="My App" logo={<AppLogo />} />
+  <SidebarContent>
+    <SidebarSection label="Main">
+      <SidebarItem icon={<HomeIcon />} active={active === "dashboard"} onClick={() => setActive("dashboard")}>
+        Dashboard
+      </SidebarItem>
+      <SidebarItem icon={<UsersIcon />} active={active === "users"} onClick={() => setActive("users")}>
+        Users
+      </SidebarItem>
+      <SidebarItem icon={<BellIcon />} badge={3} active={active === "notif"} onClick={() => setActive("notif")}>
+        Notifications
+      </SidebarItem>
+    </SidebarSection>
+  </SidebarContent>
+  <SidebarFooter>
+    <SidebarItem icon={<SettingsIcon />} href="/settings">Settings</SidebarItem>
+  </SidebarFooter>
+</Sidebar>`;
+
+const codeBasicVue = `<script setup>
+import {
+  Sidebar, SidebarHeader, SidebarContent,
+  SidebarSection, SidebarItem, SidebarFooter,
+} from "@vyre/vue";
+
+const active = ref("dashboard");
+</script>
+<template>
+  <Sidebar>
+    <SidebarHeader title="My App">
+      <template #logo><AppLogo /></template>
+    </SidebarHeader>
+    <SidebarContent>
+      <SidebarSection label="Main">
+        <SidebarItem :active="active === 'dashboard'" @click="active = 'dashboard'">
+          <template #icon><HomeIcon /></template>
+          Dashboard
+        </SidebarItem>
+        <SidebarItem :active="active === 'users'" @click="active = 'users'">
+          <template #icon><UsersIcon /></template>
+          Users
+        </SidebarItem>
+        <SidebarItem :badge="3" :active="active === 'notif'" @click="active = 'notif'">
+          <template #icon><BellIcon /></template>
+          Notifications
+        </SidebarItem>
+      </SidebarSection>
+    </SidebarContent>
+    <SidebarFooter>
+      <SidebarItem href="/settings">
+        <template #icon><SettingsIcon /></template>
+        Settings
+      </SidebarItem>
+    </SidebarFooter>
+  </Sidebar>
+</template>`;
+
+const codeCollapsibleReact = `import { AppLayout, AppShell, AppBar, PageContent, SidebarTrigger, Sidebar, ... } from "@vyre/react";
+
+// AppLayout handles state — no useState needed
+<AppLayout defaultCollapsed={false}>
+  <Sidebar>
+    <SidebarHeader title="App" logo={<AppLogo />} />
+    <SidebarContent>
+      <SidebarSection>
+        <SidebarItem icon={<HomeIcon />} active>Dashboard</SidebarItem>
+        <SidebarItem icon={<UsersIcon />}>Users</SidebarItem>
+      </SidebarSection>
+    </SidebarContent>
+  </Sidebar>
+  <AppShell>
+    <AppBar>
+      <SidebarTrigger />   {/* reads collapsed state from AppLayout context */}
+    </AppBar>
+    <PageContent>...</PageContent>
+  </AppShell>
+</AppLayout>`;
+
+const codeCollapsibleVue = `<script setup>
+import { AppLayout, AppShell, AppBar, PageContent, SidebarTrigger, Sidebar, ... } from "@vyre/vue";
+// AppLayout handles state — no ref needed
+</script>
+<template>
+  <AppLayout :default-collapsed="false">
+    <Sidebar>
+      <SidebarHeader title="App">
+        <template #logo><AppLogo /></template>
+      </SidebarHeader>
+      <SidebarContent>
+        <SidebarSection>
+          <SidebarItem :active="true">
+            <template #icon><HomeIcon /></template>
+            Dashboard
+          </SidebarItem>
+        </SidebarSection>
+      </SidebarContent>
+    </Sidebar>
+    <AppShell>
+      <AppBar>
+        <SidebarTrigger /> <!-- reads collapsed state from AppLayout context -->
+      </AppBar>
+      <PageContent>...</PageContent>
+    </AppShell>
+  </AppLayout>
+</template>`;
+
+const codeLayoutReact = `import {
+  AppLayout, AppShell, AppBar, PageContent, SidebarTrigger,
+  Sidebar, SidebarHeader, SidebarContent,
+  SidebarSection, SidebarItem, SidebarFooter,
+} from "@vyre/react";
+
+<AppLayout>
+  <Sidebar>
+    <SidebarHeader title="Workspace" logo={<AppLogo />} />
+    <SidebarContent>
+      <SidebarSection label="Main">
+        <SidebarItem icon={<HomeIcon />} active href="/dashboard">Dashboard</SidebarItem>
+        <SidebarItem icon={<UsersIcon />} href="/users">Users</SidebarItem>
+        <SidebarItem icon={<BellIcon />} badge={3} href="/notifications">Notifications</SidebarItem>
+      </SidebarSection>
+    </SidebarContent>
+    <SidebarFooter>
+      <SidebarItem icon={<SettingsIcon />} href="/settings">Settings</SidebarItem>
+    </SidebarFooter>
+  </Sidebar>
+  <AppShell>
+    <AppBar>
+      <SidebarTrigger />
+      <Breadcrumb>...</Breadcrumb>
+      <div style={{ marginLeft: "auto" }}>page actions</div>
+    </AppBar>
+    <PageContent>
+      <h1>Dashboard</h1>
+      <p>Your page content here.</p>
+    </PageContent>
+  </AppShell>
+</AppLayout>`;
+
+const codeLayoutVue = `<script setup>
+import {
+  AppLayout, AppShell, AppBar, PageContent, SidebarTrigger,
+  Sidebar, SidebarHeader, SidebarContent,
+  SidebarSection, SidebarItem, SidebarFooter,
+} from "@vyre/vue";
+</script>
+<template>
+  <AppLayout>
+    <Sidebar>
+      <SidebarHeader title="Workspace">
+        <template #logo><AppLogo /></template>
+      </SidebarHeader>
+      <SidebarContent>
+        <SidebarSection label="Main">
+          <SidebarItem href="/dashboard" :active="true">
+            <template #icon><HomeIcon /></template>
+            Dashboard
+          </SidebarItem>
+          <SidebarItem href="/users">
+            <template #icon><UsersIcon /></template>
+            Users
+          </SidebarItem>
+          <SidebarItem href="/notifications" :badge="3">
+            <template #icon><BellIcon /></template>
+            Notifications
+          </SidebarItem>
+        </SidebarSection>
+      </SidebarContent>
+      <SidebarFooter>
+        <SidebarItem href="/settings">
+          <template #icon><SettingsIcon /></template>
+          Settings
+        </SidebarItem>
+      </SidebarFooter>
+    </Sidebar>
+    <AppShell>
+      <AppBar>
+        <SidebarTrigger />
+        <Breadcrumb>...</Breadcrumb>
+      </AppBar>
+      <PageContent>
+        <h1>Dashboard</h1>
+        <p>Your page content here.</p>
+      </PageContent>
+    </AppShell>
+  </AppLayout>
+</template>`;
+
+const layoutProps = [
+  { name: "defaultCollapsed",    type: "boolean",                   default: "false", description: "Initial collapsed state for uncontrolled usage." },
+  { name: "collapsed",           type: "boolean",                   default: "—",     description: "Controlled collapsed state." },
+  { name: "onCollapsedChange",   type: "(v: boolean) => void",      default: "—",     description: "(React) Called when collapsed state changes." },
+  { name: "v-model:collapsed",   type: "boolean",                   default: "—",     description: "(Vue) Two-way binding for collapsed state." },
+  { name: "class / className",   type: "string",                    default: "—",     description: "Additional CSS class." },
+];
+
+const appShellProps = [
+  { name: "class / className",   type: "string",                    default: "—",     description: "Additional CSS class on the right column wrapper (flex: 1)." },
+];
+
+const appBarProps = [
+  { name: "class / className",   type: "string",                    default: "—",     description: "Additional CSS class on the <header> element (height: 52px)." },
+];
+
+const pageContentProps = [
+  { name: "class / className",   type: "string",                    default: "—",     description: "Additional CSS class on the scrollable content area (padding: 24px, overflow: auto)." },
+];
+
+const sidebarProps = [
+  { name: "collapsed",          type: "boolean",                      default: "false",       description: "Collapses the sidebar to icon-only mode (56px wide)." },
+  { name: "onCollapsedChange",  type: "(v: boolean) => void",         default: "—",           description: "(React) Called when the collapse toggle is clicked. Shows the toggle button when provided." },
+  { name: "v-model:collapsed",  type: "boolean",                      default: "—",           description: "(Vue) Two-way binding for collapsed state." },
+  { name: "variant",            type: '"default" | "floating"',       default: '"default"',   description: "floating adds a border, rounded corners, and shadow — for overlay/inset sidebars." },
+  { name: "class / className",  type: "string",                       default: "—",           description: "Additional CSS class." },
+];
+
+const headerProps = [
+  { name: "title",   type: "string",      default: "—", description: "Application or workspace name displayed next to the logo. Hidden when sidebar is collapsed." },
+  { name: "logo",    type: "ReactNode",   default: "—", description: "(React) Logo element. In Vue use the #logo slot." },
+];
+
+const itemProps = [
+  { name: "active",  type: "boolean",          default: "false", description: "Highlights the item as the current active page." },
+  { name: "icon",    type: "ReactNode / slot", default: "—",     description: "Leading icon. In Vue use the #icon slot." },
+  { name: "badge",   type: "string | number",  default: "—",     description: "Notification badge shown on the right. Hidden when collapsed." },
+  { name: "href",    type: "string",           default: "—",     description: "Renders as an <a> tag when provided. Use onClick for button behavior." },
+  { name: "onClick", type: "() => void",       default: "—",     description: "(React) Click handler. Ignored when href is set." },
+];
+
+const sectionProps = [
+  { name: "label",  type: "string",  default: "—", description: "Section heading text. Hidden when sidebar is collapsed." },
+];
+---
+
+<DocsLayout title="Sidebar">
+  <div class="docs-header">
+    <div class="docs-header__meta">
+      <span class="vyre-badge vyre-badge--default">@vyre/react</span>
+      <span class="vyre-badge vyre-badge--default">@vyre/vue</span>
+    </div>
+    <h1 class="docs-title">Sidebar</h1>
+    <p class="docs-lead">
+      A composable navigation sidebar with sections, active states, badges, and optional
+      collapse to icon-only mode. Built from small pieces —
+      <code>SidebarHeader</code>, <code>SidebarContent</code>, <code>SidebarSection</code>,
+      <code>SidebarItem</code>, and <code>SidebarFooter</code> — so you compose exactly what you need.
+    </p>
+  </div>
+
+  <hr class="docs-divider" />
+
+  <h2 class="docs-h2">Full layout — SidebarLayout + SidebarMain</h2>
+  <p class="docs-p">
+    Wrap everything in <code>SidebarLayout</code> (a flex row) and put your page content
+    inside <code>SidebarMain</code>. This gives you the canonical app shell hierarchy:
+    sidebar on the left, main content on the right.
+  </p>
+  <ComponentPreview react={codeLayoutReact} vue={codeLayoutVue}>
+    <SidebarLayoutDemo client:visible />
+  </ComponentPreview>
+
+  <h2 class="docs-h2">Sidebar only</h2>
+  <p class="docs-p">
+    Use <code>Sidebar</code> standalone when you manage the outer layout yourself.
+    <code>SidebarItem</code> renders as an <code>&lt;a&gt;</code> when <code>href</code> is set,
+    otherwise as a <code>&lt;button&gt;</code>. Use <code>badge</code> for notification counts.
+  </p>
+  <ComponentPreview react={codeBasicReact} vue={codeBasicVue}>
+    <SidebarDemo client:visible />
+  </ComponentPreview>
+
+  <h2 class="docs-h2">Collapsible</h2>
+  <p class="docs-p">
+    Pass <code>collapsed</code> and <code>onCollapsedChange</code> (React) or <code>v-model:collapsed</code> (Vue)
+    to enable a collapse toggle. In collapsed mode, labels and section headings are hidden —
+    only icons remain. Hover <code>title</code> is added automatically for accessibility.
+  </p>
+  <ComponentPreview react={codeCollapsibleReact} vue={codeCollapsibleVue}>
+    <SidebarCollapsibleDemo client:visible />
+  </ComponentPreview>
+
+  <h2 class="docs-h2">Component hierarchy</h2>
+  <pre class="docs-pre"><code>AppLayout             — root, manages collapsed state via context
+├── Sidebar           — left column (240px / 56px collapsed)
+│   ├── SidebarHeader — logo + app name
+│   ├── SidebarContent — scrollable nav area, flex: 1
+│   │   └── SidebarSection — grouped items with optional label
+│   │       └── SidebarItem — &lt;a&gt; or &lt;button&gt;
+│   └── SidebarFooter — pinned bottom area
+└── AppShell          — right column, flex: 1
+    ├── AppBar        — optional top bar (52px, border-bottom)
+    │   └── SidebarTrigger — collapse toggle, reads context
+    └── PageContent   — scrollable page content, padding: 24px</code></pre>
+
+  <h2 class="docs-h2">Props — AppLayout</h2>
+  <PropsTable props={layoutProps} />
+
+  <h2 class="docs-h2">Props — AppShell</h2>
+  <PropsTable props={appShellProps} />
+
+  <h2 class="docs-h2">Props — AppBar</h2>
+  <PropsTable props={appBarProps} />
+
+  <h2 class="docs-h2">Props — PageContent</h2>
+  <PropsTable props={pageContentProps} />
+
+  <h2 class="docs-h2">Props — Sidebar</h2>
+  <PropsTable props={sidebarProps} />
+
+  <h2 class="docs-h2">Props — SidebarHeader</h2>
+  <PropsTable props={headerProps} />
+
+  <h2 class="docs-h2">Props — SidebarItem</h2>
+  <PropsTable props={itemProps} />
+
+  <h2 class="docs-h2">Props — SidebarSection</h2>
+  <PropsTable props={sectionProps} />
+
+  <div class="docs-pagination">
+    <a href="/docs/components/sheet" class="docs-pagination__link docs-pagination__link--prev">
+      ← Sheet
+    </a>
+    <a href="/docs/components/skeleton" class="docs-pagination__link docs-pagination__link--next">
+      Skeleton →
+    </a>
+  </div>
+</DocsLayout>
