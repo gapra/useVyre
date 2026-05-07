@@ -1,10 +1,10 @@
 /**
- * @vyre/react — Alert + AlertDialog
+ * @usevyre/react — Alert + AlertDialog
  *
  * AI CONTEXT:
  * ┌─────────────────────────────────────────────────────────┐
  * │ Components: Alert + AlertDialog                         │
- * │ Import:     import { Alert, AlertDialog } from "@vyre/react"│
+ * │ Import:     import { Alert, AlertDialog } from "@usevyre/react"│
  * │                                                         │
  * │ Alert props (inline banner):                            │
  * │   variant  = "info"(default)|"success"|"warning"|"danger"│

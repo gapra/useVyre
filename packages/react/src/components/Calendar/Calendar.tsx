@@ -1,10 +1,10 @@
 /**
- * @vyre/react — Calendar & DatePicker
+ * @usevyre/react — Calendar & DatePicker
  *
  * AI CONTEXT:
  * ┌─────────────────────────────────────────────────────────────┐
  * │ Components: Calendar · DatePicker                           │
- * │ Import:     import { Calendar, DatePicker } from "@vyre/react" │
+ * │ Import:     import { Calendar, DatePicker } from "@usevyre/react" │
  * │                                                             │
  * │ Calendar props:                                             │
  * │   mode      = "single"(default) | "range" | "multiple"     │
@@ -484,8 +484,8 @@ export const DatePicker = React.forwardRef<HTMLDivElement, DatePickerProps>(
       if (calendarProps.mode === "range") {
         return {
           ...calendarProps,
-          onChange: (v) => {
-            calendarProps.onChange?.(v);
+          onChange: (v: [Date | null, Date | null]) => {
+            (calendarProps as CalendarRangeProps).onChange?.(v);
             if (v[0] && v[1]) setOpen(false);
           },
         };

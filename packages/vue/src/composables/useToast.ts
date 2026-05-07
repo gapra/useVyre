@@ -1,10 +1,10 @@
 /**
- * @vyre/vue — useToast composable
+ * @usevyre/vue — useToast composable
  *
  * AI CONTEXT:
  * ┌─────────────────────────────────────────────────────────┐
  * │ Composable: useToast                                    │
- * │ Import:     import { useToast } from "@vyre/vue"        │
+ * │ Import:     import { useToast } from "@usevyre/vue"        │
  * │                                                         │
  * │ Setup: add <ToastViewport /> anywhere in your app root  │
  * │        (once, renders the toast stack via Teleport)     │

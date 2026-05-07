@@ -128,10 +128,6 @@ const isLive = SITE_MODE === "live";
                 GitHub
               </a>
             </div>
-
-            <p class="hero__install">
-              <code>npm install ...</code>
-            </p>
           </div>
 
           <div class="hero__visual">
@@ -195,7 +191,7 @@ loading  = boolean</code></pre>
               <div class="feature-card__icon">⬡</div>
               <h3 class="feature-card__title">React + Vue</h3>
               <p class="feature-card__body">
-                <code>@vyre/react</code> and <code>@vyre/vue</code> - identical API,
+                <code>@usevyre/react</code> and <code>@usevyre/vue</code> - identical API,
                 identical CSS classes, one design system.
               </p>
             </div>
@@ -223,7 +219,7 @@ loading  = boolean</code></pre>
         <div class="section-inner">
           <h2 class="section-title">Components that speak agent</h2>
           <p class="section-subtitle">
-            11 components across React and Vue. Every one ships with an AI context block.
+            30+ components across React and Vue. Every one ships with an AI context block.
           </p>
           <div class="showcase-grid">
             {[
@@ -235,13 +231,17 @@ loading  = boolean</code></pre>
               { name: "Select",  variants: "keyboard nav · controlled · uncontrolled" },
               { name: "Tabs",    variants: "WAI-ARIA · keyboard nav · controlled" },
               { name: "Toast",   variants: "default · success · warning · danger" },
-              { name: "Tooltip", variants: "top · bottom · left · right · delay" },
             ].map((c) => (
               <a href={`/docs/components/${c.name.toLowerCase()}`} class="showcase-item">
                 <span class="showcase-item__name">{c.name}</span>
                 <span class="showcase-item__variants">{c.variants}</span>
               </a>
             ))}
+          </div>
+          <div class="showcase-footer">
+            <a href="/docs/getting-started" class="showcase-all">
+              View all components →
+            </a>
           </div>
         </div>
       </section>

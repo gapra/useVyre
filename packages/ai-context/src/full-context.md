@@ -17,23 +17,23 @@ no runtime transforms, just semantic token names that describe intent.
 
 ```bash
 # Tokens (required by everything)
-pnpm add @vyre/tokens
+pnpm add @usevyre/tokens
 
 # React components
-pnpm add @vyre/react
+pnpm add @usevyre/react
 
 # Vue components
-pnpm add @vyre/vue
+pnpm add @usevyre/vue
 ```
 
 ## CSS Setup
 
 ```css
 /* In your global CSS entry point */
-@import "@vyre/tokens/css";      /* design tokens */
-@import "@vyre/react/styles";    /* component styles (React) */
+@import "@usevyre/tokens/css";      /* design tokens */
+@import "@usevyre/react/styles";    /* component styles (React) */
 /* or */
-@import "@vyre/vue/styles";      /* component styles (Vue) */
+@import "@usevyre/vue/styles";      /* component styles (Vue) */
 ```
 
 ---
@@ -154,7 +154,7 @@ Examples:
 ### Button
 
 ```tsx
-import { Button } from "@vyre/react"
+import { Button } from "@usevyre/react"
 
 // Props:
 // variant  = "primary" | "secondary" | "ghost" | "accent" | "teal" | "danger"
@@ -175,7 +175,7 @@ import { Button } from "@vyre/react"
 ### Badge
 
 ```tsx
-import { Badge } from "@vyre/react"
+import { Badge } from "@usevyre/react"
 
 // Props:
 // variant = "default" | "accent" | "teal" | "success" | "warning" | "danger"
@@ -190,7 +190,7 @@ import { Badge } from "@vyre/react"
 ### Card
 
 ```tsx
-import { Card, CardHeader, CardBody, CardFooter } from "@vyre/react"
+import { Card, CardHeader, CardBody, CardFooter } from "@usevyre/react"
 
 // Card props:
 // variant   = "default" | "elevated" | "outlined" | "ghost" | "accent"
@@ -215,7 +215,7 @@ import { Card, CardHeader, CardBody, CardFooter } from "@vyre/react"
 ### Field + Input + Textarea
 
 ```tsx
-import { Field, Input, Textarea } from "@vyre/react"
+import { Field, Input, Textarea } from "@usevyre/react"
 
 // Field props:
 // label    = string

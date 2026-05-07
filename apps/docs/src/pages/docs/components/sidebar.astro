@@ -7,7 +7,7 @@ import { SidebarDemo, SidebarCollapsibleDemo, SidebarLayoutDemo } from "@/compon
 const codeBasicReact = `import {
   Sidebar, SidebarHeader, SidebarContent,
   SidebarSection, SidebarItem, SidebarFooter,
-} from "@vyre/react";
+} from "@usevyre/react";
 
 const [active, setActive] = useState("dashboard");
 
@@ -35,7 +35,7 @@ const codeBasicVue = `<script setup>
 import {
   Sidebar, SidebarHeader, SidebarContent,
   SidebarSection, SidebarItem, SidebarFooter,
-} from "@vyre/vue";
+} from "@usevyre/vue";
 
 const active = ref("dashboard");
 </script>
@@ -69,7 +69,7 @@ const active = ref("dashboard");
   </Sidebar>
 </template>`;
 
-const codeCollapsibleReact = `import { AppLayout, AppShell, AppBar, PageContent, SidebarTrigger, Sidebar, ... } from "@vyre/react";
+const codeCollapsibleReact = `import { AppLayout, AppShell, AppBar, PageContent, SidebarTrigger, Sidebar, ... } from "@usevyre/react";
 
 // AppLayout handles state — no useState needed
 <AppLayout defaultCollapsed={false}>
@@ -91,7 +91,7 @@ const codeCollapsibleReact = `import { AppLayout, AppShell, AppBar, PageContent,
 </AppLayout>`;
 
 const codeCollapsibleVue = `<script setup>
-import { AppLayout, AppShell, AppBar, PageContent, SidebarTrigger, Sidebar, ... } from "@vyre/vue";
+import { AppLayout, AppShell, AppBar, PageContent, SidebarTrigger, Sidebar, ... } from "@usevyre/vue";
 // AppLayout handles state — no ref needed
 </script>
 <template>
@@ -122,7 +122,7 @@ const codeLayoutReact = `import {
   AppLayout, AppShell, AppBar, PageContent, SidebarTrigger,
   Sidebar, SidebarHeader, SidebarContent,
   SidebarSection, SidebarItem, SidebarFooter,
-} from "@vyre/react";
+} from "@usevyre/react";
 
 <AppLayout>
   <Sidebar>
@@ -156,7 +156,7 @@ import {
   AppLayout, AppShell, AppBar, PageContent, SidebarTrigger,
   Sidebar, SidebarHeader, SidebarContent,
   SidebarSection, SidebarItem, SidebarFooter,
-} from "@vyre/vue";
+} from "@usevyre/vue";
 </script>
 <template>
   <AppLayout>
@@ -249,8 +249,8 @@ const sectionProps = [
 <DocsLayout title="Sidebar">
   <div class="docs-header">
     <div class="docs-header__meta">
-      <span class="vyre-badge vyre-badge--default">@vyre/react</span>
-      <span class="vyre-badge vyre-badge--default">@vyre/vue</span>
+      <span class="vyre-badge vyre-badge--default">@usevyre/react</span>
+      <span class="vyre-badge vyre-badge--default">@usevyre/vue</span>
     </div>
     <h1 class="docs-title">Sidebar</h1>
     <p class="docs-lead">

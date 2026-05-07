@@ -1,10 +1,10 @@
 /**
- * @vyre/react — Popover
+ * @usevyre/react — Popover
  *
  * AI CONTEXT:
  * ┌─────────────────────────────────────────────────────────┐
  * │ Component:  Popover                                     │
- * │ Import:     import { Popover } from "@vyre/react"       │
+ * │ Import:     import { Popover } from "@usevyre/react"       │
  * │                                                         │
  * │ Props:                                                  │
  * │   open           = boolean (controlled)                 │

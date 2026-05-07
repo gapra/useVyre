@@ -9,7 +9,7 @@ import {
   Separator,
   Label,
   Skeleton,
-} from "@vyre/react";
+} from "@usevyre/react";
 
 const row: React.CSSProperties = { display: "flex", gap: 12, alignItems: "center", flexWrap: "wrap" };
 const col: React.CSSProperties = { display: "flex", flexDirection: "column", gap: 12 };

@@ -7,7 +7,7 @@ import { CommandInlineDemo, CommandDialogDemo } from "@/components/demos/Tier2De
 const codeInlineReact = `import {
   Command, CommandInput, CommandList, CommandEmpty,
   CommandGroup, CommandItem, CommandSeparator,
-} from "@vyre/react";
+} from "@usevyre/react";
 
 <Command>
   <CommandInput placeholder="Search commands..." />
@@ -35,7 +35,7 @@ const codeInlineVue = `<script setup>
 import {
   Command, CommandInput, CommandList, CommandEmpty,
   CommandGroup, CommandItem, CommandSeparator,
-} from "@vyre/vue";
+} from "@usevyre/vue";
 </script>
 <template>
   <Command>
@@ -64,7 +64,7 @@ import {
   </Command>
 </template>`;
 
-const codeDialogReact = `import { CommandDialog, CommandInput, CommandList, ... } from "@vyre/react";
+const codeDialogReact = `import { CommandDialog, CommandInput, CommandList, ... } from "@usevyre/react";
 
 const [open, setOpen] = useState(false);
 
@@ -95,7 +95,7 @@ useEffect(() => {
 </CommandDialog>`;
 
 const codeDialogVue = `<script setup>
-import { CommandDialog, Command, CommandInput, CommandList, ... } from "@vyre/vue";
+import { CommandDialog, Command, CommandInput, CommandList, ... } from "@usevyre/vue";
 
 const open = ref(false);
 
@@ -153,8 +153,8 @@ const groupProps = [
 <DocsLayout title="Command">
   <div class="docs-header">
     <div class="docs-header__meta">
-      <span class="vyre-badge vyre-badge--default">@vyre/react</span>
-      <span class="vyre-badge vyre-badge--default">@vyre/vue</span>
+      <span class="vyre-badge vyre-badge--default">@usevyre/react</span>
+      <span class="vyre-badge vyre-badge--default">@usevyre/vue</span>
     </div>
     <h1 class="docs-title">Command</h1>
     <p class="docs-lead">

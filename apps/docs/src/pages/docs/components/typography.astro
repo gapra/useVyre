@@ -8,7 +8,7 @@ import {
   TypographyCodeDemo,
 } from "@/components/demos/Tier2Demo";
 
-const codeHeadingReact = `import { Heading } from "@vyre/react";
+const codeHeadingReact = `import { Heading } from "@usevyre/react";
 
 <Heading as="h1" size="3xl">Page title</Heading>
 <Heading as="h2" size="2xl">Section title</Heading>
@@ -16,7 +16,7 @@ const codeHeadingReact = `import { Heading } from "@vyre/react";
 <Heading as="h4" size="lg">Card heading</Heading>`;
 
 const codeHeadingVue = `<script setup>
-import { Heading } from "@vyre/vue";
+import { Heading } from "@usevyre/vue";
 </script>
 <template>
   <Heading as="h1" size="3xl">Page title</Heading>
@@ -25,7 +25,7 @@ import { Heading } from "@vyre/vue";
   <Heading as="h4" size="lg">Card heading</Heading>
 </template>`;
 
-const codeTextReact = `import { Text, Lead } from "@vyre/react";
+const codeTextReact = `import { Text, Lead } from "@usevyre/react";
 
 <Lead>Introductory paragraph with larger, muted text.</Lead>
 <Text>Default body text.</Text>
@@ -37,7 +37,7 @@ const codeTextReact = `import { Text, Lead } from "@vyre/react";
 <Text size="xs" color="muted">Caption text.</Text>`;
 
 const codeTextVue = `<script setup>
-import { Text, Lead } from "@vyre/vue";
+import { Text, Lead } from "@usevyre/vue";
 </script>
 <template>
   <Lead>Introductory paragraph with larger, muted text.</Lead>
@@ -48,13 +48,13 @@ import { Text, Lead } from "@vyre/vue";
   <Text mono>monospace value</Text>
 </template>`;
 
-const codeCodeReact = `import { Text, Code, Blockquote } from "@vyre/react";
+const codeCodeReact = `import { Text, Code, Blockquote } from "@usevyre/react";
 
 // Inline code
-<Text>Run <Code>npm install @vyre/react</Code> to install.</Text>
+<Text>Run <Code>npm install @usevyre/react</Code> to install.</Text>
 
 // Block code
-<Code block>{\`import { Button } from "@vyre/react";
+<Code block>{\`import { Button } from "@usevyre/react";
 
 export default function App() {
   return <Button variant="accent">Get started</Button>;
@@ -66,15 +66,15 @@ export default function App() {
 </Blockquote>`;
 
 const codeCodeVue = `<script setup>
-import { Text, VyreCode, Blockquote } from "@vyre/vue";
+import { Text, VyreCode, Blockquote } from "@usevyre/vue";
 </script>
 <template>
   <!-- Inline code -->
-  <Text>Run <VyreCode>npm install @vyre/vue</VyreCode> to install.</Text>
+  <Text>Run <VyreCode>npm install @usevyre/vue</VyreCode> to install.</Text>
 
   <!-- Block code -->
   <VyreCode :block="true">
-import { Button } from "@vyre/vue";
+import { Button } from "@usevyre/vue";
   </VyreCode>
 
   <!-- Blockquote -->
@@ -111,8 +111,8 @@ const codeProps = [
 <DocsLayout title="Typography">
   <div class="docs-header">
     <div class="docs-header__meta">
-      <span class="vyre-badge vyre-badge--default">@vyre/react</span>
-      <span class="vyre-badge vyre-badge--default">@vyre/vue</span>
+      <span class="vyre-badge vyre-badge--default">@usevyre/react</span>
+      <span class="vyre-badge vyre-badge--default">@usevyre/vue</span>
     </div>
     <h1 class="docs-title">Typography</h1>
     <p class="docs-lead">

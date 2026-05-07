@@ -4,7 +4,7 @@ import ComponentPreview from "@/components/docs/ComponentPreview.astro";
 import PropsTable       from "@/components/docs/PropsTable.astro";
 import { ProgressDemo, ProgressSizesDemo } from "@/components/demos/Tier1Demos";
 
-const codeBasicReact = `import { Progress } from "@vyre/react";
+const codeBasicReact = `import { Progress } from "@usevyre/react";
 
 <Progress value={30} />
 <Progress value={65} variant="accent" />
@@ -13,7 +13,7 @@ const codeBasicReact = `import { Progress } from "@vyre/react";
 <Progress indeterminate />`;
 
 const codeBasicVue = `<script setup>
-import { Progress } from "@vyre/vue";
+import { Progress } from "@usevyre/vue";
 </script>
 <template>
   <Progress :value="30" />
@@ -44,8 +44,8 @@ const props = [
 <DocsLayout title="Progress">
   <div class="docs-header">
     <div class="docs-header__meta">
-      <span class="vyre-badge vyre-badge--default">@vyre/react</span>
-      <span class="vyre-badge vyre-badge--default">@vyre/vue</span>
+      <span class="vyre-badge vyre-badge--default">@usevyre/react</span>
+      <span class="vyre-badge vyre-badge--default">@usevyre/vue</span>
     </div>
     <h1 class="docs-title">Progress</h1>
     <p class="docs-lead">

@@ -4,7 +4,7 @@ import {
   Tabs, TabList, Tab, TabPanels, TabPanel,
   Tooltip, Button,
   Accordion, AccordionItem, AccordionTrigger, AccordionContent,
-} from "@vyre/react";
+} from "@usevyre/react";
 
 // ── Select ────────────────────────────────────────────────────
 const frameworks = [
@@ -77,12 +77,12 @@ export function TabsControlledDemo() {
       <TabPanels>
         <TabPanel value="react">
           <p style={{ margin: "16px 0 0", fontSize: "0.875rem", opacity: 0.75 }}>
-            Import from <code>@vyre/react</code>. All components are typed with TypeScript.
+            Import from <code>@usevyre/react</code>. All components are typed with TypeScript.
           </p>
         </TabPanel>
         <TabPanel value="vue">
           <p style={{ margin: "16px 0 0", fontSize: "0.875rem", opacity: 0.75 }}>
-            Import from <code>@vyre/vue</code>. Uses <code>v-model</code> for controlled state.
+            Import from <code>@usevyre/vue</code>. Uses <code>v-model</code> for controlled state.
           </p>
         </TabPanel>
       </TabPanels>

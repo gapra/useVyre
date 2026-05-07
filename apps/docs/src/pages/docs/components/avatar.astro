@@ -4,7 +4,7 @@ import ComponentPreview from "@/components/docs/ComponentPreview.astro";
 import PropsTable       from "@/components/docs/PropsTable.astro";
 import { AvatarSizesDemo, AvatarStatusDemo, AvatarFallbackDemo } from "@/components/demos/Tier1Demos";
 
-const codeSizesReact = `import { Avatar } from "@vyre/react";
+const codeSizesReact = `import { Avatar } from "@usevyre/react";
 
 <Avatar size="sm" fallback="GP" />
 <Avatar size="md" fallback="GP" />
@@ -12,7 +12,7 @@ const codeSizesReact = `import { Avatar } from "@vyre/react";
 <Avatar size="xl" fallback="GP" />`;
 
 const codeSizesVue = `<script setup>
-import { Avatar } from "@vyre/vue";
+import { Avatar } from "@usevyre/vue";
 </script>
 <template>
   <Avatar size="sm" fallback="GP" />
@@ -62,8 +62,8 @@ const props = [
 <DocsLayout title="Avatar">
   <div class="docs-header">
     <div class="docs-header__meta">
-      <span class="vyre-badge vyre-badge--default">@vyre/react</span>
-      <span class="vyre-badge vyre-badge--default">@vyre/vue</span>
+      <span class="vyre-badge vyre-badge--default">@usevyre/react</span>
+      <span class="vyre-badge vyre-badge--default">@usevyre/vue</span>
     </div>
     <h1 class="docs-title">Avatar</h1>
     <p class="docs-lead">

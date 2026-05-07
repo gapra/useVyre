@@ -39,13 +39,9 @@
  * </DropdownMenu>
  */
 
-import { ref, watch, nextTick, onBeforeUnmount, computed, provide } from "vue";
+import { ref, watch, nextTick, onBeforeUnmount, computed, provide, Teleport, Transition } from "vue";
 import { cn } from "../../utils/cn";
-import { Teleport, Transition } from "vue";
-import type { InjectionKey } from "vue";
-
-export interface DropdownCtx { close: () => void; }
-export const DROPDOWN_KEY: InjectionKey<DropdownCtx> = Symbol("vyre-dropdown");
+import { DROPDOWN_KEY } from "./context";
 
 type DropdownPlacement = "bottom-start" | "bottom-end" | "top-start" | "top-end";
 

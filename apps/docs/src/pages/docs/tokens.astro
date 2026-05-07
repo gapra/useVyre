@@ -3,7 +3,7 @@ import DocsLayout from "@/layouts/DocsLayout.astro";
 import { Code }   from "astro:components";
 
 const codeImportCss = `/* Import once at your app entry */
-import "@vyre/tokens/css";
+import "@usevyre/tokens/css";
 
 /* Then use anywhere in CSS */
 .my-button {
@@ -14,7 +14,7 @@ import "@vyre/tokens/css";
   border-radius: var(--vyre-border-radius-md);
 }`;
 
-const codeImportJs = `import { tokens } from "@vyre/tokens";
+const codeImportJs = `import { tokens } from "@usevyre/tokens";
 
 // Typed JS object — useful for runtime theming or Storybook
 console.log(tokens.color.semantic.accent); // "#7c3aed"`;

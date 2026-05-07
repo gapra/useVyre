@@ -4,7 +4,7 @@ import ComponentPreview from "@/components/docs/ComponentPreview.astro";
 import PropsTable       from "@/components/docs/PropsTable.astro";
 import { PopoverBasicDemo, PopoverPlacementDemo } from "@/components/demos/Tier2Demo";
 
-const codeBasicReact = `import { Popover, Button } from "@vyre/react";
+const codeBasicReact = `import { Popover, Button } from "@usevyre/react";
 
 const [open, setOpen] = useState(false);
 
@@ -18,7 +18,7 @@ const [open, setOpen] = useState(false);
 </Popover>`;
 
 const codeBasicVue = `<script setup>
-import { Popover, Button } from "@vyre/vue";
+import { Popover, Button } from "@usevyre/vue";
 const open = ref(false);
 </script>
 <template>
@@ -73,8 +73,8 @@ const props = [
 <DocsLayout title="Popover">
   <div class="docs-header">
     <div class="docs-header__meta">
-      <span class="vyre-badge vyre-badge--default">@vyre/react</span>
-      <span class="vyre-badge vyre-badge--default">@vyre/vue</span>
+      <span class="vyre-badge vyre-badge--default">@usevyre/react</span>
+      <span class="vyre-badge vyre-badge--default">@usevyre/vue</span>
     </div>
     <h1 class="docs-title">Popover</h1>
     <p class="docs-lead">

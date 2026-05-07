@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import { inject } from "vue";
 import { cn } from "../../utils/cn";
-import { APP_LAYOUT_KEY } from "./AppLayout.vue";
+import { APP_LAYOUT_KEY } from "./context";
 
 const props = defineProps<{ class?: string }>();
 const ctx = inject(APP_LAYOUT_KEY, { collapsed: { value: false }, toggleCollapsed: () => {} });

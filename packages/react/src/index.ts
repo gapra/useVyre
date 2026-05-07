@@ -1,9 +1,9 @@
 /**
- * @vyre/react — Main export
+ * @usevyre/react — Main export
  *
  * AI CONTEXT:
  * All useVyre React components are exported from this single entry point.
- * Import pattern: import { Button, Badge, Card, ... } from "@vyre/react"
+ * Import pattern: import { Button, Badge, Card, ... } from "@usevyre/react"
  *
  * Available components:
  * - Button         — Interactive actions and CTAs
@@ -37,8 +37,8 @@
  * - Table          — Data table (+ TableHead, TableBody, TableRow, TableHeader, TableCell, TableCaption)
  *
  * CSS must be imported separately:
- * import "@vyre/tokens/css";           ← design tokens (required)
- * import "@vyre/react/styles";         ← component styles (required)
+ * import "@usevyre/tokens/css";           ← design tokens (required)
+ * import "@usevyre/react/styles";         ← component styles (required)
  */
 
 // ── Components ────────────────────────────────────────────────

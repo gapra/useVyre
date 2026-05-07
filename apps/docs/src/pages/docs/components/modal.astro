@@ -5,7 +5,7 @@ import PropsTable       from "@/components/docs/PropsTable.astro";
 import { ModalBasicDemo, ModalSizesDemo } from "@/components/demos/ModalDemo";
 
 const codeBasicReact = `import { useState } from "react";
-import { Modal, ModalHeader, ModalBody, ModalFooter, Button } from "@vyre/react";
+import { Modal, ModalHeader, ModalBody, ModalFooter, Button } from "@usevyre/react";
 
 function Example() {
   const [open, setOpen] = useState(false);
@@ -30,7 +30,7 @@ function Example() {
 
 const codeBasicVue = `<script setup>
 import { ref } from "vue";
-import { Modal, ModalHeader, ModalBody, ModalFooter, Button } from "@vyre/vue";
+import { Modal, ModalHeader, ModalBody, ModalFooter, Button } from "@usevyre/vue";
 const open = ref(false);
 </script>
 <template>
@@ -72,8 +72,8 @@ const props = [
 <DocsLayout title="Modal">
   <div class="docs-header">
     <div class="docs-header__meta">
-      <span class="vyre-badge vyre-badge--default">@vyre/react</span>
-      <span class="vyre-badge vyre-badge--default">@vyre/vue</span>
+      <span class="vyre-badge vyre-badge--default">@usevyre/react</span>
+      <span class="vyre-badge vyre-badge--default">@usevyre/vue</span>
     </div>
     <h1 class="docs-title">Modal</h1>
     <p class="docs-lead">

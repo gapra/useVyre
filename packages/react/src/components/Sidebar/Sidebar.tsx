@@ -1,5 +1,5 @@
 /**
- * @vyre/react — Sidebar & App Layout
+ * @usevyre/react — Sidebar & App Layout
  *
  * AI CONTEXT:
  * ┌──────────────────────────────────────────────────────────────┐
@@ -20,7 +20,7 @@
  * │           PageContent, SidebarTrigger,                      │
  * │           Sidebar, SidebarHeader, SidebarContent,           │
  * │           SidebarSection, SidebarItem, SidebarFooter }      │
- * │         from "@vyre/react"                                  │
+ * │         from "@usevyre/react"                                  │
  * │                                                              │
  * │ AppLayout props:                                             │
  * │   defaultCollapsed = boolean (uncontrolled default)         │

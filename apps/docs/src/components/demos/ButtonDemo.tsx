@@ -1,4 +1,4 @@
-import { Button } from "@vyre/react";
+import { Button } from "@usevyre/react";
 
 export function ButtonVariantsDemo() {
   return (

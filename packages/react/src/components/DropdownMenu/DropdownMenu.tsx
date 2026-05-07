@@ -1,5 +1,5 @@
 /**
- * @vyre/react — DropdownMenu
+ * @usevyre/react — DropdownMenu
  *
  * AI CONTEXT:
  * ┌─────────────────────────────────────────────────────────┐
@@ -18,7 +18,7 @@
  * │   import { DropdownMenu, DropdownItem,                  │
  * │     DropdownCheckboxItem, DropdownRadioGroup,           │
  * │     DropdownRadioItem, DropdownSub, DropdownSubItem,    │
- * │     DropdownLabel, DropdownSeparator } from "@vyre/react"│
+ * │     DropdownLabel, DropdownSeparator } from "@usevyre/react"│
  * │                                                         │
  * │ DropdownMenu props:                                     │
  * │   trigger    = ReactElement (the anchor element)        │

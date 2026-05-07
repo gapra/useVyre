@@ -4,7 +4,7 @@ import ComponentPreview from "@/components/docs/ComponentPreview.astro";
 import PropsTable       from "@/components/docs/PropsTable.astro";
 import { AlertVariantsDemo, AlertNoTitleDemo, AlertDialogDemo, AlertDialogVariantsDemo } from "@/components/demos/Tier2Demo";
 
-const codeVariantsReact = `import { Alert } from "@vyre/react";
+const codeVariantsReact = `import { Alert } from "@usevyre/react";
 
 {/* With title */}
 <Alert variant="info" title="Info">
@@ -24,7 +24,7 @@ const codeVariantsReact = `import { Alert } from "@vyre/react";
 </Alert>`;
 
 const codeVariantsVue = `<script setup>
-import { Alert } from "@vyre/vue";
+import { Alert } from "@usevyre/vue";
 </script>
 <template>
   <Alert variant="success" title="Saved!">
@@ -52,7 +52,7 @@ const visible = ref(true);
   </Alert>
 </template>`;
 
-const codeDialogReact = `import { AlertDialog, Button } from "@vyre/react";
+const codeDialogReact = `import { AlertDialog, Button } from "@usevyre/react";
 
 const [open, setOpen] = useState(false);
 
@@ -70,7 +70,7 @@ const [open, setOpen] = useState(false);
 />`;
 
 const codeDialogVue = `<script setup>
-import { AlertDialog, Button } from "@vyre/vue";
+import { AlertDialog, Button } from "@usevyre/vue";
 const open = ref(false);
 </script>
 <template>
@@ -109,8 +109,8 @@ const dialogProps = [
 <DocsLayout title="Alert">
   <div class="docs-header">
     <div class="docs-header__meta">
-      <span class="vyre-badge vyre-badge--default">@vyre/react</span>
-      <span class="vyre-badge vyre-badge--default">@vyre/vue</span>
+      <span class="vyre-badge vyre-badge--default">@usevyre/react</span>
+      <span class="vyre-badge vyre-badge--default">@usevyre/vue</span>
     </div>
     <h1 class="docs-title">Alert</h1>
     <p class="docs-lead">

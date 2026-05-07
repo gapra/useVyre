@@ -32,9 +32,8 @@
  * </Popover>
  */
 
-import { ref, watch, nextTick, onBeforeUnmount, computed } from "vue";
+import { ref, watch, nextTick, onBeforeUnmount, computed, Teleport, Transition } from "vue";
 import { cn } from "../../utils/cn";
-import { Teleport, Transition } from "vue";
 
 type PopoverSide      = "top" | "bottom" | "left" | "right";
 type PopoverAlign     = "start" | "center" | "end";
