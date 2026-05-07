@@ -108,6 +108,8 @@ export { default as CommandGroup }      from "./components/Command/CommandGroup.
 export { default as CommandItem }       from "./components/Command/CommandItem.vue";
 export { default as CommandSeparator }  from "./components/Command/CommandSeparator.vue";
 export { default as CommandDialog }     from "./components/Command/CommandDialog.vue";
+export { default as Calendar }          from "./components/Calendar/Calendar.vue";
+export { default as DatePicker }        from "./components/Calendar/DatePicker.vue";
 
 // ── Composables ───────────────────────────────────────────────
 export { useToast }                 from "./composables/useToast";
