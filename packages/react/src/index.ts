@@ -79,6 +79,11 @@ export {
   Command, CommandInput, CommandList, CommandEmpty,
   CommandGroup, CommandItem, CommandSeparator, CommandDialog,
 }                                                           from "./components/Command/Command";
+export { Calendar, DatePicker }                             from "./components/Calendar/Calendar";
+export type {
+  CalendarProps, CalendarSingleProps, CalendarRangeProps,
+  CalendarMultipleProps, CalendarBaseProps, DatePickerProps, CalendarMode,
+}                                                           from "./components/Calendar/Calendar";
 
 // ── Types ─────────────────────────────────────────────────────
 export type { ButtonProps }                                 from "./components/Button/Button";

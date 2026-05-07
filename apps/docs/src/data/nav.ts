@@ -58,6 +58,7 @@ export const navigation: NavSection[] = [
       { title: "Pagination",    href: "/docs/components/pagination"    },
       { title: "Table",         href: "/docs/components/table"         },
       { title: "Command",       href: "/docs/components/command"       },
+      { title: "Calendar",      href: "/docs/components/calendar"      },
     ],
   },
 ];

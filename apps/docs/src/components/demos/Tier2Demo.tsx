@@ -14,6 +14,7 @@ import {
   Command, CommandInput, CommandList, CommandEmpty,
   CommandGroup, CommandItem, CommandSeparator, CommandDialog,
 } from "@vyre/react";
+import { Calendar, DatePicker } from "@vyre/react";
 
 // ── Popover demos ─────────────────────────────────────────────
 
@@ -598,6 +599,69 @@ export function CommandDialogDemo() {
           </CommandGroup>
         </CommandList>
       </CommandDialog>
+    </div>
+  );
+}
+
+// ── Calendar demos ─────────────────────────────────────────────
+
+export function CalendarSingleDemo() {
+  const [date, setDate] = useState<Date | null>(null);
+  return (
+    <div style={{ display: "flex", flexDirection: "column", alignItems: "center", gap: "12px" }}>
+      <Calendar mode="single" value={date} onChange={setDate} />
+      {date && (
+        <p style={{ fontSize: "13px", color: "var(--vyre-color-semantic-text-muted)" }}>
+          Selected: {new Intl.DateTimeFormat("default", { dateStyle: "long" }).format(date)}
+        </p>
+      )}
+    </div>
+  );
+}
+
+export function CalendarRangeDemo() {
+  const [range, setRange] = useState<[Date | null, Date | null]>([null, null]);
+  return (
+    <div style={{ display: "flex", flexDirection: "column", alignItems: "center", gap: "12px" }}>
+      <Calendar mode="range" value={range} onChange={setRange} />
+      {range[0] && range[1] && (
+        <p style={{ fontSize: "13px", color: "var(--vyre-color-semantic-text-muted)" }}>
+          {new Intl.DateTimeFormat("default", { dateStyle: "medium" }).format(range[0])}
+          {" – "}
+          {new Intl.DateTimeFormat("default", { dateStyle: "medium" }).format(range[1])}
+        </p>
+      )}
+    </div>
+  );
+}
+
+export function CalendarTimeDemo() {
+  const [date, setDate] = useState<Date | null>(null);
+  return (
+    <div style={{ display: "flex", flexDirection: "column", alignItems: "center", gap: "12px" }}>
+      <Calendar mode="single" showTime value={date} onChange={setDate} />
+      {date && (
+        <p style={{ fontSize: "13px", color: "var(--vyre-color-semantic-text-muted)" }}>
+          Selected: {new Intl.DateTimeFormat("default", { dateStyle: "long", timeStyle: "short" }).format(date)}
+        </p>
+      )}
+    </div>
+  );
+}
+
+export function DatePickerDemo() {
+  const [date, setDate] = useState<Date | null>(null);
+  const [range, setRange] = useState<[Date | null, Date | null]>([null, null]);
+  return (
+    <div style={{ display: "flex", flexDirection: "column", gap: "16px" }}>
+      <div style={{ display: "flex", flexDirection: "column", gap: "6px" }}>
+        <label style={{ fontSize: "13px", fontWeight: 500, color: "var(--vyre-color-semantic-text-muted)" }}>Single date</label>
+        <DatePicker mode="single" value={date} onChange={setDate} placeholder="Pick a date" />
+      </div>
+      <div style={{ display: "flex", flexDirection: "column", gap: "6px" }}>
+        <label style={{ fontSize: "13px", fontWeight: 500, color: "var(--vyre-color-semantic-text-muted)" }}>Date range</label>
+        <DatePicker mode="range" value={range} onChange={setRange} placeholder="Pick a range" />
+      </div>
     </div>
   );
 }
