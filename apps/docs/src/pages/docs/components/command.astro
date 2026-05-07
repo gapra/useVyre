@@ -1,0 +1,205 @@
+---
+import DocsLayout       from "@/layouts/DocsLayout.astro";
+import ComponentPreview from "@/components/docs/ComponentPreview.astro";
+import PropsTable       from "@/components/docs/PropsTable.astro";
+import { CommandInlineDemo, CommandDialogDemo } from "@/components/demos/Tier2Demo";
+
+const codeInlineReact = `import {
+  Command, CommandInput, CommandList, CommandEmpty,
+  CommandGroup, CommandItem, CommandSeparator,
+} from "@vyre/react";
+
+<Command>
+  <CommandInput placeholder="Search commands..." />
+  <CommandList>
+    <CommandEmpty>No results found.</CommandEmpty>
+    <CommandGroup heading="Navigation">
+      <CommandItem icon={<FileIcon />} shortcut="⌘N" onSelect={() => openFile()}>
+        New file
+      </CommandItem>
+      <CommandItem icon={<SearchIcon />} shortcut="⌘F" onSelect={() => find()}>
+        Find in files
+      </CommandItem>
+    </CommandGroup>
+    <CommandSeparator />
+    <CommandGroup heading="Settings">
+      <CommandItem icon={<SettingsIcon />} shortcut="⌘," onSelect={() => openPrefs()}>
+        Preferences
+      </CommandItem>
+      <CommandItem disabled>Admin panel</CommandItem>
+    </CommandGroup>
+  </CommandList>
+</Command>`;
+
+const codeInlineVue = `<script setup>
+import {
+  Command, CommandInput, CommandList, CommandEmpty,
+  CommandGroup, CommandItem, CommandSeparator,
+} from "@vyre/vue";
+</script>
+<template>
+  <Command>
+    <CommandInput placeholder="Search commands..." />
+    <CommandList>
+      <CommandEmpty>No results found.</CommandEmpty>
+      <CommandGroup heading="Navigation">
+        <CommandItem shortcut="⌘N" @select="openFile">
+          <template #icon><FileIcon /></template>
+          New file
+        </CommandItem>
+        <CommandItem shortcut="⌘F" @select="find">
+          <template #icon><SearchIcon /></template>
+          Find in files
+        </CommandItem>
+      </CommandGroup>
+      <CommandSeparator />
+      <CommandGroup heading="Settings">
+        <CommandItem shortcut="⌘," @select="openPrefs">
+          <template #icon><SettingsIcon /></template>
+          Preferences
+        </CommandItem>
+        <CommandItem :disabled="true">Admin panel</CommandItem>
+      </CommandGroup>
+    </CommandList>
+  </Command>
+</template>`;
+
+const codeDialogReact = `import { CommandDialog, CommandInput, CommandList, ... } from "@vyre/react";
+
+const [open, setOpen] = useState(false);
+
+// Bind ⌘K / Ctrl+K globally
+useEffect(() => {
+  const handler = (e) => {
+    if ((e.metaKey || e.ctrlKey) && e.key === "k") {
+      e.preventDefault();
+      setOpen((o) => !o);
+    }
+  };
+  window.addEventListener("keydown", handler);
+  return () => window.removeEventListener("keydown", handler);
+}, []);
+
+<Button onClick={() => setOpen(true)}>Open palette</Button>
+
+<CommandDialog open={open} onOpenChange={setOpen}>
+  <CommandInput placeholder="Type a command or search..." />
+  <CommandList>
+    <CommandEmpty>No results found.</CommandEmpty>
+    <CommandGroup heading="Navigation">
+      <CommandItem icon={<FileIcon />} shortcut="⌘N" onSelect={() => { openFile(); setOpen(false); }}>
+        New file
+      </CommandItem>
+    </CommandGroup>
+  </CommandList>
+</CommandDialog>`;
+
+const codeDialogVue = `<script setup>
+import { CommandDialog, Command, CommandInput, CommandList, ... } from "@vyre/vue";
+
+const open = ref(false);
+
+onMounted(() => {
+  window.addEventListener("keydown", (e) => {
+    if ((e.metaKey || e.ctrlKey) && e.key === "k") {
+      e.preventDefault();
+      open.value = !open.value;
+    }
+  });
+});
+</script>
+<template>
+  <CommandDialog v-model:open="open">
+    <Command>
+      <CommandInput placeholder="Type a command or search..." />
+      <CommandList>
+        <CommandEmpty>No results found.</CommandEmpty>
+        <CommandGroup heading="Navigation">
+          <CommandItem @select="() => { openFile(); open = false; }">New file</CommandItem>
+        </CommandGroup>
+      </CommandList>
+    </Command>
+  </CommandDialog>
+</template>`;
+
+const commandProps = [
+  { name: "value / v-model",    type: "string",                     default: "—",      description: "Controlled search value. Omit to use internal state." },
+  { name: "onValueChange",      type: "(v: string) => void",        default: "—",      description: "(React) Called when the search input changes." },
+  { name: "class / className",  type: "string",                     default: "—",      description: "Additional CSS class on the root element." },
+];
+
+const dialogProps = [
+  { name: "open",              type: "boolean",                     default: "—",      description: "Controlled open state." },
+  { name: "onOpenChange",      type: "(open: boolean) => void",     default: "—",      description: "(React) Called when the dialog should close (Escape or backdrop click)." },
+  { name: "v-model:open",      type: "boolean",                     default: "—",      description: "(Vue) Two-way binding for open state." },
+  { name: "+ Command props",   type: "—",                           default: "—",      description: "All Command props are forwarded." },
+];
+
+const itemProps = [
+  { name: "onSelect / @select", type: "() => void",                 default: "—",      description: "Called when the item is clicked or activated via keyboard." },
+  { name: "disabled",           type: "boolean",                    default: "false",  description: "Makes the item non-interactive and visually dimmed." },
+  { name: "keywords",           type: "string[]",                   default: "—",      description: "Extra search terms used to match this item beyond its visible label." },
+  { name: "icon",               type: "ReactNode / #icon slot",     default: "—",      description: "Leading icon displayed before the label." },
+  { name: "shortcut",           type: "string",                     default: "—",      description: "Keyboard shortcut hint rendered on the right (e.g. ⌘K). Display only — does not bind the shortcut." },
+  { name: "class / className",  type: "string",                     default: "—",      description: "Additional CSS class." },
+];
+
+const groupProps = [
+  { name: "heading",            type: "string",                     default: "—",      description: "Section label rendered above the group items." },
+  { name: "class / className",  type: "string",                     default: "—",      description: "Additional CSS class." },
+];
+---
+
+<DocsLayout title="Command">
+  <div class="docs-header">
+    <div class="docs-header__meta">
+      <span class="vyre-badge vyre-badge--default">@vyre/react</span>
+      <span class="vyre-badge vyre-badge--default">@vyre/vue</span>
+    </div>
+    <h1 class="docs-title">Command</h1>
+    <p class="docs-lead">
+      A fast, filterable command palette. Type to search — items are filtered in real-time by their
+      visible label or optional <code>keywords</code>. Use it inline or as a full-screen dialog
+      triggered by <kbd>⌘K</kbd>.
+    </p>
+  </div>
+
+  <hr class="docs-divider" />
+
+  <h2 class="docs-h2">Inline</h2>
+  <p class="docs-p">
+    Compose <code>CommandInput</code>, <code>CommandList</code>, <code>CommandGroup</code>, and
+    <code>CommandItem</code> inside <code>Command</code>. Type in the search box to filter items live.
+  </p>
+  <ComponentPreview react={codeInlineReact} vue={codeInlineVue}>
+    <CommandInlineDemo client:visible />
+  </ComponentPreview>
+
+  <h2 class="docs-h2">Dialog — command palette</h2>
+  <p class="docs-p">
+    Wrap with <code>CommandDialog</code> to render as a full-screen modal with backdrop.
+    Press <kbd>⌘K</kbd> or <kbd>Ctrl+K</kbd> to open, <kbd>Esc</kbd> to close.
+    Focus is moved to the search input automatically on open.
+  </p>
+  <ComponentPreview react={codeDialogReact} vue={codeDialogVue}>
+    <CommandDialogDemo client:visible />
+  </ComponentPreview>
+
+  <h2 class="docs-h2">Props — Command</h2>
+  <PropsTable props={commandProps} />
+
+  <h2 class="docs-h2">Props — CommandDialog</h2>
+  <PropsTable props={dialogProps} />
+
+  <h2 class="docs-h2">Props — CommandItem</h2>
+  <PropsTable props={itemProps} />
+
+  <h2 class="docs-h2">Props — CommandGroup</h2>
+  <PropsTable props={groupProps} />
+
+  <div class="docs-pagination">
+    <a href="/docs/components/table" class="docs-pagination__link docs-pagination__link--prev">
+      ← Table
+    </a>
+  </div>
+</DocsLayout>
