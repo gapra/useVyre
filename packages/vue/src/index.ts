@@ -100,6 +100,14 @@ export { default as TableRow }          from "./components/Table/TableRow.vue";
 export { default as TableHeader }       from "./components/Table/TableHeader.vue";
 export { default as TableCell }         from "./components/Table/TableCell.vue";
 export { default as TableCaption }      from "./components/Table/TableCaption.vue";
+export { default as Command }           from "./components/Command/Command.vue";
+export { default as CommandInput }      from "./components/Command/CommandInput.vue";
+export { default as CommandList }       from "./components/Command/CommandList.vue";
+export { default as CommandEmpty }      from "./components/Command/CommandEmpty.vue";
+export { default as CommandGroup }      from "./components/Command/CommandGroup.vue";
+export { default as CommandItem }       from "./components/Command/CommandItem.vue";
+export { default as CommandSeparator }  from "./components/Command/CommandSeparator.vue";
+export { default as CommandDialog }     from "./components/Command/CommandDialog.vue";
 
 // ── Composables ───────────────────────────────────────────────
 export { useToast }                 from "./composables/useToast";

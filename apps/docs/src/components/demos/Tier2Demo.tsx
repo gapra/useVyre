@@ -10,6 +10,10 @@ import { Sheet, SheetHeader, SheetBody, SheetFooter } from "@vyre/react";
 import { Breadcrumb, BreadcrumbItem } from "@vyre/react";
 import { Pagination } from "@vyre/react";
 import { Table, TableHead, TableBody, TableRow, TableHeader, TableCell, TableCaption } from "@vyre/react";
+import {
+  Command, CommandInput, CommandList, CommandEmpty,
+  CommandGroup, CommandItem, CommandSeparator, CommandDialog,
+} from "@vyre/react";
 
 // ── Popover demos ─────────────────────────────────────────────
 
@@ -491,6 +495,109 @@ export function TableVariantsDemo() {
           </TableBody>
         </Table>
       </div>
+    </div>
+  );
+}
+
+// ── Command demos ─────────────────────────────────────────────
+
+const SettingsIcon = () => (
+  <svg width="14" height="14" viewBox="0 0 14 14" fill="none">
+    <circle cx="7" cy="7" r="2" stroke="currentColor" strokeWidth="1.3"/>
+    <path d="M7 1v1.5M7 11.5V13M1 7h1.5M11.5 7H13M2.93 2.93l1.06 1.06M10.01 10.01l1.06 1.06M2.93 11.07l1.06-1.06M10.01 3.99l1.06-1.06" stroke="currentColor" strokeWidth="1.3" strokeLinecap="round"/>
+  </svg>
+);
+const FileIcon = () => (
+  <svg width="14" height="14" viewBox="0 0 14 14" fill="none">
+    <path d="M3 1h5.5L11 3.5V13H3V1z" stroke="currentColor" strokeWidth="1.3" strokeLinejoin="round"/>
+    <path d="M8.5 1v3H11" stroke="currentColor" strokeWidth="1.3" strokeLinejoin="round"/>
+  </svg>
+);
+const UserIcon = () => (
+  <svg width="14" height="14" viewBox="0 0 14 14" fill="none">
+    <circle cx="7" cy="4.5" r="2.5" stroke="currentColor" strokeWidth="1.3"/>
+    <path d="M1.5 13c0-3.038 2.462-5.5 5.5-5.5s5.5 2.462 5.5 5.5" stroke="currentColor" strokeWidth="1.3" strokeLinecap="round"/>
+  </svg>
+);
+const SearchIcon = () => (
+  <svg width="14" height="14" viewBox="0 0 14 14" fill="none">
+    <circle cx="6" cy="6" r="4" stroke="currentColor" strokeWidth="1.3"/>
+    <path d="M9.5 9.5L13 13" stroke="currentColor" strokeWidth="1.3" strokeLinecap="round"/>
+  </svg>
+);
+
+export function CommandInlineDemo() {
+  const [last, setLast] = useState<string | null>(null);
+  return (
+    <div style={{ padding: "24px 0", display: "flex", flexDirection: "column", gap: 12 }}>
+      <Command style={{ border: "1px solid var(--vyre-color-semantic-border)", borderRadius: "var(--vyre-radius-xl)", maxWidth: 400, margin: "0 auto", width: "100%" }}>
+        <CommandInput placeholder="Search commands..." />
+        <CommandList style={{ maxHeight: 280 }}>
+          <CommandEmpty>No results found.</CommandEmpty>
+          <CommandGroup heading="Navigation">
+            <CommandItem icon={<FileIcon />} shortcut="⌘N" onSelect={() => setLast("New file")}>New file</CommandItem>
+            <CommandItem icon={<SearchIcon />} shortcut="⌘F" onSelect={() => setLast("Find in files")}>Find in files</CommandItem>
+          </CommandGroup>
+          <CommandSeparator />
+          <CommandGroup heading="Settings">
+            <CommandItem icon={<SettingsIcon />} shortcut="⌘," onSelect={() => setLast("Preferences")}>Preferences</CommandItem>
+            <CommandItem icon={<UserIcon />} onSelect={() => setLast("Profile")}>Profile</CommandItem>
+            <CommandItem disabled onSelect={() => setLast("Admin")}>Admin panel</CommandItem>
+          </CommandGroup>
+        </CommandList>
+      </Command>
+      {last && (
+        <p style={{ margin: "0 auto", fontSize: "0.8125rem", opacity: 0.6 }}>
+          Selected: <strong>{last}</strong>
+        </p>
+      )}
+    </div>
+  );
+}
+
+export function CommandDialogDemo() {
+  const [open, setOpen] = useState(false);
+  const [last, setLast] = useState<string | null>(null);
+
+  React.useEffect(() => {
+    const handler = (e: KeyboardEvent) => {
+      if ((e.metaKey || e.ctrlKey) && e.key === "k") {
+        e.preventDefault();
+        setOpen((o) => !o);
+      }
+    };
+    window.addEventListener("keydown", handler);
+    return () => window.removeEventListener("keydown", handler);
+  }, []);
+
+  const select = (label: string) => { setLast(label); setOpen(false); };
+
+  return (
+    <div style={{ display: "flex", flexDirection: "column", alignItems: "center", gap: 12, padding: "24px 0" }}>
+      <Button variant="secondary" onClick={() => setOpen(true)}>
+        Open Command Palette
+        <kbd style={{ marginLeft: 8, fontFamily: "monospace", fontSize: "0.75rem", opacity: 0.6 }}>⌘K</kbd>
+      </Button>
+      {last && (
+        <p style={{ margin: 0, fontSize: "0.8125rem", opacity: 0.6 }}>
+          Selected: <strong>{last}</strong>
+        </p>
+      )}
+      <CommandDialog open={open} onOpenChange={setOpen}>
+        <CommandInput placeholder="Type a command or search..." />
+        <CommandList>
+          <CommandEmpty>No results found.</CommandEmpty>
+          <CommandGroup heading="Navigation">
+            <CommandItem icon={<FileIcon />} shortcut="⌘N" onSelect={() => select("New file")}>New file</CommandItem>
+            <CommandItem icon={<SearchIcon />} shortcut="⌘F" onSelect={() => select("Find in files")}>Find in files</CommandItem>
+          </CommandGroup>
+          <CommandSeparator />
+          <CommandGroup heading="Settings">
+            <CommandItem icon={<SettingsIcon />} shortcut="⌘," onSelect={() => select("Preferences")}>Preferences</CommandItem>
+            <CommandItem icon={<UserIcon />} onSelect={() => select("Profile")}>Profile</CommandItem>
+          </CommandGroup>
+        </CommandList>
+      </CommandDialog>
     </div>
   );
 }

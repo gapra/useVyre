@@ -75,6 +75,10 @@ export {
   Table, TableHead, TableBody, TableRow,
   TableHeader, TableCell, TableCaption,
 }                                                           from "./components/Table/Table";
+export {
+  Command, CommandInput, CommandList, CommandEmpty,
+  CommandGroup, CommandItem, CommandSeparator, CommandDialog,
+}                                                           from "./components/Command/Command";
 
 // ── Types ─────────────────────────────────────────────────────
 export type { ButtonProps }                                 from "./components/Button/Button";
