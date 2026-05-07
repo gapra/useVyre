@@ -5,14 +5,14 @@ import CodeTabs        from "@/components/docs/CodeTabs.astro";
 import PropsTable       from "@/components/docs/PropsTable.astro";
 import { LabelDemo } from "@/components/demos/Tier1Demos";
 
-const codeBasicReact = `import { Label } from "@vyre/react";
+const codeBasicReact = `import { Label } from "@usevyre/react";
 
 <Label htmlFor="email">Email address</Label>
 <Label htmlFor="password" required>Password</Label>
 <Label htmlFor="notes" disabled>Disabled field</Label>`;
 
 const codeBasicVue = `<script setup>
-import { Label } from "@vyre/vue";
+import { Label } from "@usevyre/vue";
 </script>
 <template>
   <Label for="email">Email address</Label>
@@ -20,7 +20,7 @@ import { Label } from "@vyre/vue";
   <Label for="notes" disabled>Disabled field</Label>
 </template>`;
 
-const codeWithInputReact = `import { Label, Input } from "@vyre/react";
+const codeWithInputReact = `import { Label, Input } from "@usevyre/react";
 
 <div style={{ display: "flex", flexDirection: "column", gap: 6 }}>
   <Label htmlFor="email" required>Email</Label>
@@ -28,7 +28,7 @@ const codeWithInputReact = `import { Label, Input } from "@vyre/react";
 </div>`;
 
 const codeWithInputVue = `<script setup>
-import { Label, Input } from "@vyre/vue";
+import { Label, Input } from "@usevyre/vue";
 </script>
 <template>
   <div style="display:flex;flex-direction:column;gap:6px">
@@ -48,8 +48,8 @@ const props = [
 <DocsLayout title="Label">
   <div class="docs-header">
     <div class="docs-header__meta">
-      <span class="vyre-badge vyre-badge--default">@vyre/react</span>
-      <span class="vyre-badge vyre-badge--default">@vyre/vue</span>
+      <span class="vyre-badge vyre-badge--default">@usevyre/react</span>
+      <span class="vyre-badge vyre-badge--default">@usevyre/vue</span>
     </div>
     <h1 class="docs-title">Label</h1>
     <p class="docs-lead">

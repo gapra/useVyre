@@ -30,9 +30,8 @@
  * </Sheet>
  */
 
-import { watch, onBeforeUnmount } from "vue";
+import { watch, onBeforeUnmount, Teleport } from "vue";
 import { cn } from "../../utils/cn";
-import { Teleport } from "vue";
 
 const props = withDefaults(
   defineProps<{

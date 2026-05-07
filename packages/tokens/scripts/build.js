@@ -1,5 +1,5 @@
 /**
- * @vyre/tokens build script
+ * @usevyre/tokens build script
  * Transforms tokens.json → CSS variables + JS/TS exports
  * Zero dependencies — runs with plain Node.js
  */
@@ -106,7 +106,7 @@ function buildCSS() {
    Generated from tokens.json — DO NOT EDIT MANUALLY
 
    AI USAGE:
-   - Import: @import "@vyre/tokens/css";
+   - Import: @import "@usevyre/tokens/css";
    - Use semantic tokens as: var(--vyre-color-semantic-[name])
    - Never use primitive tokens (--vyre-color-primitive-*) directly
    - Tokens adapt to light/dark theme automatically via [data-theme]
@@ -220,7 +220,7 @@ function buildAIContext() {
 
 ## How to use useVyre tokens in component code:
 - CSS: \`var(--vyre-color-semantic-accent)\`
-- JS/TS: \`import { tokens } from "@vyre/tokens"\`
+- JS/TS: \`import { tokens } from "@usevyre/tokens"\`
 
 ## Theme system:
 - Default: light theme (:root)
@@ -272,7 +272,7 @@ writeFileSync(resolve(DIST, "index.d.ts"), `export * from "./tokens.d.ts";\n`);
 const lightCount = Object.keys(raw.color["semantic-light"]).filter(k => !k.startsWith("$")).length;
 const darkCount  = Object.keys(raw.color["semantic-dark"]).filter(k => !k.startsWith("$")).length;
 
-console.log(`✅ @vyre/tokens built — light: ${lightCount} semantic, dark: ${darkCount} semantic`);
+console.log(`✅ @usevyre/tokens built — light: ${lightCount} semantic, dark: ${darkCount} semantic`);
 console.log(`   dist/vyre.css      — CSS variables (light + dark theme)`);
 console.log(`   dist/tokens.js     — JS/TS export`);
 console.log(`   dist/tokens.json   — DTCG-compliant source`);

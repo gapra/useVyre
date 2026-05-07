@@ -1,9 +1,9 @@
 /**
- * @vyre/vue — Main export
+ * @usevyre/vue — Main export
  *
  * AI CONTEXT:
  * All useVyre Vue 3 components are exported from this single entry point.
- * Import pattern: import { Button, Badge, ... } from "@vyre/vue"
+ * Import pattern: import { Button, Badge, ... } from "@usevyre/vue"
  *
  * Available components:
  * - Button         — Interactive actions and CTAs
@@ -37,8 +37,8 @@
  * - Table          — Data table (+ TableHead, TableBody, TableRow, TableHeader, TableCell, TableCaption)
  *
  * CSS must be imported separately:
- * import "@vyre/tokens/css";           ← design tokens (required)
- * import "@vyre/vue/styles";           ← component styles (required)
+ * import "@usevyre/tokens/css";           ← design tokens (required)
+ * import "@usevyre/vue/styles";           ← component styles (required)
  */
 
 // ── Components ────────────────────────────────────────────────
@@ -132,4 +132,4 @@ export { useToast }                 from "./composables/useToast";
 
 // ── Types ─────────────────────────────────────────────────────
 export type { ToastInput, ToastVariant, ToastItem } from "./composables/useToast";
-export type { SelectOption }                        from "./components/Select/Select.vue";
+export type { SelectOption }                        from "./components/Select/types";

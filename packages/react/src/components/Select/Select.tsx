@@ -1,10 +1,10 @@
 /**
- * @vyre/react — Select / Dropdown
+ * @usevyre/react — Select / Dropdown
  *
  * AI CONTEXT:
  * ┌─────────────────────────────────────────────────────────┐
  * │ Component:  Select                                      │
- * │ Import:     import { Select } from "@vyre/react"        │
+ * │ Import:     import { Select } from "@usevyre/react"        │
  * │                                                         │
  * │ Props:                                                  │
  * │   options     = { value: string; label: string;         │

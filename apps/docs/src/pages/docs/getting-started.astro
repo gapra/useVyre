@@ -2,30 +2,30 @@
 import DocsLayout from "@/layouts/DocsLayout.astro";
 import { Code }   from "astro:components";
 
-const installReact = `# Coming soon — not yet published to npm
-# Star the repo to be notified: https://github.com/gapra/usevyre
-npm install ...`;
-const installVue   = `# Coming soon — not yet published to npm
-# Star the repo to be notified: https://github.com/gapra/usevyre
-npm install ...`;
+const installReact = `npm install @usevyre/tokens @usevyre/react
+# or
+pnpm add @usevyre/tokens @usevyre/react`;
+const installVue   = `npm install @usevyre/tokens @usevyre/vue
+# or
+pnpm add @usevyre/tokens @usevyre/vue`;
 
 const setupReact = `// main.tsx or your entry file
-import "@vyre/tokens/css";        // ← design tokens
-import "@vyre/react/styles";      // ← component styles
+import "@usevyre/tokens/css";        // ← design tokens
+import "@usevyre/react/styles";      // ← component styles
 
-import { Button, Badge, Card } from "@vyre/react";`;
+import { Button, Badge, Card } from "@usevyre/react";`;
 
 const setupVue = `// main.ts
-import "@vyre/tokens/css";
-import "@vyre/vue/styles";
+import "@usevyre/tokens/css";
+import "@usevyre/vue/styles";
 
 import { createApp } from "vue";
 import App from "./App.vue";
 
 createApp(App).mount("#app");`;
 
-const usageReact = `import { Button, Badge, Card, CardBody } from "@vyre/react";
-import { ToastProvider, useToast } from "@vyre/react";
+const usageReact = `import { Button, Badge, Card, CardBody } from "@usevyre/react";
+import { ToastProvider, useToast } from "@usevyre/react";
 
 // Wrap your app with ToastProvider
 function App() {
@@ -56,7 +56,7 @@ function MyPage() {
 
 const usageVue = `<!-- App.vue -->
 <script setup lang="ts">
-import { ToastViewport } from "@vyre/vue";
+import { ToastViewport } from "@usevyre/vue";
 </script>
 <template>
   <RouterView />
@@ -65,8 +65,8 @@ import { ToastViewport } from "@vyre/vue";
 
 <!-- MyPage.vue -->
 <script setup lang="ts">
-import { Button, Badge, Card, CardBody } from "@vyre/vue";
-import { useToast } from "@vyre/vue";
+import { Button, Badge, Card, CardBody } from "@usevyre/vue";
+import { useToast } from "@usevyre/vue";
 const { toast } = useToast();
 </script>
 <template>
@@ -81,9 +81,9 @@ const { toast } = useToast();
 </template>`;
 
 const aiContextSetup = `# Add to CLAUDE.md, .cursor/rules, or AGENTS.md
-# (auto-generate with: npx @vyre/ai-context init --claude)
+# (auto-generate with: npx @usevyre/ai-context init --claude)
 
-$(cat node_modules/@vyre/tokens/dist/ai-context.md)`;
+$(cat node_modules/@usevyre/tokens/dist/ai-context.md)`;
 ---
 
 <DocsLayout title="Getting Started">
@@ -98,11 +98,6 @@ $(cat node_modules/@vyre/tokens/dist/ai-context.md)`;
   <hr class="docs-divider" />
 
   <h2 class="docs-h2">Installation</h2>
-
-  <div class="docs-callout docs-callout--accent">
-    <strong>Not yet on npm.</strong> useVyre is under active development and packages are not published yet.
-    <a href="https://github.com/gapra/usevyre" target="_blank" rel="noopener noreferrer">Star the repo</a> to be notified when v1.0 launches.
-  </div>
 
   <div class="docs-tabs" id="install-tabs">
     <div class="docs-tabs__bar" role="tablist">
@@ -165,7 +160,7 @@ $(cat node_modules/@vyre/tokens/dist/ai-context.md)`;
 
   <p class="docs-p">
     Or manually copy the contents of
-    <code>node_modules/@vyre/tokens/dist/ai-context.md</code> into your agent rules file.
+    <code>node_modules/@usevyre/tokens/dist/ai-context.md</code> into your agent rules file.
   </p>
 
   <div class="docs-next">

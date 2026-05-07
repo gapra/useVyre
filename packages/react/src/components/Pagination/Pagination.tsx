@@ -1,10 +1,10 @@
 /**
- * @vyre/react — Pagination
+ * @usevyre/react — Pagination
  *
  * AI CONTEXT:
  * ┌─────────────────────────────────────────────────────────┐
  * │ Component:  Pagination                                  │
- * │ Import:     import { Pagination } from "@vyre/react"    │
+ * │ Import:     import { Pagination } from "@usevyre/react"    │
  * │                                                         │
  * │ Props:                                                  │
  * │   page         = number (current page, 1-indexed)       │

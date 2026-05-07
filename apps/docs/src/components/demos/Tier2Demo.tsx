@@ -1,26 +1,26 @@
 import React, { useState } from "react";
-import { Button } from "@vyre/react";
-import { Popover } from "@vyre/react";
+import { Button } from "@usevyre/react";
+import { Popover } from "@usevyre/react";
 import {
   DropdownMenu, DropdownItem, DropdownSeparator, DropdownLabel,
   DropdownCheckboxItem, DropdownRadioGroup, DropdownRadioItem, DropdownSub,
-} from "@vyre/react";
-import { Alert, AlertDialog } from "@vyre/react";
-import { Sheet, SheetHeader, SheetBody, SheetFooter } from "@vyre/react";
-import { Breadcrumb, BreadcrumbItem } from "@vyre/react";
-import { Pagination } from "@vyre/react";
-import { Table, TableHead, TableBody, TableRow, TableHeader, TableCell, TableCaption } from "@vyre/react";
+} from "@usevyre/react";
+import { Alert, AlertDialog } from "@usevyre/react";
+import { Sheet, SheetHeader, SheetBody, SheetFooter } from "@usevyre/react";
+import { Breadcrumb, BreadcrumbItem } from "@usevyre/react";
+import { Pagination } from "@usevyre/react";
+import { Table, TableHead, TableBody, TableRow, TableHeader, TableCell, TableCaption } from "@usevyre/react";
 import {
   Command, CommandInput, CommandList, CommandEmpty,
   CommandGroup, CommandItem, CommandSeparator, CommandDialog,
-} from "@vyre/react";
-import { Calendar, DatePicker } from "@vyre/react";
-import { Text, Heading, Lead, Code, Blockquote } from "@vyre/react";
+} from "@usevyre/react";
+import { Calendar, DatePicker } from "@usevyre/react";
+import { Text, Heading, Lead, Code, Blockquote } from "@usevyre/react";
 import {
   AppLayout, AppShell, AppBar, PageContent, SidebarTrigger,
   Sidebar, SidebarHeader, SidebarContent,
   SidebarSection, SidebarItem, SidebarFooter,
-} from "@vyre/react";
+} from "@usevyre/react";
 
 // ── Popover demos ─────────────────────────────────────────────
 
@@ -707,12 +707,12 @@ export function TypographyCodeDemo() {
   return (
     <div style={{ display: "flex", flexDirection: "column", gap: "12px" }}>
       <Text>
-        Install the package: <Code>npm install @vyre/react</Code>
+        Install the package: <Code>npm install @usevyre/react</Code>
       </Text>
       <Blockquote>
         Design is not just what it looks like and feels like. Design is how it works. — Steve Jobs
       </Blockquote>
-      <Code block>{`import { Button } from "@vyre/react";
+      <Code block>{`import { Button } from "@usevyre/react";
 
 export default function App() {
   return <Button variant="accent">Get started</Button>;

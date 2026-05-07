@@ -9,49 +9,49 @@ import {
   DatePickerDemo,
 } from "@/components/demos/Tier2Demo";
 
-const codeSingleReact = `import { Calendar } from "@vyre/react";
+const codeSingleReact = `import { Calendar } from "@usevyre/react";
 
 const [date, setDate] = useState<Date | null>(null);
 
 <Calendar mode="single" value={date} onChange={setDate} />`;
 
 const codeSingleVue = `<script setup>
-import { Calendar } from "@vyre/vue";
+import { Calendar } from "@usevyre/vue";
 const date = ref(null);
 </script>
 <template>
   <Calendar mode="single" v-model="date" />
 </template>`;
 
-const codeRangeReact = `import { Calendar } from "@vyre/react";
+const codeRangeReact = `import { Calendar } from "@usevyre/react";
 
 const [range, setRange] = useState<[Date | null, Date | null]>([null, null]);
 
 <Calendar mode="range" value={range} onChange={setRange} />`;
 
 const codeRangeVue = `<script setup>
-import { Calendar } from "@vyre/vue";
+import { Calendar } from "@usevyre/vue";
 const range = ref([null, null]);
 </script>
 <template>
   <Calendar mode="range" v-model="range" />
 </template>`;
 
-const codeTimeReact = `import { Calendar } from "@vyre/react";
+const codeTimeReact = `import { Calendar } from "@usevyre/react";
 
 const [date, setDate] = useState<Date | null>(null);
 
 <Calendar mode="single" showTime value={date} onChange={setDate} />`;
 
 const codeTimeVue = `<script setup>
-import { Calendar } from "@vyre/vue";
+import { Calendar } from "@usevyre/vue";
 const date = ref(null);
 </script>
 <template>
   <Calendar mode="single" :show-time="true" v-model="date" />
 </template>`;
 
-const codeDatePickerReact = `import { DatePicker } from "@vyre/react";
+const codeDatePickerReact = `import { DatePicker } from "@usevyre/react";
 
 const [date, setDate] = useState<Date | null>(null);
 const [range, setRange] = useState<[Date | null, Date | null]>([null, null]);
@@ -63,7 +63,7 @@ const [range, setRange] = useState<[Date | null, Date | null]>([null, null]);
 <DatePicker mode="range" value={range} onChange={setRange} placeholder="Pick a range" />`;
 
 const codeDatePickerVue = `<script setup>
-import { DatePicker } from "@vyre/vue";
+import { DatePicker } from "@usevyre/vue";
 const date = ref(null);
 const range = ref([null, null]);
 </script>
@@ -97,8 +97,8 @@ const datePickerProps = [
 <DocsLayout title="Calendar">
   <div class="docs-header">
     <div class="docs-header__meta">
-      <span class="vyre-badge vyre-badge--default">@vyre/react</span>
-      <span class="vyre-badge vyre-badge--default">@vyre/vue</span>
+      <span class="vyre-badge vyre-badge--default">@usevyre/react</span>
+      <span class="vyre-badge vyre-badge--default">@usevyre/vue</span>
     </div>
     <h1 class="docs-title">Calendar</h1>
     <p class="docs-lead">

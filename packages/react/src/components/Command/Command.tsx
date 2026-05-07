@@ -1,5 +1,5 @@
 /**
- * @vyre/react — Command
+ * @usevyre/react — Command
  *
  * AI CONTEXT:
  * ┌─────────────────────────────────────────────────────────┐
@@ -7,7 +7,7 @@
  * │             CommandEmpty + CommandGroup + CommandItem + │
  * │             CommandSeparator + CommandDialog            │
  * │ Import:     import { Command, CommandDialog, ... }      │
- * │             from "@vyre/react"                          │
+ * │             from "@usevyre/react"                          │
  * │                                                         │
  * │ Command props:                                          │
  * │   value       = string (controlled search value)        │
@@ -208,7 +208,7 @@ export const CommandList = React.forwardRef<HTMLDivElement, CommandListProps>(
     const { activeIndex, setActiveIndex, items, selectItem } = useCommand();
 
     const handleKeyDown = useCallback((e: React.KeyboardEvent) => {
-      const visible = Array.from(items.current.entries())
+      const visible = Array.from((items.current ?? new Map()).entries())
         .filter(([, v]) => !v.disabled && v.el.closest("[data-cmd-item]") !== null && !v.el.hasAttribute("data-cmd-hidden"));
 
       if (e.key === "ArrowDown") {
@@ -300,7 +300,7 @@ export interface CommandItemProps {
 export const CommandItem: React.FC<CommandItemProps> = ({
   onSelect, disabled = false, keywords, className, children, icon, shortcut,
 }) => {
-  const { search, setActiveIndex, registerItem, unregisterItem, selectItem, onSelectRef, setVisibleCount } = useCommand();
+  const { search, setActiveIndex, registerItem, unregisterItem, onSelectRef, setVisibleCount } = useCommand();
   const id = useMemo(() => uid(), []);
   const ref = useRef<HTMLDivElement>(null);
 
@@ -320,8 +320,8 @@ export const CommandItem: React.FC<CommandItemProps> = ({
   }, [id, disabled, visible, registerItem, unregisterItem]);
 
   useEffect(() => {
-    if (onSelect) onSelectRef.current.set(id, onSelect);
-    return () => { onSelectRef.current.delete(id); };
+    if (onSelect) onSelectRef.current?.set(id, onSelect);
+    return () => { onSelectRef.current?.delete(id); };
   }, [id, onSelect, onSelectRef]);
 
   if (!visible) return null;

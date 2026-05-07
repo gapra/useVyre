@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { Modal, ModalHeader, ModalBody, ModalFooter, Button } from "@vyre/react";
+import { Modal, ModalHeader, ModalBody, ModalFooter, Button } from "@usevyre/react";
 
 export function ModalBasicDemo() {
   const [open, setOpen] = useState(false);

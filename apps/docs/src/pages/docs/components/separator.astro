@@ -4,7 +4,7 @@ import ComponentPreview from "@/components/docs/ComponentPreview.astro";
 import PropsTable       from "@/components/docs/PropsTable.astro";
 import { SeparatorDemo } from "@/components/demos/Tier1Demos";
 
-const codeBasicReact = `import { Separator } from "@vyre/react";
+const codeBasicReact = `import { Separator } from "@usevyre/react";
 
 // Horizontal (default)
 <p>Above</p>
@@ -19,7 +19,7 @@ const codeBasicReact = `import { Separator } from "@vyre/react";
 </div>`;
 
 const codeBasicVue = `<script setup>
-import { Separator } from "@vyre/vue";
+import { Separator } from "@usevyre/vue";
 </script>
 <template>
   <p>Above</p>
@@ -43,8 +43,8 @@ const props = [
 <DocsLayout title="Separator">
   <div class="docs-header">
     <div class="docs-header__meta">
-      <span class="vyre-badge vyre-badge--default">@vyre/react</span>
-      <span class="vyre-badge vyre-badge--default">@vyre/vue</span>
+      <span class="vyre-badge vyre-badge--default">@usevyre/react</span>
+      <span class="vyre-badge vyre-badge--default">@usevyre/vue</span>
     </div>
     <h1 class="docs-title">Separator</h1>
     <p class="docs-lead">

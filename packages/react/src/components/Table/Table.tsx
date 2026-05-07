@@ -1,5 +1,5 @@
 /**
- * @vyre/react — Table
+ * @usevyre/react — Table
  *
  * AI CONTEXT:
  * ┌─────────────────────────────────────────────────────────┐
@@ -7,7 +7,7 @@
  * │             TableHeader + TableCell + TableCaption      │
  * │ Import:     import { Table, TableHead, TableBody,       │
  * │             TableRow, TableHeader, TableCell,           │
- * │             TableCaption } from "@vyre/react"           │
+ * │             TableCaption } from "@usevyre/react"           │
  * │                                                         │
  * │ Table props:                                            │
  * │   striped  = boolean (default: false)                   │

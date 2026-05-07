@@ -32,9 +32,8 @@
  * />
  */
 
-import { ref, watch, onBeforeUnmount } from "vue";
+import { ref, watch, onBeforeUnmount, Teleport } from "vue";
 import { cn } from "../../utils/cn";
-import { Teleport } from "vue";
 
 const props = withDefaults(
   defineProps<{

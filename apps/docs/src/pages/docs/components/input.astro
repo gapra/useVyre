@@ -3,7 +3,7 @@ import DocsLayout       from "@/layouts/DocsLayout.astro";
 import ComponentPreview from "@/components/docs/ComponentPreview.astro";
 import PropsTable       from "@/components/docs/PropsTable.astro";
 
-const codeBasicReact = `import { Input } from "@vyre/react";
+const codeBasicReact = `import { Input } from "@usevyre/react";
 
 <Input placeholder="Enter your email" type="email" />
 <Input placeholder="With left icon" leftIcon={<SearchIcon />} />
@@ -11,7 +11,7 @@ const codeBasicReact = `import { Input } from "@vyre/react";
 <Input placeholder="Disabled" disabled />`;
 
 const codeBasicVue = `<script setup>
-import { Input } from "@vyre/vue";
+import { Input } from "@usevyre/vue";
 </script>
 <template>
   <Input placeholder="Enter your email" type="email" />
@@ -21,7 +21,7 @@ import { Input } from "@vyre/vue";
   <Input placeholder="Disabled" disabled />
 </template>`;
 
-const codeFieldReact = `import { Field, Input } from "@vyre/react";
+const codeFieldReact = `import { Field, Input } from "@usevyre/react";
 
 <Field label="Email" htmlFor="email" hint="We'll never share it.">
   <Input id="email" type="email" placeholder="you@example.com" />
@@ -32,7 +32,7 @@ const codeFieldReact = `import { Field, Input } from "@vyre/react";
 </Field>`;
 
 const codeFieldVue = `<script setup>
-import { Field, Input } from "@vyre/vue";
+import { Field, Input } from "@usevyre/vue";
 </script>
 <template>
   <Field label="Email" html-for="email" hint="We'll never share it.">
@@ -44,7 +44,7 @@ import { Field, Input } from "@vyre/vue";
   </Field>
 </template>`;
 
-const codeTextareaReact = `import { Textarea } from "@vyre/react";
+const codeTextareaReact = `import { Textarea } from "@usevyre/react";
 
 <Textarea placeholder="Add a description..." rows={4} />`;
 
@@ -71,8 +71,8 @@ const fieldProps = [
 <DocsLayout title="Input">
   <div class="docs-header">
     <div class="docs-header__meta">
-      <span class="vyre-badge vyre-badge--default">@vyre/react</span>
-      <span class="vyre-badge vyre-badge--default">@vyre/vue</span>
+      <span class="vyre-badge vyre-badge--default">@usevyre/react</span>
+      <span class="vyre-badge vyre-badge--default">@usevyre/vue</span>
     </div>
     <h1 class="docs-title">Input</h1>
     <p class="docs-lead">

@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import { inject } from "vue";
 import { cn } from "../../utils/cn";
-import { DROPDOWN_KEY } from "./DropdownMenu.vue";
+import { DROPDOWN_KEY } from "./context";
 
 const props = withDefaults(
   defineProps<{

@@ -1,10 +1,10 @@
 /**
- * @vyre/react — Tooltip
+ * @usevyre/react — Tooltip
  *
  * AI CONTEXT:
  * ┌─────────────────────────────────────────────────────────┐
  * │ Component:  Tooltip                                     │
- * │ Import:     import { Tooltip } from "@vyre/react"       │
+ * │ Import:     import { Tooltip } from "@usevyre/react"       │
  * │                                                         │
  * │ Props:                                                  │
  * │   content    = string | ReactNode (tooltip text)        │

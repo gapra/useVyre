@@ -4,7 +4,7 @@ import ComponentPreview from "@/components/docs/ComponentPreview.astro";
 import PropsTable       from "@/components/docs/PropsTable.astro";
 import { SwitchDemo } from "@/components/demos/Tier1Demos";
 
-const codeBasicReact = `import { Switch } from "@vyre/react";
+const codeBasicReact = `import { Switch } from "@usevyre/react";
 
 // Uncontrolled
 <Switch defaultChecked />
@@ -14,7 +14,7 @@ const [on, setOn] = useState(false);
 <Switch checked={on} onCheckedChange={setOn} />`;
 
 const codeBasicVue = `<script setup>
-import { Switch } from "@vyre/vue";
+import { Switch } from "@usevyre/vue";
 const on = ref(false);
 </script>
 <template>
@@ -38,8 +38,8 @@ const props = [
 <DocsLayout title="Switch">
   <div class="docs-header">
     <div class="docs-header__meta">
-      <span class="vyre-badge vyre-badge--default">@vyre/react</span>
-      <span class="vyre-badge vyre-badge--default">@vyre/vue</span>
+      <span class="vyre-badge vyre-badge--default">@usevyre/react</span>
+      <span class="vyre-badge vyre-badge--default">@usevyre/vue</span>
     </div>
     <h1 class="docs-title">Switch</h1>
     <p class="docs-lead">

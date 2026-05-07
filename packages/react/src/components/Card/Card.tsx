@@ -1,10 +1,10 @@
 /**
- * @vyre/react — Card
+ * @usevyre/react — Card
  *
  * AI CONTEXT:
  * ┌─────────────────────────────────────────────────────────┐
  * │ Component:  Card + CardHeader + CardBody + CardFooter   │
- * │ Import:     import { Card, CardBody, ... } from "@vyre/react" │
+ * │ Import:     import { Card, CardBody, ... } from "@usevyre/react" │
  * │                                                         │
  * │ Card props:                                             │
  * │   variant = "default"|"elevated"|"outlined"|            │

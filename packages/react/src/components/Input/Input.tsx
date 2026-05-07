@@ -1,10 +1,10 @@
 /**
- * @vyre/react — Input + Field
+ * @usevyre/react — Input + Field
  *
  * AI CONTEXT:
  * ┌─────────────────────────────────────────────────────────┐
  * │ Components: Field + Input + Textarea                    │
- * │ Import:     import { Field, Input, Textarea } from "@vyre/react" │
+ * │ Import:     import { Field, Input, Textarea } from "@usevyre/react" │
  * │                                                         │
  * │ Field props:                                            │
  * │   label    = string                                     │
@@ -124,8 +124,8 @@ export const Input = React.forwardRef<HTMLInputElement, InputProps>(
             className={cn(
               "vyre-input",
               `vyre-input--${size}`,
-              leftElement && "vyre-input--has-left",
-              rightElement && "vyre-input--has-right",
+              !!leftElement && "vyre-input--has-left",
+              !!rightElement && "vyre-input--has-right",
               className
             )}
             {...props}

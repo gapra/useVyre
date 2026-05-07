@@ -9,7 +9,7 @@
 
 import { inject, computed } from "vue";
 import { cn } from "../../utils/cn";
-import { APP_LAYOUT_KEY } from "./AppLayout.vue";
+import { APP_LAYOUT_KEY } from "./context";
 
 const props = withDefaults(defineProps<{
   variant?: "default" | "floating";

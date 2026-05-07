@@ -1,10 +1,10 @@
 /**
- * @vyre/react — Button
+ * @usevyre/react — Button
  *
  * AI CONTEXT:
  * ┌─────────────────────────────────────────────────────────┐
  * │ Component:  Button                                      │
- * │ Import:     import { Button } from "@vyre/react"        │
+ * │ Import:     import { Button } from "@usevyre/react"        │
  * │                                                         │
  * │ Props:                                                  │
  * │   variant  = "primary"|"secondary"|"ghost"|             │

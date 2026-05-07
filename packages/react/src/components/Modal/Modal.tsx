@@ -1,11 +1,11 @@
 /**
- * @vyre/react — Modal / Dialog
+ * @usevyre/react — Modal / Dialog
  *
  * AI CONTEXT:
  * ┌─────────────────────────────────────────────────────────┐
  * │ Components: Modal + ModalHeader + ModalBody + ModalFooter│
  * │ Import:     import { Modal, ModalHeader, ModalBody,     │
- * │             ModalFooter } from "@vyre/react"            │
+ * │             ModalFooter } from "@usevyre/react"            │
  * │                                                         │
  * │ Modal props:                                            │
  * │   open             = boolean (controlled)               │

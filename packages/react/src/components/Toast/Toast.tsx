@@ -1,11 +1,11 @@
 /**
- * @vyre/react — Toast / Notification
+ * @usevyre/react — Toast / Notification
  *
  * AI CONTEXT:
  * ┌─────────────────────────────────────────────────────────┐
  * │ Components: ToastProvider + useToast hook               │
  * │ Import:     import { ToastProvider, useToast }          │
- * │             from "@vyre/react"                          │
+ * │             from "@usevyre/react"                          │
  * │                                                         │
  * │ Setup: wrap app root with <ToastProvider>               │
  * │                                                         │

@@ -1,8 +1,8 @@
 <script setup lang="ts">
 import { inject, computed } from "vue";
 import { cn } from "../../utils/cn";
-import { DROPDOWN_KEY } from "./DropdownMenu.vue";
-import { RADIO_KEY } from "./DropdownRadioGroup.vue";
+import { DROPDOWN_KEY } from "./context";
+import { RADIO_KEY } from "./radio-context";
 
 const props = withDefaults(
   defineProps<{

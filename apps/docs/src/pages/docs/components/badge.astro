@@ -3,7 +3,7 @@ import DocsLayout       from "@/layouts/DocsLayout.astro";
 import ComponentPreview from "@/components/docs/ComponentPreview.astro";
 import PropsTable       from "@/components/docs/PropsTable.astro";
 
-const codeVariantsReact = `import { Badge } from "@vyre/react";
+const codeVariantsReact = `import { Badge } from "@usevyre/react";
 
 <Badge variant="default">Default</Badge>
 <Badge variant="accent">Accent</Badge>
@@ -13,7 +13,7 @@ const codeVariantsReact = `import { Badge } from "@vyre/react";
 <Badge variant="danger">Danger</Badge>`;
 
 const codeVariantsVue = `<script setup>
-import { Badge } from "@vyre/vue";
+import { Badge } from "@usevyre/vue";
 </script>
 <template>
   <Badge variant="default">Default</Badge>
@@ -42,8 +42,8 @@ const props = [
 <DocsLayout title="Badge">
   <div class="docs-header">
     <div class="docs-header__meta">
-      <span class="vyre-badge vyre-badge--default">@vyre/react</span>
-      <span class="vyre-badge vyre-badge--default">@vyre/vue</span>
+      <span class="vyre-badge vyre-badge--default">@usevyre/react</span>
+      <span class="vyre-badge vyre-badge--default">@usevyre/vue</span>
     </div>
     <h1 class="docs-title">Badge</h1>
     <p class="docs-lead">
