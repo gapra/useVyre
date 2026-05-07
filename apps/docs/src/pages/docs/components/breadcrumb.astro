@@ -1,0 +1,101 @@
+---
+import DocsLayout       from "@/layouts/DocsLayout.astro";
+import ComponentPreview from "@/components/docs/ComponentPreview.astro";
+import PropsTable       from "@/components/docs/PropsTable.astro";
+import { BreadcrumbBasicDemo, BreadcrumbCustomSeparatorDemo } from "@/components/demos/Tier2Demo";
+
+const codeBasicReact = `import { Breadcrumb, BreadcrumbItem } from "@vyre/react";
+
+<Breadcrumb>
+  <BreadcrumbItem href="/">Home</BreadcrumbItem>
+  <BreadcrumbItem href="/docs">Docs</BreadcrumbItem>
+  <BreadcrumbItem current>Breadcrumb</BreadcrumbItem>
+</Breadcrumb>`;
+
+const codeBasicVue = `<script setup>
+import { Breadcrumb, BreadcrumbItem } from "@vyre/vue";
+</script>
+<template>
+  <Breadcrumb>
+    <BreadcrumbItem href="/">Home</BreadcrumbItem>
+    <BreadcrumbItem href="/docs">Docs</BreadcrumbItem>
+    <BreadcrumbItem :current="true">Breadcrumb</BreadcrumbItem>
+  </Breadcrumb>
+</template>`;
+
+const codeSeparatorReact = `{/* Chevron › separator */}
+<Breadcrumb separator="›">
+  <BreadcrumbItem href="/dashboard">Dashboard</BreadcrumbItem>
+  <BreadcrumbItem current>Settings</BreadcrumbItem>
+</Breadcrumb>
+
+{/* Dot · separator */}
+<Breadcrumb separator="·">
+  <BreadcrumbItem href="/docs">Docs</BreadcrumbItem>
+  <BreadcrumbItem current>API</BreadcrumbItem>
+</Breadcrumb>`;
+
+const codeSeparatorVue = `<Breadcrumb separator="›">
+  <BreadcrumbItem href="/dashboard">Dashboard</BreadcrumbItem>
+  <BreadcrumbItem :current="true">Settings</BreadcrumbItem>
+</Breadcrumb>`;
+
+const breadcrumbProps = [
+  { name: "separator",   type: "ReactNode / string", default: `"/"`,  description: "Character or element rendered between items." },
+  { name: "class / className", type: "string",       default: "—",    description: "Additional CSS class on the nav element." },
+];
+
+const itemProps = [
+  { name: "href",    type: "string",  default: "—",     description: "When provided, renders an anchor tag. Omit for the current (last) item." },
+  { name: "current", type: "boolean", default: "false", description: "Marks the item with aria-current='page' and applies active styling." },
+  { name: "class / className", type: "string", default: "—", description: "Additional CSS class." },
+];
+---
+
+<DocsLayout title="Breadcrumb">
+  <div class="docs-header">
+    <div class="docs-header__meta">
+      <span class="vyre-badge vyre-badge--default">@vyre/react</span>
+      <span class="vyre-badge vyre-badge--default">@vyre/vue</span>
+    </div>
+    <h1 class="docs-title">Breadcrumb</h1>
+    <p class="docs-lead">
+      A navigational trail showing the user's location within a hierarchy.
+      The last item is automatically marked as the current page with <code>aria-current="page"</code>.
+    </p>
+  </div>
+
+  <hr class="docs-divider" />
+
+  <h2 class="docs-h2">Basic</h2>
+  <p class="docs-p">
+    Compose <code>BreadcrumbItem</code> elements inside <code>Breadcrumb</code>. Add <code>current</code>
+    to the last item to indicate the active page.
+  </p>
+  <ComponentPreview react={codeBasicReact} vue={codeBasicVue}>
+    <BreadcrumbBasicDemo client:visible />
+  </ComponentPreview>
+
+  <h2 class="docs-h2">Custom separator</h2>
+  <p class="docs-p">
+    The <code>separator</code> prop accepts any string or React node.
+  </p>
+  <ComponentPreview react={codeSeparatorReact} vue={codeSeparatorVue}>
+    <BreadcrumbCustomSeparatorDemo client:visible />
+  </ComponentPreview>
+
+  <h2 class="docs-h2">Props — Breadcrumb</h2>
+  <PropsTable props={breadcrumbProps} />
+
+  <h2 class="docs-h2">Props — BreadcrumbItem</h2>
+  <PropsTable props={itemProps} />
+
+  <div class="docs-pagination">
+    <a href="/docs/components/sheet" class="docs-pagination__link docs-pagination__link--prev">
+      ← Sheet
+    </a>
+    <a href="/docs/components/pagination" class="docs-pagination__link docs-pagination__link--next">
+      Pagination →
+    </a>
+  </div>
+</DocsLayout>

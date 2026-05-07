@@ -1,0 +1,153 @@
+---
+import DocsLayout       from "@/layouts/DocsLayout.astro";
+import ComponentPreview from "@/components/docs/ComponentPreview.astro";
+import PropsTable       from "@/components/docs/PropsTable.astro";
+import { TableBasicDemo, TableVariantsDemo } from "@/components/demos/Tier2Demo";
+
+const codeBasicReact = `import {
+  Table, TableHead, TableBody, TableRow,
+  TableHeader, TableCell, TableCaption
+} from "@vyre/react";
+
+const [sortDir, setSortDir] = useState<"asc" | "desc" | null>(null);
+
+<Table hoverable>
+  <TableHead>
+    <TableRow>
+      <TableHeader sortable sortDir={sortDir} onSort={toggleSort}>Name</TableHeader>
+      <TableHeader>Role</TableHeader>
+      <TableHeader>Email</TableHeader>
+      <TableHeader align="center">Status</TableHeader>
+    </TableRow>
+  </TableHead>
+  <TableBody>
+    {rows.map((row) => (
+      <TableRow key={row.id}>
+        <TableCell>{row.name}</TableCell>
+        <TableCell>{row.role}</TableCell>
+        <TableCell>{row.email}</TableCell>
+        <TableCell align="center">{row.status}</TableCell>
+      </TableRow>
+    ))}
+  </TableBody>
+  <TableCaption>Team members</TableCaption>
+</Table>`;
+
+const codeBasicVue = `<script setup>
+import {
+  Table, TableHead, TableBody, TableRow,
+  TableHeader, TableCell, TableCaption
+} from "@vyre/vue";
+
+const sortDir = ref(null);
+const toggleSort = () => {
+  sortDir.value = sortDir.value === "asc" ? "desc" : sortDir.value === "desc" ? null : "asc";
+};
+</script>
+<template>
+  <Table :hoverable="true">
+    <TableHead>
+      <TableRow>
+        <TableHeader :sortable="true" :sort-dir="sortDir" @sort="toggleSort">Name</TableHeader>
+        <TableHeader>Role</TableHeader>
+      </TableRow>
+    </TableHead>
+    <TableBody>
+      <TableRow v-for="row in rows" :key="row.id">
+        <TableCell>{{ row.name }}</TableCell>
+        <TableCell>{{ row.role }}</TableCell>
+      </TableRow>
+    </TableBody>
+    <TableCaption>Team members</TableCaption>
+  </Table>
+</template>`;
+
+const codeVariantsReact = `{/* Striped rows */}
+<Table striped>...</Table>
+
+{/* Bordered cells */}
+<Table bordered>...</Table>
+
+{/* Compact padding */}
+<Table compact>...</Table>
+
+{/* Combined */}
+<Table bordered compact>...</Table>`;
+
+const tableProps = [
+  { name: "striped",   type: "boolean", default: "false", description: "Alternating row background colors." },
+  { name: "bordered",  type: "boolean", default: "false", description: "Borders on all cells." },
+  { name: "compact",   type: "boolean", default: "false", description: "Reduced cell padding." },
+  { name: "hoverable", type: "boolean", default: "true",  description: "Highlight row on hover." },
+  { name: "class / className", type: "string", default: "—", description: "Additional CSS class." },
+];
+
+const headerProps = [
+  { name: "sortable",  type: "boolean",                   default: "false", description: "Renders a sort button inside the header cell." },
+  { name: "sortDir",   type: `"asc" | "desc" | null`,     default: "null",  description: "Current sort direction. Controls icon opacity." },
+  { name: "onSort / @sort", type: "() => void",           default: "—",     description: "Called when the sort button is clicked." },
+  { name: "align",     type: `"left" | "center" | "right"`, default: `"left"`, description: "Text alignment." },
+  { name: "class / className", type: "string",            default: "—",     description: "Additional CSS class." },
+];
+
+const cellProps = [
+  { name: "align",     type: `"left" | "center" | "right"`, default: `"left"`, description: "Text alignment of the cell." },
+  { name: "class / className", type: "string",               default: "—",      description: "Additional CSS class." },
+];
+
+const rowProps = [
+  { name: "selected",  type: "boolean", default: "false", description: "Highlights the row and sets aria-selected." },
+  { name: "class / className", type: "string", default: "—", description: "Additional CSS class." },
+];
+---
+
+<DocsLayout title="Table">
+  <div class="docs-header">
+    <div class="docs-header__meta">
+      <span class="vyre-badge vyre-badge--default">@vyre/react</span>
+      <span class="vyre-badge vyre-badge--default">@vyre/vue</span>
+    </div>
+    <h1 class="docs-title">Table</h1>
+    <p class="docs-lead">
+      A composable data table with sortable columns, striped rows, and multiple density variants.
+      Built from semantic HTML table elements with accessible sort indicators.
+    </p>
+  </div>
+
+  <hr class="docs-divider" />
+
+  <h2 class="docs-h2">Basic with sorting</h2>
+  <p class="docs-p">
+    Add <code>sortable</code> and <code>sortDir</code> to <code>TableHeader</code> for an accessible
+    sort button with directional icons. Click the Name column header below to toggle sort direction.
+  </p>
+  <ComponentPreview react={codeBasicReact} vue={codeBasicVue}>
+    <TableBasicDemo client:visible />
+  </ComponentPreview>
+
+  <h2 class="docs-h2">Variants</h2>
+  <p class="docs-p">
+    Mix <code>striped</code>, <code>bordered</code>, and <code>compact</code> props freely.
+  </p>
+  <ComponentPreview react={codeVariantsReact} vue={`<Table :striped="true">...</Table>\n<Table :bordered="true" :compact="true">...</Table>`}>
+    <TableVariantsDemo client:visible />
+  </ComponentPreview>
+
+  <h2 class="docs-h2">Props — Table</h2>
+  <PropsTable props={tableProps} />
+
+  <h2 class="docs-h2">Props — TableHeader</h2>
+  <PropsTable props={headerProps} />
+
+  <h2 class="docs-h2">Props — TableCell</h2>
+  <PropsTable props={cellProps} />
+
+  <h2 class="docs-h2">Props — TableRow</h2>
+  <PropsTable props={rowProps} />
+
+  <div class="docs-pagination">
+    <a href="/docs/components/pagination" class="docs-pagination__link docs-pagination__link--prev">
+      ← Pagination
+    </a>
+  </div>
+</DocsLayout>
