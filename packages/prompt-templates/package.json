@@ -1,0 +1,43 @@
+{
+  "name": "@usevyre/prompt-templates",
+  "version": "0.1.0",
+  "description": "Ready-to-use prompt templates for building UI with useVyre + AI agents (Claude, Cursor, Copilot, Windsurf)",
+  "keywords": [
+    "design-system",
+    "ai",
+    "prompt",
+    "template",
+    "claude",
+    "cursor",
+    "copilot",
+    "vyre"
+  ],
+  "homepage": "https://usevyre.com/docs/ai-tooling/prompt-templates",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/gapra/usevyre"
+  },
+  "license": "MIT",
+  "type": "module",
+  "exports": {
+    ".": "./src/index.js",
+    "./claude": "./templates/claude.md",
+    "./cursor": "./templates/cursor.md",
+    "./copilot": "./templates/copilot.md",
+    "./windsurf": "./templates/windsurf.md",
+    "./generic": "./templates/generic.md"
+  },
+  "files": [
+    "src",
+    "templates"
+  ],
+  "scripts": {
+    "build": "node src/build.js"
+  },
+  "dependencies": {
+    "@usevyre/ai-context": "workspace:*"
+  },
+  "engines": {
+    "node": ">=18.0.0"
+  }
+}
