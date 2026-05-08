@@ -24,7 +24,7 @@ export const navigation: NavSection[] = [
     items: [
       { title: "@usevyre/ai-context", href: "/docs/ai-tooling/ai-context-pkg" },
       { title: "validate-ai-context", href: "/docs/ai-tooling/validate"        },
-      { title: "eslint-plugin-vyre",  href: "/docs/ai-tooling/eslint-plugin"   },
+      { title: "@usevyre/eslint-plugin",  href: "/docs/ai-tooling/eslint-plugin"   },
       { title: "MCP Server",          href: "/docs/ai-tooling/mcp-server"      },
     ],
   },

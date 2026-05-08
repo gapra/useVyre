@@ -60,7 +60,7 @@ importers:
 
   packages/ai-context: {}
 
-  packages/eslint-plugin-vyre:
+  packages/eslint-plugin:
     dependencies:
       '@usevyre/ai-context':
         specifier: workspace:*
