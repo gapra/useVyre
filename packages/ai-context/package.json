@@ -1,6 +1,6 @@
 {
   "name": "@usevyre/ai-context",
-  "version": "0.2.0",
+  "version": "0.2.1",
   "description": "useVyre AI context — inject into LLM system prompts to eliminate UI hallucinations",
   "keywords": [
     "design-system",
@@ -26,7 +26,9 @@
     "./schema": "./dist/schema.json",
     "./anti-patterns": "./dist/anti-patterns.json",
     "./version-info": "./dist/version-info.json",
-    "./cheat-sheets": "./dist/cheat-sheets/index.md"
+    "./cheat-sheets": "./dist/cheat-sheets/index.md",
+    "./tokens": "./dist/tokens.json",
+    "./tokens-md": "./dist/tokens.md"
   },
   "files": [
     "dist"
