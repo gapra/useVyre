@@ -1,9 +1,10 @@
 ---
 import DocsLayout from "@/layouts/DocsLayout.astro";
-import CodeTabs   from "@/components/docs/CodeTabs.astro";
 import { Code }   from "astro:components";
 
-const codeClaudeMd = `# CLAUDE.md (or .cursor/rules / AGENTS.md)
+// ── Option 1: paste block ───────────────────────────────────────
+const codePaste = `# useVyre AI Context
+# Paste into: CLAUDE.md · .cursor/rules · AGENTS.md · .github/copilot-instructions.md
 
 ## Design System: useVyre
 
@@ -83,93 +84,325 @@ import { Separator, Label, Skeleton } from "@usevyre/vue";
 - React: Modal closes via onClose prop
 - Vue: Modal closes via @close event`;
 
-const codeClaudeReadFile = `# In CLAUDE.md, reference the generated file directly:
-See @packages/tokens/dist/ai-context.md for the full token reference.`;
+// ── Option 2: auto-generated file (monorepo / consumers) ───────
+const codeAutoFile = `# CLAUDE.md
+# Reference the generated file — always stays up to date with package versions.
+See @packages/tokens/dist/ai-context.md for the full token + component reference.`;
 
-const codeCursorRules = `# .cursor/rules
-# Paste the contents of packages/tokens/dist/ai-context.md here,
-# or reference it with @packages/tokens/dist/ai-context.md`;
+const codeCursorRef = `# .cursor/rules
+# Reference or paste the contents of:
+# packages/tokens/dist/ai-context.md`;
 
-const codeTokensImport = `// Access tokens in JS/TS
-import { tokens } from "@usevyre/tokens";
+// ── npx init ───────────────────────────────────────────────────
+const codeNpxClaude  = `npx @usevyre/ai-context init --claude
+# → writes CLAUDE.md with full context`;
 
-// e.g. read a token value at runtime
-console.log(tokens.color.semantic.accent); // "#7c3aed" (light)`;
+const codeNpxCursor  = `npx @usevyre/ai-context init --cursor
+# → writes .cursor/rules with full context`;
+
+const codeNpxWindsurf = `npx @usevyre/ai-context init --windsurf
+# → writes .windsurf/rules with full context`;
+
+// ── Before / after ─────────────────────────────────────────────
+const codeWithout = `// ❌ Without useVyre AI context
+// Prompt: "Build a danger button with extra-large size"
+
+<Button color="red" size="xl">Delete</Button>
+//       ^^^^^^^^^^  ^^^^^^^^
+//       'color' prop doesn't exist on Button
+//       'xl' is not a valid size — max is 'lg'
+// Result: TypeScript error + runtime warning`;
+
+const codeWith = `// ✅ With useVyre AI context
+// Same prompt — agent reads context first
+
+<Button variant="danger" size="lg">Delete</Button>
+// Correct on the first try. No edits needed.`;
+
+const codeWithoutForm = `// ❌ Without context
+// Prompt: "Add email validation to this field"
+
+<Input type="email" error="Invalid email" />
+//                  ^^^^^^^^^^^^^^^^^^^^
+//  'error' prop doesn't exist. The pattern is:
+//  Field wrapper with state + hint props.
+// Result: prop silently ignored, no visual feedback`;
+
+const codeWithForm = `// ✅ With context
+// Agent knows Field wraps Input and carries state
+
+<Field label="Email" state="error" hint="Invalid email">
+  <Input type="email" value={email} onChange={...} />
+</Field>
+// Correct validation UI, first try.`;
+
+// ── Validate ───────────────────────────────────────────────────
+const codeValidate = `npx @usevyre/validate-ai-context src/
+
+# ❌ dashboard.tsx:12
+#    <Button> has no "color" prop
+#    → Use variant prop instead
+#
+# ❌ dashboard.tsx:18
+#    <Button size="xl"> — "xl" is not a valid value
+#    → Valid: "sm" | "md" | "lg" | "icon"
+#
+# Scanned 4 files · 2 errors`;
+
+// ── Update workflow ────────────────────────────────────────────
+const codeUpdate = `# Re-generate context after upgrading @usevyre packages
+npx @usevyre/ai-context init --claude   # overwrites CLAUDE.md section
+
+# Or rebuild manually in a monorepo
+pnpm --filter @usevyre/tokens build
+# → packages/tokens/dist/ai-context.md is regenerated`;
+
+const codeCheckVersion = `import { versionInfo } from "@usevyre/ai-context/version-info";
+
+console.log(versionInfo.version);      // "0.2.1"
+console.log(versionInfo.validFor);     // "@usevyre/react >= 0.1.2"
+console.log(versionInfo.generatedAt);  // "2026-05-08T..."`;
 ---
 
-<DocsLayout title="AI Context">
+<DocsLayout title="AI Context" description="Add useVyre AI context to your coding agent — eliminate hallucinated props and variants.">
   <div class="docs-header">
     <div class="docs-header__meta">
       <span class="vyre-badge vyre-badge--teal">AI-native</span>
     </div>
     <h1 class="docs-title">AI Context</h1>
     <p class="docs-lead">
-      The real power of useVyre is predictability. Add the AI context file to your agent's
-      rules so it generates correct, type-safe component code on the first try - no invented
-      props, no hallucinated variants.
+      Add the AI context block to your agent's rules file and it will generate
+      correct useVyre code on the first try — no invented props, no hallucinated variants,
+      no manual corrections.
     </p>
   </div>
 
   <hr class="docs-divider" />
 
-  <div class="docs-callout docs-callout--teal">
-    <strong>Why this matters:</strong> Without context, AI agents invent props that don't exist -
-    <code>color="blue"</code> instead of <code>variant="accent"</code>,
-    <code>type="error"</code> instead of <code>state="error"</code>. With the context file,
-    they get it right every time.
+  <!-- ── Before / after proof ─────────────────────────────── -->
+  <h2 class="docs-h2" id="why-it-matters">Why it matters</h2>
+  <p class="docs-p">
+    AI agents don't read source code — they predict tokens. Without an explicit reference,
+    they invent props by analogy: <code>color="red"</code>, <code>size="xl"</code>,
+    <code>type="error"</code>. These compile silently and fail at runtime.
+  </p>
+
+  <div class="ai-context-split">
+    <div class="ai-context-split__col">
+      <p class="ai-context-split__label ai-context-split__label--bad">Without context</p>
+      <Code code={codeWithout} lang="tsx" theme="github-dark" />
+    </div>
+    <div class="ai-context-split__col">
+      <p class="ai-context-split__label ai-context-split__label--good">With context</p>
+      <Code code={codeWith} lang="tsx" theme="github-dark" />
+    </div>
   </div>
 
-  <h2 class="docs-h2">Option 1 — Paste into CLAUDE.md / .cursor/rules</h2>
-  <p class="docs-p">
-    Copy the block below into your <code>CLAUDE.md</code>, <code>.cursor/rules</code>,
-    or <code>AGENTS.md</code>. This covers every token, import pattern, prop name,
-    and behavioral difference between the React and Vue adapters.
-  </p>
-  <Code code={codeClaudeMd} lang="markdown" theme="github-dark" />
-
-  <h2 class="docs-h2">Option 2 — Reference the generated file</h2>
-  <p class="docs-p">
-    After building the tokens package (<code>pnpm --filter @usevyre/tokens build</code>),
-    a full context file is generated at <code>packages/tokens/dist/ai-context.md</code>.
-    Reference it directly in Claude Code or Cursor:
-  </p>
-  <CodeTabs react={codeClaudeReadFile} vue={codeCursorRules} />
-
-  <h2 class="docs-h2">Access tokens in JavaScript</h2>
-  <p class="docs-p">
-    The tokens package also exports a typed JS object for runtime use:
-  </p>
-  <Code code={codeTokensImport} lang="ts" theme="github-dark" />
-
-  <h2 class="docs-h2">What the context tells your agent</h2>
-
-  <div style="display:flex;flex-direction:column;gap:12px;margin:16px 0">
-    <div class="vyre-card" style="padding:16px 20px">
-      <p style="margin:0 0 4px;font-weight:600;font-size:0.875rem">Token naming</p>
-      <p style="margin:0;font-size:0.8125rem;opacity:0.7">
-        <code>--vyre-color-semantic-accent</code> not <code>#7c3aed</code>.
-        Semantic tokens adapt to light/dark automatically.
-      </p>
+  <div class="ai-context-split" style="margin-top:16px">
+    <div class="ai-context-split__col">
+      <p class="ai-context-split__label ai-context-split__label--bad">Without context</p>
+      <Code code={codeWithoutForm} lang="tsx" theme="github-dark" />
     </div>
-    <div class="vyre-card" style="padding:16px 20px">
-      <p style="margin:0 0 4px;font-weight:600;font-size:0.875rem">Exact prop names</p>
-      <p style="margin:0;font-size:0.8125rem;opacity:0.7">
-        <code>variant="accent"</code> not <code>color="purple"</code>.
-        <code>onCheckedChange</code> not <code>onChange</code>.
-      </p>
+    <div class="ai-context-split__col">
+      <p class="ai-context-split__label ai-context-split__label--good">With context</p>
+      <Code code={codeWithForm} lang="tsx" theme="github-dark" />
     </div>
-    <div class="vyre-card" style="padding:16px 20px">
-      <p style="margin:0 0 4px;font-weight:600;font-size:0.875rem">React vs Vue differences</p>
-      <p style="margin:0;font-size:0.8125rem;opacity:0.7">
-        React uses <code>checked + onCheckedChange</code>.
-        Vue uses <code>v-model</code>. Toast setup differs per framework.
-      </p>
+  </div>
+
+  <hr class="docs-divider" />
+
+  <!-- ── Setup ─────────────────────────────────────────────── -->
+  <h2 class="docs-h2" id="setup">Setup</h2>
+
+  <h3 class="docs-h3">Option 1 — npx init (recommended)</h3>
+  <p class="docs-p">
+    Run once in your project root. Writes a ready-to-use context block into your agent's
+    rules file. Re-run after upgrading <code>@usevyre</code> packages to pick up changes.
+  </p>
+
+  <div class="docs-tabs" id="init-tabs">
+    <div class="docs-tabs__bar" role="tablist">
+      <button class="docs-tabs__tab docs-tabs__tab--active" role="tab" data-target="init-claude" type="button">Claude Code</button>
+      <button class="docs-tabs__tab" role="tab" data-target="init-cursor" type="button">Cursor</button>
+      <button class="docs-tabs__tab" role="tab" data-target="init-windsurf" type="button">Windsurf</button>
     </div>
-    <div class="vyre-card" style="padding:16px 20px">
-      <p style="margin:0 0 4px;font-weight:600;font-size:0.875rem">Import paths</p>
-      <p style="margin:0;font-size:0.8125rem;opacity:0.7">
-        Every component and its exact named export, so the agent never guesses the import.
-      </p>
+    <div id="init-claude" class="docs-tabs__panel">
+      <Code code={codeNpxClaude} lang="bash" theme="github-dark" />
+    </div>
+    <div id="init-cursor" class="docs-tabs__panel" hidden>
+      <Code code={codeNpxCursor} lang="bash" theme="github-dark" />
+    </div>
+    <div id="init-windsurf" class="docs-tabs__panel" hidden>
+      <Code code={codeNpxWindsurf} lang="bash" theme="github-dark" />
+    </div>
+  </div>
+
+  <h3 class="docs-h3">Option 2 — Paste manually</h3>
+  <p class="docs-p">
+    Copy the block below into <code>CLAUDE.md</code>, <code>.cursor/rules</code>,
+    <code>AGENTS.md</code>, or <code>.github/copilot-instructions.md</code>.
+  </p>
+  <Code code={codePaste} lang="markdown" theme="github-dark" />
+
+  <h3 class="docs-h3">Option 3 — Reference generated file (monorepo)</h3>
+  <p class="docs-p">
+    After building the tokens package, a full context file is written to
+    <code>packages/tokens/dist/ai-context.md</code>. Reference it directly —
+    it updates automatically when you rebuild.
+  </p>
+
+  <div class="docs-tabs" id="ref-tabs">
+    <div class="docs-tabs__bar" role="tablist">
+      <button class="docs-tabs__tab docs-tabs__tab--active" role="tab" data-target="ref-claude" type="button">CLAUDE.md</button>
+      <button class="docs-tabs__tab" role="tab" data-target="ref-cursor" type="button">.cursor/rules</button>
+    </div>
+    <div id="ref-claude" class="docs-tabs__panel">
+      <Code code={codeAutoFile} lang="markdown" theme="github-dark" />
+    </div>
+    <div id="ref-cursor" class="docs-tabs__panel" hidden>
+      <Code code={codeCursorRef} lang="markdown" theme="github-dark" />
+    </div>
+  </div>
+
+  <hr class="docs-divider" />
+
+  <!-- ── Validate ──────────────────────────────────────────── -->
+  <h2 class="docs-h2" id="validate">Validate AI-generated code</h2>
+  <p class="docs-p">
+    Run <code>@usevyre/validate-ai-context</code> after AI generation to catch any
+    hallucinated props before they hit CI. Works as a one-off check or in a GitHub
+    Actions workflow.
+  </p>
+  <Code code={codeValidate} lang="bash" theme="github-dark" />
+  <p class="docs-p">
+    See the <a href="/docs/ai-tooling/validate">validate-ai-context docs</a> for
+    CI integration and all available flags.
+  </p>
+
+  <hr class="docs-divider" />
+
+  <!-- ── Keeping context up to date ────────────────────────── -->
+  <h2 class="docs-h2" id="keeping-up-to-date">Keeping context up to date</h2>
+  <p class="docs-p">
+    The context block is versioned alongside the packages. When you upgrade
+    <code>@usevyre/react</code> or <code>@usevyre/vue</code>, re-run the init command
+    to pick up any new props, renamed variants, or removed anti-patterns.
+  </p>
+  <Code code={codeUpdate} lang="bash" theme="github-dark" />
+  <p class="docs-p">
+    You can also check the context version programmatically:
+  </p>
+  <Code code={codeCheckVersion} lang="ts" theme="github-dark" />
+
+  <hr class="docs-divider" />
+
+  <!-- ── Troubleshooting ───────────────────────────────────── -->
+  <h2 class="docs-h2" id="troubleshooting">Troubleshooting</h2>
+
+  <div class="ai-context-faq">
+    <details class="ai-context-faq__item">
+      <summary class="ai-context-faq__q">Agent still inventing props after adding context</summary>
+      <div class="ai-context-faq__a">
+        <p>Check that the context block is actually being read by the agent. In Claude Code,
+        the file must be named <code>CLAUDE.md</code> and be in your project root or an
+        ancestor directory. In Cursor, it must be in <code>.cursor/rules</code>. Verify
+        the file exists and is not gitignored.</p>
+        <p>If the file is present, the context block may be too far down the file. Move the
+        useVyre section toward the top so it stays within the agent's context window on long
+        conversations.</p>
+      </div>
+    </details>
+
+    <details class="ai-context-faq__item">
+      <summary class="ai-context-faq__q">TypeScript errors on valid props after agent generation</summary>
+      <div class="ai-context-faq__a">
+        <p>Likely a version mismatch — the agent was trained on an older version of the context.
+        Re-run <code>npx @usevyre/ai-context init --claude</code> to regenerate with the
+        current package versions, then ask the agent to fix the specific file.</p>
+        <p>Also run <code>npx @usevyre/validate-ai-context src/</code> to get an exact list
+        of invalid props with fix suggestions.</p>
+      </div>
+    </details>
+
+    <details class="ai-context-faq__item">
+      <summary class="ai-context-faq__q">Agent generates Vue syntax in a React project (or vice versa)</summary>
+      <div class="ai-context-faq__a">
+        <p>The context block includes both React and Vue import patterns. Add a one-line
+        clarifier at the top of your rules file:</p>
+        <Code code={`# This project uses @usevyre/react. Ignore Vue patterns below.`} lang="markdown" theme="github-dark" />
+      </div>
+    </details>
+
+    <details class="ai-context-faq__item">
+      <summary class="ai-context-faq__q">Toast / Modal not working despite correct props</summary>
+      <div class="ai-context-faq__a">
+        <p>These components require a provider at the app root that agents frequently skip:</p>
+        <ul>
+          <li><strong>React Toast:</strong> wrap your app with <code>&lt;ToastProvider&gt;</code> — the agent must add this to your entry file, not just the component file.</li>
+          <li><strong>Vue Toast:</strong> place <code>&lt;ToastViewport /&gt;</code> once in your root layout (<code>App.vue</code> or the layout component).</li>
+          <li><strong>React Modal:</strong> the <code>isOpen</code> + <code>onClose</code> props must both be wired — a modal with only <code>isOpen</code> cannot close.</li>
+        </ul>
+      </div>
+    </details>
+
+    <details class="ai-context-faq__item">
+      <summary class="ai-context-faq__q">validate-ai-context reports false positives</summary>
+      <div class="ai-context-faq__a">
+        <p>The validator scans for known anti-patterns by string matching. If you have a
+        legitimate use of a string that matches a pattern (e.g., a comment or a different
+        library's component), use <code>// vyre-ignore</code> on that line to suppress:</p>
+        <Code code={`<ThirdPartyButton color="red" /> {/* vyre-ignore */}`} lang="tsx" theme="github-dark" />
+      </div>
+    </details>
+  </div>
+
+  <hr class="docs-divider" />
+
+  <!-- ── What the context covers ───────────────────────────── -->
+  <h2 class="docs-h2" id="coverage">What the context covers</h2>
+
+  <div class="ai-context-coverage">
+    <div class="ai-context-coverage__item">
+      <span class="ai-context-coverage__icon">◈</span>
+      <div>
+        <strong>Token naming</strong>
+        <p><code>--vyre-color-semantic-accent</code> not <code>#7c3aed</code>. Semantic tokens adapt to light/dark automatically.</p>
+      </div>
+    </div>
+    <div class="ai-context-coverage__item">
+      <span class="ai-context-coverage__icon">⌥</span>
+      <div>
+        <strong>Exact prop names &amp; valid values</strong>
+        <p><code>variant="accent"</code> not <code>color="purple"</code>. Every enum value per component, no guessing.</p>
+      </div>
+    </div>
+    <div class="ai-context-coverage__item">
+      <span class="ai-context-coverage__icon">◉</span>
+      <div>
+        <strong>React vs Vue differences</strong>
+        <p>Controlled state, provider setup, event names — each framework's exact pattern documented.</p>
+      </div>
+    </div>
+    <div class="ai-context-coverage__item">
+      <span class="ai-context-coverage__icon">⬡</span>
+      <div>
+        <strong>Import paths</strong>
+        <p>Every named export from <code>@usevyre/react</code> and <code>@usevyre/vue</code> — the agent never guesses the import.</p>
+      </div>
+    </div>
+    <div class="ai-context-coverage__item">
+      <span class="ai-context-coverage__icon">⌘</span>
+      <div>
+        <strong>31 anti-patterns</strong>
+        <p>Explicit list of what not to generate: <code>size="xl"</code>, <code>variant="error"</code>, missing providers, and more.</p>
+      </div>
+    </div>
+    <div class="ai-context-coverage__item">
+      <span class="ai-context-coverage__icon">◎</span>
+      <div>
+        <strong>Composition rules</strong>
+        <p>Which sub-components are required: <code>Accordion &gt; AccordionItem &gt; AccordionTrigger + AccordionContent</code>, etc.</p>
+      </div>
     </div>
   </div>
 
@@ -182,3 +415,135 @@ console.log(tokens.color.semantic.accent); // "#7c3aed" (light)`;
     </a>
   </div>
 </DocsLayout>
+
+<style>
+/* ── Before / after split ─────────────────────────────── */
+.ai-context-split {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 12px;
+  margin: 16px 0;
+  min-width: 0;
+}
+@media (max-width: 720px) {
+  .ai-context-split { grid-template-columns: 1fr; }
+}
+.ai-context-split__col {
+  min-width: 0;
+  overflow: hidden;
+}
+.ai-context-split__col pre {
+  overflow-x: auto;
+  max-width: 100%;
+}
+.ai-context-split__label {
+  font-size: 12px;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  margin: 0 0 6px;
+}
+.ai-context-split__label--bad  { color: var(--vyre-color-semantic-danger); }
+.ai-context-split__label--good { color: var(--vyre-color-semantic-success); }
+
+/* ── FAQ / troubleshooting ────────────────────────────── */
+.ai-context-faq {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  margin: 16px 0;
+}
+.ai-context-faq__item {
+  border: 1px solid var(--vyre-color-semantic-border-subtle);
+  border-radius: var(--vyre-radius-md);
+  overflow: hidden;
+}
+.ai-context-faq__item[open] {
+  border-color: var(--vyre-color-semantic-border);
+}
+.ai-context-faq__q {
+  padding: 14px 16px;
+  font-size: 14px;
+  font-weight: 500;
+  cursor: pointer;
+  list-style: none;
+  color: var(--vyre-color-semantic-text-primary);
+  background: var(--vyre-color-semantic-surface);
+  user-select: none;
+}
+.ai-context-faq__q::-webkit-details-marker { display: none; }
+.ai-context-faq__q::before {
+  content: "+ ";
+  color: var(--vyre-color-semantic-accent);
+  font-weight: 600;
+}
+.ai-context-faq__item[open] .ai-context-faq__q::before { content: "− "; }
+.ai-context-faq__q:hover { color: var(--vyre-color-semantic-accent); }
+.ai-context-faq__a {
+  padding: 16px;
+  font-size: 14px;
+  line-height: 1.65;
+  color: var(--vyre-color-semantic-text-secondary);
+  border-top: 1px solid var(--vyre-color-semantic-border-subtle);
+  background: var(--vyre-color-semantic-background);
+}
+.ai-context-faq__a p { margin: 0 0 10px; }
+.ai-context-faq__a p:last-child { margin-bottom: 0; }
+.ai-context-faq__a ul {
+  margin: 8px 0;
+  padding-left: 20px;
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+.ai-context-faq__a :global(.astro-code) { margin: 10px 0 0; }
+
+/* ── Coverage grid ────────────────────────────────────── */
+.ai-context-coverage {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  margin: 16px 0;
+}
+.ai-context-coverage__item {
+  display: flex;
+  gap: 14px;
+  padding: 14px 16px;
+  border-radius: var(--vyre-radius-md);
+  border: 1px solid var(--vyre-color-semantic-border-subtle);
+  background: var(--vyre-color-semantic-surface-raised);
+  font-size: 14px;
+}
+.ai-context-coverage__icon {
+  flex-shrink: 0;
+  font-size: 16px;
+  color: var(--vyre-color-semantic-accent);
+  margin-top: 1px;
+}
+.ai-context-coverage__item strong {
+  display: block;
+  margin-bottom: 4px;
+  color: var(--vyre-color-semantic-text-primary);
+}
+.ai-context-coverage__item p {
+  margin: 0;
+  color: var(--vyre-color-semantic-text-secondary);
+  line-height: 1.5;
+}
+</style>
+
+<script>
+  document.querySelectorAll(".docs-tabs").forEach((wrapper) => {
+    const tabs   = wrapper.querySelectorAll<HTMLButtonElement>(".docs-tabs__tab");
+    const panels = wrapper.querySelectorAll<HTMLElement>(".docs-tabs__panel");
+    tabs.forEach((tab) => {
+      tab.addEventListener("click", () => {
+        tabs.forEach((t)   => t.classList.remove("docs-tabs__tab--active"));
+        panels.forEach((p) => { p.hidden = true; });
+        tab.classList.add("docs-tabs__tab--active");
+        const target = document.getElementById(tab.dataset.target!);
+        if (target) target.hidden = false;
+      });
+    });
+  });
+</script>
