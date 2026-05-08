@@ -34,9 +34,25 @@ const codeEnumError = `// ❌ Error: 'xl' is not a valid value for Button size. 
 const codeHallucinatedProp = `// ❌ Error: 'color' prop does not exist on Button → Use variant= instead
 <Button color="blue">Click me</Button>`;
 
-const codeCI = `# GitHub Actions
-- name: Validate useVyre usage
-  run: npx @usevyre/validate-ai-context src/ --quiet`;
+const codeCI = `# .github/workflows/validate-ai.yml
+name: Validate AI-generated code
+
+on:
+  pull_request:
+    paths: ["**/*.tsx", "**/*.ts", "**/*.vue"]
+
+jobs:
+  validate:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: pnpm/action-setup@v3
+        with: { version: 9 }
+      - uses: actions/setup-node@v4
+        with: { node-version: 20, cache: pnpm }
+      - run: pnpm install --frozen-lockfile
+      - name: Validate useVyre props
+        run: npx @usevyre/validate-ai-context src/ --json`;
 
 const codeJson = `# JSON output for custom reporting
 validate-ai-context --json > validation-results.json`;
