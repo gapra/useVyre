@@ -3,6 +3,7 @@ import DocsLayout       from "@/layouts/DocsLayout.astro";
 import ComponentPreview from "@/components/docs/ComponentPreview.astro";
 import CodeTabs        from "@/components/docs/CodeTabs.astro";
 import PropsTable       from "@/components/docs/PropsTable.astro";
+import AICheatSheet from "@/components/docs/AICheatSheet.astro";
 import { LabelDemo } from "@/components/demos/Tier1Demos";
 
 const codeBasicReact = `import { Label } from "@usevyre/react";
@@ -45,7 +46,7 @@ const props = [
 ];
 ---
 
-<DocsLayout title="Label">
+<DocsLayout title="Label" component="Label">
   <div class="docs-header">
     <div class="docs-header__meta">
       <span class="vyre-badge vyre-badge--default">@usevyre/react</span>
@@ -73,6 +74,8 @@ const props = [
 
   <h2 class="docs-h2">Props</h2>
   <PropsTable props={props} />
+
+  <AICheatSheet component="Label" />
 
   <div class="docs-pagination">
     <a href="/docs/components/checkbox" class="docs-pagination__link docs-pagination__link--prev">

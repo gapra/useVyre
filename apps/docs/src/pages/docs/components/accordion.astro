@@ -2,6 +2,7 @@
 import DocsLayout       from "@/layouts/DocsLayout.astro";
 import ComponentPreview from "@/components/docs/ComponentPreview.astro";
 import PropsTable       from "@/components/docs/PropsTable.astro";
+import AICheatSheet    from "@/components/docs/AICheatSheet.astro";
 import { AccordionDemo } from "@/components/demos/Tier1Demos";
 import { AccordionSingleDemo, AccordionMultipleDemo } from "@/components/demos/SelectTabsDemo";
 
@@ -63,7 +64,7 @@ const itemProps = [
 ];
 ---
 
-<DocsLayout title="Accordion">
+<DocsLayout title="Accordion" component="Accordion">
   <div class="docs-header">
     <div class="docs-header__meta">
       <span class="vyre-badge vyre-badge--default">@usevyre/react</span>
@@ -96,6 +97,8 @@ const itemProps = [
 
   <h2 class="docs-h2">AccordionItem props</h2>
   <PropsTable props={itemProps} />
+
+  <AICheatSheet component="Accordion" />
 
   <div class="docs-pagination">
     <a href="/docs/components/tooltip" class="docs-pagination__link docs-pagination__link--prev">

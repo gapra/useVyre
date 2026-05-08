@@ -2,6 +2,7 @@
 import DocsLayout        from "@/layouts/DocsLayout.astro";
 import ComponentPreview  from "@/components/docs/ComponentPreview.astro";
 import PropsTable        from "@/components/docs/PropsTable.astro";
+import AICheatSheet      from "@/components/docs/AICheatSheet.astro";
 import { ButtonVariantsDemo, ButtonSizesDemo, ButtonStatesDemo } from "@/components/demos/ButtonDemo";
 
 const codeVariantsReact = `import { Button } from "@usevyre/react";
@@ -94,7 +95,7 @@ const props = [
 ];
 ---
 
-<DocsLayout title="Button">
+<DocsLayout title="Button" component="Button">
   <div class="docs-header">
     <div class="docs-header__meta">
       <span class="vyre-badge vyre-badge--default">@usevyre/react</span>
@@ -161,6 +162,9 @@ const props = [
   <!-- Props -->
   <h2 class="docs-h2">Props</h2>
   <PropsTable props={props} />
+
+  <!-- AI Cheat Sheet -->
+  <AICheatSheet component="Button" />
 
   <!-- Nav -->
   <div class="docs-pagination">

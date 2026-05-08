@@ -2,6 +2,7 @@
 import DocsLayout       from "@/layouts/DocsLayout.astro";
 import ComponentPreview from "@/components/docs/ComponentPreview.astro";
 import PropsTable       from "@/components/docs/PropsTable.astro";
+import AICheatSheet    from "@/components/docs/AICheatSheet.astro";
 import {
   DropdownBasicDemo,
   DropdownCheckboxDemo,
@@ -149,7 +150,7 @@ const subProps = [
 ];
 ---
 
-<DocsLayout title="Dropdown Menu">
+<DocsLayout title="Dropdown Menu" component="DropdownMenu">
   <div class="docs-header">
     <div class="docs-header__meta">
       <span class="vyre-badge vyre-badge--default">@usevyre/react</span>
@@ -214,6 +215,8 @@ const subProps = [
 
   <h2 class="docs-h2">DropdownSub props</h2>
   <PropsTable props={subProps} />
+
+  <AICheatSheet component="DropdownMenu" />
 
   <div class="docs-pagination">
     <a href="/docs/components/popover" class="docs-pagination__link docs-pagination__link--prev">

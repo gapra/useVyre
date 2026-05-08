@@ -11,7 +11,10 @@ const { currentPath } = Astro.props;
 <nav class="sidebar" aria-label="Docs navigation">
   {navigation.map((section) => (
     <div class="sidebar__section">
-      <p class="sidebar__heading">{section.title}</p>
+      {section.title === "Components"
+        ? <a href="/docs/components" class="sidebar__heading sidebar__heading--link">{section.title}</a>
+        : <p class="sidebar__heading">{section.title}</p>
+      }
       <ul class="sidebar__list" role="list">
         {section.items.map((item) => {
           const isActive = currentPath === item.href ||

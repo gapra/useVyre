@@ -1,6 +1,7 @@
 ---
 import DocsLayout       from "@/layouts/DocsLayout.astro";
 import ComponentPreview from "@/components/docs/ComponentPreview.astro";
+import AICheatSheet      from "@/components/docs/AICheatSheet.astro";
 import PropsTable       from "@/components/docs/PropsTable.astro";
 
 const codeBasicReact = `import { Input } from "@usevyre/react";
@@ -68,7 +69,7 @@ const fieldProps = [
 ];
 ---
 
-<DocsLayout title="Input">
+<DocsLayout title="Input" component="Input">
   <div class="docs-header">
     <div class="docs-header__meta">
       <span class="vyre-badge vyre-badge--default">@usevyre/react</span>
@@ -129,6 +130,8 @@ const fieldProps = [
 
   <h2 class="docs-h2">Field props</h2>
   <PropsTable props={fieldProps} />
+
+  <AICheatSheet component="Field" />
 
   <div class="docs-pagination">
     <a href="/docs/components/card" class="docs-pagination__link docs-pagination__link--prev">

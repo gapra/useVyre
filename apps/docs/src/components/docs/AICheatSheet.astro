@@ -1,0 +1,328 @@
+---
+/**
+ * AI Cheat Sheet — collapsible section for every component docs page.
+ * Data comes from @usevyre/ai-context schema so it's always in sync.
+ */
+import { readFileSync } from "node:fs";
+import { fileURLToPath } from "node:url";
+import { resolve, dirname } from "node:path";
+
+export interface Props {
+  component: string;
+}
+
+const schemaPath = resolve(
+  dirname(fileURLToPath(import.meta.url)),
+  "../../../node_modules/@usevyre/ai-context/dist/schema.json"
+);
+const schema = JSON.parse(readFileSync(schemaPath, "utf-8"));
+
+const { component } = Astro.props;
+const comp = schema.components[component];
+if (!comp) throw new Error(`AICheatSheet: unknown component "${component}"`);
+
+const props = comp.props ?? {};
+const allProps = Object.entries(props);
+const enumProps = allProps.filter(([, p]) => p.values);
+const boolProps = allProps.filter(([, p]) => p.type === "boolean");
+const antiPatterns = comp.antiPatterns ?? [];
+const examples = (comp.examples ?? []).slice(0, 2);
+
+// Copy-to-clipboard text: markdown-formatted cheat sheet
+const propTableRows = [
+  ...enumProps.map(([n, p]) =>
+    `| \`${n}\` | ${p.values.map((v) => `\`"${v}"\``).join(" \\| ")} | \`${p.default ?? "—"}\` |`
+  ),
+  ...boolProps.map(([n, p]) =>
+    `| \`${n}\` | \`true\` \\| \`false\` | \`${p.default ?? false}\` |`
+  ),
+].join("\n");
+
+const avoidLines = antiPatterns.map((ap) => `- ❌ \`${ap.pattern}\` → ${ap.fix}`).join("\n");
+
+const exampleBlocks = (comp.examples ?? []).slice(0, 2).map((ex) =>
+  `// ${ex.description}\n${ex.code}`
+).join("\n\n");
+
+const copyText = [
+  `## ${component} — useVyre AI Context`,
+  "",
+  "```tsx",
+  comp.import,
+  "```",
+  ...(propTableRows ? [
+    "",
+    "### Props",
+    "| Prop | Values | Default |",
+    "|------|--------|---------|",
+    propTableRows,
+  ] : []),
+  ...(avoidLines ? [
+    "",
+    "### Avoid",
+    avoidLines,
+  ] : []),
+  ...(exampleBlocks ? [
+    "",
+    "### Examples",
+    "```tsx",
+    exampleBlocks,
+    "```",
+  ] : []),
+].join("\n");
+
+const id = `acs-${component.toLowerCase()}`;
+---
+
+<details class="acs" id={id}>
+  <summary class="acs__trigger">
+    <span class="acs__icon" aria-hidden="true">
+      <svg width="14" height="14" viewBox="0 0 14 14" fill="none">
+        <rect x="1" y="3" width="12" height="9" rx="1.5" stroke="currentColor" stroke-width="1.3"/>
+        <path d="M4 1v2M10 1v2M1 6h12" stroke="currentColor" stroke-width="1.3" stroke-linecap="round"/>
+        <path d="M4 9h2M8 9h2" stroke="currentColor" stroke-width="1.3" stroke-linecap="round"/>
+      </svg>
+    </span>
+    AI Context
+    <span class="acs__badge">for Claude · Cursor · Copilot</span>
+    <span class="acs__chevron" aria-hidden="true">
+      <svg width="12" height="12" viewBox="0 0 12 12" fill="none">
+        <path d="M3 4.5L6 7.5L9 4.5" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+      </svg>
+    </span>
+  </summary>
+
+  <div class="acs__body">
+
+    {(enumProps.length > 0 || boolProps.length > 0) && (
+      <div class="acs__section">
+        <p class="acs__label">Valid props</p>
+        <table class="acs__table">
+          <thead>
+            <tr><th>Prop</th><th>Values</th><th>Default</th></tr>
+          </thead>
+          <tbody>
+            {enumProps.map(([n, p]) => (
+              <tr>
+                <td><code class="acs__code">{n}</code></td>
+                <td class="acs__values">
+                  {p.values.map((v, i) => (
+                    <><code class="acs__val">{`"${v}"`}</code>{i < p.values.length - 1 && <span class="acs__pipe">|</span>}</>
+                  ))}
+                </td>
+                <td>{p.default !== undefined ? <code class="acs__code">{String(p.default)}</code> : <span class="acs__empty">—</span>}</td>
+              </tr>
+            ))}
+            {boolProps.map(([n, p]) => (
+              <tr>
+                <td><code class="acs__code">{n}</code></td>
+                <td class="acs__values">
+                  <code class="acs__val">true</code>
+                  <span class="acs__pipe">|</span>
+                  <code class="acs__val">false</code>
+                </td>
+                <td><code class="acs__code">{String(p.default ?? false)}</code></td>
+              </tr>
+            ))}
+          </tbody>
+        </table>
+      </div>
+    )}
+
+    {antiPatterns.length > 0 && (
+      <div class="acs__section">
+        <p class="acs__label">Common AI mistakes</p>
+        <ul class="acs__mistakes">
+          {antiPatterns.map((ap) => (
+            <li class="acs__mistake">
+              <span class="acs__mistake-bad">❌ <code>{ap.pattern}</code></span>
+              <span class="acs__mistake-fix">→ {ap.fix}</span>
+            </li>
+          ))}
+        </ul>
+      </div>
+    )}
+
+    {examples.length > 0 && (
+      <div class="acs__section">
+        <p class="acs__label">Quick examples</p>
+        {examples.map((ex) => (
+          <div class="acs__example">
+            <span class="acs__example-label">{ex.description}</span>
+            <pre class="acs__pre"><code>{ex.code}</code></pre>
+          </div>
+        ))}
+      </div>
+    )}
+
+    <div class="acs__footer">
+      <button class="acs__copy" data-copy={copyText} type="button">
+        <svg width="13" height="13" viewBox="0 0 14 14" fill="none" aria-hidden="true">
+          <rect x="4" y="4" width="8" height="8" rx="1" stroke="currentColor" stroke-width="1.3"/>
+          <path d="M2 10V2h8" stroke="currentColor" stroke-width="1.3" stroke-linecap="round"/>
+        </svg>
+        Copy for CLAUDE.md / .cursor/rules
+      </button>
+    </div>
+
+  </div>
+</details>
+
+<script>
+  document.querySelectorAll<HTMLButtonElement>(".acs__copy").forEach((btn) => {
+    btn.addEventListener("click", async () => {
+      await navigator.clipboard.writeText(btn.dataset.copy ?? "");
+      const orig = btn.textContent ?? "";
+      btn.textContent = "Copied!";
+      setTimeout(() => { btn.textContent = orig; }, 2000);
+    });
+  });
+</script>
+
+<style>
+  .acs {
+    border: 1px solid var(--vyre-color-semantic-border-subtle);
+    border-radius: var(--vyre-border-radius-lg);
+    overflow: hidden;
+    margin: var(--vyre-spacing-8) 0;
+  }
+
+  .acs__trigger {
+    display: flex;
+    align-items: center;
+    gap: var(--vyre-spacing-2);
+    padding: var(--vyre-spacing-3) var(--vyre-spacing-4);
+    cursor: pointer;
+    font-size: var(--vyre-typography-font-size-sm);
+    font-weight: var(--vyre-typography-font-weight-medium);
+    color: var(--vyre-color-semantic-text-secondary);
+    background: var(--vyre-color-semantic-surface);
+    list-style: none;
+    user-select: none;
+  }
+  .acs__trigger::-webkit-details-marker { display: none; }
+  .acs__trigger:hover { color: var(--vyre-color-semantic-text-primary); }
+
+  .acs__icon { display: flex; color: var(--vyre-color-semantic-accent); }
+
+  .acs__badge {
+    margin-left: var(--vyre-spacing-1);
+    padding: 2px 7px;
+    border-radius: var(--vyre-border-radius-full);
+    font-size: var(--vyre-typography-font-size-xs);
+    font-weight: var(--vyre-typography-font-weight-regular);
+    background: var(--vyre-color-semantic-accent-subtle);
+    color: var(--vyre-color-semantic-accent);
+  }
+
+  .acs__chevron {
+    margin-left: auto;
+    display: flex;
+    transition: transform 0.2s;
+  }
+  details[open] .acs__chevron { transform: rotate(180deg); }
+
+  .acs__body {
+    padding: var(--vyre-spacing-4);
+    border-top: 1px solid var(--vyre-color-semantic-border-subtle);
+    background: var(--vyre-color-semantic-background);
+    display: flex;
+    flex-direction: column;
+    gap: var(--vyre-spacing-4);
+  }
+
+  .acs__section { display: flex; flex-direction: column; gap: var(--vyre-spacing-2); }
+
+  .acs__label {
+    font-size: var(--vyre-typography-font-size-xs);
+    font-weight: var(--vyre-typography-font-weight-semibold);
+    text-transform: uppercase;
+    letter-spacing: 0.06em;
+    color: var(--vyre-color-semantic-text-muted);
+    margin: 0;
+  }
+
+  .acs__table {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: var(--vyre-typography-font-size-sm);
+  }
+  .acs__table th {
+    text-align: left;
+    padding: var(--vyre-spacing-1) var(--vyre-spacing-2);
+    font-size: var(--vyre-typography-font-size-xs);
+    font-weight: var(--vyre-typography-font-weight-medium);
+    color: var(--vyre-color-semantic-text-muted);
+    border-bottom: 1px solid var(--vyre-color-semantic-border-subtle);
+  }
+  .acs__table td {
+    padding: var(--vyre-spacing-1) var(--vyre-spacing-2);
+    vertical-align: top;
+    border-bottom: 1px solid var(--vyre-color-semantic-border-subtle);
+  }
+  .acs__table tr:last-child td { border-bottom: none; }
+
+  .acs__values { display: flex; flex-wrap: wrap; align-items: center; gap: 4px; }
+  .acs__pipe { color: var(--vyre-color-semantic-text-muted); font-size: 10px; }
+
+  .acs__code, .acs__val {
+    font-family: var(--vyre-typography-font-family-mono);
+    font-size: var(--vyre-typography-font-size-xs);
+    padding: 1px 5px;
+    border-radius: var(--vyre-border-radius-sm);
+    background: var(--vyre-color-semantic-surface-raised);
+    color: var(--vyre-color-semantic-teal);
+  }
+  .acs__empty { color: var(--vyre-color-semantic-text-muted); }
+
+  .acs__mistakes { list-style: none; margin: 0; padding: 0; display: flex; flex-direction: column; gap: var(--vyre-spacing-2); }
+  .acs__mistake { display: flex; flex-direction: column; gap: 2px; font-size: var(--vyre-typography-font-size-sm); }
+  .acs__mistake-bad code {
+    font-family: var(--vyre-typography-font-family-mono);
+    font-size: var(--vyre-typography-font-size-xs);
+    padding: 1px 5px;
+    border-radius: var(--vyre-border-radius-sm);
+    background: var(--vyre-color-semantic-danger-subtle);
+    color: var(--vyre-color-semantic-danger);
+  }
+  .acs__mistake-fix {
+    padding-left: var(--vyre-spacing-4);
+    color: var(--vyre-color-semantic-text-secondary);
+    font-size: var(--vyre-typography-font-size-xs);
+  }
+
+  .acs__example { display: flex; flex-direction: column; gap: var(--vyre-spacing-1); }
+  .acs__example-label {
+    font-size: var(--vyre-typography-font-size-xs);
+    color: var(--vyre-color-semantic-text-muted);
+  }
+  .acs__pre {
+    margin: 0;
+    padding: var(--vyre-spacing-3);
+    background: var(--vyre-color-semantic-surface);
+    border-radius: var(--vyre-border-radius-md);
+    overflow-x: auto;
+    font-size: var(--vyre-typography-font-size-xs);
+    font-family: var(--vyre-typography-font-family-mono);
+    line-height: 1.6;
+  }
+
+  .acs__footer { display: flex; }
+  .acs__copy {
+    display: inline-flex;
+    align-items: center;
+    gap: var(--vyre-spacing-1);
+    padding: var(--vyre-spacing-1) var(--vyre-spacing-3);
+    border-radius: var(--vyre-border-radius-md);
+    border: 1px solid var(--vyre-color-semantic-border);
+    background: var(--vyre-color-semantic-surface);
+    color: var(--vyre-color-semantic-text-secondary);
+    font-size: var(--vyre-typography-font-size-xs);
+    cursor: pointer;
+    transition: background 0.15s, color 0.15s;
+  }
+  .acs__copy:hover {
+    background: var(--vyre-color-semantic-surface-raised);
+    color: var(--vyre-color-semantic-text-primary);
+  }
+</style>

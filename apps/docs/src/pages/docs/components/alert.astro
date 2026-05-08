@@ -1,6 +1,7 @@
 ---
 import DocsLayout       from "@/layouts/DocsLayout.astro";
 import ComponentPreview from "@/components/docs/ComponentPreview.astro";
+import AICheatSheet      from "@/components/docs/AICheatSheet.astro";
 import PropsTable       from "@/components/docs/PropsTable.astro";
 import { AlertVariantsDemo, AlertNoTitleDemo, AlertDialogDemo, AlertDialogVariantsDemo } from "@/components/demos/Tier2Demo";
 
@@ -106,7 +107,7 @@ const dialogProps = [
 ];
 ---
 
-<DocsLayout title="Alert">
+<DocsLayout title="Alert" component="Alert">
   <div class="docs-header">
     <div class="docs-header__meta">
       <span class="vyre-badge vyre-badge--default">@usevyre/react</span>
@@ -157,6 +158,8 @@ const dialogProps = [
 
   <h2 class="docs-h2">AlertDialog props</h2>
   <PropsTable props={dialogProps} />
+
+  <AICheatSheet component="Alert" />
 
   <div class="docs-pagination">
     <a href="/docs/components/dropdown-menu" class="docs-pagination__link docs-pagination__link--prev">

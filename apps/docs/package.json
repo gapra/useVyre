@@ -10,6 +10,7 @@
   "dependencies": {
     "@astrojs/react": "^3.6.0",
     "@astrojs/vue": "^4.5.0",
+    "@usevyre/ai-context": "workspace:*",
     "@usevyre/react": "workspace:*",
     "@usevyre/tokens": "workspace:*",
     "@usevyre/vue": "workspace:*",

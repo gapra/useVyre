@@ -1,0 +1,111 @@
+---
+import DocsLayout from "@/layouts/DocsLayout.astro";
+
+const codePackageJson = `{
+  "scripts": {
+    "validate": "validate-ai-context src/"
+  }
+}`;
+
+const codeUsage = `validate-ai-context [paths...] [options]
+
+# Scan default src/ directory
+validate-ai-context
+
+# Scan specific directory or file
+validate-ai-context src/components
+validate-ai-context src/pages/dashboard.tsx
+
+# Only show errors, suppress warnings
+validate-ai-context --quiet
+
+# Output as JSON (useful for CI parsing)
+validate-ai-context --json
+
+# Custom file extensions
+validate-ai-context --ext=tsx,jsx`;
+
+const codeEnumError = `// ❌ Error: 'xl' is not a valid value for Button size. Valid: sm, md, lg, icon
+<Button size="xl">Submit</Button>
+
+// ❌ Error: 'error' is not a valid value for Alert variant. Valid: info, success, warning, danger
+<Alert variant="error">Something went wrong</Alert>`;
+
+const codeHallucinatedProp = `// ❌ Error: 'color' prop does not exist on Button → Use variant= instead
+<Button color="blue">Click me</Button>`;
+
+const codeCI = `# GitHub Actions
+- name: Validate useVyre usage
+  run: npx @usevyre/validate-ai-context src/ --quiet`;
+
+const codeJson = `# JSON output for custom reporting
+validate-ai-context --json > validation-results.json`;
+---
+
+<DocsLayout title="validate-ai-context">
+  <div class="docs-header">
+    <div class="docs-header__meta">
+      <span class="vyre-badge vyre-badge--accent">npm</span>
+      <span class="vyre-badge vyre-badge--default">v0.1.0</span>
+    </div>
+    <h1 class="docs-title">validate-ai-context</h1>
+    <p class="docs-lead">
+      CLI tool that scans your JSX/TSX files for invalid useVyre component usage.
+      Catches AI hallucinations — wrong prop values, non-existent props — before they ship to production.
+    </p>
+  </div>
+
+  <hr class="docs-divider" />
+
+  <h2 class="docs-h2">Quick start</h2>
+  <p class="docs-p">Run without installing — scans <code>src/</code> by default:</p>
+  <pre class="docs-pre"><code>npx @usevyre/validate-ai-context</code></pre>
+
+  <h2 class="docs-h2">Installation</h2>
+  <pre class="docs-pre"><code>npm install --save-dev @usevyre/validate-ai-context
+# or
+pnpm add -D @usevyre/validate-ai-context</code></pre>
+
+  <p class="docs-p">Add to <code>package.json</code> scripts:</p>
+  <pre class="docs-pre"><code set:text={codePackageJson} /></pre>
+
+  <h2 class="docs-h2">Usage</h2>
+  <pre class="docs-pre"><code set:text={codeUsage} /></pre>
+
+  <h2 class="docs-h2">What it catches</h2>
+
+  <h3 class="docs-h3">Invalid enum values</h3>
+  <p class="docs-p">Props with a defined set of valid values — catches typos and hallucinated variants:</p>
+  <pre class="docs-pre"><code set:text={codeEnumError} /></pre>
+
+  <h3 class="docs-h3">Hallucinated props</h3>
+  <p class="docs-p">Props that don't exist on the component at all:</p>
+  <pre class="docs-pre"><code set:text={codeHallucinatedProp} /></pre>
+
+  <h2 class="docs-h2">CI integration</h2>
+  <p class="docs-p">Exits with code <code>1</code> if errors are found — works in any CI pipeline:</p>
+  <pre class="docs-pre"><code set:text={codeCI} /></pre>
+  <pre class="docs-pre"><code set:text={codeJson} /></pre>
+
+  <h2 class="docs-h2">Exit codes</h2>
+  <div class="docs-table-wrapper">
+    <table class="docs-table">
+      <thead>
+        <tr><th>Code</th><th>Meaning</th></tr>
+      </thead>
+      <tbody>
+        <tr><td><code>0</code></td><td>No errors (warnings may still exist)</td></tr>
+        <tr><td><code>1</code></td><td>One or more errors found</td></tr>
+      </tbody>
+    </table>
+  </div>
+
+  <div class="docs-pagination">
+    <a href="/docs/ai-tooling/ai-context-pkg" class="docs-pagination__link docs-pagination__link--prev">
+      ← @usevyre/ai-context
+    </a>
+    <a href="/docs/ai-tooling/eslint-plugin" class="docs-pagination__link docs-pagination__link--next">
+      eslint-plugin-vyre →
+    </a>
+  </div>
+</DocsLayout>

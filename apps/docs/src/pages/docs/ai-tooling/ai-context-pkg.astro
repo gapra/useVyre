@@ -1,0 +1,122 @@
+---
+import DocsLayout from "@/layouts/DocsLayout.astro";
+
+const codeClaude = `node -e "
+const { claudeContext } = await import('@usevyre/ai-context');
+require('fs').writeFileSync('CLAUDE.md', claudeContext);
+"`;
+
+const codeClaudePrompt = `import { claudeContext } from '@usevyre/ai-context';
+// inject into system prompt
+const systemPrompt = claudeContext + yourOtherInstructions;`;
+
+const codeCursor = `node -e "
+const { cursorRules } = await import('@usevyre/ai-context');
+require('fs').mkdirSync('.cursor', { recursive: true });
+require('fs').writeFileSync('.cursor/rules', cursorRules);
+"`;
+
+const codeWindsurf = `node -e "
+const { windsurfRules } = await import('@usevyre/ai-context');
+require('fs').mkdirSync('.windsurf', { recursive: true });
+require('fs').writeFileSync('.windsurf/rules', windsurfRules);
+"`;
+
+const codeCopilot = `node -e "
+const { copilotInstructions } = await import('@usevyre/ai-context');
+require('fs').mkdirSync('.github', { recursive: true });
+require('fs').writeFileSync('.github/copilot-instructions.md', copilotInstructions);
+"`;
+
+const codeApi = `import {
+  schema,              // full component schema
+  antiPatterns,        // all hallucination patterns
+  versionInfo,         // version + compatible package versions
+  cheatSheets,         // per-component cheat sheet strings
+  claudeContext,       // ready-to-paste CLAUDE.md content
+  cursorRules,         // ready-to-paste .cursor/rules content
+  windsurfRules,       // ready-to-paste .windsurf/rules content
+  copilotInstructions,
+} from '@usevyre/ai-context';
+
+// Access a single component
+const button = schema.components.Button;
+console.log(button.props.variant.values);
+// → ["primary", "secondary", "ghost", "accent", "teal", "danger"]`;
+---
+
+<DocsLayout title="@usevyre/ai-context">
+  <div class="docs-header">
+    <div class="docs-header__meta">
+      <span class="vyre-badge vyre-badge--accent">npm</span>
+      <span class="vyre-badge vyre-badge--default">v0.2.0</span>
+    </div>
+    <h1 class="docs-title">@usevyre/ai-context</h1>
+    <p class="docs-lead">
+      Single source of truth for all AI tooling. Generates structured context for Claude,
+      Cursor, Windsurf, and Copilot — component schemas, cheat sheets, anti-patterns, and
+      version info — all from one <code>components.json</code> file.
+    </p>
+  </div>
+
+  <hr class="docs-divider" />
+
+  <h2 class="docs-h2">Installation</h2>
+  <pre class="docs-pre"><code>npm install @usevyre/ai-context
+# or
+pnpm add @usevyre/ai-context</code></pre>
+
+  <h2 class="docs-h2">Usage per tool</h2>
+  <p class="docs-p">
+    Each AI tool has a dedicated export. Copy the content into your project's config file
+    once — it stays in sync whenever you update the package.
+  </p>
+
+  <div class="docs-callout docs-callout--teal">
+    The package ships pre-built markdown files — no build step required in your project.
+  </div>
+
+  <h3 class="docs-h3">Claude (CLAUDE.md)</h3>
+  <pre class="docs-pre"><code set:text={codeClaude} /></pre>
+  <p class="docs-p">Or reference directly in your system prompt:</p>
+  <pre class="docs-pre"><code set:text={codeClaudePrompt} /></pre>
+
+  <h3 class="docs-h3">Cursor (.cursor/rules)</h3>
+  <pre class="docs-pre"><code set:text={codeCursor} /></pre>
+
+  <h3 class="docs-h3">Windsurf (.windsurf/rules)</h3>
+  <pre class="docs-pre"><code set:text={codeWindsurf} /></pre>
+
+  <h3 class="docs-h3">Copilot (.github/copilot-instructions.md)</h3>
+  <pre class="docs-pre"><code set:text={codeCopilot} /></pre>
+
+  <h2 class="docs-h2">Exports</h2>
+  <div class="docs-table-wrapper">
+    <table class="docs-table">
+      <thead>
+        <tr><th>Export path</th><th>Content</th></tr>
+      </thead>
+      <tbody>
+        <tr><td><code>@usevyre/ai-context</code></td><td>JS module — all exports as structured data</td></tr>
+        <tr><td><code>@usevyre/ai-context/claude</code></td><td>CLAUDE.md formatted markdown</td></tr>
+        <tr><td><code>@usevyre/ai-context/cursor</code></td><td>.cursor/rules formatted markdown</td></tr>
+        <tr><td><code>@usevyre/ai-context/windsurf</code></td><td>.windsurf/rules formatted markdown</td></tr>
+        <tr><td><code>@usevyre/ai-context/copilot</code></td><td>.github/copilot-instructions.md markdown</td></tr>
+        <tr><td><code>@usevyre/ai-context/schema</code></td><td>Full component schema JSON</td></tr>
+        <tr><td><code>@usevyre/ai-context/anti-patterns</code></td><td>All hallucination patterns JSON</td></tr>
+        <tr><td><code>@usevyre/ai-context/cheat-sheets</code></td><td>Per-component cheat sheet index</td></tr>
+        <tr><td><code>@usevyre/ai-context/version-info</code></td><td>Version and compatibility info</td></tr>
+      </tbody>
+    </table>
+  </div>
+
+  <h2 class="docs-h2">JS API</h2>
+  <pre class="docs-pre"><code set:text={codeApi} /></pre>
+
+  <div class="docs-pagination">
+    <span></span>
+    <a href="/docs/ai-tooling/validate" class="docs-pagination__link docs-pagination__link--next">
+      validate-ai-context →
+    </a>
+  </div>
+</DocsLayout>

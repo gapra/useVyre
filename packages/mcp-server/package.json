@@ -1,0 +1,36 @@
+{
+  "name": "@usevyre/mcp-server",
+  "version": "0.1.0",
+  "description": "useVyre MCP server — gives Claude Desktop real-time access to component context",
+  "keywords": [
+    "mcp",
+    "model-context-protocol",
+    "design-system",
+    "claude",
+    "ai",
+    "vyre"
+  ],
+  "homepage": "https://usevyre.com/docs/mcp",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/gapra/usevyre"
+  },
+  "license": "MIT",
+  "type": "module",
+  "bin": {
+    "usevyre-mcp": "./src/index.js"
+  },
+  "exports": {
+    ".": "./src/index.js"
+  },
+  "files": [
+    "src"
+  ],
+  "dependencies": {
+    "@modelcontextprotocol/sdk": "^1.0.0",
+    "@usevyre/ai-context": "workspace:*"
+  },
+  "engines": {
+    "node": ">=18.0.0"
+  }
+}

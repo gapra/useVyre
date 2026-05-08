@@ -1,0 +1,98 @@
+---
+import DocsLayout from "@/layouts/DocsLayout.astro";
+import { navigation } from "@/data/nav";
+
+const components = navigation.find(s => s.title === "Components")?.items ?? [];
+
+const descriptions: Record<string, string> = {
+  Accordion:     "Collapsible sections with smooth animation.",
+  Alert:         "Contextual feedback with info, success, warning, and danger variants.",
+  Avatar:        "User profile photo with graceful initials fallback.",
+  Badge:         "Short status labels with dot indicator support.",
+  Breadcrumb:    "Navigation trail for deep page hierarchies.",
+  Button:        "Primary action element with 6 variants and loading state.",
+  Calendar:      "Date picker with single and range selection.",
+  Card:          "Content container with header, body, and footer slots.",
+  Checkbox:      "Controlled checkbox with indeterminate state support.",
+  Command:       "Command palette with search, keyboard navigation, and dialog mode.",
+  "Dropdown Menu": "Contextual menu with checkbox items, radio groups, and submenus.",
+  Input:         "Text input with label, helper text, and error state.",
+  Label:         "Accessible form label with required indicator.",
+  Modal:         "Focus-trapped dialog for confirmations and forms.",
+  Pagination:    "Page navigation with ellipsis and page size controls.",
+  Popover:       "Floating content anchored to a trigger element.",
+  Progress:      "Linear progress bar with determinate and indeterminate modes.",
+  Select:        "Dropdown select with search and multi-select support.",
+  Separator:     "Horizontal or vertical visual divider.",
+  Sheet:         "Side panel that slides in from any edge.",
+  Sidebar:       "App navigation sidebar with collapse and icon-only mode.",
+  Skeleton:      "Loading placeholder with animated shimmer.",
+  Slider:        "Range input with single and dual-handle support.",
+  Switch:        "Toggle switch for boolean settings.",
+  Table:         "Data table with sortable columns and striped rows.",
+  Tabs:          "Tabbed interface for switching between content panels.",
+  Toast:         "Non-blocking notification with auto-dismiss.",
+  Tooltip:       "Contextual label that appears on hover or focus.",
+  Typography:    "Heading, Text, Lead, Code, and Blockquote primitives.",
+};
+---
+
+<DocsLayout title="Components">
+  <div class="docs-header">
+    <h1 class="docs-title">Components</h1>
+    <p class="docs-lead">
+      {components.length} components, all AI-native — every prop, variant, and anti-pattern is documented
+      for Claude, Cursor, Copilot, and Windsurf.
+    </p>
+  </div>
+
+  <hr class="docs-divider" />
+
+  <div class="comp-grid">
+    {components.map(item => (
+      <a href={item.href} class="comp-card">
+        <span class="comp-card__name">{item.title}</span>
+        <span class="comp-card__desc">{descriptions[item.title] ?? ""}</span>
+      </a>
+    ))}
+  </div>
+</DocsLayout>
+
+<style>
+  .comp-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+    gap: var(--vyre-spacing-3);
+    margin-top: var(--vyre-spacing-2);
+  }
+
+  .comp-card {
+    display: flex;
+    flex-direction: column;
+    gap: var(--vyre-spacing-1);
+    padding: var(--vyre-spacing-4) var(--vyre-spacing-4);
+    background: var(--vyre-color-semantic-surface);
+    border: 1px solid var(--vyre-color-semantic-border-subtle);
+    border-radius: var(--vyre-border-radius-lg);
+    text-decoration: none;
+    transition: border-color var(--vyre-transition-duration-fast) var(--vyre-transition-easing-out),
+                background  var(--vyre-transition-duration-fast) var(--vyre-transition-easing-out);
+  }
+
+  .comp-card:hover {
+    border-color: var(--vyre-color-semantic-accent-subtle-border);
+    background: var(--vyre-color-semantic-surface-raised);
+  }
+
+  .comp-card__name {
+    font-size: var(--vyre-typography-font-size-sm);
+    font-weight: var(--vyre-typography-font-weight-semibold);
+    color: var(--vyre-color-semantic-text-primary);
+  }
+
+  .comp-card__desc {
+    font-size: var(--vyre-typography-font-size-xs);
+    color: var(--vyre-color-semantic-text-muted);
+    line-height: 1.5;
+  }
+</style>

@@ -20,6 +20,15 @@ export const navigation: NavSection[] = [
     ],
   },
   {
+    title: "AI Tooling",
+    items: [
+      { title: "@usevyre/ai-context", href: "/docs/ai-tooling/ai-context-pkg" },
+      { title: "validate-ai-context", href: "/docs/ai-tooling/validate"        },
+      { title: "eslint-plugin-vyre",  href: "/docs/ai-tooling/eslint-plugin"   },
+      { title: "MCP Server",          href: "/docs/ai-tooling/mcp-server"      },
+    ],
+  },
+  {
     title: "Components",
     items: [
       { title: "Accordion",     href: "/docs/components/accordion"     },

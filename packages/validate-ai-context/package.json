@@ -1,0 +1,36 @@
+{
+  "name": "@usevyre/validate-ai-context",
+  "version": "0.1.0",
+  "description": "Validate useVyre component usage — catches AI hallucinations before they ship",
+  "keywords": [
+    "design-system",
+    "ai",
+    "hallucination",
+    "lint",
+    "vyre"
+  ],
+  "homepage": "https://usevyre.com/docs/validate",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/gapra/usevyre"
+  },
+  "license": "MIT",
+  "type": "module",
+  "bin": {
+    "validate-ai-context": "./bin/cli.js"
+  },
+  "exports": {
+    ".": "./src/index.js",
+    "./validator": "./src/validator.js"
+  },
+  "files": [
+    "bin",
+    "src"
+  ],
+  "dependencies": {
+    "@usevyre/ai-context": "workspace:*"
+  },
+  "engines": {
+    "node": ">=18.0.0"
+  }
+}

@@ -2,6 +2,7 @@
 import DocsLayout       from "@/layouts/DocsLayout.astro";
 import ComponentPreview from "@/components/docs/ComponentPreview.astro";
 import PropsTable       from "@/components/docs/PropsTable.astro";
+import AICheatSheet    from "@/components/docs/AICheatSheet.astro";
 import { CommandInlineDemo, CommandDialogDemo } from "@/components/demos/Tier2Demo";
 
 const codeInlineReact = `import {
@@ -150,7 +151,7 @@ const groupProps = [
 ];
 ---
 
-<DocsLayout title="Command">
+<DocsLayout title="Command" component="Command">
   <div class="docs-header">
     <div class="docs-header__meta">
       <span class="vyre-badge vyre-badge--default">@usevyre/react</span>
@@ -196,6 +197,8 @@ const groupProps = [
 
   <h2 class="docs-h2">Props — CommandGroup</h2>
   <PropsTable props={groupProps} />
+
+  <AICheatSheet component="Command" />
 
   <div class="docs-pagination">
     <a href="/docs/components/table" class="docs-pagination__link docs-pagination__link--prev">

@@ -2,6 +2,7 @@
 import DocsLayout       from "@/layouts/DocsLayout.astro";
 import ComponentPreview from "@/components/docs/ComponentPreview.astro";
 import PropsTable       from "@/components/docs/PropsTable.astro";
+import AICheatSheet    from "@/components/docs/AICheatSheet.astro";
 import { TableBasicDemo, TableVariantsDemo } from "@/components/demos/Tier2Demo";
 
 const codeBasicReact = `import {
@@ -101,7 +102,7 @@ const rowProps = [
 ];
 ---
 
-<DocsLayout title="Table">
+<DocsLayout title="Table" component="Table">
   <div class="docs-header">
     <div class="docs-header__meta">
       <span class="vyre-badge vyre-badge--default">@usevyre/react</span>
@@ -144,6 +145,8 @@ const rowProps = [
 
   <h2 class="docs-h2">Props — TableRow</h2>
   <PropsTable props={rowProps} />
+
+  <AICheatSheet component="Table" />
 
   <div class="docs-pagination">
     <a href="/docs/components/pagination" class="docs-pagination__link docs-pagination__link--prev">
