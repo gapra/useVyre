@@ -78,6 +78,12 @@ importers:
         specifier: workspace:*
         version: link:../ai-context
 
+  packages/prompt-templates:
+    dependencies:
+      '@usevyre/ai-context':
+        specifier: workspace:*
+        version: link:../ai-context
+
   packages/react:
     dependencies:
       '@usevyre/tokens':
