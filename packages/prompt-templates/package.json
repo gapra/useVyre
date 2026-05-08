@@ -31,9 +31,6 @@
     "src",
     "templates"
   ],
-  "scripts": {
-    "build": "node src/build.js"
-  },
   "dependencies": {
     "@usevyre/ai-context": "workspace:*"
   },
