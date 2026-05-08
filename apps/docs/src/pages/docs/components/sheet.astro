@@ -2,6 +2,7 @@
 import DocsLayout       from "@/layouts/DocsLayout.astro";
 import ComponentPreview from "@/components/docs/ComponentPreview.astro";
 import PropsTable       from "@/components/docs/PropsTable.astro";
+import AICheatSheet from "@/components/docs/AICheatSheet.astro";
 import { SheetBasicDemo, SheetSidesDemo } from "@/components/demos/Tier2Demo";
 
 const codeBasicReact = `import { Sheet, SheetHeader, SheetBody, SheetFooter, Button } from "@usevyre/react";
@@ -59,7 +60,7 @@ const sheetProps = [
 ];
 ---
 
-<DocsLayout title="Sheet">
+<DocsLayout title="Sheet" component="Sheet">
   <div class="docs-header">
     <div class="docs-header__meta">
       <span class="vyre-badge vyre-badge--default">@usevyre/react</span>
@@ -93,6 +94,8 @@ const sheetProps = [
 
   <h2 class="docs-h2">Props — Sheet</h2>
   <PropsTable props={sheetProps} />
+
+  <AICheatSheet component="Sheet" />
 
   <div class="docs-pagination">
     <a href="/docs/components/alert" class="docs-pagination__link docs-pagination__link--prev">

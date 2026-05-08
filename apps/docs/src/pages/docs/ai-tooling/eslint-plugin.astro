@@ -1,0 +1,98 @@
+---
+import DocsLayout from "@/layouts/DocsLayout.astro";
+
+const codeFlat = `// eslint.config.js
+import vyrePlugin from 'eslint-plugin-vyre';
+
+export default [
+  vyrePlugin.configs.recommended,
+  // ...your other config
+];`;
+
+const codeLegacy = `// .eslintrc.js
+module.exports = {
+  plugins: ['vyre'],
+  extends: ['plugin:vyre/recommended'],
+};
+
+// or manually:
+module.exports = {
+  plugins: ['vyre'],
+  rules: {
+    'vyre/no-invalid-vyre-props': 'error',
+  },
+};`;
+
+const codeEnumError = `// ❌ ESLint error (red underline in editor)
+<Button variant="blue" />
+// 'blue' is not a valid value for Button variant. Valid: primary, secondary, ghost, accent, teal, danger
+
+// ✅ Valid
+<Button variant="accent" />`;
+
+const codeHallucinated = `// ❌ ESLint error
+<Badge color="green" />
+// 'color' prop does not exist on Badge → Use variant= instead
+
+// ✅ Valid
+<Badge variant="success" />`;
+---
+
+<DocsLayout title="eslint-plugin-vyre">
+  <div class="docs-header">
+    <div class="docs-header__meta">
+      <span class="vyre-badge vyre-badge--accent">npm</span>
+      <span class="vyre-badge vyre-badge--default">v0.1.0</span>
+    </div>
+    <h1 class="docs-title">eslint-plugin-vyre</h1>
+    <p class="docs-lead">
+      ESLint plugin that catches invalid useVyre component usage at lint time — inline in your
+      editor as you type. The same hallucination detection as the CLI, but integrated into
+      your existing ESLint workflow.
+    </p>
+  </div>
+
+  <hr class="docs-divider" />
+
+  <h2 class="docs-h2">Installation</h2>
+  <pre class="docs-pre"><code>npm install --save-dev eslint-plugin-vyre
+# or
+pnpm add -D eslint-plugin-vyre</code></pre>
+
+  <h2 class="docs-h2">Setup</h2>
+
+  <h3 class="docs-h3">ESLint 9+ (flat config)</h3>
+  <pre class="docs-pre"><code set:text={codeFlat} /></pre>
+
+  <h3 class="docs-h3">ESLint 8 (legacy config)</h3>
+  <pre class="docs-pre"><code set:text={codeLegacy} /></pre>
+
+  <h2 class="docs-h2">Rule: no-invalid-vyre-props</h2>
+  <p class="docs-p">The plugin ships one rule that covers two categories of errors:</p>
+
+  <h3 class="docs-h3">Invalid enum values</h3>
+  <pre class="docs-pre"><code set:text={codeEnumError} /></pre>
+
+  <h3 class="docs-h3">Hallucinated props</h3>
+  <pre class="docs-pre"><code set:text={codeHallucinated} /></pre>
+
+  <h2 class="docs-h2">Editor integration</h2>
+  <p class="docs-p">
+    Works with any editor that supports ESLint — VS Code (ESLint extension),
+    WebStorm, Neovim, and more. Errors appear inline as you type, without running any CLI command.
+  </p>
+
+  <div class="docs-callout docs-callout--accent">
+    <strong>Tip:</strong> Combine with <a href="/docs/ai-tooling/validate">validate-ai-context</a> in CI
+    for a two-layer guard — catch issues in the editor and block them in the pipeline.
+  </div>
+
+  <div class="docs-pagination">
+    <a href="/docs/ai-tooling/validate" class="docs-pagination__link docs-pagination__link--prev">
+      ← validate-ai-context
+    </a>
+    <a href="/docs/ai-tooling/mcp-server" class="docs-pagination__link docs-pagination__link--next">
+      MCP Server →
+    </a>
+  </div>
+</DocsLayout>

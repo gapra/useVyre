@@ -3,6 +3,7 @@ import DocsLayout       from "@/layouts/DocsLayout.astro";
 import ComponentPreview from "@/components/docs/ComponentPreview.astro";
 import CodeTabs        from "@/components/docs/CodeTabs.astro";
 import PropsTable       from "@/components/docs/PropsTable.astro";
+import AICheatSheet from "@/components/docs/AICheatSheet.astro";
 import { CheckboxDemo } from "@/components/demos/Tier1Demos";
 
 const codeBasicReact = `import { Checkbox } from "@usevyre/react";
@@ -45,7 +46,7 @@ const props = [
 ];
 ---
 
-<DocsLayout title="Checkbox">
+<DocsLayout title="Checkbox" component="Checkbox">
   <div class="docs-header">
     <div class="docs-header__meta">
       <span class="vyre-badge vyre-badge--default">@usevyre/react</span>
@@ -74,6 +75,8 @@ const props = [
 
   <h2 class="docs-h2">Props</h2>
   <PropsTable props={props} />
+
+  <AICheatSheet component="Checkbox" />
 
   <div class="docs-pagination">
     <a href="/docs/components/avatar" class="docs-pagination__link docs-pagination__link--prev">

@@ -1,0 +1,329 @@
+---
+import { readFileSync } from "node:fs";
+import { fileURLToPath } from "node:url";
+import { resolve, dirname } from "node:path";
+
+export interface Props {
+  component?: string;
+}
+
+const { component } = Astro.props;
+
+let aiData = null;
+if (component) {
+  const schemaPath = resolve(
+    dirname(fileURLToPath(import.meta.url)),
+    "../../../node_modules/@usevyre/ai-context/dist/schema.json"
+  );
+  const schema = JSON.parse(readFileSync(schemaPath, "utf-8"));
+  const comp = schema.components[component];
+  if (comp) {
+    const props = comp.props ?? {};
+    const allProps = Object.entries(props);
+    const enumProps = allProps.filter(([, p]) => p.values);
+    const boolProps = allProps.filter(([, p]) => p.type === "boolean");
+    const antiPatterns = comp.antiPatterns ?? [];
+
+    aiData = {
+      importStr: comp.import,
+      enumProps,
+      boolProps,
+      antiPatterns,
+    };
+  }
+}
+---
+
+<nav class="right-panel" aria-label="Page navigation">
+
+  <!-- ── On this page ── -->
+  <div class="rp-section">
+    <p class="rp-heading">On this page</p>
+    <ol class="rp-toc-list" id="toc-list"></ol>
+  </div>
+
+  <!-- ── AI Context ── -->
+  {aiData && (
+    <div class="rp-section rp-ai">
+      <p class="rp-heading rp-heading--ai">
+        <span class="rp-ai-dot" aria-hidden="true"></span>
+        AI Context
+      </p>
+
+      <!-- Import -->
+      <div class="rp-ai-block">
+        <p class="rp-ai-label">Import</p>
+        <code class="rp-ai-import">{aiData.importStr}</code>
+      </div>
+
+      <!-- Enum props -->
+      {aiData.enumProps.length > 0 && (
+        <div class="rp-ai-block">
+          <p class="rp-ai-label">Valid props</p>
+          <div class="rp-ai-props">
+            {aiData.enumProps.map(([name, p]) => (
+              <div class="rp-ai-prop">
+                <span class="rp-ai-prop-name">{name}</span>
+                <div class="rp-ai-values">
+                  {p.values.map((v) => (
+                    <span class="rp-ai-val">{v}</span>
+                  ))}
+                </div>
+              </div>
+            ))}
+            {aiData.boolProps.map(([name]) => (
+              <div class="rp-ai-prop">
+                <span class="rp-ai-prop-name">{name}</span>
+                <div class="rp-ai-values">
+                  <span class="rp-ai-val">true</span>
+                  <span class="rp-ai-val">false</span>
+                </div>
+              </div>
+            ))}
+          </div>
+        </div>
+      )}
+
+      <!-- Anti-patterns -->
+      {aiData.antiPatterns.length > 0 && (
+        <div class="rp-ai-block">
+          <p class="rp-ai-label">Avoid</p>
+          <ul class="rp-ai-avoid">
+            {aiData.antiPatterns.slice(0, 3).map((ap) => (
+              <li class="rp-ai-avoid-item">
+                <code class="rp-ai-bad">{ap.pattern}</code>
+              </li>
+            ))}
+          </ul>
+        </div>
+      )}
+    </div>
+  )}
+
+</nav>
+
+<script>
+  function buildToc() {
+    const article = document.querySelector(".docs-article");
+    const list    = document.getElementById("toc-list");
+    if (!article || !list) return;
+
+    const headings = Array.from(article.querySelectorAll("h2.docs-h2"));
+    if (headings.length === 0) return;
+
+    headings.forEach(h => {
+      if (!h.id) {
+        h.id = h.textContent.trim().toLowerCase()
+          .replace(/[^\w\s-]/g, "")
+          .replace(/\s+/g, "-");
+      }
+    });
+
+    list.innerHTML = headings
+      .map(h => `<li class="rp-toc-item"><a class="rp-toc-link" href="#${h.id}">${h.textContent.trim()}</a></li>`)
+      .join("");
+
+    const links = Array.from(list.querySelectorAll(".rp-toc-link"));
+
+    const setActive = (id) => {
+      links.forEach(a => {
+        a.classList.toggle("rp-toc-link--active", a.getAttribute("href") === `#${id}`);
+      });
+    };
+
+    if (headings[0]) setActive(headings[0].id);
+
+    const observer = new IntersectionObserver(
+      (entries) => {
+        const visible = entries
+          .filter(e => e.isIntersecting)
+          .sort((a, b) => a.boundingClientRect.top - b.boundingClientRect.top);
+        if (visible[0]) setActive(visible[0].target.id);
+      },
+      { rootMargin: "-56px 0px -60% 0px", threshold: 0 }
+    );
+
+    headings.forEach(h => observer.observe(h));
+  }
+
+  document.addEventListener("DOMContentLoaded", buildToc);
+  if (document.readyState !== "loading") buildToc();
+</script>
+
+<style is:global>
+  .right-panel {
+    display: flex;
+    flex-direction: column;
+    gap: var(--vyre-spacing-6);
+    padding-bottom: var(--vyre-spacing-8);
+  }
+
+  /* ── Shared section ── */
+  .rp-section {
+    display: flex;
+    flex-direction: column;
+    gap: var(--vyre-spacing-2);
+  }
+
+  .rp-heading {
+    display: flex;
+    align-items: center;
+    gap: var(--vyre-spacing-2);
+    font-size: var(--vyre-typography-font-size-xs);
+    font-weight: var(--vyre-typography-font-weight-semibold);
+    font-family: var(--vyre-typography-font-family-mono);
+    text-transform: uppercase;
+    letter-spacing: 0.06em;
+    color: var(--vyre-color-semantic-text-muted);
+    margin: 0 0 var(--vyre-spacing-1);
+    padding: 0 var(--vyre-spacing-3);
+  }
+
+  /* ── ToC list ── */
+  .rp-toc-list {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    display: flex;
+    flex-direction: column;
+    gap: 1px;
+  }
+
+  .rp-toc-item { display: flex; }
+
+  .rp-toc-link {
+    display: block;
+    width: 100%;
+    padding: 3px var(--vyre-spacing-3);
+    font-size: var(--vyre-typography-font-size-sm);
+    color: var(--vyre-color-semantic-text-muted);
+    text-decoration: none;
+    line-height: 1.5;
+    border-radius: var(--vyre-border-radius-sm);
+    transition: color var(--vyre-transition-duration-fast) var(--vyre-transition-easing-out);
+  }
+
+  .rp-toc-link:hover {
+    color: var(--vyre-color-semantic-text-primary);
+  }
+
+  .rp-toc-link--active {
+    color: var(--vyre-color-semantic-accent);
+    font-weight: var(--vyre-typography-font-weight-medium);
+  }
+
+  /* ── Divider between sections ── */
+  .rp-ai {
+    padding-top: var(--vyre-spacing-5);
+    border-top: 1px solid var(--vyre-color-semantic-border-subtle);
+  }
+
+  /* ── AI heading dot ── */
+  .rp-heading--ai {
+    color: var(--vyre-color-semantic-accent);
+    opacity: 1;
+  }
+
+  .rp-ai-dot {
+    display: inline-block;
+    width: 6px;
+    height: 6px;
+    border-radius: 50%;
+    background: var(--vyre-color-semantic-accent);
+    flex-shrink: 0;
+    animation: rp-pulse 2.4s ease-in-out infinite;
+  }
+
+  @keyframes rp-pulse {
+    0%, 100% { opacity: 1; }
+    50%       { opacity: 0.35; }
+  }
+
+  /* ── AI content blocks ── */
+  .rp-ai-block {
+    display: flex;
+    flex-direction: column;
+    gap: var(--vyre-spacing-1);
+    padding: 0 var(--vyre-spacing-3);
+  }
+
+  .rp-ai-label {
+    font-size: var(--vyre-typography-font-size-xs);
+    font-weight: var(--vyre-typography-font-weight-medium);
+    color: var(--vyre-color-semantic-text-muted);
+    margin: 0;
+  }
+
+  .rp-ai-import {
+    display: block;
+    font-family: var(--vyre-typography-font-family-mono);
+    font-size: 10px;
+    color: var(--vyre-color-semantic-teal);
+    background: var(--vyre-color-semantic-teal-subtle);
+    padding: var(--vyre-spacing-2) var(--vyre-spacing-2);
+    border-radius: var(--vyre-border-radius-sm);
+    line-height: 1.5;
+    overflow-x: auto;
+    white-space: nowrap;
+    scrollbar-width: none;
+  }
+  .rp-ai-import::-webkit-scrollbar { display: none; }
+
+  /* ── Prop list ── */
+  .rp-ai-props {
+    display: flex;
+    flex-direction: column;
+    gap: var(--vyre-spacing-2);
+  }
+
+  .rp-ai-prop {
+    display: flex;
+    flex-direction: column;
+    gap: 3px;
+  }
+
+  .rp-ai-prop-name {
+    font-family: var(--vyre-typography-font-family-mono);
+    font-size: 10px;
+    font-weight: var(--vyre-typography-font-weight-semibold);
+    color: var(--vyre-color-semantic-text-secondary);
+  }
+
+  .rp-ai-values {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 3px;
+  }
+
+  .rp-ai-val {
+    font-family: var(--vyre-typography-font-family-mono);
+    font-size: 10px;
+    padding: 1px 5px;
+    border-radius: var(--vyre-border-radius-sm);
+    background: var(--vyre-color-semantic-accent-subtle);
+    color: var(--vyre-color-semantic-accent);
+    border: 1px solid var(--vyre-color-semantic-accent-subtle-border);
+  }
+
+  /* ── Avoid list ── */
+  .rp-ai-avoid {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+  }
+
+  .rp-ai-avoid-item { display: flex; align-items: flex-start; }
+
+  .rp-ai-bad {
+    font-family: var(--vyre-typography-font-family-mono);
+    font-size: 10px;
+    padding: 1px 5px;
+    border-radius: var(--vyre-border-radius-sm);
+    background: var(--vyre-color-semantic-danger-subtle);
+    color: var(--vyre-color-semantic-danger);
+    line-height: 1.5;
+  }
+</style>

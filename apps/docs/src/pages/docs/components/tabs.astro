@@ -2,6 +2,7 @@
 import DocsLayout       from "@/layouts/DocsLayout.astro";
 import ComponentPreview from "@/components/docs/ComponentPreview.astro";
 import PropsTable       from "@/components/docs/PropsTable.astro";
+import AICheatSheet    from "@/components/docs/AICheatSheet.astro";
 import { TabsBasicDemo, TabsControlledDemo } from "@/components/demos/SelectTabsDemo";
 
 const codeBasicReact = `import { Tabs, TabList, Tab, TabPanels, TabPanel } from "@usevyre/react";
@@ -68,7 +69,7 @@ const tabProps = [
 ];
 ---
 
-<DocsLayout title="Tabs">
+<DocsLayout title="Tabs" component="Tabs">
   <div class="docs-header">
     <div class="docs-header__meta">
       <span class="vyre-badge vyre-badge--default">@usevyre/react</span>
@@ -109,6 +110,8 @@ const tabProps = [
 
   <h2 class="docs-h2">Tab props</h2>
   <PropsTable props={tabProps} />
+
+  <AICheatSheet component="Tabs" />
 
   <div class="docs-pagination">
     <a href="/docs/components/select" class="docs-pagination__link docs-pagination__link--prev">

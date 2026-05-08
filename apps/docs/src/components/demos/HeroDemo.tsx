@@ -7,7 +7,7 @@ export default function HeroDemo() {
         <CardBody>
           <div style={{ display: "flex", alignItems: "center", gap: 10, marginBottom: 16 }}>
             <Badge variant="teal" dot>AI-ready</Badge>
-            <Badge variant="accent">v0.1.1</Badge>
+            <Badge variant="accent">Inline-AI-context</Badge>
           </div>
           <p style={{
             fontFamily: "var(--vyre-typography-font-family-body)",

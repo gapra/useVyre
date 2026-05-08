@@ -2,6 +2,7 @@
 import DocsLayout       from "@/layouts/DocsLayout.astro";
 import ComponentPreview from "@/components/docs/ComponentPreview.astro";
 import PropsTable       from "@/components/docs/PropsTable.astro";
+import AICheatSheet from "@/components/docs/AICheatSheet.astro";
 import {
   CalendarSingleDemo,
   CalendarRangeDemo,
@@ -94,7 +95,7 @@ const datePickerProps = [
 ];
 ---
 
-<DocsLayout title="Calendar">
+<DocsLayout title="Calendar" component="Calendar">
   <div class="docs-header">
     <div class="docs-header__meta">
       <span class="vyre-badge vyre-badge--default">@usevyre/react</span>
@@ -152,6 +153,8 @@ const datePickerProps = [
 
   <h2 class="docs-h2">Props — DatePicker</h2>
   <PropsTable props={datePickerProps} />
+
+  <AICheatSheet component="Calendar" />
 
   <div class="docs-pagination">
     <a href="/docs/components/command" class="docs-pagination__link docs-pagination__link--prev">

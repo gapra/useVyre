@@ -2,6 +2,7 @@
 import DocsLayout       from "@/layouts/DocsLayout.astro";
 import ComponentPreview from "@/components/docs/ComponentPreview.astro";
 import CodeTabs        from "@/components/docs/CodeTabs.astro";
+import AICheatSheet      from "@/components/docs/AICheatSheet.astro";
 import PropsTable       from "@/components/docs/PropsTable.astro";
 import { ToastDemo } from "@/components/demos/SelectTabsDemo";
 
@@ -76,7 +77,7 @@ const toastInputProps = [
 ];
 ---
 
-<DocsLayout title="Toast">
+<DocsLayout title="Toast" component="Toast">
   <div class="docs-header">
     <div class="docs-header__meta">
       <span class="vyre-badge vyre-badge--default">@usevyre/react</span>
@@ -112,6 +113,8 @@ const toastInputProps = [
 
   <h2 class="docs-h2">toast() options</h2>
   <PropsTable props={toastInputProps} />
+
+  <AICheatSheet component="Toast" />
 
   <div class="docs-pagination">
     <a href="/docs/components/tabs" class="docs-pagination__link docs-pagination__link--prev">

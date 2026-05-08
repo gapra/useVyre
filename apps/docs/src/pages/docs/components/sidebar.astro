@@ -2,6 +2,7 @@
 import DocsLayout       from "@/layouts/DocsLayout.astro";
 import ComponentPreview from "@/components/docs/ComponentPreview.astro";
 import PropsTable       from "@/components/docs/PropsTable.astro";
+import AICheatSheet from "@/components/docs/AICheatSheet.astro";
 import { SidebarDemo, SidebarCollapsibleDemo, SidebarLayoutDemo } from "@/components/demos/Tier2Demo";
 
 const codeBasicReact = `import {
@@ -246,7 +247,7 @@ const sectionProps = [
 ];
 ---
 
-<DocsLayout title="Sidebar">
+<DocsLayout title="Sidebar" component="Sidebar">
   <div class="docs-header">
     <div class="docs-header__meta">
       <span class="vyre-badge vyre-badge--default">@usevyre/react</span>
@@ -263,11 +264,11 @@ const sectionProps = [
 
   <hr class="docs-divider" />
 
-  <h2 class="docs-h2">Full layout — SidebarLayout + SidebarMain</h2>
+  <h2 class="docs-h2">Full layout</h2>
   <p class="docs-p">
-    Wrap everything in <code>SidebarLayout</code> (a flex row) and put your page content
-    inside <code>SidebarMain</code>. This gives you the canonical app shell hierarchy:
-    sidebar on the left, main content on the right.
+    Wrap everything in <code>AppLayout</code> (manages collapsed state via context) and put
+    your page content inside <code>AppShell</code>. Use <code>AppBar</code> for the top bar
+    and <code>PageContent</code> for the scrollable content area.
   </p>
   <ComponentPreview react={codeLayoutReact} vue={codeLayoutVue}>
     <SidebarLayoutDemo client:visible />
@@ -306,29 +307,33 @@ const sectionProps = [
     │   └── SidebarTrigger — collapse toggle, reads context
     └── PageContent   — scrollable page content, padding: 24px</code></pre>
 
-  <h2 class="docs-h2">Props — AppLayout</h2>
+  <h2 class="docs-h2">Props</h2>
+
+  <h3 class="docs-h3">AppLayout</h3>
   <PropsTable props={layoutProps} />
 
-  <h2 class="docs-h2">Props — AppShell</h2>
+  <h3 class="docs-h3">AppShell</h3>
   <PropsTable props={appShellProps} />
 
-  <h2 class="docs-h2">Props — AppBar</h2>
+  <h3 class="docs-h3">AppBar</h3>
   <PropsTable props={appBarProps} />
 
-  <h2 class="docs-h2">Props — PageContent</h2>
+  <h3 class="docs-h3">PageContent</h3>
   <PropsTable props={pageContentProps} />
 
-  <h2 class="docs-h2">Props — Sidebar</h2>
+  <h3 class="docs-h3">Sidebar</h3>
   <PropsTable props={sidebarProps} />
 
-  <h2 class="docs-h2">Props — SidebarHeader</h2>
+  <h3 class="docs-h3">SidebarHeader</h3>
   <PropsTable props={headerProps} />
 
-  <h2 class="docs-h2">Props — SidebarItem</h2>
+  <h3 class="docs-h3">SidebarItem</h3>
   <PropsTable props={itemProps} />
 
-  <h2 class="docs-h2">Props — SidebarSection</h2>
+  <h3 class="docs-h3">SidebarSection</h3>
   <PropsTable props={sectionProps} />
+
+  <AICheatSheet component="Sidebar" />
 
   <div class="docs-pagination">
     <a href="/docs/components/sheet" class="docs-pagination__link docs-pagination__link--prev">

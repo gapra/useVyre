@@ -2,6 +2,7 @@
 import DocsLayout       from "@/layouts/DocsLayout.astro";
 import ComponentPreview from "@/components/docs/ComponentPreview.astro";
 import PropsTable       from "@/components/docs/PropsTable.astro";
+import AICheatSheet from "@/components/docs/AICheatSheet.astro";
 import { SelectBasicDemo, SelectSizesDemo } from "@/components/demos/SelectTabsDemo";
 
 const codeBasicReact = `import { Select } from "@usevyre/react";
@@ -63,7 +64,7 @@ const props = [
 ];
 ---
 
-<DocsLayout title="Select">
+<DocsLayout title="Select" component="Select">
   <div class="docs-header">
     <div class="docs-header__meta">
       <span class="vyre-badge vyre-badge--default">@usevyre/react</span>
@@ -97,6 +98,8 @@ const props = [
 
   <h2 class="docs-h2">Props</h2>
   <PropsTable props={props} />
+
+  <AICheatSheet component="Select" />
 
   <div class="docs-pagination">
     <a href="/docs/components/modal" class="docs-pagination__link docs-pagination__link--prev">

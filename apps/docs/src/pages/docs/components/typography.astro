@@ -2,6 +2,7 @@
 import DocsLayout       from "@/layouts/DocsLayout.astro";
 import ComponentPreview from "@/components/docs/ComponentPreview.astro";
 import PropsTable       from "@/components/docs/PropsTable.astro";
+import AICheatSheet    from "@/components/docs/AICheatSheet.astro";
 import {
   TypographyHeadingDemo,
   TypographyTextDemo,
@@ -108,7 +109,7 @@ const codeProps = [
 ];
 ---
 
-<DocsLayout title="Typography">
+<DocsLayout title="Typography" component="Typography">
   <div class="docs-header">
     <div class="docs-header__meta">
       <span class="vyre-badge vyre-badge--default">@usevyre/react</span>
@@ -160,6 +161,8 @@ const codeProps = [
 
   <h2 class="docs-h2">Props — Code</h2>
   <PropsTable props={codeProps} />
+
+  <AICheatSheet component="Typography" />
 
   <div class="docs-pagination">
     <a href="/docs/components/tooltip" class="docs-pagination__link docs-pagination__link--prev">

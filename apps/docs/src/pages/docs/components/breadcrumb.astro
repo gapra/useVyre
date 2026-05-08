@@ -2,6 +2,7 @@
 import DocsLayout       from "@/layouts/DocsLayout.astro";
 import ComponentPreview from "@/components/docs/ComponentPreview.astro";
 import PropsTable       from "@/components/docs/PropsTable.astro";
+import AICheatSheet    from "@/components/docs/AICheatSheet.astro";
 import { BreadcrumbBasicDemo, BreadcrumbCustomSeparatorDemo } from "@/components/demos/Tier2Demo";
 
 const codeBasicReact = `import { Breadcrumb, BreadcrumbItem } from "@usevyre/react";
@@ -52,7 +53,7 @@ const itemProps = [
 ];
 ---
 
-<DocsLayout title="Breadcrumb">
+<DocsLayout title="Breadcrumb" component="Breadcrumb">
   <div class="docs-header">
     <div class="docs-header__meta">
       <span class="vyre-badge vyre-badge--default">@usevyre/react</span>
@@ -89,6 +90,8 @@ const itemProps = [
 
   <h2 class="docs-h2">Props — BreadcrumbItem</h2>
   <PropsTable props={itemProps} />
+
+  <AICheatSheet component="Breadcrumb" />
 
   <div class="docs-pagination">
     <a href="/docs/components/sheet" class="docs-pagination__link docs-pagination__link--prev">

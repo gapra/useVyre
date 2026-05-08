@@ -1,6 +1,7 @@
 ---
 import DocsLayout       from "@/layouts/DocsLayout.astro";
 import ComponentPreview from "@/components/docs/ComponentPreview.astro";
+import AICheatSheet      from "@/components/docs/AICheatSheet.astro";
 import PropsTable       from "@/components/docs/PropsTable.astro";
 
 const codeBasicReact = `import { Card, CardHeader, CardBody, CardFooter, Button, Badge } from "@usevyre/react";
@@ -56,7 +57,7 @@ const sectionProps = [
 ];
 ---
 
-<DocsLayout title="Card">
+<DocsLayout title="Card" component="Card">
   <div class="docs-header">
     <div class="docs-header__meta">
       <span class="vyre-badge vyre-badge--default">@usevyre/react</span>
@@ -102,6 +103,8 @@ const sectionProps = [
 
   <h2 class="docs-h2">CardHeader / CardBody / CardFooter props</h2>
   <PropsTable props={sectionProps} />
+
+  <AICheatSheet component="Card" />
 
   <div class="docs-pagination">
     <a href="/docs/components/badge" class="docs-pagination__link docs-pagination__link--prev">

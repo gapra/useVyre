@@ -1,6 +1,7 @@
 ---
 import DocsLayout       from "@/layouts/DocsLayout.astro";
 import ComponentPreview from "@/components/docs/ComponentPreview.astro";
+import AICheatSheet      from "@/components/docs/AICheatSheet.astro";
 import PropsTable       from "@/components/docs/PropsTable.astro";
 import { ModalBasicDemo, ModalSizesDemo } from "@/components/demos/ModalDemo";
 
@@ -69,7 +70,7 @@ const props = [
 ];
 ---
 
-<DocsLayout title="Modal">
+<DocsLayout title="Modal" component="Modal">
   <div class="docs-header">
     <div class="docs-header__meta">
       <span class="vyre-badge vyre-badge--default">@usevyre/react</span>
@@ -107,6 +108,9 @@ const props = [
 
   <h2 class="docs-h2">Props</h2>
   <PropsTable props={props} />
+
+  <!-- AI Cheat Sheet -->
+  <AICheatSheet component="Modal" />
 
   <div class="docs-pagination">
     <a href="/docs/components/input" class="docs-pagination__link docs-pagination__link--prev">

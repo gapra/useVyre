@@ -1,0 +1,110 @@
+---
+import DocsLayout from "@/layouts/DocsLayout.astro";
+
+const codeConfig = `{
+  "mcpServers": {
+    "usevyre-context": {
+      "command": "npx",
+      "args": ["-y", "@usevyre/mcp-server"]
+    }
+  }
+}`;
+---
+
+<DocsLayout title="MCP Server">
+  <div class="docs-header">
+    <div class="docs-header__meta">
+      <span class="vyre-badge vyre-badge--accent">npm</span>
+      <span class="vyre-badge vyre-badge--default">v0.1.0</span>
+    </div>
+    <h1 class="docs-title">@usevyre/mcp-server</h1>
+    <p class="docs-lead">
+      Model Context Protocol server that gives Claude Desktop real-time access to useVyre
+      component context — props, valid values, anti-patterns, and examples — without
+      copy-pasting anything into your system prompt.
+    </p>
+  </div>
+
+  <hr class="docs-divider" />
+
+  <h2 class="docs-h2">Setup</h2>
+  <p class="docs-p">
+    Add to your Claude Desktop config at
+    <code>~/Library/Application Support/Claude/claude_desktop_config.json</code>
+    (macOS) or <code>%APPDATA%\Claude\claude_desktop_config.json</code> (Windows):
+  </p>
+  <pre class="docs-pre"><code set:text={codeConfig} />
+
+  <p class="docs-p">Restart Claude Desktop — the server starts automatically on next launch.</p>
+
+  <h2 class="docs-h2">Available tools</h2>
+  <p class="docs-p">
+    Claude calls these tools automatically when you ask UI-related questions.
+    You don't need to invoke them manually.
+  </p>
+
+  <div class="docs-table-wrapper">
+    <table class="docs-table">
+      <thead>
+        <tr><th>Tool</th><th>Description</th></tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td><code>get_component_info</code></td>
+          <td>Full context for a component — props, valid values, anti-patterns, examples</td>
+        </tr>
+        <tr>
+          <td><code>get_valid_props</code></td>
+          <td>All valid prop values for a component — called before generating code</td>
+        </tr>
+        <tr>
+          <td><code>check_valid_prop_value</code></td>
+          <td>Check if a specific prop value is valid — returns valid/invalid + suggestion</td>
+        </tr>
+        <tr>
+          <td><code>suggest_component</code></td>
+          <td>Suggest the best component(s) for a given use case</td>
+        </tr>
+        <tr>
+          <td><code>get_full_context</code></td>
+          <td>Complete AI context — all components, tokens, and rules</td>
+        </tr>
+        <tr>
+          <td><code>get_anti_patterns</code></td>
+          <td>All known hallucination patterns — props and values that don't exist</td>
+        </tr>
+        <tr>
+          <td><code>get_version_info</code></td>
+          <td>Current schema version and compatible package versions</td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+
+  <h2 class="docs-h2">How it works</h2>
+  <p class="docs-p">
+    When you ask Claude to build a UI with useVyre components, it automatically calls
+    <code>get_valid_props</code> or <code>get_component_info</code> before writing code —
+    so it never guesses prop values.
+  </p>
+
+  <div class="docs-callout docs-callout--accent">
+    <strong>Example:</strong> Ask Claude <em>"Add a danger button with loading state"</em> —
+    it calls <code>get_component_info("Button")</code> and confirms
+    <code>variant="danger"</code> and <code>loading</code> are valid before writing the JSX.
+  </div>
+
+  <h2 class="docs-h2">Without MCP</h2>
+  <p class="docs-p">
+    If you prefer not to use MCP, copy the context into your CLAUDE.md manually using
+    <a href="/docs/ai-tooling/ai-context-pkg">@usevyre/ai-context</a>. MCP just automates
+    this and keeps it always in sync with the installed package version.
+  </p>
+
+  <div class="docs-pagination">
+    <a href="/docs/ai-tooling/eslint-plugin" class="docs-pagination__link docs-pagination__link--prev">
+      ← eslint-plugin-vyre
+    </a>
+    <span></span>
+  </div>
+</DocsLayout>
