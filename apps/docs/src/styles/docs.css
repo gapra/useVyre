@@ -263,9 +263,10 @@ pre code { background: none; padding: 0; color: inherit; font-size: inherit; }
   padding-top: var(--vyre-spacing-8);
   position: sticky;
   top: 56px;
-  height: calc(100vh - 56px);
+  max-height: calc(100vh - 56px);
   overflow-y: auto;
   scrollbar-width: none;
+  align-self: start;
 }
 .docs-sidebar::-webkit-scrollbar { display: none; }
 
@@ -274,7 +275,7 @@ pre code { background: none; padding: 0; color: inherit; font-size: inherit; }
   min-width: 0;
 }
 
-.docs-article { max-width: 720px; }
+.docs-article { max-width: 720px; min-width: 0; overflow-x: hidden; }
 
 /* Wide variant: hide TOC, let content fill the right rail. */
 .docs-body--wide {
@@ -287,8 +288,11 @@ pre code { background: none; padding: 0; color: inherit; font-size: inherit; }
   padding-top: var(--vyre-spacing-8);
   position: sticky;
   top: 56px;
-  height: calc(100vh - 56px);
+  max-height: calc(100vh - 56px);
   overflow-y: auto;
+  overflow-x: hidden;
+  min-width: 0;
+  align-self: start;
 }
 
 /* ── SIDEBAR ─────────────────────────────────────────────────── */
