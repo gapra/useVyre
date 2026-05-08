@@ -43,13 +43,27 @@ const codeApi = `import {
 const button = schema.components.Button;
 console.log(button.props.variant.values);
 // → ["primary", "secondary", "ghost", "accent", "teal", "danger"]`;
+
+const codeTokensApi = `import tokensRef from '@usevyre/ai-context/tokens';
+
+// All 30 semantic color tokens with light + dark values, usage, and related tokens
+const accent = tokensRef.categories.color.semantic.find(t => t.name === 'color.semantic.accent');
+console.log(accent.values);       // { light: "#7c3aed", dark: "#a78bfa" }
+console.log(accent.usage);        // ["Button primary background", "Link active state", ...]
+console.log(accent.relatedTokens); // ["color.semantic.accent-hover", ...]
+
+// Spacing, typography, border-radius, shadow, transition, z-index
+console.log(tokensRef.categories.spacing.tokens.map(t => t.cssVar));
+
+// AI usage rules
+console.log(tokensRef.rules); // 8 rules for AI agents`;
 ---
 
 <DocsLayout title="@usevyre/ai-context">
   <div class="docs-header">
     <div class="docs-header__meta">
       <span class="vyre-badge vyre-badge--accent">npm</span>
-      <span class="vyre-badge vyre-badge--default">v0.2.0</span>
+      <span class="vyre-badge vyre-badge--default">v0.2.1</span>
     </div>
     <h1 class="docs-title">@usevyre/ai-context</h1>
     <p class="docs-lead">
@@ -106,12 +120,22 @@ pnpm add @usevyre/ai-context</code></pre>
         <tr><td><code>@usevyre/ai-context/anti-patterns</code></td><td>All hallucination patterns JSON</td></tr>
         <tr><td><code>@usevyre/ai-context/cheat-sheets</code></td><td>Per-component cheat sheet index</td></tr>
         <tr><td><code>@usevyre/ai-context/version-info</code></td><td>Version and compatibility info</td></tr>
+        <tr><td><code>@usevyre/ai-context/tokens</code></td><td>Design token reference JSON — semantic colors with light/dark values, usage, related tokens</td></tr>
+        <tr><td><code>@usevyre/ai-context/tokens-md</code></td><td>Design token reference markdown — ready to paste into AI prompts</td></tr>
       </tbody>
     </table>
   </div>
 
   <h2 class="docs-h2">JS API</h2>
   <pre class="docs-pre"><code set:text={codeApi} /></pre>
+
+  <h2 class="docs-h2">Token Reference API</h2>
+  <p class="docs-p">
+    <code>@usevyre/ai-context/tokens</code> exposes the full design token reference as structured
+    data — useful for MCP servers, custom agents, or any tool that needs to query tokens
+    programmatically rather than parsing markdown.
+  </p>
+  <pre class="docs-pre"><code set:text={codeTokensApi} /></pre>
 
   <div class="docs-pagination">
     <span></span>

@@ -1,11 +1,42 @@
 ---
 import DocsLayout from "@/layouts/DocsLayout.astro";
 
-const codeConfig = `{
+const codeConfigMac = `// ~/Library/Application Support/Claude/claude_desktop_config.json
+{
   "mcpServers": {
     "usevyre-context": {
       "command": "npx",
       "args": ["-y", "@usevyre/mcp-server"]
+    }
+  }
+}`;
+
+const codeConfigWin = `// %APPDATA%\\Claude\\claude_desktop_config.json
+{
+  "mcpServers": {
+    "usevyre-context": {
+      "command": "npx",
+      "args": ["-y", "@usevyre/mcp-server"]
+    }
+  }
+}`;
+
+const codeConfigCursor = `// .cursor/mcp.json (project) or ~/.cursor/mcp.json (global)
+{
+  "mcpServers": {
+    "usevyre-context": {
+      "command": "npx",
+      "args": ["-y", "@usevyre/mcp-server"]
+    }
+  }
+}`;
+
+const codeLocalPath = `// Use a local path if you want to pin the version
+{
+  "mcpServers": {
+    "usevyre-context": {
+      "command": "node",
+      "args": ["/absolute/path/to/node_modules/@usevyre/mcp-server/src/index.js"]
     }
   }
 }`;
@@ -15,91 +46,259 @@ const codeConfig = `{
   <div class="docs-header">
     <div class="docs-header__meta">
       <span class="vyre-badge vyre-badge--accent">npm</span>
-      <span class="vyre-badge vyre-badge--default">v0.1.1</span>
+      <span class="vyre-badge vyre-badge--default">v0.1.2</span>
+      <span class="vyre-badge vyre-badge--teal">MCP</span>
     </div>
     <h1 class="docs-title">@usevyre/mcp-server</h1>
     <p class="docs-lead">
-      Model Context Protocol server that gives Claude Desktop real-time access to useVyre
-      component context — props, valid values, anti-patterns, and examples — without
-      copy-pasting anything into your system prompt.
+      Model Context Protocol server that gives Claude Desktop and Cursor real-time access
+      to useVyre component and token context — props, valid values, anti-patterns, design
+      tokens — without copy-pasting anything into your system prompt.
     </p>
   </div>
 
   <hr class="docs-divider" />
 
-  <h2 class="docs-h2">Setup</h2>
-  <p class="docs-p">
-    Add to your Claude Desktop config at
-    <code>~/Library/Application Support/Claude/claude_desktop_config.json</code>
-    (macOS) or <code>%APPDATA%\Claude\claude_desktop_config.json</code> (Windows):
-  </p>
-  <pre class="docs-pre"><code set:text={codeConfig} /></pre>
+  <div class="docs-callout docs-callout--accent">
+    <strong>How it works:</strong> When you ask Claude to build UI with useVyre, it automatically
+    calls the right tool before writing code — so it never guesses prop values or invents tokens.
+    No configuration needed beyond the setup below.
+  </div>
 
-  <p class="docs-p">Restart Claude Desktop — the server starts automatically on next launch.</p>
+  <h2 class="docs-h2">Setup — Claude Desktop</h2>
+  <p class="docs-p">
+    Edit your Claude Desktop config file and add the <code>mcpServers</code> block.
+    Restart Claude Desktop after saving — the server starts automatically.
+  </p>
+
+  <h3 class="docs-h3">macOS</h3>
+  <pre class="docs-pre"><code set:text={codeConfigMac} /></pre>
+
+  <h3 class="docs-h3">Windows</h3>
+  <pre class="docs-pre"><code set:text={codeConfigWin} /></pre>
+
+  <h2 class="docs-h2">Setup — Cursor IDE</h2>
+  <p class="docs-p">
+    Create <code>.cursor/mcp.json</code> in your project root (or <code>~/.cursor/mcp.json</code>
+    for global config), then enable MCP in Cursor Settings → Features → MCP.
+  </p>
+  <pre class="docs-pre"><code set:text={codeConfigCursor} /></pre>
 
   <h2 class="docs-h2">Available tools</h2>
   <p class="docs-p">
-    Claude calls these tools automatically when you ask UI-related questions.
-    You don't need to invoke them manually.
+    Claude and Cursor call these tools automatically. You can also invoke them explicitly
+    by asking things like <em>"use get_token_info to look up the accent token"</em>.
   </p>
 
   <div class="docs-table-wrapper">
     <table class="docs-table">
       <thead>
-        <tr><th>Tool</th><th>Description</th></tr>
+        <tr><th>Tool</th><th>Description</th><th>Inputs</th></tr>
       </thead>
       <tbody>
         <tr>
           <td><code>get_component_info</code></td>
-          <td>Full context for a component — props, valid values, anti-patterns, examples</td>
+          <td>Full context for a component — props, valid values, anti-patterns, and examples</td>
+          <td><code>component</code></td>
         </tr>
         <tr>
           <td><code>get_valid_props</code></td>
-          <td>All valid prop values for a component — called before generating code</td>
+          <td>All valid prop values for a component — called automatically before generating code</td>
+          <td><code>component</code></td>
         </tr>
         <tr>
           <td><code>check_valid_prop_value</code></td>
-          <td>Check if a specific prop value is valid — returns valid/invalid + suggestion</td>
+          <td>Validate a single prop value — returns valid/invalid with suggestion</td>
+          <td><code>component</code>, <code>prop</code>, <code>value</code></td>
         </tr>
         <tr>
           <td><code>suggest_component</code></td>
-          <td>Suggest the best component(s) for a given use case</td>
+          <td>Suggest the best component(s) for a use case or description</td>
+          <td><code>use_case</code></td>
+        </tr>
+        <tr>
+          <td><code>get_token_info</code></td>
+          <td>Query design tokens — look up a specific token or list all tokens in a category</td>
+          <td><code>token?</code>, <code>category?</code></td>
         </tr>
         <tr>
           <td><code>get_full_context</code></td>
-          <td>Complete AI context — all components, tokens, and rules</td>
+          <td>Complete AI context — all components, tokens, and rules in one call</td>
+          <td>—</td>
         </tr>
         <tr>
           <td><code>get_anti_patterns</code></td>
           <td>All known hallucination patterns — props and values that don't exist</td>
+          <td><code>component?</code></td>
         </tr>
         <tr>
           <td><code>get_version_info</code></td>
           <td>Current schema version and compatible package versions</td>
+          <td>—</td>
         </tr>
       </tbody>
     </table>
   </div>
 
-  <h2 class="docs-h2">How it works</h2>
+  <h2 class="docs-h2">Tool examples</h2>
+
+  <h3 class="docs-h3">get_component_info</h3>
+  <pre class="docs-pre"><code>{`// Input
+{ "component": "Button" }
+
+// Output (cheat sheet format)
+## Button
+Triggers actions and navigation.
+
+import: import { Button } from "@usevyre/react"
+
+Props:
+  variant  = "primary" | "secondary" | "ghost" | "accent" | "teal" | "danger" (default: secondary)
+  size     = "sm" | "md" | "lg" | "icon" (default: md)
+  loading  = boolean (default: false)
+  disabled = boolean (default: false)
+
+Common mistakes:
+  ❌ variant="blue"   → Use variant="accent"
+  ❌ size="xl"        → Max size is "lg"
+  ❌ color="red"      → No color prop — use variant="danger"`}</code></pre>
+
+  <h3 class="docs-h3">get_token_info</h3>
+  <pre class="docs-pre"><code>{`// Look up a specific token
+{ "token": "accent" }
+
+// Output
+## --vyre-color-semantic-accent
+
+Primary brand accent. CTAs, highlights, focus rings.
+
+Light: "#7c3aed"
+Dark:  "#a78bfa"
+
+Aliases:
+  Light → color.primitive.violet.600
+  Dark  → color.primitive.violet.400
+
+Usage:
+  - Button primary background
+  - Link active state
+  - Focus ring
+  - Badge accent variant
+  - Active nav indicator
+
+Related tokens:
+  - --vyre-color-semantic-accent-hover
+  - --vyre-color-semantic-accent-foreground
+  - --vyre-color-semantic-accent-subtle
+
+// List a category
+{ "category": "spacing" }
+
+// Output
+## useVyre spacing tokens
+4px base grid. Use for padding, margin, gap.
+
+--vyre-spacing-0 = 0
+--vyre-spacing-1 = 0.25rem — 4px
+--vyre-spacing-2 = 0.5rem  — 8px
+...`}</code></pre>
+
+  <h3 class="docs-h3">check_valid_prop_value</h3>
+  <pre class="docs-pre"><code>{`// Input
+{ "component": "Button", "prop": "variant", "value": "blue" }
+
+// Output
+❌ "blue" is NOT a valid value for Button variant.
+Valid values: "primary", "secondary", "ghost", "accent", "teal", "danger"
+Did you mean: "primary"?`}</code></pre>
+
+  <h3 class="docs-h3">suggest_component</h3>
+  <pre class="docs-pre"><code>{`// Input
+{ "use_case": "show a transient success notification" }
+
+// Output
+Suggested useVyre components for "show a transient success notification":
+- Toast: Temporary notification messages with auto-dismiss
+  Import: import { toast } from "@usevyre/react"
+- Alert: Inline feedback messages for success, warning, error, info
+  Import: import { Alert } from "@usevyre/react"`}</code></pre>
+
+  <h2 class="docs-h2">Prompt examples</h2>
   <p class="docs-p">
-    When you ask Claude to build a UI with useVyre components, it automatically calls
-    <code>get_valid_props</code> or <code>get_component_info</code> before writing code —
-    so it never guesses prop values.
+    These prompts trigger the MCP tools automatically — no manual invocation needed.
   </p>
 
-  <div class="docs-callout docs-callout--accent">
-    <strong>Example:</strong> Ask Claude <em>"Add a danger button with loading state"</em> —
-    it calls <code>get_component_info("Button")</code> and confirms
-    <code>variant="danger"</code> and <code>loading</code> are valid before writing the JSX.
+  <div class="docs-table-wrapper">
+    <table class="docs-table">
+      <thead>
+        <tr><th>What you say</th><th>Tool called</th></tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td><em>"Add a danger button with loading state"</em></td>
+          <td><code>get_component_info("Button")</code></td>
+        </tr>
+        <tr>
+          <td><em>"What variants does Badge support?"</em></td>
+          <td><code>get_valid_props("Badge")</code></td>
+        </tr>
+        <tr>
+          <td><em>"Is size='xl' valid on Button?"</em></td>
+          <td><code>check_valid_prop_value("Button", "size", "xl")</code></td>
+        </tr>
+        <tr>
+          <td><em>"What component should I use for a search palette?"</em></td>
+          <td><code>suggest_component("search palette")</code></td>
+        </tr>
+        <tr>
+          <td><em>"What color should I use for the primary CTA?"</em></td>
+          <td><code>get_token_info(token="accent")</code></td>
+        </tr>
+        <tr>
+          <td><em>"List all spacing tokens"</em></td>
+          <td><code>get_token_info(category="spacing")</code></td>
+        </tr>
+        <tr>
+          <td><em>"What mistakes do AI agents make with Modal?"</em></td>
+          <td><code>get_anti_patterns("Modal")</code></td>
+        </tr>
+      </tbody>
+    </table>
   </div>
 
   <h2 class="docs-h2">Without MCP</h2>
   <p class="docs-p">
     If you prefer not to use MCP, copy the context into your CLAUDE.md manually using
-    <a href="/docs/ai-tooling/ai-context-pkg">@usevyre/ai-context</a>. MCP just automates
-    this and keeps it always in sync with the installed package version.
+    <a href="/docs/ai-tooling/ai-context-pkg">@usevyre/ai-context</a>. MCP automates this
+    and keeps context in sync with your installed package version automatically.
   </p>
+
+  <h2 class="docs-h2">Troubleshooting</h2>
+
+  <h3 class="docs-h3">Server not appearing in Claude Desktop</h3>
+  <ul class="docs-list">
+    <li>Fully quit and relaunch Claude Desktop (menu bar → Quit, not just close window)</li>
+    <li>Check the config file is valid JSON — use a JSON validator</li>
+    <li>macOS path must be exact: <code>~/Library/Application Support/Claude/claude_desktop_config.json</code></li>
+    <li>Check Claude Desktop logs: <code>~/Library/Logs/Claude/</code></li>
+  </ul>
+
+  <h3 class="docs-h3">npx command not found</h3>
+  <ul class="docs-list">
+    <li>Ensure Node.js ≥ 18 is installed: <code>node --version</code></li>
+    <li>If Claude Desktop can't find <code>npx</code>, use the absolute path: <code>which npx</code> on macOS/Linux</li>
+    <li>
+      Alternatively, install globally and use a direct path:
+      <pre class="docs-pre" style="margin-top:0.5rem"><code set:text={codeLocalPath} /></pre>
+    </li>
+  </ul>
+
+  <h3 class="docs-h3">Tools not being called automatically</h3>
+  <ul class="docs-list">
+    <li>MCP tools are called at Claude's discretion — mention "useVyre" explicitly in your prompt</li>
+    <li>You can always trigger a tool directly: <em>"Call get_component_info for Button"</em></li>
+    <li>Check that the server is connected — look for the MCP indicator in Claude Desktop's interface</li>
+  </ul>
 
   <div class="docs-pagination">
     <a href="/docs/ai-tooling/eslint-plugin" class="docs-pagination__link docs-pagination__link--prev">
