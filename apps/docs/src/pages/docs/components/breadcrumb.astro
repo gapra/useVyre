@@ -41,6 +41,20 @@ const codeSeparatorVue = `<Breadcrumb separator="›">
   <BreadcrumbItem :current="true">Settings</BreadcrumbItem>
 </Breadcrumb>`;
 
+const codeLinkReact = `import { Breadcrumb, BreadcrumbItem, BreadcrumbLink, BreadcrumbSeparator } from "@usevyre/react";
+
+<Breadcrumb>
+  <BreadcrumbItem>
+    <BreadcrumbLink href="/">Home</BreadcrumbLink>
+  </BreadcrumbItem>
+  <BreadcrumbSeparator />
+  <BreadcrumbItem>
+    <BreadcrumbLink href="/docs">Docs</BreadcrumbLink>
+  </BreadcrumbItem>
+  <BreadcrumbSeparator />
+  <BreadcrumbItem aria-current="page">Breadcrumb</BreadcrumbItem>
+</Breadcrumb>`;
+
 const breadcrumbProps = [
   { name: "separator",   type: "ReactNode / string", default: `"/"`,  description: "Character or element rendered between items." },
   { name: "class / className", type: "string",       default: "—",    description: "Additional CSS class on the nav element." },
@@ -49,6 +63,11 @@ const breadcrumbProps = [
 const itemProps = [
   { name: "href",    type: "string",  default: "—",     description: "When provided, renders an anchor tag. Omit for the current (last) item." },
   { name: "current", type: "boolean", default: "false", description: "Marks the item with aria-current='page' and applies active styling." },
+  { name: "class / className", type: "string", default: "—", description: "Additional CSS class." },
+];
+
+const linkProps = [
+  { name: "href", type: "string", default: "—", description: "URL the link navigates to. Required." },
   { name: "class / className", type: "string", default: "—", description: "Additional CSS class." },
 ];
 ---
@@ -85,11 +104,22 @@ const itemProps = [
     <BreadcrumbCustomSeparatorDemo client:visible />
   </ComponentPreview>
 
+  <h2 class="docs-h2">BreadcrumbLink + BreadcrumbSeparator (React)</h2>
+  <p class="docs-p">
+    Alternative composition pattern using explicit <code>BreadcrumbLink</code> and <code>BreadcrumbSeparator</code>
+    subcomponents. Useful when you need full control over link rendering (e.g. with a router).
+    Vue uses <code>href</code> on <code>BreadcrumbItem</code> directly.
+  </p>
+  <pre class="docs-pre"><code set:text={codeLinkReact} /></pre>
+
   <h2 class="docs-h2">Props — Breadcrumb</h2>
   <PropsTable props={breadcrumbProps} />
 
   <h2 class="docs-h2">Props — BreadcrumbItem</h2>
   <PropsTable props={itemProps} />
+
+  <h2 class="docs-h2">Props — BreadcrumbLink (React only)</h2>
+  <PropsTable props={linkProps} />
 
   <AICheatSheet component="Breadcrumb" />
 

@@ -113,7 +113,7 @@ export { default as DatePicker }        from "./components/Calendar/DatePicker.v
 export { default as Text }              from "./components/Typography/Typography.vue";
 export { default as Heading }           from "./components/Typography/Heading.vue";
 export { default as Lead }              from "./components/Typography/Lead.vue";
-export { default as VyreCode }          from "./components/Typography/Code.vue";
+export { default as Code }              from "./components/Typography/Code.vue";
 export { default as Blockquote }        from "./components/Typography/Blockquote.vue";
 export { default as AppLayout }         from "./components/Sidebar/AppLayout.vue";
 export { default as AppShell }          from "./components/Sidebar/AppShell.vue";

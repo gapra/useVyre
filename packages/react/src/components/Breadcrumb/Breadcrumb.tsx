@@ -88,3 +88,26 @@ export const BreadcrumbItem: React.FC<BreadcrumbItemProps> = ({
   );
 };
 BreadcrumbItem.displayName = "VyreBreadcrumbItem";
+
+export interface BreadcrumbLinkProps {
+  children: React.ReactNode;
+  href: string;
+  className?: string;
+}
+
+export const BreadcrumbLink: React.FC<BreadcrumbLinkProps> = ({ children, href, className }) => (
+  <a href={href} className={cn("vyre-breadcrumb__link", className)}>
+    {children}
+  </a>
+);
+BreadcrumbLink.displayName = "VyreBreadcrumbLink";
+
+export const BreadcrumbSeparator: React.FC<{ children?: React.ReactNode; className?: string }> = ({
+  children = "/",
+  className,
+}) => (
+  <span className={cn("vyre-breadcrumb__separator", className)} aria-hidden="true">
+    {children}
+  </span>
+);
+BreadcrumbSeparator.displayName = "VyreBreadcrumbSeparator";
