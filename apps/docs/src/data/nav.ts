@@ -30,10 +30,11 @@ export const navigation: NavSection[] = [
   {
     title: "AI Tooling",
     items: [
-      { title: "@usevyre/ai-context", href: "/docs/ai-tooling/ai-context-pkg" },
-      { title: "validate-ai-context", href: "/docs/ai-tooling/validate"        },
-      { title: "@usevyre/eslint-plugin",  href: "/docs/ai-tooling/eslint-plugin"   },
-      { title: "MCP Server",          href: "/docs/ai-tooling/mcp-server"      },
+      { title: "@usevyre/ai-context",    href: "/docs/ai-tooling/ai-context-pkg"    },
+      { title: "@usevyre/validate-ai-context",    href: "/docs/ai-tooling/validate"          },
+      { title: "@usevyre/eslint-plugin", href: "/docs/ai-tooling/eslint-plugin"     },
+      { title: "MCP Server",             href: "/docs/ai-tooling/mcp-server"        },
+      { title: "Prompt Templates",       href: "/docs/ai-tooling/prompt-templates"  },
     ],
   },
   {

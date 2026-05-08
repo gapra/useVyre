@@ -1,0 +1,173 @@
+---
+import DocsLayout from "@/layouts/DocsLayout.astro";
+
+const codeClaude = `I'm building a React dashboard using the useVyre design system (@usevyre/react).
+
+Rules:
+- Only use components that exist in useVyre: Accordion, Alert, Avatar, Badge, Breadcrumb,
+  Button, Calendar, Card, Checkbox, Command, DropdownMenu, Input, Label, Modal, Pagination,
+  Popover, Progress, Select, Separator, Sheet, Sidebar, Skeleton, Slider, Switch, Table,
+  Tabs, Toast, Tooltip, Typography
+- Always use semantic tokens for colors (--vyre-color-semantic-*), never hardcode
+- Use variant prop for Button, never color prop
+- Add aria-label to any Button with size="icon"
+
+Build me a dashboard with:
+- Sidebar with navigation links
+- Header with search (use Command component) and user avatar
+- Main area with stats cards and a data table`;
+
+const codeClaudeForm = `I'm using the useVyre design system (@usevyre/react).
+
+Form rules:
+- Wrap each Input in a <Field> component for label + validation state
+- Field state prop: "idle" | "error" | "success" | "warning"
+- Use <Select options={[{ value, label }]}> for dropdowns, never native <select>
+- Submit button: <Button variant="accent" type="submit" loading={isSubmitting}>
+
+Build me a user registration form with name, email, password, and role select.`;
+
+const codeCursor = `I'm working with the useVyre design system. @usevyre/react is installed.
+
+Available components: Accordion, Alert, Avatar, Badge, Breadcrumb, Button, Calendar, Card,
+Checkbox, Command, DropdownMenu, Input, Label, Modal, Pagination, Popover, Progress, Select,
+Separator, Sheet, Sidebar, Skeleton, Slider, Switch, Table, Tabs, Toast, Tooltip, Typography
+
+Critical rules:
+- Button: variant = primary | secondary | ghost | accent | teal | danger
+- Badge: variant = default | accent | teal | success | warning | danger
+- Alert: variant = info | success | warning | danger (NOT "error")
+- Toast: use useToast() hook, never render <Toast> directly
+- Search UI → use Command component, NOT Input type="search"
+
+Build: [describe what you need]`;
+
+const codeCopilot = `// useVyre Button: variant=primary|secondary|ghost|accent|teal|danger, size=sm|md|lg|icon
+// No color prop. Add aria-label for size="icon".
+<Button`;
+
+const codeFixHallucination = `Fix useVyre prop errors in this code:
+[paste code]
+
+Common fixes:
+- color="blue" → variant="accent"
+- size="xl" → size="lg"
+- variant="error" → variant="danger"
+- variant="info" (on Badge) → variant="teal"
+- icon={...} on Button → leftIcon={...}
+- <Toast> rendered directly → const { toast } = useToast()`;
+
+const codeMinimal = `React component using @usevyre/react.
+Button: variant=primary|secondary|ghost|accent|teal|danger, no color prop.
+Badge: variant=default|accent|teal|success|warning|danger.
+Alert: variant=info|success|warning|danger.
+Toast: useToast() hook only.
+Build: [describe what you need]`;
+
+const codeInstall = `npm install @usevyre/prompt-templates
+# or
+pnpm add @usevyre/prompt-templates`;
+
+const codeImport = `import { getTemplate, templates } from "@usevyre/prompt-templates";
+
+// Get a specific template as markdown string
+const claudeTemplates = getTemplate("claude");
+
+// Or access all at once
+console.log(templates.cursor);
+console.log(templates.copilot);`;
+---
+
+<DocsLayout title="Prompt Templates">
+  <div class="docs-header">
+    <div class="docs-header__meta">
+      <span class="vyre-badge vyre-badge--accent">npm</span>
+      <span class="vyre-badge vyre-badge--default">v0.1.0</span>
+    </div>
+    <h1 class="docs-title">Prompt Templates</h1>
+    <p class="docs-lead">
+      Ready-to-use prompt templates for generating correct useVyre UI with Claude, Cursor, Copilot,
+      and Windsurf. Copy, fill in your task, and get working code on the first try.
+    </p>
+  </div>
+
+  <hr class="docs-divider" />
+
+  <h2 class="docs-h2">Why use templates?</h2>
+  <p class="docs-p">
+    AI agents hallucinate component props when they don't have explicit context. These templates
+    embed the exact valid values for every useVyre component — so the AI generates correct code
+    without you having to debug wrong variants, missing props, or non-existent sizes.
+  </p>
+
+  <div class="docs-callout docs-callout--accent">
+    <strong>Tip:</strong> For persistent context in your project, run
+    <code>npx @usevyre/ai-context init --claude</code> to generate a <code>CLAUDE.md</code>
+    (or <code>.cursor/rules</code> for Cursor) — then you won't need to paste context every time.
+  </div>
+
+  <hr class="docs-divider" />
+
+  <h2 class="docs-h2">Claude templates</h2>
+  <p class="docs-p">Use in <a href="https://claude.ai" class="docs-link">claude.ai</a>, Claude Desktop, or Claude Code.</p>
+
+  <h3 class="docs-h3">Build a dashboard</h3>
+  <pre class="docs-pre"><code set:text={codeClaude} /></pre>
+
+  <h3 class="docs-h3">Build a form</h3>
+  <pre class="docs-pre"><code set:text={codeClaudeForm} /></pre>
+
+  <hr class="docs-divider" />
+
+  <h2 class="docs-h2">Cursor templates</h2>
+  <p class="docs-p">Use in Cursor chat (<kbd>Cmd+L</kbd>) or paste into <code>.cursor/rules</code> for persistent context.</p>
+
+  <h3 class="docs-h3">Build a page (Cmd+L chat)</h3>
+  <pre class="docs-pre"><code set:text={codeCursor} /></pre>
+
+  <hr class="docs-divider" />
+
+  <h2 class="docs-h2">Copilot templates</h2>
+  <p class="docs-p">Use inline in your <code>.tsx</code> file as a comment trigger, or in Copilot Chat.</p>
+
+  <h3 class="docs-h3">Inline comment trigger</h3>
+  <pre class="docs-pre"><code set:text={codeCopilot} /></pre>
+
+  <hr class="docs-divider" />
+
+  <h2 class="docs-h2">Fix AI-generated code (any tool)</h2>
+  <p class="docs-p">Got hallucinated props from your AI? Paste this to fix them:</p>
+  <pre class="docs-pre"><code set:text={codeFixHallucination} /></pre>
+
+  <h2 class="docs-h2">Minimal template (any tool)</h2>
+  <p class="docs-p">Shortest possible context — good for quick inline prompts:</p>
+  <pre class="docs-pre"><code set:text={codeMinimal} /></pre>
+
+  <hr class="docs-divider" />
+
+  <h2 class="docs-h2">Download all templates</h2>
+  <p class="docs-p">Install the package to access all templates programmatically:</p>
+  <pre class="docs-pre"><code set:text={codeInstall} /></pre>
+  <pre class="docs-pre"><code set:text={codeImport} /></pre>
+
+  <div class="docs-table-wrapper">
+    <table class="docs-table">
+      <thead>
+        <tr><th>Export</th><th>File</th><th>Use case</th></tr>
+      </thead>
+      <tbody>
+        <tr><td><code>@usevyre/prompt-templates/claude</code></td><td><code>templates/claude.md</code></td><td>claude.ai, Claude Desktop, Claude Code</td></tr>
+        <tr><td><code>@usevyre/prompt-templates/cursor</code></td><td><code>templates/cursor.md</code></td><td>Cursor IDE chat + inline</td></tr>
+        <tr><td><code>@usevyre/prompt-templates/copilot</code></td><td><code>templates/copilot.md</code></td><td>GitHub Copilot inline + chat</td></tr>
+        <tr><td><code>@usevyre/prompt-templates/windsurf</code></td><td><code>templates/windsurf.md</code></td><td>Windsurf Cascade</td></tr>
+        <tr><td><code>@usevyre/prompt-templates/generic</code></td><td><code>templates/generic.md</code></td><td>ChatGPT, Gemini, any other AI</td></tr>
+      </tbody>
+    </table>
+  </div>
+
+  <div class="docs-pagination">
+    <a href="/docs/ai-tooling/mcp-server" class="docs-pagination__link docs-pagination__link--prev">
+      ← MCP Server
+    </a>
+  </div>
+</DocsLayout>
