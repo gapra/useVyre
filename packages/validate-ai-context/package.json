@@ -9,7 +9,7 @@
     "lint",
     "vyre"
   ],
-  "homepage": "https://usevyre.com/docs/validate",
+  "homepage": "https://usevyre.com/docs/ai-tooling/validate",
   "repository": {
     "type": "git",
     "url": "https://github.com/gapra/usevyre"

@@ -2,7 +2,7 @@
 import DocsLayout from "@/layouts/DocsLayout.astro";
 
 const codeFlat = `// eslint.config.js
-import vyrePlugin from 'eslint-plugin-vyre';
+import vyrePlugin from '@usevyre/eslint-plugin';
 
 export default [
   vyrePlugin.configs.recommended,
@@ -11,15 +11,15 @@ export default [
 
 const codeLegacy = `// .eslintrc.js
 module.exports = {
-  plugins: ['vyre'],
-  extends: ['plugin:vyre/recommended'],
+  plugins: ['@usevyre'],
+  extends: ['plugin:@usevyre/recommended'],
 };
 
 // or manually:
 module.exports = {
-  plugins: ['vyre'],
+  plugins: ['@usevyre'],
   rules: {
-    'vyre/no-invalid-vyre-props': 'error',
+    '@usevyre/no-invalid-vyre-props': 'error',
   },
 };`;
 
@@ -38,13 +38,13 @@ const codeHallucinated = `// ❌ ESLint error
 <Badge variant="success" />`;
 ---
 
-<DocsLayout title="eslint-plugin-vyre">
+<DocsLayout title="@usevyre/eslint-plugin">
   <div class="docs-header">
     <div class="docs-header__meta">
       <span class="vyre-badge vyre-badge--accent">npm</span>
       <span class="vyre-badge vyre-badge--default">v0.1.0</span>
     </div>
-    <h1 class="docs-title">eslint-plugin-vyre</h1>
+    <h1 class="docs-title">@usevyre/eslint-plugin</h1>
     <p class="docs-lead">
       ESLint plugin that catches invalid useVyre component usage at lint time — inline in your
       editor as you type. The same hallucination detection as the CLI, but integrated into
@@ -55,9 +55,9 @@ const codeHallucinated = `// ❌ ESLint error
   <hr class="docs-divider" />
 
   <h2 class="docs-h2">Installation</h2>
-  <pre class="docs-pre"><code>npm install --save-dev eslint-plugin-vyre
+  <pre class="docs-pre"><code>npm install --save-dev @usevyre/eslint-plugin
 # or
-pnpm add -D eslint-plugin-vyre</code></pre>
+pnpm add -D @usevyre/eslint-plugin</code></pre>
 
   <h2 class="docs-h2">Setup</h2>
 
