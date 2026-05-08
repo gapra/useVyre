@@ -1,6 +1,6 @@
 {
   "name": "@usevyre/mcp-server",
-  "version": "0.1.2",
+  "version": "0.1.3",
   "description": "useVyre MCP server — gives Claude Desktop real-time access to component context",
   "keywords": [
     "mcp",
@@ -28,7 +28,8 @@
   ],
   "dependencies": {
     "@modelcontextprotocol/sdk": "^1.0.0",
-    "@usevyre/ai-context": "workspace:*"
+    "@usevyre/ai-context": "workspace:*",
+    "zod": "^3.22.0"
   },
   "engines": {
     "node": ">=18.0.0"

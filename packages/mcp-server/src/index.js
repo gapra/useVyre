@@ -4,7 +4,8 @@ import { StdioServerTransport } from "@modelcontextprotocol/sdk/server/stdio.js"
 import { z } from "zod";
 import { readFileSync } from "fs";
 import { resolve, dirname } from "path";
-import { fileURLToPath, createRequire } from "url";
+import { fileURLToPath } from "url";
+import { createRequire } from "module";
 import { schema, antiPatterns, cheatSheets, versionInfo, claudeContext } from "@usevyre/ai-context";
 
 const _require = createRequire(import.meta.url);

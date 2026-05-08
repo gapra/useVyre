@@ -77,6 +77,9 @@ importers:
       '@usevyre/ai-context':
         specifier: workspace:*
         version: link:../ai-context
+      zod:
+        specifier: ^3.22.0
+        version: 3.25.76
 
   packages/prompt-templates:
     dependencies:
