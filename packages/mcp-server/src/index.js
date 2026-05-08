@@ -2,7 +2,14 @@
 import { McpServer } from "@modelcontextprotocol/sdk/server/mcp.js";
 import { StdioServerTransport } from "@modelcontextprotocol/sdk/server/stdio.js";
 import { z } from "zod";
+import { readFileSync } from "fs";
+import { resolve, dirname } from "path";
+import { fileURLToPath, createRequire } from "url";
 import { schema, antiPatterns, cheatSheets, versionInfo, claudeContext } from "@usevyre/ai-context";
+
+const _require = createRequire(import.meta.url);
+const aiTokensPath = _require.resolve("@usevyre/ai-context/tokens");
+const aiTokens = JSON.parse(readFileSync(aiTokensPath, "utf-8"));
 
 const { components } = schema;
 const componentNames = Object.keys(components);
@@ -364,6 +371,145 @@ server.tool(
       },
     ],
   })
+);
+
+// ── Tool: get_token_info ──────────────────────────────────────────────────────
+
+server.tool(
+  "get_token_info",
+  "Get design token information for useVyre. Query a specific token by name, or list all tokens in a category (color, spacing, typography, borderRadius, shadow, transition, zIndex).",
+  {
+    token: z
+      .string()
+      .optional()
+      .describe("Token name or CSS variable (e.g. 'accent', 'color.semantic.accent', '--vyre-color-semantic-accent', 'spacing-4')"),
+    category: z
+      .string()
+      .optional()
+      .describe("Category to list: 'color', 'spacing', 'typography', 'borderRadius', 'shadow', 'transition', 'zIndex'"),
+  },
+  async ({ token, category }) => {
+    // List a category
+    if (category && !token) {
+      const cat = aiTokens.categories[category];
+      if (!cat) {
+        const valid = Object.keys(aiTokens.categories).join(", ");
+        return {
+          content: [{ type: "text", text: `Category "${category}" not found.\nValid categories: ${valid}` }],
+          isError: true,
+        };
+      }
+
+      const tokens = cat.tokens ?? cat.semantic ?? [];
+      if (tokens.length === 0) {
+        return { content: [{ type: "text", text: `No tokens in category "${category}".` }] };
+      }
+
+      const lines = [`## useVyre ${category} tokens`, "", cat.description ?? "", ""];
+      for (const t of tokens) {
+        if (t.values) {
+          lines.push(`**${t.cssVar}**`);
+          lines.push(`  Light: \`${t.values.light}\` | Dark: \`${t.values.dark ?? "—"}\``);
+          lines.push(`  ${t.description}`);
+        } else {
+          lines.push(`**${t.cssVar}** = \`${t.value}\` — ${t.description}`);
+        }
+      }
+      return { content: [{ type: "text", text: lines.join("\n") }] };
+    }
+
+    // Look up a specific token
+    if (token) {
+      const query = token
+        .replace(/^--vyre-/, "")           // strip CSS var prefix
+        .replace(/^color\.semantic\./, "") // strip full path prefix
+        .toLowerCase();
+
+      // Search semantic color tokens first
+      const semantic = aiTokens.categories.color.semantic;
+      const match = semantic.find(
+        (t) =>
+          t.name.toLowerCase() === `color.semantic.${query}` ||
+          t.name.toLowerCase().endsWith(query) ||
+          t.cssVar.toLowerCase() === `--vyre-${query}` ||
+          t.cssVar.toLowerCase().includes(query)
+      );
+
+      if (match) {
+        const lines = [
+          `## ${match.cssVar}`,
+          "",
+          match.description,
+          "",
+          `**Light:** \`${match.values.light}\``,
+          `**Dark:**  \`${match.values.dark ?? "—"}\``,
+          "",
+          `**Aliases:**`,
+          `  Light → \`${match.aliases.light ?? match.values.light}\``,
+          `  Dark  → \`${match.aliases.dark  ?? match.values.dark ?? "—"}\``,
+          "",
+          `**Usage:**`,
+          ...(match.usage ?? []).map((u) => `  - ${u}`),
+          "",
+          `**Related tokens:**`,
+          ...(match.relatedTokens ?? []).map((r) => `  - \`--vyre-${r.replace("color.semantic.", "color-semantic-")}\``),
+          "",
+          `**JS key:** \`tokens["${match.jsKey}"]\``,
+          `**CSS:**    \`var(${match.cssVar})\``,
+        ];
+        return { content: [{ type: "text", text: lines.join("\n") }] };
+      }
+
+      // Search other categories
+      for (const [catName, cat] of Object.entries(aiTokens.categories)) {
+        if (catName === "color") continue;
+        const tokens = cat.tokens ?? [];
+        const t = tokens.find(
+          (t) =>
+            t.cssVar.toLowerCase().includes(query) ||
+            t.name?.toLowerCase().includes(query)
+        );
+        if (t) {
+          const lines = [
+            `## ${t.cssVar}`,
+            "",
+            t.description ?? "",
+            "",
+            `**Value:** \`${t.value}\``,
+            `**Category:** ${catName}`,
+            `**JS key:** \`tokens["${t.jsKey}"]\``,
+          ];
+          return { content: [{ type: "text", text: lines.join("\n") }] };
+        }
+      }
+
+      return {
+        content: [{ type: "text", text: `Token "${token}" not found.\nTry get_token_info with category="color" to list all semantic color tokens.` }],
+        isError: true,
+      };
+    }
+
+    // No args — return overview
+    const semanticCount = aiTokens.categories.color.semantic.length;
+    const spacingCount  = aiTokens.categories.spacing.tokens.length;
+    const lines = [
+      `## useVyre Token Reference — v${aiTokens.version}`,
+      "",
+      ...aiTokens.rules.map((r, i) => `${i + 1}. ${r}`),
+      "",
+      `**Categories:**`,
+      `  - color (${semanticCount} semantic tokens, light + dark values)`,
+      `  - spacing (${spacingCount} tokens, 4px grid)`,
+      `  - typography (font-family, font-size, font-weight, line-height)`,
+      `  - borderRadius`,
+      `  - shadow`,
+      `  - transition (duration + easing)`,
+      `  - zIndex`,
+      "",
+      `Use get_token_info with token="accent" or category="spacing" to query.`,
+    ];
+    return { content: [{ type: "text", text: lines.join("\n") }] };
+  }
 );
 
 // ── Start ─────────────────────────────────────────────────────────────────────

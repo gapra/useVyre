@@ -19,6 +19,29 @@ const codeImportJs = `import { tokens } from "@usevyre/tokens";
 // Typed JS object — useful for runtime theming or Storybook
 console.log(tokens.color.semantic.accent); // "#7c3aed"`;
 
+const codeAiTokens = `// Machine-readable token reference for AI agents
+import tokensRef from "@usevyre/tokens/ai";
+// or via ai-context:
+import tokensRef from "@usevyre/ai-context/tokens";
+
+// Each semantic color token includes light + dark values, usage hints, and related tokens
+const accent = tokensRef.categories.color.semantic.find(t => t.name === "color.semantic.accent");
+// {
+//   cssVar:        "--vyre-color-semantic-accent",
+//   values:        { light: "#7c3aed", dark: "#a78bfa" },
+//   aliases:       { light: "color.primitive.violet.600", dark: "color.primitive.violet.400" },
+//   usage:         ["Button primary background", "Link active state", "Focus ring", ...],
+//   relatedTokens: ["color.semantic.accent-hover", "color.semantic.accent-foreground", ...]
+// }
+
+// Spacing, typography, border-radius, shadow, transition, z-index also included
+tokensRef.categories.spacing.tokens;    // [{ cssVar, value, description }, ...]
+tokensRef.categories.borderRadius.tokens;
+tokensRef.categories.shadow.tokens;
+
+// AI usage rules (8 rules)
+tokensRef.rules; // ["NEVER use primitive tokens ...", ...]`;
+
 const codeTheme = `<!-- Light (explicit) -->
 <html data-theme="light">
 
@@ -185,6 +208,18 @@ const typographyTokens: TypographyRow[] = [
       </tbody>
     </table>
   </div>
+
+  <h2 class="docs-h2">AI Token Reference</h2>
+  <p class="docs-p">
+    For AI agents, MCP servers, and custom tooling — all tokens are available as structured
+    machine-readable JSON with light/dark values, usage hints, and related token links.
+  </p>
+  <div class="docs-callout docs-callout--teal">
+    <strong>For AI agents:</strong> Use <code>@usevyre/tokens/ai</code> (or
+    <code>@usevyre/ai-context/tokens</code>) instead of scraping this page. The JSON includes
+    every token with both light and dark values, usage examples, and related token names.
+  </div>
+  <Code code={codeAiTokens} lang="ts" theme="github-dark" />
 
   <div class="docs-pagination">
     <a href="/docs/ai-context" class="docs-pagination__link docs-pagination__link--prev">
