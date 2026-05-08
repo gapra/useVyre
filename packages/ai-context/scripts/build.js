@@ -14,6 +14,12 @@ mkdirSync(dist, { recursive: true });
 const schema = JSON.parse(readFileSync(resolve(src, "schema/components.json"), "utf8"));
 const staticContext = readFileSync(resolve(src, "full-context.md"), "utf8");
 
+// Load AI tokens from @usevyre/tokens (sibling package in monorepo)
+const tokensDistPath = resolve(__dirname, "../../tokens/dist/ai-tokens.json");
+const tokensMDPath   = resolve(__dirname, "../../tokens/dist/ai-tokens.md");
+const aiTokens    = existsSync(tokensDistPath) ? JSON.parse(readFileSync(tokensDistPath, "utf8")) : null;
+const aiTokensMD  = existsSync(tokensMDPath)   ? readFileSync(tokensMDPath, "utf8") : null;
+
 // ── Helpers ───────────────────────────────────────────────────────────────────
 
 function buildComponentSection(name, comp) {
@@ -387,6 +393,15 @@ const indexContent = [
 
 writeFileSync(resolve(dist, "index.js"), indexContent);
 
+// ── Copy AI tokens from @usevyre/tokens ──────────────────────────────────────
+
+if (aiTokens) {
+  writeFileSync(resolve(dist, "tokens.json"), JSON.stringify(aiTokens, null, 2));
+}
+if (aiTokensMD) {
+  writeFileSync(resolve(dist, "tokens.md"), aiTokensMD);
+}
+
 // ── Update package.json exports to include new files ─────────────────────────
 
 const pkg = JSON.parse(readFileSync(resolve(root, "package.json"), "utf8"));
@@ -401,6 +416,8 @@ pkg.exports = {
   "./anti-patterns": "./dist/anti-patterns.json",
   "./version-info": "./dist/version-info.json",
   "./cheat-sheets": "./dist/cheat-sheets/index.md",
+  "./tokens": "./dist/tokens.json",
+  "./tokens-md": "./dist/tokens.md",
 };
 writeFileSync(resolve(root, "package.json"), JSON.stringify(pkg, null, 2) + "\n");
 
@@ -420,4 +437,6 @@ console.log(`  dist/cursor-rules.md`);
 console.log(`  dist/claude-context.md`);
 console.log(`  dist/windsurf-rules.md`);
 console.log(`  dist/copilot-instructions.md`);
+console.log(`  dist/tokens.json     — AI token reference (from @usevyre/tokens)`);
+console.log(`  dist/tokens.md       — AI token reference markdown`);
 console.log(`  dist/index.js`);

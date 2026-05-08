@@ -1,6 +1,6 @@
 {
   "name": "@usevyre/tokens",
-  "version": "0.1.1",
+  "version": "0.1.2",
   "description": "useVyre design tokens — CSS variables, JS/TS, and DTCG-compliant JSON",
   "keywords": [
     "design-system",
@@ -21,7 +21,9 @@
     "./css": "./dist/vyre.css",
     "./css/base": "./dist/base.css",
     "./json": "./dist/tokens.json",
-    "./js": "./dist/tokens.js"
+    "./js": "./dist/tokens.js",
+    "./ai": "./dist/ai-tokens.json",
+    "./ai-md": "./dist/ai-tokens.md"
   },
   "files": [
     "dist"
