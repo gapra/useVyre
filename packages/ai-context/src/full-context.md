@@ -809,10 +809,10 @@ import { Tabs, TabList, Tab, TabPanels, TabPanel } from "@usevyre/react"
 
 ### Toast
 
-Transient notification. Use the useToast hook to trigger toasts imperatively.
+Transient notification. Use the useToast hook to trigger toasts imperatively. React: wrap app in <ToastProvider>. Vue: place <ToastViewport /> once in app root.
 
 ```tsx
-import { useToast, ToastProvider } from "@usevyre/react"
+import { useToast, ToastProvider } from "@usevyre/react" // Vue: import { useToast, ToastViewport } from "@usevyre/vue"
 
 // Props:
 // variant        = "default" | "success" | "warning" | "danger" (default: default)

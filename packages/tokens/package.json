@@ -1,6 +1,6 @@
 {
   "name": "@usevyre/tokens",
-  "version": "0.1.2",
+  "version": "0.2.0",
   "description": "useVyre design tokens — CSS variables, JS/TS, and DTCG-compliant JSON",
   "keywords": [
     "design-system",

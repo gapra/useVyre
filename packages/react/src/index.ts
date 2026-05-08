@@ -69,7 +69,7 @@ export {
 }                                                           from "./components/DropdownMenu/DropdownMenu";
 export { Alert, AlertDialog }                               from "./components/Alert/Alert";
 export { Sheet, SheetHeader, SheetBody, SheetFooter }       from "./components/Sheet/Sheet";
-export { Breadcrumb, BreadcrumbItem }                       from "./components/Breadcrumb/Breadcrumb";
+export { Breadcrumb, BreadcrumbItem, BreadcrumbLink, BreadcrumbSeparator } from "./components/Breadcrumb/Breadcrumb";
 export { Pagination }                                       from "./components/Pagination/Pagination";
 export {
   Table, TableHead, TableBody, TableRow,
@@ -128,7 +128,7 @@ export type {
 }                                                           from "./components/DropdownMenu/DropdownMenu";
 export type { AlertProps, AlertDialogProps, AlertVariant }  from "./components/Alert/Alert";
 export type { SheetProps, SheetSectionProps, SheetSide, SheetSize } from "./components/Sheet/Sheet";
-export type { BreadcrumbProps, BreadcrumbItemProps }        from "./components/Breadcrumb/Breadcrumb";
+export type { BreadcrumbProps, BreadcrumbItemProps, BreadcrumbLinkProps } from "./components/Breadcrumb/Breadcrumb";
 export type { PaginationProps }                             from "./components/Pagination/Pagination";
 export type {
   TableProps, TableRowProps, TableHeaderProps,

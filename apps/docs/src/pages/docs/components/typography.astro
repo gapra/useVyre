@@ -67,16 +67,16 @@ export default function App() {
 </Blockquote>`;
 
 const codeCodeVue = `<script setup>
-import { Text, VyreCode, Blockquote } from "@usevyre/vue";
+import { Text, Code, Blockquote } from "@usevyre/vue";
 </script>
 <template>
   <!-- Inline code -->
-  <Text>Run <VyreCode>npm install @usevyre/vue</VyreCode> to install.</Text>
+  <Text>Run <Code>npm install @usevyre/vue</Code> to install.</Text>
 
   <!-- Block code -->
-  <VyreCode :block="true">
+  <Code :block="true">
 import { Button } from "@usevyre/vue";
-  </VyreCode>
+  </Code>
 
   <!-- Blockquote -->
   <Blockquote>

@@ -948,8 +948,8 @@
       ]
     },
     "Toast": {
-      "description": "Transient notification. Use the useToast hook to trigger toasts imperatively.",
-      "import": "import { useToast, ToastProvider } from \"@usevyre/react\"",
+      "description": "Transient notification. Use the useToast hook to trigger toasts imperatively. React: wrap app in <ToastProvider>. Vue: place <ToastViewport /> once in app root.",
+      "import": "import { useToast, ToastProvider } from \"@usevyre/react\" // Vue: import { useToast, ToastViewport } from \"@usevyre/vue\"",
       "props": {
         "variant": {
           "type": "enum",
