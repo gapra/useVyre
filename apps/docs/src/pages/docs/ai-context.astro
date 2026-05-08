@@ -94,14 +94,17 @@ const codeCursorRef = `# .cursor/rules
 # packages/tokens/dist/ai-context.md`;
 
 // ── npx init ───────────────────────────────────────────────────
-const codeNpxClaude  = `npx @usevyre/ai-context init --claude
-# → writes CLAUDE.md with full context`;
+const codeNpxClaude  = `npx @usevyre/ai-context --claude
+# → writes CLAUDE.md with full context
+# Re-run after upgrading @usevyre packages to pick up changes`;
 
-const codeNpxCursor  = `npx @usevyre/ai-context init --cursor
-# → writes .cursor/rules with full context`;
+const codeNpxCursor  = `npx @usevyre/ai-context --cursor
+# → writes .cursor/rules with full context
+# Re-run after upgrading @usevyre packages to pick up changes`;
 
-const codeNpxWindsurf = `npx @usevyre/ai-context init --windsurf
-# → writes .windsurf/rules with full context`;
+const codeNpxWindsurf = `npx @usevyre/ai-context --windsurf
+# → writes .windsurf/rules with full context
+# Re-run after upgrading @usevyre packages to pick up changes`;
 
 // ── Before / after ─────────────────────────────────────────────
 const codeWithout = `// ❌ Without useVyre AI context
@@ -151,7 +154,7 @@ const codeValidate = `npx @usevyre/validate-ai-context src/
 
 // ── Update workflow ────────────────────────────────────────────
 const codeUpdate = `# Re-generate context after upgrading @usevyre packages
-npx @usevyre/ai-context init --claude   # overwrites CLAUDE.md section
+npx @usevyre/ai-context --claude   # updates CLAUDE.md section in-place
 
 # Or rebuild manually in a monorepo
 pnpm --filter @usevyre/tokens build
