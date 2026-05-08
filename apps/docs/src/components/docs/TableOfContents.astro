@@ -1,7 +1,5 @@
 ---
-import { readFileSync } from "node:fs";
-import { fileURLToPath } from "node:url";
-import { resolve, dirname } from "node:path";
+import { schema } from "@/data/vyre-schema";
 
 export interface Props {
   component?: string;
@@ -11,17 +9,12 @@ const { component } = Astro.props;
 
 let aiData = null;
 if (component) {
-  const schemaPath = resolve(
-    dirname(fileURLToPath(import.meta.url)),
-    "../../../node_modules/@usevyre/ai-context/dist/schema.json"
-  );
-  const schema = JSON.parse(readFileSync(schemaPath, "utf-8"));
   const comp = schema.components[component];
   if (comp) {
     const props = comp.props ?? {};
     const allProps = Object.entries(props);
-    const enumProps = allProps.filter(([, p]) => p.values);
-    const boolProps = allProps.filter(([, p]) => p.type === "boolean");
+    const enumProps = allProps.filter((entry) => entry[1].values);
+    const boolProps = allProps.filter((entry) => entry[1].type === "boolean");
     const antiPatterns = comp.antiPatterns ?? [];
 
     aiData = {

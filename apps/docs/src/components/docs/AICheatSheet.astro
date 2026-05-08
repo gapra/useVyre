@@ -1,328 +1,284 @@
 ---
-/**
- * AI Cheat Sheet — collapsible section for every component docs page.
- * Data comes from @usevyre/ai-context schema so it's always in sync.
- */
-import { readFileSync } from "node:fs";
-import { fileURLToPath } from "node:url";
-import { resolve, dirname } from "node:path";
+import { schema } from "@/data/vyre-schema";
+import { AICheatSheetPanel } from "./AICheatSheetPanel";
 
-export interface Props {
-  component: string;
-}
-
-const schemaPath = resolve(
-  dirname(fileURLToPath(import.meta.url)),
-  "../../../node_modules/@usevyre/ai-context/dist/schema.json"
-);
-const schema = JSON.parse(readFileSync(schemaPath, "utf-8"));
-
+export interface Props { component: string; }
 const { component } = Astro.props;
 const comp = schema.components[component];
-if (!comp) throw new Error(`AICheatSheet: unknown component "${component}"`);
-
-const props = comp.props ?? {};
+const props = comp ? comp.props ?? {} : {};
 const allProps = Object.entries(props);
-const enumProps = allProps.filter(([, p]) => p.values);
-const boolProps = allProps.filter(([, p]) => p.type === "boolean");
-const antiPatterns = comp.antiPatterns ?? [];
-const examples = (comp.examples ?? []).slice(0, 2);
+const enumPropsRaw = allProps.filter((entry) => entry[1].values);
+const boolPropsRaw = allProps.filter((entry) => entry[1].type === "boolean");
+const antiPatterns = comp ? comp.antiPatterns ?? [] : [];
+const examples = comp ? (comp.examples ?? []).slice(0, 2) : [];
 
-// Copy-to-clipboard text: markdown-formatted cheat sheet
-const propTableRows = [
-  ...enumProps.map(([n, p]) =>
-    `| \`${n}\` | ${p.values.map((v) => `\`"${v}"\``).join(" \\| ")} | \`${p.default ?? "—"}\` |`
-  ),
-  ...boolProps.map(([n, p]) =>
-    `| \`${n}\` | \`true\` \\| \`false\` | \`${p.default ?? false}\` |`
-  ),
-].join("\n");
+const enumProps = enumPropsRaw.map((ep) => ({
+  name: ep[0],
+  values: ep[1].values,
+  defaultVal: ep[1].default,
+}));
 
-const avoidLines = antiPatterns.map((ap) => `- ❌ \`${ap.pattern}\` → ${ap.fix}`).join("\n");
+const boolProps = boolPropsRaw.map((bp) => ({
+  name: bp[0],
+  defaultVal: bp[1].default,
+}));
 
-const exampleBlocks = (comp.examples ?? []).slice(0, 2).map((ex) =>
-  `// ${ex.description}\n${ex.code}`
-).join("\n\n");
+const copyRows = enumPropsRaw.map((ep) => {
+  const vals = ep[1].values.map((v) => '`"' + v + '"`').join(" | ");
+  return "| `" + ep[0] + "` | " + vals + " | `" + (ep[1].default ?? "—") + "` |";
+}).concat(boolPropsRaw.map((bp) => {
+  return "| `" + bp[0] + "` | `true` | `false` | `" + (bp[1].default ?? false) + "` |";
+}));
 
-const copyText = [
-  `## ${component} — useVyre AI Context`,
+const copyLines = [
+  "## " + component + " — useVyre AI Context",
   "",
   "```tsx",
-  comp.import,
+  comp ? comp.import : "",
   "```",
-  ...(propTableRows ? [
-    "",
-    "### Props",
-    "| Prop | Values | Default |",
-    "|------|--------|---------|",
-    propTableRows,
-  ] : []),
-  ...(avoidLines ? [
-    "",
-    "### Avoid",
-    avoidLines,
-  ] : []),
-  ...(exampleBlocks ? [
-    "",
-    "### Examples",
-    "```tsx",
-    exampleBlocks,
-    "```",
-  ] : []),
-].join("\n");
+].concat(
+  copyRows.length ? ["", "### Props", "| Prop | Values | Default |", "|------|--------|---------|"].concat(copyRows) : []
+).concat(
+  antiPatterns.length ? ["", "### Avoid"].concat(antiPatterns.map((ap) => "- ❌ `" + ap.pattern + "` → " + ap.fix)) : []
+).concat(
+  examples.length ? ["", "### Examples", "```tsx"].concat(examples.map((ex) => "// " + ex.description + "\n" + ex.code)).concat(["```"]) : []
+);
 
-const id = `acs-${component.toLowerCase()}`;
+const copyText = copyLines.join("\n");
 ---
 
-<details class="acs" id={id}>
-  <summary class="acs__trigger">
-    <span class="acs__icon" aria-hidden="true">
-      <svg width="14" height="14" viewBox="0 0 14 14" fill="none">
-        <rect x="1" y="3" width="12" height="9" rx="1.5" stroke="currentColor" stroke-width="1.3"/>
-        <path d="M4 1v2M10 1v2M1 6h12" stroke="currentColor" stroke-width="1.3" stroke-linecap="round"/>
-        <path d="M4 9h2M8 9h2" stroke="currentColor" stroke-width="1.3" stroke-linecap="round"/>
-      </svg>
-    </span>
-    AI Context
-    <span class="acs__badge">for Claude · Cursor · Copilot</span>
-    <span class="acs__chevron" aria-hidden="true">
-      <svg width="12" height="12" viewBox="0 0 12 12" fill="none">
-        <path d="M3 4.5L6 7.5L9 4.5" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
-      </svg>
-    </span>
-  </summary>
+<AICheatSheetPanel
+  client:visible
+  component={component}
+  importStr={comp ? comp.import : ""}
+  enumProps={enumProps}
+  boolProps={boolProps}
+  antiPatterns={antiPatterns}
+  examples={examples}
+  copyText={copyText}
+/>
 
-  <div class="acs__body">
+<style is:global>
+/* ── AI Cheat Sheet wrapper (subtle, matches docs aesthetic) ─── */
+.acs-wrap {
+  margin: var(--vyre-spacing-8) 0;
+}
 
-    {(enumProps.length > 0 || boolProps.length > 0) && (
-      <div class="acs__section">
-        <p class="acs__label">Valid props</p>
-        <table class="acs__table">
-          <thead>
-            <tr><th>Prop</th><th>Values</th><th>Default</th></tr>
-          </thead>
-          <tbody>
-            {enumProps.map(([n, p]) => (
-              <tr>
-                <td><code class="acs__code">{n}</code></td>
-                <td class="acs__values">
-                  {p.values.map((v, i) => (
-                    <><code class="acs__val">{`"${v}"`}</code>{i < p.values.length - 1 && <span class="acs__pipe">|</span>}</>
-                  ))}
-                </td>
-                <td>{p.default !== undefined ? <code class="acs__code">{String(p.default)}</code> : <span class="acs__empty">—</span>}</td>
-              </tr>
-            ))}
-            {boolProps.map(([n, p]) => (
-              <tr>
-                <td><code class="acs__code">{n}</code></td>
-                <td class="acs__values">
-                  <code class="acs__val">true</code>
-                  <span class="acs__pipe">|</span>
-                  <code class="acs__val">false</code>
-                </td>
-                <td><code class="acs__code">{String(p.default ?? false)}</code></td>
-              </tr>
-            ))}
-          </tbody>
-        </table>
-      </div>
-    )}
+/* Accordion root */
+.acs-wrap .vyre-accordion {
+  border: 1px solid var(--vyre-color-semantic-border-subtle);
+  border-radius: var(--vyre-border-radius-lg);
+  overflow: hidden;
+  background: var(--vyre-color-semantic-background);
+}
+.acs-wrap .vyre-accordion__item {
+  border-top: none;
+  border-bottom: none;
+}
 
-    {antiPatterns.length > 0 && (
-      <div class="acs__section">
-        <p class="acs__label">Common AI mistakes</p>
-        <ul class="acs__mistakes">
-          {antiPatterns.map((ap) => (
-            <li class="acs__mistake">
-              <span class="acs__mistake-bad">❌ <code>{ap.pattern}</code></span>
-              <span class="acs__mistake-fix">→ {ap.fix}</span>
-            </li>
-          ))}
-        </ul>
-      </div>
-    )}
+/* Trigger */
+.acs-wrap .vyre-accordion__trigger.acs-trigger {
+  width: 100%;
+  padding: var(--vyre-spacing-3) var(--vyre-spacing-4);
+  background: var(--vyre-color-semantic-surface);
+  border: none;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--vyre-spacing-3);
+  cursor: pointer;
+  font-size: var(--vyre-typography-font-size-sm);
+  font-weight: var(--vyre-typography-font-weight-medium);
+  color: var(--vyre-color-semantic-text-secondary);
+}
+.acs-wrap .vyre-accordion__trigger.acs-trigger:hover {
+  color: var(--vyre-color-semantic-text-primary);
+}
+.acs-wrap .vyre-accordion__chevron {
+  flex-shrink: 0;
+  color: var(--vyre-color-semantic-text-muted);
+}
 
-    {examples.length > 0 && (
-      <div class="acs__section">
-        <p class="acs__label">Quick examples</p>
-        {examples.map((ex) => (
-          <div class="acs__example">
-            <span class="acs__example-label">{ex.description}</span>
-            <pre class="acs__pre"><code>{ex.code}</code></pre>
-          </div>
-        ))}
-      </div>
-    )}
+/* Trigger left side */
+.acs-trigger__left {
+  display: flex;
+  align-items: center;
+  gap: var(--vyre-spacing-2);
+  flex-shrink: 0;
+}
 
-    <div class="acs__footer">
-      <button class="acs__copy" data-copy={copyText} type="button">
-        <svg width="13" height="13" viewBox="0 0 14 14" fill="none" aria-hidden="true">
-          <rect x="4" y="4" width="8" height="8" rx="1" stroke="currentColor" stroke-width="1.3"/>
-          <path d="M2 10V2h8" stroke="currentColor" stroke-width="1.3" stroke-linecap="round"/>
-        </svg>
-        Copy for CLAUDE.md / .cursor/rules
-      </button>
-    </div>
+.acs-trigger__icon {
+  display: flex;
+  color: var(--vyre-color-semantic-accent);
+}
 
-  </div>
-</details>
+.acs-trigger__label {
+  font-size: var(--vyre-typography-font-size-md);
+  font-weight: var(--vyre-typography-font-weight-medium);
+  color: var(--vyre-color-semantic-text-secondary);
+}
 
-<script>
-  document.querySelectorAll<HTMLButtonElement>(".acs__copy").forEach((btn) => {
-    btn.addEventListener("click", async () => {
-      await navigator.clipboard.writeText(btn.dataset.copy ?? "");
-      const orig = btn.textContent ?? "";
-      btn.textContent = "Copied!";
-      setTimeout(() => { btn.textContent = orig; }, 2000);
-    });
-  });
-</script>
+/* AI tool chips — subtle */
+.acs-trigger__tools {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 4px;
+  align-items: center;
+  margin-left: var(--vyre-spacing-2);
+  margin-right: var(--vyre-spacing-2);
+}
 
-<style>
-  .acs {
-    border: 1px solid var(--vyre-color-semantic-border-subtle);
-    border-radius: var(--vyre-border-radius-lg);
-    overflow: hidden;
-    margin: var(--vyre-spacing-8) 0;
-  }
+.acs-tool-chip {
+  font-size: var(--vyre-typography-font-size-xs);
+  font-weight: var(--vyre-typography-font-weight-regular);
+  padding: 2px 7px;
+  border-radius: var(--vyre-border-radius-full);
+  background: var(--vyre-color-semantic-accent-subtle);
+  color: var(--vyre-color-semantic-accent);
+  line-height: 1.4;
+}
 
-  .acs__trigger {
-    display: flex;
-    align-items: center;
-    gap: var(--vyre-spacing-2);
-    padding: var(--vyre-spacing-3) var(--vyre-spacing-4);
-    cursor: pointer;
-    font-size: var(--vyre-typography-font-size-sm);
-    font-weight: var(--vyre-typography-font-weight-medium);
-    color: var(--vyre-color-semantic-text-secondary);
-    background: var(--vyre-color-semantic-surface);
-    list-style: none;
-    user-select: none;
-  }
-  .acs__trigger::-webkit-details-marker { display: none; }
-  .acs__trigger:hover { color: var(--vyre-color-semantic-text-primary); }
+/* Body */
+.acs-wrap .vyre-accordion__content.acs-body {
+  background: var(--vyre-color-semantic-background);
+  border-top: 1px solid var(--vyre-color-semantic-border-subtle);
+}
 
-  .acs__icon { display: flex; color: var(--vyre-color-semantic-accent); }
+.acs-inner {
+  padding: var(--vyre-spacing-4);
+  display: flex;
+  flex-direction: column;
+  gap: var(--vyre-spacing-4);
+}
 
-  .acs__badge {
-    margin-left: var(--vyre-spacing-1);
-    padding: 2px 7px;
-    border-radius: var(--vyre-border-radius-full);
-    font-size: var(--vyre-typography-font-size-xs);
-    font-weight: var(--vyre-typography-font-weight-regular);
-    background: var(--vyre-color-semantic-accent-subtle);
-    color: var(--vyre-color-semantic-accent);
-  }
+.acs-section {
+  display: flex;
+  flex-direction: column;
+  gap: var(--vyre-spacing-2);
+}
 
-  .acs__chevron {
-    margin-left: auto;
-    display: flex;
-    transition: transform 0.2s;
-  }
-  details[open] .acs__chevron { transform: rotate(180deg); }
+.acs-label {
+  font-size: var(--vyre-typography-font-size-xs);
+  font-weight: var(--vyre-typography-font-weight-semibold);
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+  color: var(--vyre-color-semantic-text-muted);
+  margin: 0;
+}
 
-  .acs__body {
-    padding: var(--vyre-spacing-4);
-    border-top: 1px solid var(--vyre-color-semantic-border-subtle);
-    background: var(--vyre-color-semantic-background);
-    display: flex;
-    flex-direction: column;
-    gap: var(--vyre-spacing-4);
-  }
+/* Props table */
+.acs-table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: var(--vyre-typography-font-size-sm);
+}
+.acs-table th {
+  text-align: left;
+  padding: var(--vyre-spacing-1) var(--vyre-spacing-2);
+  font-size: var(--vyre-typography-font-size-xs);
+  font-weight: var(--vyre-typography-font-weight-medium);
+  color: var(--vyre-color-semantic-text-muted);
+  border-bottom: 1px solid var(--vyre-color-semantic-border-subtle);
+}
+.acs-table td {
+  padding: var(--vyre-spacing-1) var(--vyre-spacing-2);
+  vertical-align: top;
+  border-bottom: 1px solid var(--vyre-color-semantic-border-subtle);
+}
+.acs-table tr:last-child td { border-bottom: none; }
 
-  .acs__section { display: flex; flex-direction: column; gap: var(--vyre-spacing-2); }
+.acs-values { display: flex; flex-wrap: wrap; align-items: center; gap: 4px; }
+.acs-val-wrap { display: inline-flex; align-items: center; gap: 4px; }
+.acs-pipe { color: var(--vyre-color-semantic-text-muted); font-size: 10px; }
+.acs-code, .acs-val {
+  font-family: var(--vyre-typography-font-family-mono);
+  font-size: var(--vyre-typography-font-size-xs);
+  padding: 1px 5px;
+  border-radius: var(--vyre-border-radius-sm);
+  background: var(--vyre-color-semantic-surface-raised);
+  color: var(--vyre-color-semantic-teal);
+}
+.acs-empty { color: var(--vyre-color-semantic-text-muted); }
 
-  .acs__label {
-    font-size: var(--vyre-typography-font-size-xs);
-    font-weight: var(--vyre-typography-font-weight-semibold);
-    text-transform: uppercase;
-    letter-spacing: 0.06em;
-    color: var(--vyre-color-semantic-text-muted);
-    margin: 0;
-  }
+/* Mistakes */
+.acs-mistakes {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: flex;
+  flex-direction: column;
+  gap: var(--vyre-spacing-2);
+}
+.acs-mistake {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  font-size: var(--vyre-typography-font-size-sm);
+}
+.acs-bad {
+  font-family: var(--vyre-typography-font-family-mono);
+  font-size: var(--vyre-typography-font-size-xs);
+  padding: 1px 5px;
+  border-radius: var(--vyre-border-radius-sm);
+  background: var(--vyre-color-semantic-danger-subtle);
+  color: var(--vyre-color-semantic-danger);
+  align-self: flex-start;
+}
+.acs-fix {
+  padding-left: var(--vyre-spacing-4);
+  color: var(--vyre-color-semantic-text-secondary);
+  font-size: var(--vyre-typography-font-size-xs);
+}
 
-  .acs__table {
-    width: 100%;
-    border-collapse: collapse;
-    font-size: var(--vyre-typography-font-size-sm);
-  }
-  .acs__table th {
-    text-align: left;
-    padding: var(--vyre-spacing-1) var(--vyre-spacing-2);
-    font-size: var(--vyre-typography-font-size-xs);
-    font-weight: var(--vyre-typography-font-weight-medium);
-    color: var(--vyre-color-semantic-text-muted);
-    border-bottom: 1px solid var(--vyre-color-semantic-border-subtle);
-  }
-  .acs__table td {
-    padding: var(--vyre-spacing-1) var(--vyre-spacing-2);
-    vertical-align: top;
-    border-bottom: 1px solid var(--vyre-color-semantic-border-subtle);
-  }
-  .acs__table tr:last-child td { border-bottom: none; }
+/* Examples */
+.acs-example { display: flex; flex-direction: column; gap: var(--vyre-spacing-1); }
+.acs-example-label {
+  font-size: var(--vyre-typography-font-size-xs);
+  color: var(--vyre-color-semantic-text-muted);
+}
+.acs-pre {
+  margin: 0;
+  padding: var(--vyre-spacing-3);
+  background: var(--vyre-color-semantic-surface);
+  border-radius: var(--vyre-border-radius-md);
+  overflow-x: auto;
+  font-size: var(--vyre-typography-font-size-xs);
+  font-family: var(--vyre-typography-font-family-mono);
+  line-height: 1.6;
+}
 
-  .acs__values { display: flex; flex-wrap: wrap; align-items: center; gap: 4px; }
-  .acs__pipe { color: var(--vyre-color-semantic-text-muted); font-size: 10px; }
+/* Footer — single copy button */
+.acs-footer {
+  display: flex;
+}
+.acs-copy-btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: var(--vyre-spacing-2);
+  width: 100%;
+  padding: var(--vyre-spacing-2) var(--vyre-spacing-3);
+  border-radius: var(--vyre-border-radius-md);
+  border: 1px solid var(--vyre-color-semantic-border);
+  background: var(--vyre-color-semantic-surface);
+  color: var(--vyre-color-semantic-text-secondary);
+  font-size: var(--vyre-typography-font-size-sm);
+  font-weight: var(--vyre-typography-font-weight-medium);
+  cursor: pointer;
+  transition: background 0.15s, color 0.15s, border-color 0.15s;
+}
+.acs-copy-btn:hover {
+  background: var(--vyre-color-semantic-surface-raised);
+  color: var(--vyre-color-semantic-text-primary);
+}
+.acs-copy-btn--done {
+  background: var(--vyre-color-semantic-accent-subtle);
+  color: var(--vyre-color-semantic-accent);
+  border-color: var(--vyre-color-semantic-accent-subtle);
+}
 
-  .acs__code, .acs__val {
-    font-family: var(--vyre-typography-font-family-mono);
-    font-size: var(--vyre-typography-font-size-xs);
-    padding: 1px 5px;
-    border-radius: var(--vyre-border-radius-sm);
-    background: var(--vyre-color-semantic-surface-raised);
-    color: var(--vyre-color-semantic-teal);
-  }
-  .acs__empty { color: var(--vyre-color-semantic-text-muted); }
-
-  .acs__mistakes { list-style: none; margin: 0; padding: 0; display: flex; flex-direction: column; gap: var(--vyre-spacing-2); }
-  .acs__mistake { display: flex; flex-direction: column; gap: 2px; font-size: var(--vyre-typography-font-size-sm); }
-  .acs__mistake-bad code {
-    font-family: var(--vyre-typography-font-family-mono);
-    font-size: var(--vyre-typography-font-size-xs);
-    padding: 1px 5px;
-    border-radius: var(--vyre-border-radius-sm);
-    background: var(--vyre-color-semantic-danger-subtle);
-    color: var(--vyre-color-semantic-danger);
-  }
-  .acs__mistake-fix {
-    padding-left: var(--vyre-spacing-4);
-    color: var(--vyre-color-semantic-text-secondary);
-    font-size: var(--vyre-typography-font-size-xs);
-  }
-
-  .acs__example { display: flex; flex-direction: column; gap: var(--vyre-spacing-1); }
-  .acs__example-label {
-    font-size: var(--vyre-typography-font-size-xs);
-    color: var(--vyre-color-semantic-text-muted);
-  }
-  .acs__pre {
-    margin: 0;
-    padding: var(--vyre-spacing-3);
-    background: var(--vyre-color-semantic-surface);
-    border-radius: var(--vyre-border-radius-md);
-    overflow-x: auto;
-    font-size: var(--vyre-typography-font-size-xs);
-    font-family: var(--vyre-typography-font-family-mono);
-    line-height: 1.6;
-  }
-
-  .acs__footer { display: flex; }
-  .acs__copy {
-    display: inline-flex;
-    align-items: center;
-    gap: var(--vyre-spacing-1);
-    padding: var(--vyre-spacing-1) var(--vyre-spacing-3);
-    border-radius: var(--vyre-border-radius-md);
-    border: 1px solid var(--vyre-color-semantic-border);
-    background: var(--vyre-color-semantic-surface);
-    color: var(--vyre-color-semantic-text-secondary);
-    font-size: var(--vyre-typography-font-size-xs);
-    cursor: pointer;
-    transition: background 0.15s, color 0.15s;
-  }
-  .acs__copy:hover {
-    background: var(--vyre-color-semantic-surface-raised);
-    color: var(--vyre-color-semantic-text-primary);
-  }
+/* Reset accordion content inner padding */
+.acs-wrap .vyre-accordion__content-inner {
+  padding: 0;
+}
 </style>
