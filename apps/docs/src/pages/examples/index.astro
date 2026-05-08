@@ -1,0 +1,99 @@
+---
+import DocsLayout from "@/layouts/DocsLayout.astro";
+
+const realLayouts = [
+  {
+    href:        "/examples/dashboard",
+    title:       "SaaS Dashboard",
+    description: "App shell, KPI cards, searchable invoice table — Card, Table, Badge, Input, Avatar, Progress.",
+    components:  ["Card", "Table", "Badge", "Avatar", "Progress", "Input", "Button"],
+    status:      "live",
+  },
+  {
+    href:        "/examples/auth",
+    title:       "Sign-in screen",
+    description: "Login form with validation hints, social providers, and a beta badge — Field, Input, Checkbox, Alert.",
+    components:  ["Card", "Field", "Input", "Checkbox", "Alert", "Badge", "Separator"],
+    status:      "live",
+  },
+];
+
+const aiShowcases = [
+  {
+    title:       "AI-generated dashboard (Claude)",
+    description: "Full source + prompt transcript. Coming soon.",
+    status:      "soon",
+  },
+  {
+    title:       "Before / after: with vs without AI context",
+    description: "Same prompt, two outputs. See how @usevyre/ai-context prevents hallucinated props.",
+    status:      "soon",
+  },
+];
+---
+
+<DocsLayout
+  title="Examples"
+  description="Real layouts built with useVyre — proof that AI agents generate correct UI, first try."
+>
+  <div class="docs-header">
+    <h1 class="docs-title">Examples</h1>
+    <p class="docs-lead">
+      Real layouts assembled from useVyre primitives. Use them as a reference for
+      composition, or as test fixtures when prompting an AI agent against the
+      <a href="/docs/ai-context">AI context</a>.
+    </p>
+  </div>
+
+  <hr class="docs-divider" />
+
+  <h2 class="docs-h2">Real layouts</h2>
+  <p class="docs-p">
+    Hand-built reference implementations, fully interactive.
+  </p>
+
+  <div class="vyre-examples-grid">
+    {realLayouts.map((ex) => (
+      <a class="vyre-examples-card" href={ex.href}>
+        <div class="vyre-examples-card__head">
+          <h3 class="vyre-examples-card__title">{ex.title}</h3>
+          <span class="vyre-badge vyre-badge--success">live</span>
+        </div>
+        <p class="vyre-examples-card__desc">{ex.description}</p>
+        <ul class="vyre-examples-card__chips" role="list">
+          {ex.components.map((c) => (
+            <li class="vyre-examples-card__chip">{c}</li>
+          ))}
+        </ul>
+        <span class="vyre-examples-card__cta">View example →</span>
+      </a>
+    ))}
+  </div>
+
+  <h2 class="docs-h2" style="margin-top:48px;">AI-generated showcases</h2>
+  <p class="docs-p">
+    These are the differentiator: not "look at this layout," but "look at AI
+    generate it correctly using <a href="/docs/ai-context">@usevyre/ai-context</a>."
+    Each will ship with the prompt, the transcript, and a side-by-side comparison
+    against an unguided AI run.
+  </p>
+
+  <div class="vyre-examples-grid">
+    {aiShowcases.map((ex) => (
+      <div class="vyre-examples-card vyre-examples-card--soon" aria-disabled="true">
+        <div class="vyre-examples-card__head">
+          <h3 class="vyre-examples-card__title">{ex.title}</h3>
+          <span class="vyre-badge vyre-badge--default">coming soon</span>
+        </div>
+        <p class="vyre-examples-card__desc">{ex.description}</p>
+      </div>
+    ))}
+  </div>
+
+  <div class="docs-callout docs-callout--teal" style="margin-top:32px;">
+    <strong>Want to contribute?</strong> If you've built something with useVyre +
+    an AI agent and the result was good (or bad in a way that taught you something),
+    open an issue on <a href="https://github.com/gapra/usevyre" target="_blank" rel="noopener">GitHub</a>
+    — these showcases are most useful when they reflect real prompts and real outputs.
+  </div>
+</DocsLayout>

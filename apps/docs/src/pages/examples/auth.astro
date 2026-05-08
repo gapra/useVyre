@@ -1,0 +1,58 @@
+---
+import DocsLayout    from "@/layouts/DocsLayout.astro";
+import { AuthExample } from "@/components/examples/AuthExample";
+import { Code }       from "astro:components";
+
+const promptExample = `Build a sign-in screen with useVyre:
+- Card variant="elevated", max-width 420px, centered
+- Logo + Beta badge in the header
+- Email field with validation hint (state="error" when invalid)
+- Password field with autocomplete
+- "Remember me" checkbox + "Forgot password?" link on one row
+- Primary "Sign in" button (full width, variant="accent")
+- Separator divider with "or continue with" text
+- Two secondary buttons: GitHub, Google`;
+---
+
+<DocsLayout
+  title="Sign-in Example"
+  description="A login screen built with useVyre — Field, Input, Checkbox, Alert, Card."
+  wide
+>
+  <div class="docs-header">
+    <p class="docs-eyebrow">
+      <a href="/examples">← All examples</a>
+    </p>
+    <h1 class="docs-title">Sign-in screen</h1>
+    <p class="docs-lead">
+      A complete auth form with email validation, social providers, and a
+      stubbed submit handler.
+    </p>
+  </div>
+
+  <div class="vyre-examples-stage vyre-examples-stage--center">
+    <AuthExample client:load />
+  </div>
+
+  <h2 class="docs-h2">Components used</h2>
+  <ul class="docs-p">
+    <li><a href="/docs/components/card">Card</a> — outer container (<code>elevated</code>)</li>
+    <li><a href="/docs/components/input">Input</a> + <code>Field</code> — email & password with validation state</li>
+    <li><a href="/docs/components/checkbox">Checkbox</a> — "Remember me" toggle</li>
+    <li><a href="/docs/components/alert">Alert</a> — submission feedback (<code>variant="info"</code>)</li>
+    <li><a href="/docs/components/badge">Badge</a> — Beta tag (<code>variant="teal"</code>)</li>
+    <li><a href="/docs/components/separator">Separator</a> — divider between primary form and providers</li>
+    <li><a href="/docs/components/button">Button</a> — submit (<code>accent</code>) and providers (<code>secondary</code>)</li>
+  </ul>
+
+  <h2 class="docs-h2">Prompt that produces this layout</h2>
+  <Code code={promptExample} lang="markdown" theme="github-dark" />
+
+  <div class="docs-callout docs-callout--teal">
+    <strong>Validation pattern:</strong> useVyre form fields use
+    <code>state="error" | "success" | "warning"</code> on the
+    <code>Field</code> wrapper plus a <code>hint</code> prop for the message —
+    this is the exact pattern an AI agent will reach for when it has the
+    context file installed.
+  </div>
+</DocsLayout>

@@ -8,9 +8,11 @@ export interface Props {
   title:        string;
   description?: string;
   component?:   string;
+  /** Hide the right-rail TOC and let content span the full width. */
+  wide?:        boolean;
 }
 
-const { title, description, component } = Astro.props;
+const { title, description, component, wide = false } = Astro.props;
 const pathname = Astro.url.pathname;
 ---
 
@@ -32,20 +34,22 @@ const pathname = Astro.url.pathname;
   <div class="docs-root">
     <TopNav />
 
-    <div class="docs-body">
+    <div class:list={["docs-body", { "docs-body--wide": wide }]}>
       <aside class="docs-sidebar">
         <Sidebar currentPath={pathname} />
       </aside>
 
       <main class="docs-content" id="main-content">
-        <article class="docs-article">
+        <article class:list={["docs-article", { "docs-article--wide": wide }]}>
           <slot />
         </article>
       </main>
 
-      <aside class="docs-toc">
-        <TableOfContents component={component} />
-      </aside>
+      {!wide && (
+        <aside class="docs-toc">
+          <TableOfContents component={component} />
+        </aside>
+      )}
     </div>
   </div>
 </BaseLayout>

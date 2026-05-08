@@ -1,0 +1,59 @@
+---
+import DocsLayout         from "@/layouts/DocsLayout.astro";
+import { DashboardExample } from "@/components/examples/DashboardExample";
+import { Code }            from "astro:components";
+
+const promptExample = `Build a SaaS dashboard with useVyre:
+- App bar with brand + avatar
+- Sidebar nav: Overview, Invoices, Customers, Reports, Settings
+- 4 KPI cards (Revenue, Invoices, Outstanding, Collection rate)
+- Recent invoices table with search input
+- Use Card variant="elevated" for KPIs, "outlined" for the table card
+- Status badges: paid=success, pending=warning, overdue=danger`;
+---
+
+<DocsLayout
+  title="Dashboard Example"
+  description="A SaaS billing dashboard built with useVyre primitives."
+  wide
+>
+  <div class="docs-header">
+    <p class="docs-eyebrow">
+      <a href="/examples">← All examples</a>
+    </p>
+    <h1 class="docs-title">SaaS Dashboard</h1>
+    <p class="docs-lead">
+      App shell, KPIs, and a searchable invoice table — composed from
+      Card, Table, Badge, Input, Avatar, and Progress.
+    </p>
+  </div>
+
+  <div class="vyre-examples-stage">
+    <DashboardExample client:load />
+  </div>
+
+  <h2 class="docs-h2">Components used</h2>
+  <ul class="docs-p">
+    <li><a href="/docs/components/card">Card</a> — KPI tiles (<code>elevated</code>) and table container (<code>outlined</code>)</li>
+    <li><a href="/docs/components/table">Table</a> — invoice list with <code>hoverable</code> rows</li>
+    <li><a href="/docs/components/badge">Badge</a> — status chips with <code>dot</code> indicator</li>
+    <li><a href="/docs/components/input">Input</a> + <code>Field</code> — search</li>
+    <li><a href="/docs/components/avatar">Avatar</a> — user, with <code>status="online"</code></li>
+    <li><a href="/docs/components/progress">Progress</a> — collection rate</li>
+    <li><a href="/docs/components/button">Button</a> — primary action (<code>variant="accent"</code>)</li>
+  </ul>
+
+  <h2 class="docs-h2">Prompt that produces this layout</h2>
+  <p class="docs-p">
+    With <a href="/docs/ai-context">@usevyre/ai-context</a> installed in your
+    agent rules, this prompt yields valid component code on the first try:
+  </p>
+  <Code code={promptExample} lang="markdown" theme="github-dark" />
+
+  <div class="docs-callout docs-callout--teal">
+    <strong>Why this matters:</strong> Without AI context, agents commonly invent
+    props like <code>variant="blue"</code> or <code>color="primary"</code> that
+    don't exist in useVyre. The context file constrains generation to actual
+    valid props.
+  </div>
+</DocsLayout>

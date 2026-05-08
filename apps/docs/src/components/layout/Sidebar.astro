@@ -18,7 +18,7 @@ const { currentPath } = Astro.props;
       <ul class="sidebar__list" role="list">
         {section.items.map((item) => {
           const isActive = currentPath === item.href ||
-            currentPath.startsWith(item.href + "/");
+            currentPath === item.href + "/";
           return (
             <li>
               <a
