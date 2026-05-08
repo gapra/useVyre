@@ -16,5 +16,10 @@ export default defineConfig({
       // Allow Vite SSR to process workspace TS source
       noExternal: ["@vyre/react", "@vyre/vue"],
     },
+    resolve: {
+      // Deduplicate React — prevents two React copies when @usevyre/react
+      // source is processed via /@fs/ and resolves its own packages/react/node_modules/react
+      dedupe: ["react", "react-dom"],
+    },
   },
 });
