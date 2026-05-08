@@ -20,6 +20,14 @@ export const navigation: NavSection[] = [
     ],
   },
   {
+    title: "Examples",
+    items: [
+      { title: "All examples",   href: "/examples"           },
+      { title: "Dashboard",      href: "/examples/dashboard" },
+      { title: "Sign-in",        href: "/examples/auth"      },
+    ],
+  },
+  {
     title: "AI Tooling",
     items: [
       { title: "@usevyre/ai-context", href: "/docs/ai-tooling/ai-context-pkg" },
