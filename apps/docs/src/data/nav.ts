@@ -17,6 +17,7 @@ export const navigation: NavSection[] = [
       { title: "Installation",   href: "/docs/installation" },
       { title: "AI Context",     href: "/docs/ai-context" },
       { title: "Tokens",         href: "/docs/tokens" },
+      { title: "Theming",        href: "/docs/theming" },
     ],
   },
   {

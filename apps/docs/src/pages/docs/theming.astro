@@ -1,0 +1,453 @@
+---
+import DocsLayout    from "@/layouts/DocsLayout.astro";
+import { Code }      from "astro:components";
+import { ThemePreview } from "@/components/demos/ThemePreview";
+
+const codeHowItWorks = `/* 1. useVyre ships its tokens */
+import "@usevyre/tokens/css";
+
+/* 2. After that import, override any token in your own CSS */
+/* globals.css (or wherever you import tokens) */
+:root {
+  --vyre-color-semantic-accent:               #2563eb;
+  --vyre-color-semantic-accent-hover:         #1d4ed8;
+  --vyre-color-semantic-accent-foreground:    #ffffff;
+  --vyre-color-semantic-accent-subtle:        #eff6ff;
+  --vyre-color-semantic-accent-subtle-border: #dbeafe;
+}`;
+
+const codeBlue = `/* globals.css — after @import "@usevyre/tokens/css" */
+:root {
+  --vyre-color-semantic-accent:               #2563eb;
+  --vyre-color-semantic-accent-hover:         #1d4ed8;
+  --vyre-color-semantic-accent-foreground:    #ffffff;
+  --vyre-color-semantic-accent-subtle:        #eff6ff;
+  --vyre-color-semantic-accent-subtle-border: #dbeafe;
+}
+
+[data-theme="dark"] {
+  --vyre-color-semantic-accent:               #60a5fa;
+  --vyre-color-semantic-accent-hover:         #93c5fd;
+  --vyre-color-semantic-accent-foreground:    #09090b;
+  --vyre-color-semantic-accent-subtle:        rgba(96, 165, 250, 0.12);
+  --vyre-color-semantic-accent-subtle-border: rgba(96, 165, 250, 0.25);
+}`;
+
+const codeGreen = `/* globals.css — after @import "@usevyre/tokens/css" */
+:root {
+  --vyre-color-semantic-accent:               #16a34a;
+  --vyre-color-semantic-accent-hover:         #15803d;
+  --vyre-color-semantic-accent-foreground:    #ffffff;
+  --vyre-color-semantic-accent-subtle:        #f0fdf4;
+  --vyre-color-semantic-accent-subtle-border: #dcfce7;
+}
+
+[data-theme="dark"] {
+  --vyre-color-semantic-accent:               #4ade80;
+  --vyre-color-semantic-accent-hover:         #86efac;
+  --vyre-color-semantic-accent-foreground:    #09090b;
+  --vyre-color-semantic-accent-subtle:        rgba(74, 222, 128, 0.12);
+  --vyre-color-semantic-accent-subtle-border: rgba(74, 222, 128, 0.25);
+}`;
+
+const codeRose = `/* globals.css — after @import "@usevyre/tokens/css" */
+:root {
+  --vyre-color-semantic-accent:               #e11d48;
+  --vyre-color-semantic-accent-hover:         #be123c;
+  --vyre-color-semantic-accent-foreground:    #ffffff;
+  --vyre-color-semantic-accent-subtle:        #fff1f2;
+  --vyre-color-semantic-accent-subtle-border: #fecdd3;
+}
+
+[data-theme="dark"] {
+  --vyre-color-semantic-accent:               #fb7185;
+  --vyre-color-semantic-accent-hover:         #fda4af;
+  --vyre-color-semantic-accent-foreground:    #09090b;
+  --vyre-color-semantic-accent-subtle:        rgba(251, 113, 133, 0.12);
+  --vyre-color-semantic-accent-subtle-border: rgba(251, 113, 133, 0.25);
+}`;
+
+const codeDarkMode = `/* Custom dark mode surface — e.g. slate instead of zinc */
+[data-theme="dark"] {
+  --vyre-color-semantic-background:     #0f172a; /* slate-950 */
+  --vyre-color-semantic-surface:        #1e293b; /* slate-800 */
+  --vyre-color-semantic-surface-raised: #334155; /* slate-700 */
+  --vyre-color-semantic-surface-overlay:#475569; /* slate-600 */
+  --vyre-color-semantic-border:         #334155;
+  --vyre-color-semantic-border-subtle:  #1e293b;
+  --vyre-color-semantic-border-strong:  #64748b;
+}`;
+
+const codeRadius = `/* Sharp — no rounded corners */
+:root {
+  --vyre-border-radius-sm:   0;
+  --vyre-border-radius-md:   0;
+  --vyre-border-radius-lg:   0;
+  --vyre-border-radius-xl:   0;
+  --vyre-border-radius-2xl:  0;
+  --vyre-border-radius-full: 0;
+}
+
+/* Rounder — softer look */
+:root {
+  --vyre-border-radius-sm:  0.5rem;   /* was 0.375rem */
+  --vyre-border-radius-md:  0.75rem;  /* was 0.5rem   */
+  --vyre-border-radius-lg:  1rem;     /* was 0.75rem  */
+  --vyre-border-radius-xl:  1.25rem;  /* was 1rem     */
+  --vyre-border-radius-2xl: 2rem;     /* was 1.5rem   */
+}`;
+
+const codeFont = `/* Replace Geist with your own font */
+:root {
+  --vyre-typography-font-family-display: 'Inter', system-ui, sans-serif;
+  --vyre-typography-font-family-body:    'Inter', system-ui, sans-serif;
+  --vyre-typography-font-family-mono:    'Fira Code', monospace;
+}`;
+
+const codeAiInstruction = `You are working in a project that uses useVyre design system.
+
+THEMING:
+The project overrides useVyre's default accent (violet) with blue.
+After "@usevyre/tokens/css" is imported, globals.css sets:
+  --vyre-color-semantic-accent:               #2563eb  (light)
+  --vyre-color-semantic-accent-hover:         #1d4ed8  (light)
+  --vyre-color-semantic-accent-foreground:    #ffffff
+  --vyre-color-semantic-accent-subtle:        #eff6ff
+  --vyre-color-semantic-accent-subtle-border: #dbeafe
+  [dark] --vyre-color-semantic-accent:        #60a5fa
+  [dark] --vyre-color-semantic-accent-hover:  #93c5fd
+
+Use these tokens in any custom CSS you write. Do NOT hardcode #7c3aed or #a78bfa.`;
+
+type AccentToken = { token: string; description: string };
+const accentTokens: AccentToken[] = [
+  { token: "--vyre-color-semantic-accent",               description: "Primary fill — button background, link color, focus ring" },
+  { token: "--vyre-color-semantic-accent-hover",         description: "Darker shade shown on hover/active states" },
+  { token: "--vyre-color-semantic-accent-foreground",    description: "Text color rendered on top of accent background" },
+  { token: "--vyre-color-semantic-accent-subtle",        description: "Very low-opacity tint — badge/chip backgrounds" },
+  { token: "--vyre-color-semantic-accent-subtle-border", description: "Border color for subtle accent containers" },
+];
+---
+
+<DocsLayout title="Theming">
+  <div class="docs-header">
+    <h1 class="docs-title">Theming</h1>
+    <p class="docs-lead">
+      Customize colors, border radius, and typography by overriding CSS variables —
+      no build step, no config files, no forks required.
+    </p>
+  </div>
+
+  <hr class="docs-divider" />
+
+  <h2 class="docs-h2">Preview</h2>
+  <p class="docs-p">
+    Pick a preset accent color or pick your own to see how it applies across components in
+    real time. The preview follows the current site theme — switch themes from the top nav
+    to see how your accent looks in both light and dark mode.
+  </p>
+  <ThemePreview client:visible />
+
+  <h2 class="docs-h2">How it works</h2>
+  <p class="docs-p">
+    Every useVyre component reads from semantic CSS variables (<code>--vyre-color-semantic-*</code>).
+    Because CSS custom properties cascade normally, any variable you define after the tokens import
+    overrides the default — and every component instantly reflects the change.
+  </p>
+  <Code code={codeHowItWorks} lang="css" theme="github-dark" />
+
+  <div class="docs-callout docs-callout--accent">
+    <strong>Order matters.</strong> Your overrides must come <em>after</em>{" "}
+    <code>@import "@usevyre/tokens/css"</code> (or after <code>import "@usevyre/tokens/css"</code>{" "}
+    in your JS entry). Otherwise the defaults win.
+  </div>
+
+  <h2 class="docs-h2" id="accent-color">Customizing the accent color</h2>
+  <p class="docs-p">
+    The accent is used by Button (primary), Badge (accent), focus rings, and any
+    component that highlights a selected or active state. There are five tokens to override —
+    all five must be set to keep hover, foreground, and badge states consistent.
+  </p>
+
+  <div class="docs-table-wrapper">
+    <table class="docs-table">
+      <thead>
+        <tr>
+          <th>Token</th>
+          <th>Used for</th>
+        </tr>
+      </thead>
+      <tbody>
+        {accentTokens.map(({ token, description }) => (
+          <tr>
+            <td><code>{token}</code></td>
+            <td style="opacity:0.75;font-size:0.8125rem">{description}</td>
+          </tr>
+        ))}
+      </tbody>
+    </table>
+  </div>
+
+  <h3 class="docs-h3">Blue</h3>
+  <Code code={codeBlue} lang="css" theme="github-dark" />
+
+  <h3 class="docs-h3">Green</h3>
+  <Code code={codeGreen} lang="css" theme="github-dark" />
+
+  <h3 class="docs-h3">Rose</h3>
+  <Code code={codeRose} lang="css" theme="github-dark" />
+
+  <h2 class="docs-h2" id="dark-mode-surface">Custom dark mode surface</h2>
+  <p class="docs-p">
+    By default the dark theme uses zinc-based neutrals. If your brand uses slate, gray, or
+    a custom neutral palette, override the surface tokens under <code>[data-theme="dark"]</code>.
+  </p>
+  <Code code={codeDarkMode} lang="css" theme="github-dark" />
+
+  <h2 class="docs-h2" id="border-radius">Border radius</h2>
+  <p class="docs-p">
+    Override the radius scale globally. All components reference these tokens, so changing
+    them here affects every component at once.
+  </p>
+  <Code code={codeRadius} lang="css" theme="github-dark" />
+
+  <h2 class="docs-h2" id="typography">Typography</h2>
+  <p class="docs-p">
+    useVyre ships with Geist loaded from Google Fonts. To use your own typeface, override
+    the font-family tokens. The fonts themselves must be loaded separately (via <code>&lt;link&gt;</code>,
+    a local <code>@font-face</code>, or a font provider).
+  </p>
+  <Code code={codeFont} lang="css" theme="github-dark" />
+
+  <h2 class="docs-h2" id="ai-context">AI context for custom themes</h2>
+  <p class="docs-p">
+    When you override tokens, update your AI context file so agents generate CSS
+    that matches your theme — not the default violet.
+    Add a <strong>THEMING</strong> block to your <code>CLAUDE.md</code> or <code>.cursor/rules</code>:
+  </p>
+  <Code code={codeAiInstruction} lang="markdown" theme="github-dark" />
+  <div class="docs-callout docs-callout--teal">
+    <strong>Why this matters:</strong> Without this block, agents writing custom CSS will
+    hardcode <code>#7c3aed</code> (the default violet) instead of using your overridden token.
+    The THEMING block tells the agent which values are in effect at runtime.
+  </div>
+
+  <div class="docs-pagination">
+    <a href="/docs/tokens" class="docs-pagination__link docs-pagination__link--prev">
+      ← Tokens
+    </a>
+    <a href="/docs/components/button" class="docs-pagination__link docs-pagination__link--next">
+      Button →
+    </a>
+  </div>
+</DocsLayout>
+
+<style is:global>
+.tp-root { margin: var(--vyre-spacing-4) 0; }
+
+/* Preset pill row */
+.tp-pill-row {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--vyre-spacing-2);
+  padding: var(--vyre-spacing-4) 0;
+}
+
+.tp-pill {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  font-family: var(--vyre-typography-font-family-mono);
+  font-size: var(--vyre-typography-font-size-xs);
+  color: var(--vyre-color-semantic-text-muted);
+  background: var(--vyre-color-semantic-surface-raised);
+  border: 1px solid var(--vyre-color-semantic-border);
+  padding: 3px 12px;
+  border-radius: var(--vyre-border-radius-full);
+  cursor: pointer;
+  transition: color 120ms ease, background 120ms ease, border-color 120ms ease;
+}
+.tp-pill:hover:not(.tp-pill--active) {
+  color: var(--vyre-color-semantic-text-secondary);
+  border-color: var(--vyre-color-semantic-border-strong);
+}
+.tp-pill__dot {
+  width: 7px; height: 7px;
+  border-radius: 50%;
+  flex-shrink: 0;
+}
+
+/* Custom color bar */
+.tp-custom-bar {
+  display: flex;
+  align-items: center;
+  gap: var(--vyre-spacing-3);
+  padding: var(--vyre-spacing-4) 0;
+}
+
+.tp-color-label {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--vyre-spacing-2);
+  padding: 3px 12px 3px 8px;
+  border: 1px solid var(--vyre-color-semantic-border);
+  border-radius: var(--vyre-border-radius-full);
+  background: var(--vyre-color-semantic-surface-raised);
+  cursor: pointer;
+  transition: border-color 120ms ease;
+}
+.tp-color-label:hover { border-color: var(--vyre-color-semantic-border-strong); }
+
+.tp-color-input {
+  position: absolute;
+  width: 1px; height: 1px;
+  opacity: 0; pointer-events: none;
+}
+
+.tp-color-swatch {
+  width: 14px; height: 14px;
+  border-radius: 50%;
+  border: 1px solid var(--vyre-color-semantic-border);
+  flex-shrink: 0;
+}
+
+.tp-color-hex {
+  font-family: var(--vyre-typography-font-family-mono);
+  font-size: var(--vyre-typography-font-size-xs);
+  color: var(--vyre-color-semantic-text-secondary);
+  background: none; padding: 0;
+  letter-spacing: 0.04em;
+}
+
+.tp-contrast {
+  font-family: var(--vyre-typography-font-family-mono);
+  font-size: var(--vyre-typography-font-size-xs);
+  font-weight: 500;
+  padding: 3px 10px;
+  border-radius: var(--vyre-border-radius-full);
+  border: 1px solid transparent;
+}
+.tp-contrast--pass { background: var(--vyre-color-semantic-success-subtle); color: var(--vyre-color-semantic-success); border-color: var(--vyre-color-semantic-success-subtle-border); }
+.tp-contrast--warn { background: var(--vyre-color-semantic-warning-subtle); color: var(--vyre-color-semantic-warning); border-color: var(--vyre-color-semantic-warning-subtle-border); }
+.tp-contrast--fail { background: var(--vyre-color-semantic-danger-subtle);  color: var(--vyre-color-semantic-danger);  border-color: var(--vyre-color-semantic-danger-subtle-border);  }
+
+/* Preview card — outer wrapper only, no background override.
+   All surface/border/text colors inherit the docs page theme.
+   Only accent tokens are overridden via inline style on the wrapper. */
+.tp-preview {
+  border: 1px solid var(--vyre-color-semantic-border-subtle);
+  border-radius: var(--vyre-border-radius-xl);
+  overflow: hidden;
+  background: var(--vyre-color-semantic-surface);
+}
+
+.tp-preview__toolbar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: var(--vyre-spacing-4) var(--vyre-spacing-5);
+  border-bottom: 1px solid var(--vyre-color-semantic-border-subtle);
+  background: var(--vyre-color-semantic-surface-raised);
+}
+
+.tp-preview__badges { display: flex; gap: var(--vyre-spacing-2); flex-wrap: wrap; align-items: center; }
+
+.tp-preview__content {
+  display: flex;
+  gap: var(--vyre-spacing-4);
+  align-items: flex-start;
+  padding: var(--vyre-spacing-5);
+}
+
+.tp-preview__meta {
+  flex: 1;
+  min-width: 0;
+  display: flex;
+  flex-direction: column;
+  gap: var(--vyre-spacing-3);
+}
+
+.tp-preview__title {
+  display: block;
+  font-family: var(--vyre-typography-font-family-body);
+  font-size: var(--vyre-typography-font-size-sm);
+  font-weight: 600;
+  color: var(--vyre-color-semantic-text-primary);
+  line-height: 1.3;
+}
+
+.tp-preview__desc {
+  display: block;
+  font-family: var(--vyre-typography-font-family-body);
+  font-size: var(--vyre-typography-font-size-sm);
+  color: var(--vyre-color-semantic-text-muted);
+}
+
+.tp-preview__progress {
+  display: flex;
+  flex-direction: column;
+  gap: var(--vyre-spacing-1);
+}
+
+.tp-preview__progress-labels {
+  display: flex;
+  justify-content: space-between;
+  font-family: var(--vyre-typography-font-family-mono);
+  font-size: var(--vyre-typography-font-size-xs);
+  color: var(--vyre-color-semantic-text-muted);
+}
+
+.tp-preview__footer {
+  display: flex;
+  gap: var(--vyre-spacing-2);
+  flex-wrap: wrap;
+  align-items: center;
+  padding: var(--vyre-spacing-3) var(--vyre-spacing-5);
+  border-top: 1px solid var(--vyre-color-semantic-border-subtle);
+  background: var(--vyre-color-semantic-surface-raised);
+}
+
+/* Token readout */
+.tp-readout {
+  margin-top: var(--vyre-spacing-3);
+  padding: var(--vyre-spacing-4) var(--vyre-spacing-5);
+  border-radius: var(--vyre-border-radius-lg);
+  border: 1px solid var(--vyre-color-semantic-border-subtle);
+  background: var(--vyre-color-semantic-surface);
+  display: flex;
+  flex-direction: column;
+  gap: 5px;
+}
+
+.tp-readout__row {
+  display: grid;
+  grid-template-columns: 12px 1fr auto;
+  align-items: center;
+  gap: var(--vyre-spacing-3);
+}
+
+.tp-readout__swatch {
+  width: 12px; height: 12px;
+  border-radius: 3px;
+  border: 1px solid var(--vyre-color-semantic-border);
+}
+
+.tp-readout__name {
+  font-family: var(--vyre-typography-font-family-mono);
+  font-size: var(--vyre-typography-font-size-xs);
+  color: var(--vyre-color-semantic-teal);
+  background: var(--vyre-color-semantic-teal-subtle);
+  padding: 1px 5px;
+  border-radius: var(--vyre-border-radius-sm);
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.tp-readout__val {
+  font-family: var(--vyre-typography-font-family-mono);
+  font-size: var(--vyre-typography-font-size-xs);
+  color: var(--vyre-color-semantic-text-muted);
+  white-space: nowrap;
+}
+</style>
