@@ -102,18 +102,19 @@ const isLive = SITE_MODE === "live";
         <div class="hero__inner">
           <div class="hero__content">
             <div class="hero__eyebrow">
-              <span class="vyre-badge vyre-badge--teal">Open source</span>
+              <span class="vyre-badge vyre-badge--teal">· Open source</span>
               <span class="hero__eyebrow-text">React + Vue · Zero runtime</span>
             </div>
 
             <h1 class="hero__title">
-              The design system<br/>
-              <span class="hero__title-accent">AI agents understand</span>
+              You ask your AI for a login form.<br/>
+              <span class="hero__title-accent">It invents a Button that doesn't exist.</span>
             </h1>
 
             <p class="hero__description">
-              useVyre ships semantic tokens, accessible components, and inline AI context blocks.
-              Every variant, every prop - documented for agents so they stop hallucinating your UI.
+              Every design system you've used was written for humans - so when Cursor or Copilot
+              touches it, you get hallucinated props, made-up variants, and class names that
+              compile but render nothing. useVyre is the first design system written for both.
             </p>
 
             <div class="hero__actions">
@@ -125,15 +126,21 @@ const isLive = SITE_MODE === "live";
                 class="vyre-btn vyre-btn--secondary vyre-btn--lg"
                 target="_blank" rel="noopener noreferrer"
               >
-                GitHub
+                Star on GitHub
               </a>
+            </div>
+
+            <div class="hero__install">
+              <code>npm i @usevyre/react @usevyre/tokens</code>
+              <span class="hero__install-sep">or</span>
+              <code>npm i @usevyre/vue @usevyre/tokens</code>
             </div>
           </div>
 
           <div class="hero__visual">
             <HeroDemo client:visible />
             <div class="hero__context-card">
-              <p class="hero__context-label">AI CONTEXT</p>
+              <p class="hero__context-label">AI CONTEXT — visible to your agent</p>
               <pre class="hero__context-code"><code>variant = "primary"|"secondary"|"ghost"|
           "accent"|"teal"|"danger"
 size     = "sm"|"md"|"lg"|"icon"
@@ -145,81 +152,144 @@ loading  = boolean</code></pre>
 
       <section class="problem">
         <div class="section-inner">
-          <h2 class="problem__title">AI coding agents break on design systems.</h2>
+          <h2 class="problem__title">The hallucination tax is real - and you've been paying it.</h2>
           <p class="problem__body">
-            When you ask Copilot or Claude to build UI, they invent class names, guess props,
-            and hallucinate variants that don't exist. The reason: design systems are built for humans,
-            not for language models.
+            Every prompt to your agent burns context, time, and patience. You tell it to
+            "use our Button component," and back comes <code>variant="brand"</code> - a variant
+            that has never existed. You correct it. It picks <code>color="primary"</code>. Wrong
+            again. Three turns later, you write the JSX yourself.
           </p>
           <p class="problem__body">
-            useVyre is built with AI agents as a first-class consumer. Every component carries
-            an inline context block that tells the agent exactly what props, variants, and patterns
-            are valid - and nothing else.
+            The problem isn't your agent. It's that no one designed your component library
+            to be readable by one. useVyre flips the contract: every component carries an inline
+            <code>AI CONTEXT</code> block listing the exact props, variants, and patterns that
+            are valid - and nothing else. Your agent reads it before it writes a single line.
           </p>
         </div>
       </section>
 
       <section class="features">
         <div class="section-inner">
-          <h2 class="section-title">Built different</h2>
+          <p class="section-eyebrow">What's inside</p>
+          <h2 class="section-title">A design system that reads like documentation -<br/>because half its readers are machines.</h2>
           <div class="feature-grid">
             <div class="feature-card">
               <div class="feature-card__icon">◈</div>
               <h3 class="feature-card__title">Semantic tokens</h3>
               <p class="feature-card__body">
-                <code>--vyre-color-semantic-accent</code> not <code>--amber-400</code>.
-                Token names describe intent. AI reads intent, not hex values.
+                <code>--vyre-color-semantic-accent</code>, not <code>--amber-400</code>.
+                Token names describe intent, so your agent picks the right one without guessing
+                hex values it half-remembers from training data.
               </p>
             </div>
             <div class="feature-card">
               <div class="feature-card__icon">⌥</div>
               <h3 class="feature-card__title">Inline AI context</h3>
               <p class="feature-card__body">
-                Every component has a structured comment block listing all valid props and variants.
-                Inject it into <code>CLAUDE.md</code>, <code>.cursor/rules</code>, or <code>AGENTS.md</code>.
+                Every component carries a structured comment block listing every valid prop
+                and variant. Drop it into <code>CLAUDE.md</code>, <code>.cursor/rules</code>,
+                or <code>AGENTS.md</code> - agents read it before they write.
               </p>
             </div>
             <div class="feature-card">
               <div class="feature-card__icon">◉</div>
               <h3 class="feature-card__title">Zero runtime</h3>
               <p class="feature-card__body">
-                Pure CSS variables. Works in React, Vue, Svelte, plain HTML - anywhere.
-                No JS bundle overhead. No framework lock-in.
+                Pure CSS variables. No styled-components, no className soup, no theme provider.
+                Ship it in React, Vue, Svelte, or plain HTML - same tokens, same look, no bundle weight.
               </p>
             </div>
             <div class="feature-card">
               <div class="feature-card__icon">⬡</div>
-              <h3 class="feature-card__title">React + Vue</h3>
+              <h3 class="feature-card__title">React + Vue, one API</h3>
               <p class="feature-card__body">
-                <code>@usevyre/react</code> and <code>@usevyre/vue</code> - identical API,
-                identical CSS classes, one design system.
+                <code>@usevyre/react</code> and <code>@usevyre/vue</code> share an identical
+                API surface and identical CSS classes. Switch frameworks; your design system
+                doesn't care.
               </p>
             </div>
             <div class="feature-card">
               <div class="feature-card__icon">⌘</div>
-              <h3 class="feature-card__title">DTCG tokens</h3>
+              <h3 class="feature-card__title">DTCG-native tokens</h3>
               <p class="feature-card__body">
-                W3C Design Token Community Group 2025 format. Interoperable with Figma,
-                Style Dictionary, and any other token toolchain.
+                Tokens follow the W3C Design Token Community Group 2025 format - readable by
+                Figma, Style Dictionary, and any toolchain that speaks the standard.
+                No custom export pipeline.
               </p>
             </div>
             <div class="feature-card">
               <div class="feature-card__icon">◎</div>
-              <h3 class="feature-card__title">Accessible first</h3>
+              <h3 class="feature-card__title">Accessible by default</h3>
               <p class="feature-card__body">
-                WAI-ARIA patterns, focus management, keyboard navigation - built in,
-                not bolted on.
+                WAI-ARIA patterns, focus management, keyboard navigation - built into the
+                primitives, not bolted on after. The same components your agent reaches for
+                pass an a11y audit on the first try.
               </p>
             </div>
           </div>
         </div>
       </section>
 
+      <section class="ai-tooling">
+        <div class="section-inner">
+          <p class="section-eyebrow">For your editor</p>
+          <h2 class="section-title">Drop it into the tool you already use.</h2>
+          <p class="section-subtitle">
+            useVyre ships first-party tooling for every major AI coding agent.
+            Configure once; your team's UI generation gets quieter overnight.
+          </p>
+          <div class="ai-tooling-grid">
+            <a href="/docs/ai-tooling/mcp-server" class="ai-tooling-card">
+              <div class="ai-tooling-card__head">
+                <span class="ai-tooling-card__name">MCP Server</span>
+                <span class="vyre-badge vyre-badge--accent">Claude, Cursor, Copilot, etc</span>
+              </div>
+              <p class="ai-tooling-card__body">
+                8 tools - <code>get_component_info</code>, <code>check_valid_prop_value</code>,
+                <code>suggest_component</code>, and more - exposed over Model Context Protocol.
+              </p>
+            </a>
+            <a href="/docs/ai-tooling/eslint-plugin" class="ai-tooling-card">
+              <div class="ai-tooling-card__head">
+                <span class="ai-tooling-card__name">ESLint plugin</span>
+                <span class="vyre-badge vyre-badge--teal">CI-ready</span>
+              </div>
+              <p class="ai-tooling-card__body">
+                <code>vyre/no-invalid-vyre-props</code> catches hallucinated props before
+                they merge. Flat config (ESLint 9+) and legacy both supported.
+              </p>
+            </a>
+            <a href="/docs/ai-tooling/validate" class="ai-tooling-card">
+              <div class="ai-tooling-card__head">
+                <span class="ai-tooling-card__name">Validate CLI</span>
+                <span class="vyre-badge vyre-badge--teal">Pre-commit</span>
+              </div>
+              <p class="ai-tooling-card__body">
+                <code>npx @usevyre/validate-ai-context src/</code> - instant scan for
+                hallucinated props and invalid enum values. <code>--json</code> output for CI.
+              </p>
+            </a>
+            <a href="/docs/ai-tooling/prompt-templates" class="ai-tooling-card">
+              <div class="ai-tooling-card__head">
+                <span class="ai-tooling-card__name">Prompt templates</span>
+                <span class="vyre-badge vyre-badge--accent">5 agents</span>
+              </div>
+              <p class="ai-tooling-card__body">
+                Drop-in system prompts for Claude, Cursor, Copilot, Windsurf, and a generic
+                template for whatever ships next.
+              </p>
+            </a>
+          </div>
+        </div>
+      </section>
+
       <section class="showcase">
         <div class="section-inner">
-          <h2 class="section-title">Components that speak agent</h2>
+          <p class="section-eyebrow">30+ components</p>
+          <h2 class="section-title">Every variant, every prop - already in your agent's context.</h2>
           <p class="section-subtitle">
-            30+ components across React and Vue. Every one ships with an AI context block.
+            Below is what your agent sees for each component. No guessing, no scraping the docs,
+            no hallucinated <code>color="brand"</code>.
           </p>
           <div class="showcase-grid">
             {[
@@ -240,7 +310,7 @@ loading  = boolean</code></pre>
           </div>
           <div class="showcase-footer">
             <a href="/docs/components" class="showcase-all">
-              View all components →
+              See all 30 components →
             </a>
           </div>
         </div>
@@ -248,18 +318,22 @@ loading  = boolean</code></pre>
 
       <section class="cta">
         <div class="section-inner cta__inner">
-          <h2 class="cta__title">Stop prompting. Start shipping.</h2>
+          <h2 class="cta__title">Stop correcting your agent. Start shipping the UI it built.</h2>
           <p class="cta__body">
-            Add useVyre to your project and let your AI agent build correct UI on the first try.
+            Five minutes to install, one file to point your agent at, and the next prompt
+            you write returns code that runs the first time.
           </p>
           <div class="cta__actions">
             <a href="/docs/getting-started" class="vyre-btn vyre-btn--accent vyre-btn--lg">
-              Read the docs
+              Get started
             </a>
             <a href="/docs/ai-context" class="vyre-btn vyre-btn--secondary vyre-btn--lg">
               Set up AI context
             </a>
           </div>
+          <p class="cta__hint">
+            Free, MIT-licensed, no signup. <code>npm i @usevyre/react</code> or <code>@usevyre/vue</code> and you're in.
+          </p>
         </div>
       </section>
 
