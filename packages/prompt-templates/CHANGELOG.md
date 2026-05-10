@@ -1,4 +1,4 @@
-# @usevyre/ai-context
+# @usevyre/prompt-templates
 
 ## 1.0.0
 
@@ -6,8 +6,7 @@
 
 - Release v1.0.0 — stable public release of the AI-native design system
 
-## 0.1.1
-
 ### Patch Changes
 
-- Add READMEs and fix homepage URLs
+- Updated dependencies
+  - @usevyre/ai-context@1.0.0

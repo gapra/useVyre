@@ -1,6 +1,6 @@
 {
   "name": "@usevyre/prompt-templates",
-  "version": "0.2.0",
+  "version": "1.0.0",
   "description": "Ready-to-use prompt templates for building UI with useVyre + AI agents (Claude, Cursor, Copilot, Windsurf)",
   "keywords": [
     "design-system",

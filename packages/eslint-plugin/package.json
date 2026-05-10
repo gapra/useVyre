@@ -1,6 +1,6 @@
 {
   "name": "@usevyre/eslint-plugin",
-  "version": "0.2.0",
+  "version": "1.0.0",
   "description": "ESLint plugin for useVyre design system — detects AI hallucinations at lint time",
   "keywords": [
     "eslint",

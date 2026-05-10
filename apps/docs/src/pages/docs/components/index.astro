@@ -3,37 +3,47 @@ import DocsLayout from "@/layouts/DocsLayout.astro";
 import { navigation } from "@/data/nav";
 
 const components = navigation.find(s => s.title === "Components")?.items ?? [];
+const liveComponents = components.filter(c => !c.badge);
+const soonComponents = components.filter(c => c.badge === "soon");
 
 const descriptions: Record<string, string> = {
-  Accordion:     "Collapsible sections with smooth animation.",
-  Alert:         "Contextual feedback with info, success, warning, and danger variants.",
-  Avatar:        "User profile photo with graceful initials fallback.",
-  Badge:         "Short status labels with dot indicator support.",
-  Breadcrumb:    "Navigation trail for deep page hierarchies.",
-  Button:        "Primary action element with 6 variants and loading state.",
-  Calendar:      "Date picker with single and range selection.",
-  Card:          "Content container with header, body, and footer slots.",
-  Checkbox:      "Controlled checkbox with indeterminate state support.",
-  Command:       "Command palette with search, keyboard navigation, and dialog mode.",
-  "Dropdown Menu": "Contextual menu with checkbox items, radio groups, and submenus.",
-  Input:         "Text input with label, helper text, and error state.",
-  Label:         "Accessible form label with required indicator.",
-  Modal:         "Focus-trapped dialog for confirmations and forms.",
-  Pagination:    "Page navigation with ellipsis and page size controls.",
-  Popover:       "Floating content anchored to a trigger element.",
-  Progress:      "Linear progress bar with determinate and indeterminate modes.",
-  Select:        "Dropdown select with search and multi-select support.",
-  Separator:     "Horizontal or vertical visual divider.",
-  Sheet:         "Side panel that slides in from any edge.",
-  Sidebar:       "App navigation sidebar with collapse and icon-only mode.",
-  Skeleton:      "Loading placeholder with animated shimmer.",
-  Slider:        "Range input with single and dual-handle support.",
-  Switch:        "Toggle switch for boolean settings.",
-  Table:         "Data table with sortable columns and striped rows.",
-  Tabs:          "Tabbed interface for switching between content panels.",
-  Toast:         "Non-blocking notification with auto-dismiss.",
-  Tooltip:       "Contextual label that appears on hover or focus.",
-  Typography:    "Heading, Text, Lead, Code, and Blockquote primitives.",
+  Accordion:          "Collapsible sections with smooth animation.",
+  Alert:              "Contextual feedback with info, success, warning, and danger variants.",
+  Avatar:             "User profile photo with graceful initials fallback.",
+  Badge:              "Short status labels with dot indicator support.",
+  Breadcrumb:         "Navigation trail for deep page hierarchies.",
+  Button:             "Primary action element with 6 variants and loading state.",
+  "Button Group":     "Segmented action row with shared borders and dividers.",
+  Calendar:           "Date picker with single and range selection.",
+  Card:               "Content container with header, body, and footer slots.",
+  Checkbox:           "Controlled checkbox with indeterminate state support.",
+  Combobox:           "Searchable dropdown with autocomplete and async data support.",
+  Command:            "Command palette with search, keyboard navigation, and dialog mode.",
+  "Data Grid":        "Advanced table with column filters, sorting, and row selection.",
+  "Date Range Picker":"Calendar-based start/end date input with range highlighting.",
+  "Dropdown Menu":    "Contextual menu with checkbox items, radio groups, and submenus.",
+  Input:              "Text input with label, helper text, and error state.",
+  Item:               "Flexible list-row primitive for menus, feeds, and settings lists.",
+  Kanban:             "Drag-and-drop board built on Card with column and card controls.",
+  Label:              "Accessible form label with required indicator.",
+  Modal:              "Focus-trapped dialog for confirmations and forms.",
+  Pagination:         "Page navigation with ellipsis and page size controls.",
+  Popover:            "Floating content anchored to a trigger element.",
+  Progress:           "Linear progress bar with determinate and indeterminate modes.",
+  "Rich Text Editor": "Minimal WYSIWYG editor with formatting toolbar and markdown output.",
+  Select:             "Dropdown select with search and multi-select support.",
+  Separator:          "Horizontal or vertical visual divider.",
+  Sheet:              "Side panel that slides in from any edge.",
+  Sidebar:            "App navigation sidebar with collapse and icon-only mode.",
+  Skeleton:           "Loading placeholder with animated shimmer.",
+  Slider:             "Range input with single and dual-handle support.",
+  Switch:             "Toggle switch for boolean settings.",
+  Table:              "Data table with sortable columns and striped rows.",
+  Tabs:               "Tabbed interface for switching between content panels.",
+  "Tags Input":       "Multi-value tag input with keyboard navigation and validation.",
+  Toast:              "Non-blocking notification with auto-dismiss.",
+  Tooltip:            "Contextual label that appears on hover or focus.",
+  Typography:         "Heading, Text, Lead, Code, and Blockquote primitives.",
 };
 ---
 
@@ -41,15 +51,23 @@ const descriptions: Record<string, string> = {
   <div class="docs-header">
     <h1 class="docs-title">Components</h1>
     <p class="docs-lead">
-      {components.length} components, all AI-native — every prop, variant, and anti-pattern is documented
-      for Claude, Cursor, Copilot, and Windsurf.
+      {liveComponents.length} components available now, {soonComponents.length} more coming in v1.1 —
+      all AI-native with inline context blocks for Claude, Cursor, Copilot, and Windsurf.
     </p>
   </div>
 
   <hr class="docs-divider" />
 
   <div class="comp-grid">
-    {components.map(item => (
+    {components.map(item => item.badge === "soon" ? (
+      <div class="comp-card comp-card--soon" aria-disabled="true">
+        <div class="comp-card__header">
+          <span class="comp-card__name">{item.title}</span>
+          <span class="vyre-badge vyre-badge--default comp-card__badge">v1.1</span>
+        </div>
+        <span class="comp-card__desc">{descriptions[item.title] ?? ""}</span>
+      </div>
+    ) : (
       <a href={item.href} class="comp-card">
         <span class="comp-card__name">{item.title}</span>
         <span class="comp-card__desc">{descriptions[item.title] ?? ""}</span>
@@ -94,5 +112,24 @@ const descriptions: Record<string, string> = {
     font-size: var(--vyre-typography-font-size-xs);
     color: var(--vyre-color-semantic-text-muted);
     line-height: 1.5;
+  }
+
+  .comp-card--soon {
+    opacity: 0.55;
+    cursor: default;
+    pointer-events: none;
+  }
+
+  .comp-card__header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: var(--vyre-spacing-2);
+  }
+
+  .comp-card__badge {
+    flex-shrink: 0;
+    font-size: 0.6rem !important;
+    padding: 1px 5px !important;
   }
 </style>
