@@ -1,0 +1,87 @@
+---
+import DocsLayout from "@/layouts/DocsLayout.astro";
+---
+
+<DocsLayout title="Button Group">
+  <div class="docs-header">
+    <div class="cs-title-row">
+      <h1 class="docs-title">Button Group</h1>
+      <span class="vyre-badge vyre-badge--default">Coming in v1.1</span>
+    </div>
+    <p class="docs-lead">
+      Segmented action row that joins multiple buttons with shared borders and a single visual unit.
+    </p>
+  </div>
+
+  <hr class="docs-divider" />
+
+  <div class="cs-body">
+    <h2 class="cs-section-title">What's coming</h2>
+    <ul class="cs-feature-list">
+      <li>Horizontal and vertical orientations</li>
+      <li>Shared border-radius on outer edges only</li>
+      <li>Works with all existing Button variants</li>
+      <li>Toggle group mode (single or multi-select)</li>
+      <li>Disabled state per-button or on the entire group</li>
+      <li>React + Vue with identical API surface</li>
+      <li>Inline AI context block for zero-hallucination agent use</li>
+    </ul>
+
+    <div class="cs-feedback">
+      <p>Have a use case in mind? Share it on GitHub and help shape the API.</p>
+      <a
+        href="https://github.com/gapra/usevyre/discussions"
+        target="_blank"
+        rel="noopener noreferrer"
+        class="vyre-btn vyre-btn--secondary vyre-btn--sm"
+      >
+        Vote or leave feedback →
+      </a>
+    </div>
+  </div>
+</DocsLayout>
+
+<style>
+  .cs-title-row {
+    display: flex;
+    align-items: center;
+    gap: var(--vyre-spacing-3);
+    flex-wrap: wrap;
+  }
+
+  .cs-body {
+    display: flex;
+    flex-direction: column;
+    gap: var(--vyre-spacing-8);
+    margin-top: var(--vyre-spacing-6);
+  }
+
+  .cs-section-title {
+    font-size: var(--vyre-typography-font-size-lg);
+    font-weight: var(--vyre-typography-font-weight-semibold);
+    color: var(--vyre-color-semantic-text-primary);
+    margin-bottom: var(--vyre-spacing-3);
+  }
+
+  .cs-feature-list {
+    display: flex;
+    flex-direction: column;
+    gap: var(--vyre-spacing-2);
+    padding-left: var(--vyre-spacing-5);
+    color: var(--vyre-color-semantic-text-secondary);
+    font-size: var(--vyre-typography-font-size-sm);
+    line-height: 1.6;
+  }
+
+  .cs-feedback {
+    display: flex;
+    flex-direction: column;
+    gap: var(--vyre-spacing-3);
+    padding: var(--vyre-spacing-5) var(--vyre-spacing-6);
+    background: var(--vyre-color-semantic-surface);
+    border: 1px solid var(--vyre-color-semantic-border-subtle);
+    border-radius: var(--vyre-border-radius-lg);
+    font-size: var(--vyre-typography-font-size-sm);
+    color: var(--vyre-color-semantic-text-secondary);
+  }
+</style>
