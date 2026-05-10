@@ -1,0 +1,57 @@
+{
+  "name": "@usevyre/all",
+  "version": "1.0.0",
+  "description": "useVyre — install everything: React, Vue, tokens, and all AI tooling in one package",
+  "keywords": [
+    "design-system",
+    "react",
+    "vue",
+    "ai-native",
+    "components",
+    "vyre"
+  ],
+  "homepage": "https://usevyre.com/docs/getting-started",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/gapra/usevyre"
+  },
+  "license": "MIT",
+  "type": "module",
+  "exports": {
+    ".": "./index.js"
+  },
+  "files": [
+    "index.js",
+    "README.md"
+  ],
+  "scripts": {
+    "build": "echo 'nothing to build'",
+    "clean": "true"
+  },
+  "dependencies": {
+    "@usevyre/tokens": "workspace:*",
+    "@usevyre/react": "workspace:*",
+    "@usevyre/vue": "workspace:*",
+    "@usevyre/ai-context": "workspace:*",
+    "@usevyre/mcp-server": "workspace:*",
+    "@usevyre/eslint-plugin": "workspace:*",
+    "@usevyre/validate-ai-context": "workspace:*",
+    "@usevyre/prompt-templates": "workspace:*"
+  },
+  "peerDependencies": {
+    "react": ">=18.0.0",
+    "react-dom": ">=18.0.0",
+    "vue": ">=3.0.0"
+  },
+  "peerDependenciesMeta": {
+    "react": {
+      "optional": true
+    },
+    "react-dom": {
+      "optional": true
+    },
+    "vue": {
+      "optional": true
+    }
+  }
+}
