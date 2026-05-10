@@ -60,6 +60,42 @@ importers:
 
   packages/ai-context: {}
 
+  packages/all:
+    dependencies:
+      '@usevyre/ai-context':
+        specifier: workspace:*
+        version: link:../ai-context
+      '@usevyre/eslint-plugin':
+        specifier: workspace:*
+        version: link:../eslint-plugin
+      '@usevyre/mcp-server':
+        specifier: workspace:*
+        version: link:../mcp-server
+      '@usevyre/prompt-templates':
+        specifier: workspace:*
+        version: link:../prompt-templates
+      '@usevyre/react':
+        specifier: workspace:*
+        version: link:../react
+      '@usevyre/tokens':
+        specifier: workspace:*
+        version: link:../tokens
+      '@usevyre/validate-ai-context':
+        specifier: workspace:*
+        version: link:../validate-ai-context
+      '@usevyre/vue':
+        specifier: workspace:*
+        version: link:../vue
+      react:
+        specifier: '>=18.0.0'
+        version: 18.3.1
+      react-dom:
+        specifier: '>=18.0.0'
+        version: 18.3.1(react@18.3.1)
+      vue:
+        specifier: '>=3.0.0'
+        version: 3.5.33(typescript@5.9.3)
+
   packages/eslint-plugin:
     dependencies:
       '@usevyre/ai-context':
