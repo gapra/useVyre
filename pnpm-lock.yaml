@@ -62,30 +62,12 @@ importers:
 
   packages/all:
     dependencies:
-      '@usevyre/ai-context':
+      '@usevyre/react-all':
         specifier: workspace:*
-        version: link:../ai-context
-      '@usevyre/eslint-plugin':
+        version: link:../react-all
+      '@usevyre/vue-all':
         specifier: workspace:*
-        version: link:../eslint-plugin
-      '@usevyre/mcp-server':
-        specifier: workspace:*
-        version: link:../mcp-server
-      '@usevyre/prompt-templates':
-        specifier: workspace:*
-        version: link:../prompt-templates
-      '@usevyre/react':
-        specifier: workspace:*
-        version: link:../react
-      '@usevyre/tokens':
-        specifier: workspace:*
-        version: link:../tokens
-      '@usevyre/validate-ai-context':
-        specifier: workspace:*
-        version: link:../validate-ai-context
-      '@usevyre/vue':
-        specifier: workspace:*
-        version: link:../vue
+        version: link:../vue-all
       react:
         specifier: '>=18.0.0'
         version: 18.3.1
@@ -151,6 +133,36 @@ importers:
         specifier: ^5.4.0
         version: 5.4.21(@types/node@12.20.55)
 
+  packages/react-all:
+    dependencies:
+      '@usevyre/ai-context':
+        specifier: workspace:*
+        version: link:../ai-context
+      '@usevyre/eslint-plugin':
+        specifier: workspace:*
+        version: link:../eslint-plugin
+      '@usevyre/mcp-server':
+        specifier: workspace:*
+        version: link:../mcp-server
+      '@usevyre/prompt-templates':
+        specifier: workspace:*
+        version: link:../prompt-templates
+      '@usevyre/react':
+        specifier: workspace:*
+        version: link:../react
+      '@usevyre/tokens':
+        specifier: workspace:*
+        version: link:../tokens
+      '@usevyre/validate-ai-context':
+        specifier: workspace:*
+        version: link:../validate-ai-context
+      react:
+        specifier: '>=18.0.0'
+        version: 18.3.1
+      react-dom:
+        specifier: '>=18.0.0'
+        version: 18.3.1(react@18.3.1)
+
   packages/tokens: {}
 
   packages/validate-ai-context:
@@ -180,6 +192,33 @@ importers:
       vue-tsc:
         specifier: ^2.0.0
         version: 2.2.12(typescript@5.9.3)
+
+  packages/vue-all:
+    dependencies:
+      '@usevyre/ai-context':
+        specifier: workspace:*
+        version: link:../ai-context
+      '@usevyre/eslint-plugin':
+        specifier: workspace:*
+        version: link:../eslint-plugin
+      '@usevyre/mcp-server':
+        specifier: workspace:*
+        version: link:../mcp-server
+      '@usevyre/prompt-templates':
+        specifier: workspace:*
+        version: link:../prompt-templates
+      '@usevyre/tokens':
+        specifier: workspace:*
+        version: link:../tokens
+      '@usevyre/validate-ai-context':
+        specifier: workspace:*
+        version: link:../validate-ai-context
+      '@usevyre/vue':
+        specifier: workspace:*
+        version: link:../vue
+      vue:
+        specifier: '>=3.0.0'
+        version: 3.5.33(typescript@5.9.3)
 
 packages:
 

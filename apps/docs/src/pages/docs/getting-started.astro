@@ -8,6 +8,25 @@ pnpm add @usevyre/tokens @usevyre/react`;
 const installVue   = `npm install @usevyre/tokens @usevyre/vue
 # or
 pnpm add @usevyre/tokens @usevyre/vue`;
+const installReactAll = `# React + tokens + all AI tooling
+npm install @usevyre/react-all
+# or
+pnpm add @usevyre/react-all
+
+# Then import as usual:
+# import { Button } from "@usevyre/react"`;
+const installVueAll   = `# Vue + tokens + all AI tooling
+npm install @usevyre/vue-all
+# or
+pnpm add @usevyre/vue-all
+
+# Then import as usual:
+# import { Button } from "@usevyre/vue"`;
+const installAll      = `# React + Vue + tokens + all AI tooling
+npm install @usevyre/all
+# or
+pnpm add @usevyre/all`;
+
 
 const setupReact = `// main.tsx or your entry file
 import "@usevyre/tokens/css";        // ← design tokens
@@ -103,12 +122,24 @@ $(cat node_modules/@usevyre/tokens/dist/ai-context.md)`;
     <div class="docs-tabs__bar" role="tablist">
       <button class="docs-tabs__tab docs-tabs__tab--active" role="tab" data-target="install-react" type="button">React</button>
       <button class="docs-tabs__tab" role="tab" data-target="install-vue" type="button">Vue</button>
+      <button class="docs-tabs__tab" role="tab" data-target="install-react-all" type="button">React + AI tooling</button>
+      <button class="docs-tabs__tab" role="tab" data-target="install-vue-all" type="button">Vue + AI tooling</button>
+      <button class="docs-tabs__tab" role="tab" data-target="install-all" type="button">Everything</button>
     </div>
     <div id="install-react" class="docs-tabs__panel">
       <Code code={installReact} lang="bash" theme="github-dark" />
     </div>
     <div id="install-vue" class="docs-tabs__panel" hidden>
       <Code code={installVue} lang="bash" theme="github-dark" />
+    </div>
+    <div id="install-react-all" class="docs-tabs__panel" hidden>
+      <Code code={installReactAll} lang="bash" theme="github-dark" />
+    </div>
+    <div id="install-vue-all" class="docs-tabs__panel" hidden>
+      <Code code={installVueAll} lang="bash" theme="github-dark" />
+    </div>
+    <div id="install-all" class="docs-tabs__panel" hidden>
+      <Code code={installAll} lang="bash" theme="github-dark" />
     </div>
   </div>
 

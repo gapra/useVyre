@@ -1,11 +1,10 @@
 {
-  "name": "@usevyre/all",
+  "name": "@usevyre/react-all",
   "version": "1.0.0",
-  "description": "useVyre — install everything: React, Vue, tokens, and all AI tooling in one package",
+  "description": "useVyre for React — components, tokens, and all AI tooling in one package",
   "keywords": [
     "design-system",
     "react",
-    "vue",
     "ai-native",
     "components",
     "vyre"
@@ -29,17 +28,16 @@
     "clean": "true"
   },
   "dependencies": {
-    "@usevyre/react-all": "workspace:*",
-    "@usevyre/vue-all":   "workspace:*"
+    "@usevyre/tokens":               "workspace:*",
+    "@usevyre/react":                "workspace:*",
+    "@usevyre/ai-context":           "workspace:*",
+    "@usevyre/mcp-server":           "workspace:*",
+    "@usevyre/eslint-plugin":        "workspace:*",
+    "@usevyre/validate-ai-context":  "workspace:*",
+    "@usevyre/prompt-templates":     "workspace:*"
   },
   "peerDependencies": {
     "react":     ">=18.0.0",
-    "react-dom": ">=18.0.0",
-    "vue":       ">=3.0.0"
-  },
-  "peerDependenciesMeta": {
-    "react":     { "optional": true },
-    "react-dom": { "optional": true },
-    "vue":       { "optional": true }
+    "react-dom": ">=18.0.0"
   }
 }

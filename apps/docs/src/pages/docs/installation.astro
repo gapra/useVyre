@@ -124,6 +124,20 @@ SITE_MODE=live pnpm --filter @usevyre/docs dev`;
   </p>
   <CodeTabs react={codeInstallReact} vue={codeInstallVue} />
 
+  <div class="docs-callout">
+    <strong>Want everything in one command?</strong>
+    Use a meta-package to get tokens + AI tooling (MCP server, ESLint plugin, validate CLI, prompt templates) bundled together.
+    <pre class="docs-pre" style="margin-top:0.75rem"><code># React only
+npm i @usevyre/react-all
+
+# Vue only
+npm i @usevyre/vue-all
+
+# React + Vue + everything
+npm i @usevyre/all</code></pre>
+    Import from the specific sub-packages as usual — tree-shaking still works.
+  </div>
+
   <h2 class="docs-h2">Import styles</h2>
   <p class="docs-p">
     Add these two imports at your app entry point. Order matters — tokens must come before component styles.
