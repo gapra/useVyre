@@ -1,6 +1,6 @@
 {
   "name": "@usevyre/react-all",
-  "version": "1.0.1",
+  "version": "1.0.2",
   "description": "useVyre for React — components, tokens, and all AI tooling in one package",
   "keywords": [
     "design-system",
@@ -28,13 +28,13 @@
     "clean": "true"
   },
   "dependencies": {
-    "@usevyre/tokens":               "workspace:*",
-    "@usevyre/react":                "workspace:*",
-    "@usevyre/ai-context":           "workspace:*",
-    "@usevyre/mcp-server":           "workspace:*",
-    "@usevyre/eslint-plugin":        "workspace:*",
-    "@usevyre/validate-ai-context":  "workspace:*",
-    "@usevyre/prompt-templates":     "workspace:*"
+    "@usevyre/tokens":               "^1.0.0",
+    "@usevyre/react":                "^1.0.0",
+    "@usevyre/ai-context":           "^1.0.0",
+    "@usevyre/mcp-server":           "^1.0.0",
+    "@usevyre/eslint-plugin":        "^1.0.0",
+    "@usevyre/validate-ai-context":  "^1.0.0",
+    "@usevyre/prompt-templates":     "^1.0.0"
   },
   "peerDependencies": {
     "react":     ">=18.0.0",

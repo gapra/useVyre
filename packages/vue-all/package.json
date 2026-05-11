@@ -28,13 +28,13 @@
     "clean": "true"
   },
   "dependencies": {
-    "@usevyre/tokens":               "workspace:*",
-    "@usevyre/vue":                  "workspace:*",
-    "@usevyre/ai-context":           "workspace:*",
-    "@usevyre/mcp-server":           "workspace:*",
-    "@usevyre/eslint-plugin":        "workspace:*",
-    "@usevyre/validate-ai-context":  "workspace:*",
-    "@usevyre/prompt-templates":     "workspace:*"
+    "@usevyre/tokens":               "^1.0.0",
+    "@usevyre/vue":                  "^1.0.0",
+    "@usevyre/ai-context":           "^1.0.0",
+    "@usevyre/mcp-server":           "^1.0.0",
+    "@usevyre/eslint-plugin":        "^1.0.0",
+    "@usevyre/validate-ai-context":  "^1.0.0",
+    "@usevyre/prompt-templates":     "^1.0.0"
   },
   "peerDependencies": {
     "vue": ">=3.0.0"

@@ -29,8 +29,8 @@
     "clean": "true"
   },
   "dependencies": {
-    "@usevyre/react-all": "workspace:*",
-    "@usevyre/vue-all":   "workspace:*"
+    "@usevyre/react-all": "^1.0.2",
+    "@usevyre/vue-all":   "^1.0.0"
   },
   "peerDependencies": {
     "react":     ">=18.0.0",

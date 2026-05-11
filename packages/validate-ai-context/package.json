@@ -28,7 +28,7 @@
     "src"
   ],
   "dependencies": {
-    "@usevyre/ai-context": "workspace:*"
+    "@usevyre/ai-context": "^1.0.0"
   },
   "engines": {
     "node": ">=18.0.0"
