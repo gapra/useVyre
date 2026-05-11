@@ -1,6 +1,6 @@
 {
   "name": "@usevyre/validate-ai-context",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "description": "Validate useVyre component usage — catches AI hallucinations before they ship",
   "keywords": [
     "design-system",
