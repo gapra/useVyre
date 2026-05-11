@@ -36,14 +36,14 @@
         "require": "./dist/index.cjs",
         "types": "./dist/index.d.ts"
       },
-      "./styles": "./src/styles/components.css"
+      "./styles": "./dist/styles/components.css"
     }
   },
   "files": [
     "dist"
   ],
   "scripts": {
-    "build": "vite build && tsc --project tsconfig.build.json",
+    "build": "vite build && tsc --project tsconfig.build.json && mkdir -p dist/styles && cp src/styles/components.css dist/styles/",
     "dev": "vite build --watch",
     "typecheck": "tsc --noEmit",
     "clean": "rm -rf dist"
