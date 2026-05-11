@@ -61,6 +61,6 @@
     "vue-tsc": "^2.0.0"
   },
   "dependencies": {
-    "@usevyre/tokens": "workspace:*"
+    "@usevyre/tokens": "^1.0.0"
   }
 }

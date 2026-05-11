@@ -25,7 +25,7 @@
     "src"
   ],
   "dependencies": {
-    "@usevyre/ai-context": "workspace:*"
+    "@usevyre/ai-context": "^1.0.0"
   },
   "peerDependencies": {
     "eslint": ">=8.0.0"
