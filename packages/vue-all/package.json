@@ -1,6 +1,6 @@
 {
   "name": "@usevyre/vue-all",
-  "version": "1.0.0",
+  "version": "1.0.2",
   "description": "useVyre for Vue — components, tokens, and all AI tooling in one package",
   "keywords": [
     "design-system",
