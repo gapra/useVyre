@@ -1,5 +1,11 @@
 # @usevyre/vue
 
+## 1.0.2
+
+### Patch Changes
+
+- d51d685: Fix exports pointing to dist instead of src, fix CSS @import namespace from @vyre to @usevyre
+
 ## 1.0.0
 
 ### Major Changes
