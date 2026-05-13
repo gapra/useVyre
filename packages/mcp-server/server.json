@@ -1,0 +1,23 @@
+{
+  "$schema": "https://static.modelcontextprotocol.io/schemas/2025-12-11/server.schema.json",
+  "name": "io.github.gapra/usevyre-context",
+  "title": "useVyre Context",
+  "description": "useVyre component context for AI agents — valid props, variants, anti-patterns, and design tokens.",
+  "version": "1.0.3",
+  "websiteUrl": "https://usevyre.com/docs/ai-tooling/mcp-server",
+  "repository": {
+    "source": "github",
+    "url": "https://github.com/gapra/usevyre",
+    "subfolder": "packages/mcp-server"
+  },
+  "packages": [
+    {
+      "registryType": "npm",
+      "identifier": "@usevyre/mcp-server",
+      "version": "1.0.3",
+      "transport": {
+        "type": "stdio"
+      }
+    }
+  ]
+}
