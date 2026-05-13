@@ -1,8 +1,8 @@
 /* ============================================================
-   @vyre/react — Component Styles
-   
-   REQUIRES: @import "@vyre/tokens/css" before this file.
-   
+   @usevyre/react — Component Styles
+
+   REQUIRES: @import "@usevyre/tokens/css" before this file.
+
    AI CONTEXT:
    - All colors reference var(--vyre-color-semantic-*) tokens
    - All spacing uses var(--vyre-spacing-*) tokens
