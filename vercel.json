@@ -1,5 +1,5 @@
 {
-  "buildCommand": "pnpm --filter @usevyre/tokens build && pnpm --filter @usevyre/docs build",
+  "buildCommand": "pnpm --filter @usevyre/tokens build && pnpm --filter @usevyre/react build && pnpm --filter @usevyre/vue build && pnpm --filter @usevyre/docs build",
   "outputDirectory": "apps/docs/dist",
   "installCommand": "pnpm install",
   "framework": "astro"
