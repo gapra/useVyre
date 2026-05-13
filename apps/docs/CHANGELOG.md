@@ -1,5 +1,13 @@
 # @usevyre/docs
 
+## 1.0.1
+
+### Patch Changes
+
+- Updated dependencies [d51d685]
+  - @usevyre/react@1.0.3
+  - @usevyre/vue@1.0.2
+
 ## 1.0.0
 
 ### Major Changes
