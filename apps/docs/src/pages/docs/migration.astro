@@ -1,0 +1,672 @@
+---
+import DocsLayout from "@/layouts/DocsLayout.astro";
+import { Code }   from "astro:components";
+
+// ─── General ────────────────────────────────────────────────────────────────
+const codeInstallReact = `npm install @usevyre/tokens @usevyre/react
+# or with all AI tooling bundled
+npm install @usevyre/react-all`;
+
+const codeInstallVue = `npm install @usevyre/tokens @usevyre/vue
+# or with all AI tooling bundled
+npm install @usevyre/vue-all`;
+
+const codeSetupReact = `// main.tsx
+import "@usevyre/tokens/css";
+import "@usevyre/react/styles";`;
+
+const codeSetupVue = `// main.ts
+import "@usevyre/tokens/css";
+import "@usevyre/vue/styles";`;
+
+const codeAiContext = `# Generate agent context file in one command
+npx @usevyre/ai-context init --claude   # → CLAUDE.md
+npx @usevyre/ai-context init --cursor   # → .cursor/rules
+npx @usevyre/ai-context init --windsurf # → .windsurf/rules`;
+
+// ─── shadcn/ui ───────────────────────────────────────────────────────────────
+const codeShadcnInstall = `# Remove shadcn (optional — can coexist during migration)
+npm uninstall @shadcn/ui
+
+# Install useVyre
+npm install @usevyre/tokens @usevyre/react`;
+
+const codeShadcnButtonBefore = `// shadcn/ui
+import { Button } from "@/components/ui/button";
+
+<Button variant="destructive" size="sm">Delete</Button>
+<Button variant="outline">Cancel</Button>
+<Button variant="ghost" size="icon"><TrashIcon /></Button>`;
+
+const codeShadcnButtonAfter = `// useVyre
+import { Button } from "@usevyre/react";
+
+<Button variant="danger" size="sm">Delete</Button>
+<Button variant="secondary">Cancel</Button>
+<Button variant="ghost" size="icon" aria-label="Delete"><TrashIcon /></Button>`;
+
+const codeShadcnAlertBefore = `// shadcn/ui
+import { Alert, AlertTitle, AlertDescription } from "@/components/ui/alert";
+
+<Alert variant="destructive">
+  <AlertTitle>Error</AlertTitle>
+  <AlertDescription>Something went wrong.</AlertDescription>
+</Alert>`;
+
+const codeShadcnAlertAfter = `// useVyre — Alert is a single component with props
+import { Alert } from "@usevyre/react";
+
+<Alert variant="danger" title="Error">
+  Something went wrong.
+</Alert>`;
+
+const codeShadcnDialogBefore = `// shadcn/ui
+import {
+  Dialog, DialogContent, DialogHeader,
+  DialogTitle, DialogDescription, DialogFooter,
+} from "@/components/ui/dialog";
+
+<Dialog open={open} onOpenChange={setOpen}>
+  <DialogContent>
+    <DialogHeader>
+      <DialogTitle>Confirm</DialogTitle>
+      <DialogDescription>Are you sure?</DialogDescription>
+    </DialogHeader>
+    <DialogFooter>...</DialogFooter>
+  </DialogContent>
+</Dialog>`;
+
+const codeShadcnDialogAfter = `// useVyre — Modal with built-in title + onClose
+import { Modal } from "@usevyre/react";
+
+<Modal open={open} onClose={() => setOpen(false)} title="Confirm" size="sm">
+  <p>Are you sure?</p>
+</Modal>`;
+
+const codeShadcnToastBefore = `// shadcn/ui — Toaster + useToast hook
+import { useToast } from "@/components/ui/use-toast";
+const { toast } = useToast();
+toast({ title: "Saved!", variant: "default" });`;
+
+const codeShadcnToastAfter = `// useVyre — same hook pattern, different setup
+import { useToast } from "@usevyre/react";
+const { toast } = useToast();
+toast({ title: "Saved!", variant: "success" });
+
+// Required: wrap root with ToastProvider (same as shadcn's Toaster)
+import { ToastProvider } from "@usevyre/react";
+<ToastProvider><App /></ToastProvider>`;
+
+const codeShadcnTokensBefore = `/* shadcn/ui — Tailwind classes */
+<div className="bg-primary text-primary-foreground rounded-md p-4">`;
+
+const codeShadcnTokensAfter = `/* useVyre — CSS variables, no Tailwind required */
+<div style={{
+  background: "var(--vyre-color-semantic-accent)",
+  color: "var(--vyre-color-semantic-on-accent)",
+  borderRadius: "var(--vyre-radius-md)",
+  padding: "var(--vyre-spacing-4)",
+}}>`;
+
+// ─── Material UI (MUI) ───────────────────────────────────────────────────────
+const codeMuiInstall = `npm uninstall @mui/material @emotion/react @emotion/styled
+
+npm install @usevyre/tokens @usevyre/react`;
+
+const codeMuiButtonBefore = `// MUI
+import Button from "@mui/material/Button";
+
+<Button variant="contained" color="error" size="small">Delete</Button>
+<Button variant="outlined">Cancel</Button>
+<Button variant="text">Learn more</Button>`;
+
+const codeMuiButtonAfter = `// useVyre
+import { Button } from "@usevyre/react";
+
+<Button variant="danger" size="sm">Delete</Button>
+<Button variant="secondary">Cancel</Button>
+<Button variant="ghost">Learn more</Button>`;
+
+const codeMuiAlertBefore = `// MUI
+import Alert from "@mui/material/Alert";
+
+<Alert severity="error">Something went wrong.</Alert>
+<Alert severity="warning" onClose={handleClose}>Low storage.</Alert>`;
+
+const codeMuiAlertAfter = `// useVyre
+import { Alert } from "@usevyre/react";
+
+<Alert variant="danger">Something went wrong.</Alert>
+<Alert variant="warning" onClose={handleClose}>Low storage.</Alert>`;
+
+const codeMuiModalBefore = `// MUI
+import { Dialog, DialogTitle, DialogContent, DialogActions } from "@mui/material";
+
+<Dialog open={open} onClose={handleClose} maxWidth="sm">
+  <DialogTitle>Confirm</DialogTitle>
+  <DialogContent>Are you sure?</DialogContent>
+  <DialogActions>
+    <Button onClick={handleClose}>Cancel</Button>
+  </DialogActions>
+</Dialog>`;
+
+const codeMuiModalAfter = `// useVyre
+import { Modal, Button } from "@usevyre/react";
+
+<Modal open={open} onClose={handleClose} title="Confirm" size="sm">
+  <p>Are you sure?</p>
+  <Button variant="secondary" onClick={handleClose}>Cancel</Button>
+</Modal>`;
+
+const codeMuiThemeBefore = `// MUI — ThemeProvider + createTheme
+import { ThemeProvider, createTheme } from "@mui/material/styles";
+const theme = createTheme({ palette: { primary: { main: "#7c3aed" } } });
+<ThemeProvider theme={theme}><App /></ThemeProvider>`;
+
+const codeMuiThemeAfter = `/* useVyre — override CSS variables directly, no provider needed */
+:root {
+  --vyre-color-semantic-accent: #7c3aed;
+  --vyre-color-semantic-accent-hover: #6d28d9;
+}`;
+
+// ─── Tailwind UI / Headless UI ────────────────────────────────────────────────
+const codeTailwindInstall = `# useVyre doesn't require Tailwind — you can remove it,
+# or keep it alongside useVyre during a gradual migration.
+npm install @usevyre/tokens @usevyre/react`;
+
+const codeTailwindButtonBefore = `// Tailwind UI — custom styled button
+<button
+  className="rounded-md bg-violet-600 px-4 py-2 text-sm font-semibold
+             text-white hover:bg-violet-500 disabled:opacity-50"
+>
+  Save changes
+</button>`;
+
+const codeTailwindButtonAfter = `// useVyre — semantic props, no class lists
+import { Button } from "@usevyre/react";
+
+<Button variant="accent">Save changes</Button>`;
+
+const codeTailwindDialogBefore = `// Headless UI
+import { Dialog } from "@headlessui/react";
+
+<Dialog open={open} onClose={setOpen}>
+  <Dialog.Panel className="...">
+    <Dialog.Title className="...">Confirm</Dialog.Title>
+    ...
+  </Dialog.Panel>
+</Dialog>`;
+
+const codeTailwindDialogAfter = `// useVyre — accessibility built in, no class config
+import { Modal } from "@usevyre/react";
+
+<Modal open={open} onClose={() => setOpen(false)} title="Confirm">
+  ...
+</Modal>`;
+
+const codeTailwindTokensBefore = `/* Tailwind — arbitrary color values or config */
+<div className="bg-violet-600 text-white rounded-lg p-4 shadow-md">`;
+
+const codeTailwindTokensAfter = `/* useVyre — semantic CSS variables, theme-aware */
+<div style={{
+  background: "var(--vyre-color-semantic-accent)",
+  color: "var(--vyre-color-semantic-on-accent)",
+  borderRadius: "var(--vyre-radius-lg)",
+  padding: "var(--vyre-spacing-4)",
+  boxShadow: "var(--vyre-shadow-md)",
+}}>
+
+/* Or use a Card component */
+import { Card, CardBody } from "@usevyre/react";
+<Card variant="elevated"><CardBody>...</CardBody></Card>`;
+---
+
+<DocsLayout title="Migration Guide — Migrating to useVyre">
+  <div class="docs-header">
+    <h1 class="docs-title">Migrating to useVyre</h1>
+    <p class="docs-lead">
+      Step-by-step guides for moving your project to useVyre from another
+      design system. Pick your starting point below.
+    </p>
+  </div>
+
+  <hr class="docs-divider" />
+
+  <h2 class="docs-h2" id="general">General migration steps</h2>
+  <p class="docs-p">
+    These steps apply regardless of where you're coming from.
+  </p>
+
+  <ol class="docs-ol">
+    <li>
+      <strong>Install useVyre</strong> — tokens package is always required,
+      plus the framework package for React or Vue.
+    </li>
+  </ol>
+
+  <div class="docs-tabs" id="install-tabs">
+    <div class="docs-tabs__bar" role="tablist">
+      <button class="docs-tabs__tab docs-tabs__tab--active" role="tab" data-target="install-react-gen" type="button">React</button>
+      <button class="docs-tabs__tab" role="tab" data-target="install-vue-gen" type="button">Vue</button>
+    </div>
+    <div id="install-react-gen" class="docs-tabs__panel">
+      <Code code={codeInstallReact} lang="bash" theme="github-dark" />
+    </div>
+    <div id="install-vue-gen" class="docs-tabs__panel" hidden>
+      <Code code={codeInstallVue} lang="bash" theme="github-dark" />
+    </div>
+  </div>
+
+  <ol class="docs-ol" start={2}>
+    <li>
+      <strong>Import styles</strong> at your app entry point — tokens CSS +
+      component styles.
+    </li>
+  </ol>
+
+  <div class="docs-tabs" id="setup-tabs">
+    <div class="docs-tabs__bar" role="tablist">
+      <button class="docs-tabs__tab docs-tabs__tab--active" role="tab" data-target="setup-react-gen" type="button">React</button>
+      <button class="docs-tabs__tab" role="tab" data-target="setup-vue-gen" type="button">Vue</button>
+    </div>
+    <div id="setup-react-gen" class="docs-tabs__panel">
+      <Code code={codeSetupReact} lang="ts" theme="github-dark" />
+    </div>
+    <div id="setup-vue-gen" class="docs-tabs__panel" hidden>
+      <Code code={codeSetupVue} lang="ts" theme="github-dark" />
+    </div>
+  </div>
+
+  <ol class="docs-ol" start={3}>
+    <li>
+      <strong>Add AI context</strong> so your coding agent knows every valid
+      prop and variant — no more hallucinated class names.
+    </li>
+  </ol>
+
+  <Code code={codeAiContext} lang="bash" theme="github-dark" />
+
+  <ol class="docs-ol" start={4}>
+    <li>
+      <strong>Replace components gradually.</strong> useVyre can coexist with
+      your old system during migration — you don't need to do it all at once.
+      Start with high-traffic components like Button, Input, and Modal.
+    </li>
+  </ol>
+
+  <div class="docs-callout docs-callout--teal">
+    <strong>Tip:</strong> Run <code>npx @usevyre/validate-ai-context src/</code> after
+    migration to catch any leftover invalid props before they reach production.
+  </div>
+
+  <hr class="docs-divider" />
+
+  <!-- ── Per-system tabs ──────────────────────────────────────── -->
+  <h2 class="docs-h2" id="from">Migrate from...</h2>
+
+  <div class="docs-tabs" id="system-tabs">
+    <div class="docs-tabs__bar" role="tablist">
+      <button class="docs-tabs__tab docs-tabs__tab--active" role="tab" data-target="from-tailwind" type="button">Tailwind UI</button>
+      <button class="docs-tabs__tab" role="tab" data-target="from-mui" type="button">Material UI</button>
+      <button class="docs-tabs__tab" role="tab" data-target="from-shadcn" type="button">shadcn/ui</button>
+    </div>
+
+    <!-- ── shadcn/ui ──────────────────────────────────────────── -->
+    <div id="from-shadcn" class="docs-tabs__panel" hidden>
+      <p class="docs-p">
+        shadcn/ui and useVyre share the same philosophy — components you own,
+        copy-paste friendly, built on accessible primitives. The main difference:
+        useVyre uses <strong>semantic props</strong> instead of Tailwind class
+        strings, so your AI agent can't invent classes that don't exist.
+      </p>
+
+      <h3 class="docs-h3">Install</h3>
+      <Code code={codeShadcnInstall} lang="bash" theme="github-dark" />
+
+      <h3 class="docs-h3">Component mapping</h3>
+
+      <table class="docs-table">
+        <thead>
+          <tr><th>shadcn/ui</th><th>useVyre</th></tr>
+        </thead>
+        <tbody>
+          <tr><td><code>Button variant="destructive"</code></td><td><code>Button variant="danger"</code></td></tr>
+          <tr><td><code>Button variant="outline"</code></td><td><code>Button variant="secondary"</code></td></tr>
+          <tr><td><code>Button variant="default"</code></td><td><code>Button variant="primary"</code></td></tr>
+          <tr><td><code>Alert variant="destructive"</code></td><td><code>Alert variant="danger"</code></td></tr>
+          <tr><td><code>Dialog</code></td><td><code>Modal</code></td></tr>
+          <tr><td><code>Sheet</code></td><td><code>Sheet</code> ✓ same name</td></tr>
+          <tr><td><code>Toaster</code> (setup)</td><td><code>ToastProvider</code></td></tr>
+          <tr><td><code>useToast</code></td><td><code>useToast</code> ✓ same hook</td></tr>
+          <tr><td><code>DropdownMenu</code></td><td><code>DropdownMenu</code> ✓ same name</td></tr>
+          <tr><td><code>Command</code></td><td><code>Command</code> ✓ same name</td></tr>
+          <tr><td><code>Skeleton</code></td><td><code>Skeleton</code> ✓ same name</td></tr>
+          <tr><td><code>Separator</code></td><td><code>Separator</code> ✓ same name</td></tr>
+          <tr><td><code>Tabs</code></td><td><code>Tabs</code> ✓ same name</td></tr>
+          <tr><td><code>Badge variant="secondary"</code></td><td><code>Badge variant="default"</code></td></tr>
+        </tbody>
+      </table>
+
+      <h3 class="docs-h3">Button</h3>
+      <div class="docs-diff">
+        <div class="docs-diff__before">
+          <p class="docs-diff__label">shadcn/ui</p>
+          <Code code={codeShadcnButtonBefore} lang="tsx" theme="github-dark" />
+        </div>
+        <div class="docs-diff__after">
+          <p class="docs-diff__label">useVyre</p>
+          <Code code={codeShadcnButtonAfter} lang="tsx" theme="github-dark" />
+        </div>
+      </div>
+
+      <h3 class="docs-h3">Alert</h3>
+      <div class="docs-diff">
+        <div class="docs-diff__before">
+          <p class="docs-diff__label">shadcn/ui</p>
+          <Code code={codeShadcnAlertBefore} lang="tsx" theme="github-dark" />
+        </div>
+        <div class="docs-diff__after">
+          <p class="docs-diff__label">useVyre</p>
+          <Code code={codeShadcnAlertAfter} lang="tsx" theme="github-dark" />
+        </div>
+      </div>
+
+      <h3 class="docs-h3">Dialog → Modal</h3>
+      <div class="docs-diff">
+        <div class="docs-diff__before">
+          <p class="docs-diff__label">shadcn/ui</p>
+          <Code code={codeShadcnDialogBefore} lang="tsx" theme="github-dark" />
+        </div>
+        <div class="docs-diff__after">
+          <p class="docs-diff__label">useVyre</p>
+          <Code code={codeShadcnDialogAfter} lang="tsx" theme="github-dark" />
+        </div>
+      </div>
+
+      <h3 class="docs-h3">Toast</h3>
+      <div class="docs-diff">
+        <div class="docs-diff__before">
+          <p class="docs-diff__label">shadcn/ui</p>
+          <Code code={codeShadcnToastBefore} lang="tsx" theme="github-dark" />
+        </div>
+        <div class="docs-diff__after">
+          <p class="docs-diff__label">useVyre</p>
+          <Code code={codeShadcnToastAfter} lang="tsx" theme="github-dark" />
+        </div>
+      </div>
+
+      <h3 class="docs-h3">Tokens: Tailwind classes → CSS variables</h3>
+      <p class="docs-p">
+        shadcn/ui uses Tailwind utility classes that map to CSS variables.
+        useVyre exposes those CSS variables directly — no Tailwind required.
+      </p>
+      <div class="docs-diff">
+        <div class="docs-diff__before">
+          <p class="docs-diff__label">shadcn/ui</p>
+          <Code code={codeShadcnTokensBefore} lang="tsx" theme="github-dark" />
+        </div>
+        <div class="docs-diff__after">
+          <p class="docs-diff__label">useVyre</p>
+          <Code code={codeShadcnTokensAfter} lang="tsx" theme="github-dark" />
+        </div>
+      </div>
+    </div>
+
+    <!-- ── Material UI ────────────────────────────────────────── -->
+    <div id="from-mui" class="docs-tabs__panel" hidden>
+      <p class="docs-p">
+        MUI uses Emotion for styling and a JavaScript ThemeProvider for
+        customization. useVyre replaces that with pure CSS variables —
+        zero runtime, zero provider, theming via CSS overrides.
+      </p>
+
+      <h3 class="docs-h3">Install</h3>
+      <Code code={codeMuiInstall} lang="bash" theme="github-dark" />
+
+      <h3 class="docs-h3">Component mapping</h3>
+
+      <table class="docs-table">
+        <thead>
+          <tr><th>MUI</th><th>useVyre</th></tr>
+        </thead>
+        <tbody>
+          <tr><td><code>Button variant="contained" color="primary"</code></td><td><code>Button variant="primary"</code></td></tr>
+          <tr><td><code>Button variant="contained" color="error"</code></td><td><code>Button variant="danger"</code></td></tr>
+          <tr><td><code>Button variant="outlined"</code></td><td><code>Button variant="secondary"</code></td></tr>
+          <tr><td><code>Button variant="text"</code></td><td><code>Button variant="ghost"</code></td></tr>
+          <tr><td><code>Alert severity="error"</code></td><td><code>Alert variant="danger"</code></td></tr>
+          <tr><td><code>Alert severity="warning"</code></td><td><code>Alert variant="warning"</code></td></tr>
+          <tr><td><code>Alert severity="success"</code></td><td><code>Alert variant="success"</code></td></tr>
+          <tr><td><code>Alert severity="info"</code></td><td><code>Alert variant="info"</code></td></tr>
+          <tr><td><code>Dialog</code></td><td><code>Modal</code></td></tr>
+          <tr><td><code>Drawer</code></td><td><code>Sheet</code></td></tr>
+          <tr><td><code>Chip</code></td><td><code>Badge</code></td></tr>
+          <tr><td><code>CircularProgress</code></td><td><code>Progress</code> (use <code>variant</code> for color)</td></tr>
+          <tr><td><code>LinearProgress</code></td><td><code>Progress</code></td></tr>
+          <tr><td><code>Tooltip</code></td><td><code>Tooltip</code> ✓ same name</td></tr>
+          <tr><td><code>Skeleton</code></td><td><code>Skeleton</code> ✓ same name</td></tr>
+          <tr><td><code>Switch</code></td><td><code>Switch</code> ✓ same name</td></tr>
+          <tr><td><code>Slider</code></td><td><code>Slider</code> ✓ same name</td></tr>
+          <tr><td><code>Pagination</code></td><td><code>Pagination</code> ✓ same name</td></tr>
+          <tr><td><code>Snackbar</code></td><td><code>Toast</code> via <code>useToast()</code></td></tr>
+          <tr><td><code>ThemeProvider</code></td><td>CSS variable overrides in <code>:root</code></td></tr>
+        </tbody>
+      </table>
+
+      <h3 class="docs-h3">Button</h3>
+      <div class="docs-diff">
+        <div class="docs-diff__before">
+          <p class="docs-diff__label">MUI</p>
+          <Code code={codeMuiButtonBefore} lang="tsx" theme="github-dark" />
+        </div>
+        <div class="docs-diff__after">
+          <p class="docs-diff__label">useVyre</p>
+          <Code code={codeMuiButtonAfter} lang="tsx" theme="github-dark" />
+        </div>
+      </div>
+
+      <h3 class="docs-h3">Alert</h3>
+      <div class="docs-diff">
+        <div class="docs-diff__before">
+          <p class="docs-diff__label">MUI</p>
+          <Code code={codeMuiAlertBefore} lang="tsx" theme="github-dark" />
+        </div>
+        <div class="docs-diff__after">
+          <p class="docs-diff__label">useVyre</p>
+          <Code code={codeMuiAlertAfter} lang="tsx" theme="github-dark" />
+        </div>
+      </div>
+
+      <h3 class="docs-h3">Dialog → Modal</h3>
+      <div class="docs-diff">
+        <div class="docs-diff__before">
+          <p class="docs-diff__label">MUI</p>
+          <Code code={codeMuiModalBefore} lang="tsx" theme="github-dark" />
+        </div>
+        <div class="docs-diff__after">
+          <p class="docs-diff__label">useVyre</p>
+          <Code code={codeMuiModalAfter} lang="tsx" theme="github-dark" />
+        </div>
+      </div>
+
+      <h3 class="docs-h3">Theming: ThemeProvider → CSS variables</h3>
+      <p class="docs-p">
+        useVyre needs no JavaScript provider for theming. Override semantic
+        CSS variables in your stylesheet and every component updates automatically.
+      </p>
+      <div class="docs-diff">
+        <div class="docs-diff__before">
+          <p class="docs-diff__label">MUI</p>
+          <Code code={codeMuiThemeBefore} lang="tsx" theme="github-dark" />
+        </div>
+        <div class="docs-diff__after">
+          <p class="docs-diff__label">useVyre</p>
+          <Code code={codeMuiThemeAfter} lang="css" theme="github-dark" />
+        </div>
+      </div>
+    </div>
+
+    <!-- ── Tailwind UI ────────────────────────────────────────── -->
+    <div id="from-tailwind" class="docs-tabs__panel">
+      <p class="docs-p">
+        Tailwind UI gives you unstyled markup with utility classes. useVyre
+        trades the class-string approach for <strong>semantic component props</strong> —
+        less to type, nothing for your AI agent to hallucinate.
+      </p>
+
+      <h3 class="docs-h3">Install</h3>
+      <Code code={codeTailwindInstall} lang="bash" theme="github-dark" />
+
+      <h3 class="docs-h3">Component mapping</h3>
+
+      <table class="docs-table">
+        <thead>
+          <tr><th>Tailwind UI / Headless UI</th><th>useVyre</th></tr>
+        </thead>
+        <tbody>
+          <tr><td>Custom <code>className</code> button</td><td><code>Button variant</code> prop</td></tr>
+          <tr><td><code>Dialog</code> (Headless UI)</td><td><code>Modal</code></td></tr>
+          <tr><td><code>Disclosure</code> (Headless UI)</td><td><code>Accordion</code></td></tr>
+          <tr><td><code>Listbox</code> (Headless UI)</td><td><code>Select</code></td></tr>
+          <tr><td><code>Combobox</code> (Headless UI)</td><td><code>Command</code></td></tr>
+          <tr><td><code>Switch</code> (Headless UI)</td><td><code>Switch</code> ✓ same name</td></tr>
+          <tr><td><code>Popover</code> (Headless UI)</td><td><code>Popover</code> ✓ same name</td></tr>
+          <tr><td><code>Tooltip</code> (Headless UI)</td><td><code>Tooltip</code> ✓ same name</td></tr>
+          <tr><td><code>bg-primary text-white</code> classes</td><td><code>var(--vyre-color-semantic-accent)</code></td></tr>
+          <tr><td><code>rounded-lg</code></td><td><code>var(--vyre-radius-lg)</code></td></tr>
+          <tr><td><code>shadow-md</code></td><td><code>var(--vyre-shadow-md)</code></td></tr>
+          <tr><td><code>p-4</code></td><td><code>var(--vyre-spacing-4)</code></td></tr>
+        </tbody>
+      </table>
+
+      <h3 class="docs-h3">Button</h3>
+      <div class="docs-diff">
+        <div class="docs-diff__before">
+          <p class="docs-diff__label">Tailwind UI</p>
+          <Code code={codeTailwindButtonBefore} lang="tsx" theme="github-dark" />
+        </div>
+        <div class="docs-diff__after">
+          <p class="docs-diff__label">useVyre</p>
+          <Code code={codeTailwindButtonAfter} lang="tsx" theme="github-dark" />
+        </div>
+      </div>
+
+      <h3 class="docs-h3">Dialog (Headless UI) → Modal</h3>
+      <div class="docs-diff">
+        <div class="docs-diff__before">
+          <p class="docs-diff__label">Headless UI</p>
+          <Code code={codeTailwindDialogBefore} lang="tsx" theme="github-dark" />
+        </div>
+        <div class="docs-diff__after">
+          <p class="docs-diff__label">useVyre</p>
+          <Code code={codeTailwindDialogAfter} lang="tsx" theme="github-dark" />
+        </div>
+      </div>
+
+      <h3 class="docs-h3">Tokens: utility classes → CSS variables</h3>
+      <p class="docs-p">
+        useVyre's semantic tokens are CSS variables. They work in inline styles,
+        plain CSS files, CSS Modules, or SCSS — no Tailwind config needed.
+      </p>
+      <div class="docs-diff">
+        <div class="docs-diff__before">
+          <p class="docs-diff__label">Tailwind UI</p>
+          <Code code={codeTailwindTokensBefore} lang="tsx" theme="github-dark" />
+        </div>
+        <div class="docs-diff__after">
+          <p class="docs-diff__label">useVyre</p>
+          <Code code={codeTailwindTokensAfter} lang="tsx" theme="github-dark" />
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <hr class="docs-divider" />
+
+  <h2 class="docs-h2" id="validate">Validate after migration</h2>
+  <p class="docs-p">
+    Run the validator on your codebase to catch any invalid props or leftover
+    patterns from the old system:
+  </p>
+  <Code code={`# Scan your source directory for invalid useVyre prop usage
+npx @usevyre/validate-ai-context src/
+
+# Output as JSON for CI integration
+npx @usevyre/validate-ai-context src/ --json`} lang="bash" theme="github-dark" />
+
+  <div class="docs-next">
+    <a href="/docs/getting-started" class="docs-next__link">
+      <span class="docs-next__label">Next</span>
+      <span class="docs-next__title">Getting Started →</span>
+    </a>
+  </div>
+</DocsLayout>
+
+<style>
+  .docs-diff {
+    display: flex;
+    flex-direction: column;
+    gap: 0.75rem;
+    margin: 1rem 0 1.75rem;
+  }
+
+  .docs-diff__before,
+  .docs-diff__after {
+    min-width: 0;
+  }
+
+  .docs-diff__label {
+    font-size: 0.72rem;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.06em;
+    margin: 0 0 0.4rem;
+  }
+
+  .docs-diff__before .docs-diff__label { color: var(--vyre-color-semantic-danger, #ef4444); }
+  .docs-diff__after  .docs-diff__label { color: var(--vyre-color-semantic-success, #10b981); }
+
+  .docs-table {
+    width: 100%;
+    border-collapse: collapse;
+    margin: 0.75rem 0 1.5rem;
+    font-size: 0.85rem;
+  }
+
+  .docs-table th,
+  .docs-table td {
+    padding: 0.45rem 0.75rem;
+    border: 1px solid var(--vyre-color-semantic-border, rgba(255,255,255,0.08));
+    text-align: left;
+    vertical-align: top;
+  }
+
+  .docs-table th {
+    background: var(--vyre-color-semantic-surface-raised, rgba(255,255,255,0.04));
+    font-weight: 600;
+  }
+
+  .docs-ol {
+    padding-left: 1.5rem;
+    margin: 0.5rem 0 1rem;
+    display: flex;
+    flex-direction: column;
+    gap: 0.4rem;
+  }
+</style>
+
+<script>
+  document.querySelectorAll(".docs-tabs").forEach((wrapper) => {
+    const tabs   = wrapper.querySelectorAll<HTMLButtonElement>(".docs-tabs__tab");
+    const panels = wrapper.querySelectorAll<HTMLElement>(".docs-tabs__panel");
+    tabs.forEach((tab) => {
+      tab.addEventListener("click", () => {
+        tabs.forEach((t)   => t.classList.remove("docs-tabs__tab--active"));
+        panels.forEach((p) => { p.hidden = true; });
+        tab.classList.add("docs-tabs__tab--active");
+        const target = document.getElementById(tab.dataset.target!);
+        if (target) target.hidden = false;
+      });
+    });
+  });
+</script>
