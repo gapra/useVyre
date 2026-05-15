@@ -1,87 +1,117 @@
 ---
-import DocsLayout from "@/layouts/DocsLayout.astro";
+import DocsLayout       from "@/layouts/DocsLayout.astro";
+import ComponentPreview from "@/components/docs/ComponentPreview.astro";
+import PropsTable       from "@/components/docs/PropsTable.astro";
+import AICheatSheet     from "@/components/docs/AICheatSheet.astro";
+import { ButtonGroupBasicDemo, ButtonGroupAttachedDemo, ButtonGroupOrientationDemo } from "@/components/demos/NewComponentsDemo";
+
+const codeBasicReact = `import { ButtonGroup, Button } from "@usevyre/react";
+
+<ButtonGroup>
+  <Button variant="secondary">Cut</Button>
+  <Button variant="secondary">Copy</Button>
+  <Button variant="secondary">Paste</Button>
+</ButtonGroup>`;
+
+const codeBasicVue = `<script setup>
+import { ButtonGroup, Button } from "@usevyre/vue";
+</script>
+<template>
+  <ButtonGroup>
+    <Button variant="secondary">Cut</Button>
+    <Button variant="secondary">Copy</Button>
+    <Button variant="secondary">Paste</Button>
+  </ButtonGroup>
+</template>`;
+
+const codeAttachedReact = `<ButtonGroup attached>
+  <Button variant="primary">Day</Button>
+  <Button variant="secondary">Week</Button>
+  <Button variant="secondary">Month</Button>
+</ButtonGroup>`;
+
+const codeAttachedVue = `<ButtonGroup :attached="true">
+  <Button variant="primary">Day</Button>
+  <Button variant="secondary">Week</Button>
+  <Button variant="secondary">Month</Button>
+</ButtonGroup>`;
+
+const codeVerticalReact = `<ButtonGroup orientation="vertical">
+  <Button variant="ghost">Option A</Button>
+  <Button variant="ghost">Option B</Button>
+  <Button variant="ghost">Option C</Button>
+</ButtonGroup>`;
+
+const codeVerticalVue = `<ButtonGroup orientation="vertical">
+  <Button variant="ghost">Option A</Button>
+  <Button variant="ghost">Option B</Button>
+  <Button variant="ghost">Option C</Button>
+</ButtonGroup>`;
+
+const props = [
+  { name: "orientation", type: `"horizontal" | "vertical"`,  default: `"horizontal"`, description: "Layout direction of the grouped buttons." },
+  { name: "attached",    type: "boolean",                    default: "false",         description: "Removes gap and collapses shared borders — turns the group into a segmented control." },
+  { name: "size",        type: `"sm" | "md" | "lg" | "icon"`, default: `"md"`,        description: "Size forwarded to child buttons via data-group-size attribute." },
+  { name: "className",   type: "string",                     default: "—",             description: "Additional CSS class." },
+];
 ---
 
-<DocsLayout title="Button Group">
+<DocsLayout title="Button Group" component="ButtonGroup">
   <div class="docs-header">
-    <div class="cs-title-row">
-      <h1 class="docs-title">Button Group</h1>
-      <span class="vyre-badge vyre-badge--default">Coming in v1.1</span>
+    <div class="docs-header__meta">
+      <span class="vyre-badge vyre-badge--default">@usevyre/react</span>
+      <span class="vyre-badge vyre-badge--default">@usevyre/vue</span>
     </div>
+    <h1 class="docs-title">Button Group</h1>
     <p class="docs-lead">
-      Segmented action row that joins multiple buttons with shared borders and a single visual unit.
+      Groups related buttons into a single visual unit. Supports horizontal and vertical
+      orientations, and an <code>attached</code> mode that collapses shared borders to
+      create a segmented-control look.
     </p>
   </div>
 
   <hr class="docs-divider" />
 
-  <div class="cs-body">
-    <h2 class="cs-section-title">What's coming</h2>
-    <ul class="cs-feature-list">
-      <li>Horizontal and vertical orientations</li>
-      <li>Shared border-radius on outer edges only</li>
-      <li>Works with all existing Button variants</li>
-      <li>Toggle group mode (single or multi-select)</li>
-      <li>Disabled state per-button or on the entire group</li>
-      <li>React + Vue with identical API surface</li>
-      <li>Inline AI context block for zero-hallucination agent use</li>
-    </ul>
+  <h2 class="docs-h2">Basic</h2>
+  <p class="docs-p">
+    Wrap any number of <code>Button</code> components in a <code>ButtonGroup</code>.
+    Buttons are spaced with a gap by default and rendered with a semantic <code>role="group"</code>.
+  </p>
+  <ComponentPreview react={codeBasicReact} vue={codeBasicVue}>
+    <ButtonGroupBasicDemo client:visible />
+  </ComponentPreview>
 
-    <div class="cs-feedback">
-      <p>Have a use case in mind? Share it on GitHub and help shape the API.</p>
-      <a
-        href="https://github.com/gapra/usevyre/discussions"
-        target="_blank"
-        rel="noopener noreferrer"
-        class="vyre-btn vyre-btn--secondary vyre-btn--sm"
-      >
-        Vote or leave feedback →
-      </a>
-    </div>
+  <h2 class="docs-h2">Attached (segmented control)</h2>
+  <p class="docs-p">
+    Add <code>attached</code> to collapse the gap and merge adjacent borders. The outermost
+    buttons retain their border-radius while inner buttons have flat edges — ideal for
+    view-mode toggles (Day / Week / Month).
+  </p>
+  <ComponentPreview react={codeAttachedReact} vue={codeAttachedVue}>
+    <ButtonGroupAttachedDemo client:visible />
+  </ComponentPreview>
+
+  <h2 class="docs-h2">Vertical orientation</h2>
+  <p class="docs-p">
+    Set <code>orientation="vertical"</code> to stack buttons in a column. Works with
+    all variants and the <code>attached</code> prop.
+  </p>
+  <ComponentPreview react={codeVerticalReact} vue={codeVerticalVue}>
+    <ButtonGroupOrientationDemo client:visible />
+  </ComponentPreview>
+
+  <h2 class="docs-h2">Props</h2>
+  <PropsTable props={props} />
+
+  <!-- AI Cheat Sheet -->
+  <AICheatSheet component="ButtonGroup" />
+
+  <div class="docs-pagination">
+    <a href="/docs/components/button" class="docs-pagination__link docs-pagination__link--prev">
+      ← Button
+    </a>
+    <a href="/docs/components/calendar" class="docs-pagination__link docs-pagination__link--next">
+      Calendar →
+    </a>
   </div>
 </DocsLayout>
-
-<style>
-  .cs-title-row {
-    display: flex;
-    align-items: center;
-    gap: var(--vyre-spacing-3);
-    flex-wrap: wrap;
-  }
-
-  .cs-body {
-    display: flex;
-    flex-direction: column;
-    gap: var(--vyre-spacing-8);
-    margin-top: var(--vyre-spacing-6);
-  }
-
-  .cs-section-title {
-    font-size: var(--vyre-typography-font-size-lg);
-    font-weight: var(--vyre-typography-font-weight-semibold);
-    color: var(--vyre-color-semantic-text-primary);
-    margin-bottom: var(--vyre-spacing-3);
-  }
-
-  .cs-feature-list {
-    display: flex;
-    flex-direction: column;
-    gap: var(--vyre-spacing-2);
-    padding-left: var(--vyre-spacing-5);
-    color: var(--vyre-color-semantic-text-secondary);
-    font-size: var(--vyre-typography-font-size-sm);
-    line-height: 1.6;
-  }
-
-  .cs-feedback {
-    display: flex;
-    flex-direction: column;
-    gap: var(--vyre-spacing-3);
-    padding: var(--vyre-spacing-5) var(--vyre-spacing-6);
-    background: var(--vyre-color-semantic-surface);
-    border: 1px solid var(--vyre-color-semantic-border-subtle);
-    border-radius: var(--vyre-border-radius-lg);
-    font-size: var(--vyre-typography-font-size-sm);
-    color: var(--vyre-color-semantic-text-secondary);
-  }
-</style>

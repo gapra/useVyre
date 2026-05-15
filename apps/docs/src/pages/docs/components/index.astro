@@ -40,6 +40,7 @@ const descriptions: Record<string, string> = {
   Switch:             "Toggle switch for boolean settings.",
   Table:              "Data table with sortable columns and striped rows.",
   Tabs:               "Tabbed interface for switching between content panels.",
+  Tag:                "Display chip for categories and filters, with removable and clickable variants.",
   "Tags Input":       "Multi-value tag input with keyboard navigation and validation.",
   Toast:              "Non-blocking notification with auto-dismiss.",
   Tooltip:            "Contextual label that appears on hover or focus.",
@@ -51,7 +52,7 @@ const descriptions: Record<string, string> = {
   <div class="docs-header">
     <h1 class="docs-title">Components</h1>
     <p class="docs-lead">
-      {liveComponents.length} components available now, {soonComponents.length} more coming in v1.1 —
+      {liveComponents.length} components available now, {soonComponents.length} more coming soon —
       all AI-native with inline context blocks for Claude, Cursor, Copilot, and Windsurf.
     </p>
   </div>
@@ -63,7 +64,7 @@ const descriptions: Record<string, string> = {
       <div class="comp-card comp-card--soon" aria-disabled="true">
         <div class="comp-card__header">
           <span class="comp-card__name">{item.title}</span>
-          <span class="vyre-badge vyre-badge--default comp-card__badge">v1.1</span>
+          <span class="vyre-badge vyre-badge--default comp-card__badge">Soon</span>
         </div>
         <span class="comp-card__desc">{descriptions[item.title] ?? ""}</span>
       </div>

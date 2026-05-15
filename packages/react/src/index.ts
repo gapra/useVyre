@@ -35,6 +35,12 @@
  * - Breadcrumb     — Navigation trail (+ BreadcrumbItem)
  * - Pagination     — Page navigation control
  * - Table          — Data table (+ TableHead, TableBody, TableRow, TableHeader, TableCell, TableCaption)
+ * - ButtonGroup    — Groups buttons horizontally/vertically with optional border collapse (attached mode)
+ * - TagsInput      — Multi-tag input: Enter/comma to add, × to remove, Backspace to delete last
+ * - Combobox       — Searchable select: type to filter options, keyboard navigation, controlled value
+ * - DataGrid       — Table with built-in column sorting (asc/desc), loading skeletons, empty state
+ * - Tag            — Standalone display tag/chip: variant, size, onRemove (× button), onClick (interactive)
+ * - TagGroup       — Read-only container that lays out multiple Tag elements with wrapping + gap
  *
  * CSS must be imported separately:
  * import "@usevyre/tokens/css";           ← design tokens (required)
@@ -79,6 +85,12 @@ export {
   Command, CommandInput, CommandList, CommandEmpty,
   CommandGroup, CommandItem, CommandSeparator, CommandDialog,
 }                                                           from "./components/Command/Command";
+export { ButtonGroup }                                      from "./components/ButtonGroup/ButtonGroup";
+export { TagsInput }                                        from "./components/TagsInput/TagsInput";
+export { Combobox }                                         from "./components/Combobox/Combobox";
+export { DataGrid }                                         from "./components/DataGrid/DataGrid";
+export { Tag }                                              from "./components/Tag/Tag";
+export { TagGroup }                                         from "./components/Tag/TagGroup";
 export { Calendar, DatePicker }                             from "./components/Calendar/Calendar";
 export type {
   CalendarProps, CalendarSingleProps, CalendarRangeProps,
@@ -134,6 +146,13 @@ export type {
   TableProps, TableRowProps, TableHeaderProps,
   TableCellProps,
 }                                                           from "./components/Table/Table";
+
+export type { ButtonGroupProps }                             from "./components/ButtonGroup/ButtonGroup";
+export type { TagsInputProps }                               from "./components/TagsInput/TagsInput";
+export type { ComboboxProps, ComboboxOption }                from "./components/Combobox/Combobox";
+export type { DataGridProps, DataGridColumn }                from "./components/DataGrid/DataGrid";
+export type { TagProps, TagVariant, TagSize }                from "./components/Tag/Tag";
+export type { TagGroupProps, TagGroupGap }                   from "./components/Tag/TagGroup";
 
 // ── Shared types ──────────────────────────────────────────────
 export type { Variant, Size, FieldState, BadgeVariant, BaseProps } from "./types";

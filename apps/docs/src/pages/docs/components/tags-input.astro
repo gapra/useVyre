@@ -1,87 +1,139 @@
 ---
-import DocsLayout from "@/layouts/DocsLayout.astro";
+import DocsLayout       from "@/layouts/DocsLayout.astro";
+import ComponentPreview from "@/components/docs/ComponentPreview.astro";
+import PropsTable       from "@/components/docs/PropsTable.astro";
+import AICheatSheet     from "@/components/docs/AICheatSheet.astro";
+import { TagsInputBasicDemo, TagsInputMaxDemo } from "@/components/demos/NewComponentsDemo";
+
+const codeBasicReact = `import { TagsInput } from "@usevyre/react";
+import { useState } from "react";
+
+const [tags, setTags] = useState(["react", "typescript"]);
+
+<TagsInput
+  value={tags}
+  onChange={setTags}
+  placeholder="Add tag…"
+/>`;
+
+const codeBasicVue = `<script setup>
+import { TagsInput } from "@usevyre/vue";
+const tags = ref(["react", "typescript"]);
+</script>
+<template>
+  <TagsInput
+    v-model="tags"
+    placeholder="Add tag…"
+  />
+</template>`;
+
+const codeMaxReact = `// Limit to 5 tags — input is disabled once the limit is reached
+const [skills, setSkills] = useState<string[]>([]);
+
+<TagsInput
+  value={skills}
+  onChange={setSkills}
+  placeholder="Add skill…"
+  max={5}
+/>`;
+
+const codeMaxVue = `<TagsInput
+  v-model="skills"
+  placeholder="Add skill…"
+  :max="5"
+/>`;
+
+const codeFieldReact = `import { Field, TagsInput } from "@usevyre/react";
+
+<Field label="Skills" hint="Press Enter or comma to add a tag.">
+  <TagsInput value={skills} onChange={setSkills} placeholder="e.g. React" />
+</Field>`;
+
+const codeFieldVue = `<Field label="Skills" hint="Press Enter or comma to add a tag.">
+  <TagsInput v-model="skills" placeholder="e.g. React" />
+</Field>`;
+
+const props = [
+  { name: "value",       type: "string[]",                   default: "—",         description: "Controlled array of tags." },
+  { name: "onChange",    type: "(tags: string[]) => void",   default: "—",         description: "React only. Called with the updated tag array on every change." },
+  { name: "placeholder", type: "string",                     default: `"Add tag…"`, description: "Input placeholder. Hidden automatically when max is reached." },
+  { name: "disabled",    type: "boolean",                    default: "false",      description: "Disables all interactions." },
+  { name: "max",         type: "number",                     default: "—",         description: "Maximum number of tags. Input is disabled once the limit is reached." },
+  { name: "size",        type: `"sm" | "md" | "lg"`,        default: `"md"`,       description: "Size scale." },
+  { name: "class / className", type: "string",               default: "—",         description: "Additional CSS class." },
+];
 ---
 
-<DocsLayout title="Tags Input">
+<DocsLayout title="Tags Input" component="TagsInput">
   <div class="docs-header">
-    <div class="cs-title-row">
-      <h1 class="docs-title">Tags Input</h1>
-      <span class="vyre-badge vyre-badge--default">Coming in v1.1</span>
+    <div class="docs-header__meta">
+      <span class="vyre-badge vyre-badge--default">@usevyre/react</span>
+      <span class="vyre-badge vyre-badge--default">@usevyre/vue</span>
     </div>
+    <h1 class="docs-title">Tags Input</h1>
     <p class="docs-lead">
-      Multi-value tag input with keyboard navigation, paste-to-split, and per-tag validation.
+      A multi-value text input that lets users enter a list of tags. Supports adding
+      tags via <kbd>Enter</kbd> or comma, removing the last tag with <kbd>Backspace</kbd>,
+      and paste-to-split for bulk entry.
     </p>
   </div>
 
   <hr class="docs-divider" />
 
-  <div class="cs-body">
-    <h2 class="cs-section-title">What's coming</h2>
-    <ul class="cs-feature-list">
-      <li>Add tags via Enter or comma delimiter</li>
-      <li>Paste a comma-separated list to bulk-add tags</li>
-      <li>Per-tag validation with error state</li>
-      <li>Backspace to remove last tag</li>
-      <li>Max tag count and duplicate prevention</li>
-      <li>React + Vue with identical API surface</li>
-      <li>Inline AI context block for zero-hallucination agent use</li>
-    </ul>
+  <h2 class="docs-h2">Basic</h2>
+  <p class="docs-p">
+    TagsInput is fully controlled. Pass a <code>string[]</code> as <code>value</code>
+    and update it in <code>onChange</code>. Duplicate tags and empty strings are silently
+    ignored.
+  </p>
+  <ComponentPreview react={codeBasicReact} vue={codeBasicVue}>
+    <TagsInputBasicDemo client:visible />
+  </ComponentPreview>
 
-    <div class="cs-feedback">
-      <p>Have a use case in mind? Share it on GitHub and help shape the API.</p>
-      <a
-        href="https://github.com/gapra/usevyre/discussions"
-        target="_blank"
-        rel="noopener noreferrer"
-        class="vyre-btn vyre-btn--secondary vyre-btn--sm"
-      >
-        Vote or leave feedback →
-      </a>
-    </div>
+  <h2 class="docs-h2">Max tags</h2>
+  <p class="docs-p">
+    Set <code>max</code> to limit the number of tags. Once the limit is reached, the
+    input placeholder disappears and the text field becomes disabled until a tag is removed.
+  </p>
+  <ComponentPreview react={codeMaxReact} vue={codeMaxVue}>
+    <TagsInputMaxDemo client:visible />
+  </ComponentPreview>
+
+  <h2 class="docs-h2">Inside a Field</h2>
+  <p class="docs-p">
+    Wrap in <code>Field</code> to add a label and hint text. The <code>state</code> prop on
+    <code>Field</code> applies validation styling to the surrounding context.
+  </p>
+  <ComponentPreview react={codeFieldReact} vue={codeFieldVue}>
+    <TagsInputBasicDemo client:visible />
+  </ComponentPreview>
+
+  <h2 class="docs-h2">Keyboard behaviour</h2>
+  <p class="docs-p">
+    <kbd>Enter</kbd> or <kbd>,</kbd> adds the current input as a tag (trimmed, deduplicated).
+    <kbd>Backspace</kbd> on an empty input removes the last tag.
+    Pasting a comma-separated string (e.g. <code>react,vue,svelte</code>) splits and
+    adds all parts at once.
+  </p>
+
+  <h2 class="docs-h2">Vue v-model</h2>
+  <p class="docs-p">
+    In Vue, use <code>v-model</code> — it binds to <code>modelValue</code> and emits
+    <code>update:modelValue</code> with the updated string array.
+  </p>
+
+  <h2 class="docs-h2">Props</h2>
+  <PropsTable props={props} />
+
+  <!-- AI Cheat Sheet -->
+  <AICheatSheet component="TagsInput" />
+
+  <div class="docs-pagination">
+    <a href="/docs/components/tag" class="docs-pagination__link docs-pagination__link--prev">
+      ← Tag
+    </a>
+    <a href="/docs/components/toast" class="docs-pagination__link docs-pagination__link--next">
+      Toast →
+    </a>
   </div>
 </DocsLayout>
-
-<style>
-  .cs-title-row {
-    display: flex;
-    align-items: center;
-    gap: var(--vyre-spacing-3);
-    flex-wrap: wrap;
-  }
-
-  .cs-body {
-    display: flex;
-    flex-direction: column;
-    gap: var(--vyre-spacing-8);
-    margin-top: var(--vyre-spacing-6);
-  }
-
-  .cs-section-title {
-    font-size: var(--vyre-typography-font-size-lg);
-    font-weight: var(--vyre-typography-font-weight-semibold);
-    color: var(--vyre-color-semantic-text-primary);
-    margin-bottom: var(--vyre-spacing-3);
-  }
-
-  .cs-feature-list {
-    display: flex;
-    flex-direction: column;
-    gap: var(--vyre-spacing-2);
-    padding-left: var(--vyre-spacing-5);
-    color: var(--vyre-color-semantic-text-secondary);
-    font-size: var(--vyre-typography-font-size-sm);
-    line-height: 1.6;
-  }
-
-  .cs-feedback {
-    display: flex;
-    flex-direction: column;
-    gap: var(--vyre-spacing-3);
-    padding: var(--vyre-spacing-5) var(--vyre-spacing-6);
-    background: var(--vyre-color-semantic-surface);
-    border: 1px solid var(--vyre-color-semantic-border-subtle);
-    border-radius: var(--vyre-border-radius-lg);
-    font-size: var(--vyre-typography-font-size-sm);
-    color: var(--vyre-color-semantic-text-secondary);
-  }
-</style>

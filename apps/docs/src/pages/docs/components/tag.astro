@@ -1,0 +1,206 @@
+---
+import DocsLayout       from "@/layouts/DocsLayout.astro";
+import ComponentPreview from "@/components/docs/ComponentPreview.astro";
+import PropsTable       from "@/components/docs/PropsTable.astro";
+import AICheatSheet     from "@/components/docs/AICheatSheet.astro";
+import {
+  TagBasicDemo,
+  TagSizesDemo,
+  TagRemovableDemo,
+  TagClickableDemo,
+} from "@/components/demos/NewComponentsDemo";
+
+const codeBasicReact = `import { Tag, TagGroup } from "@usevyre/react";
+
+<TagGroup>
+  <Tag>Design</Tag>
+  <Tag variant="accent">Featured</Tag>
+  <Tag>Engineering</Tag>
+  <Tag variant="danger">Deprecated</Tag>
+</TagGroup>`;
+
+const codeBasicVue = `<script setup>
+import { Tag, TagGroup } from "@usevyre/vue";
+</script>
+<template>
+  <TagGroup>
+    <Tag>Design</Tag>
+    <Tag variant="accent">Featured</Tag>
+    <Tag>Engineering</Tag>
+    <Tag variant="danger">Deprecated</Tag>
+  </TagGroup>
+</template>`;
+
+const codeSizesReact = `<Tag size="sm">Small</Tag>
+<Tag size="md">Medium</Tag>
+<Tag size="lg">Large</Tag>`;
+
+const codeSizesVue = `<Tag size="sm">Small</Tag>
+<Tag size="md">Medium</Tag>
+<Tag size="lg">Large</Tag>`;
+
+const codeRemovableReact = `const [tags, setTags] = useState(["react", "vue", "svelte"]);
+
+<TagGroup>
+  {tags.map((t) => (
+    <Tag
+      key={t}
+      variant="accent"
+      onRemove={() => setTags((prev) => prev.filter((x) => x !== t))}
+    >
+      {t}
+    </Tag>
+  ))}
+</TagGroup>`;
+
+const codeRemovableVue = `<script setup>
+const tags = ref(["react", "vue", "svelte"]);
+function remove(t) {
+  tags.value = tags.value.filter((x) => x !== t);
+}
+</script>
+<template>
+  <TagGroup>
+    <Tag
+      v-for="t in tags"
+      :key="t"
+      variant="accent"
+      removable
+      @remove="remove(t)"
+    >
+      {{ t }}
+    </Tag>
+  </TagGroup>
+</template>`;
+
+const codeClickableReact = `const [active, setActive] = useState(["react"]);
+
+function toggle(t) {
+  setActive((prev) =>
+    prev.includes(t) ? prev.filter((x) => x !== t) : [...prev, t]
+  );
+}
+
+<TagGroup>
+  {["react", "vue", "svelte"].map((t) => (
+    <Tag
+      key={t}
+      variant={active.includes(t) ? "accent" : "default"}
+      onClick={() => toggle(t)}
+    >
+      {t}
+    </Tag>
+  ))}
+</TagGroup>`;
+
+const codeClickableVue = `<script setup>
+const active = ref(["react"]);
+function toggle(t) {
+  active.value = active.value.includes(t)
+    ? active.value.filter((x) => x !== t)
+    : [...active.value, t];
+}
+</script>
+<template>
+  <TagGroup>
+    <Tag
+      v-for="t in ['react', 'vue', 'svelte']"
+      :key="t"
+      :variant="active.includes(t) ? 'accent' : 'default'"
+      clickable
+      @click="toggle(t)"
+    >
+      {{ t }}
+    </Tag>
+  </TagGroup>
+</template>`;
+
+const tagProps = [
+  { name: "variant",   type: `"default" | "accent" | "danger"`, default: `"default"`, description: "Visual style. default=neutral, accent=brand, danger=destructive/error. Use Badge for success/warning/teal." },
+  { name: "size",      type: `"sm" | "md" | "lg"`,             default: `"md"`,       description: "Size scale." },
+  { name: "onRemove",  type: "() => void",                     default: "—",          description: "React only. When provided, renders a × remove button. Vue: use removable prop + @remove event." },
+  { name: "onClick",   type: "() => void",                     default: "—",          description: "React only. Makes the whole tag interactive (keyboard accessible). Vue: use clickable prop + @click event." },
+  { name: "disabled",  type: "boolean",                        default: "false",      description: "Disables interaction (only relevant with onClick / onRemove)." },
+  { name: "class / className", type: "string",                 default: "—",          description: "Additional CSS class." },
+];
+
+const tagGroupProps = [
+  { name: "gap",  type: `"sm" | "md" | "lg"`, default: `"md"`, description: "Spacing between tags." },
+  { name: "wrap", type: "boolean",            default: "true", description: "Wrap tags onto multiple lines when they overflow. Set false for single-line horizontal scroll." },
+  { name: "class / className", type: "string", default: "—",   description: "Additional CSS class." },
+];
+---
+
+<DocsLayout title="Tag" component="Tag">
+  <div class="docs-header">
+    <div class="docs-header__meta">
+      <span class="vyre-badge vyre-badge--default">@usevyre/react</span>
+      <span class="vyre-badge vyre-badge--default">@usevyre/vue</span>
+    </div>
+    <h1 class="docs-title">Tag</h1>
+    <p class="docs-lead">
+      A standalone display chip for categories, labels, or filter selections.
+      Compose multiple tags with <code>TagGroup</code>. For an editable tag
+      <em>input</em>, use <a href="/docs/components/tags-input">TagsInput</a> instead.
+    </p>
+  </div>
+
+  <hr class="docs-divider" />
+
+  <h2 class="docs-h2">Basic</h2>
+  <p class="docs-p">
+    A <code>Tag</code> renders its children as a label. Wrap several in a
+    <code>TagGroup</code> for automatic spacing and wrapping. Tag has three
+    variants: <code>default</code>, <code>accent</code>, and <code>danger</code>.
+  </p>
+  <ComponentPreview react={codeBasicReact} vue={codeBasicVue}>
+    <TagBasicDemo client:visible />
+  </ComponentPreview>
+
+  <h2 class="docs-h2">Sizes</h2>
+  <ComponentPreview react={codeSizesReact} vue={codeSizesVue}>
+    <TagSizesDemo client:visible />
+  </ComponentPreview>
+
+  <h2 class="docs-h2">Removable</h2>
+  <p class="docs-p">
+    Provide <code>onRemove</code> (React) or use the <code>removable</code> prop
+    with <code>@remove</code> (Vue) to render a × button. Useful for active
+    filter chips.
+  </p>
+  <ComponentPreview react={codeRemovableReact} vue={codeRemovableVue}>
+    <TagRemovableDemo client:visible />
+  </ComponentPreview>
+
+  <h2 class="docs-h2">Clickable</h2>
+  <p class="docs-p">
+    Provide <code>onClick</code> (React) or use the <code>clickable</code> prop
+    with <code>@click</code> (Vue) to make the whole tag interactive. It becomes
+    keyboard accessible (<kbd>Enter</kbd> / <kbd>Space</kbd>) with a button role.
+  </p>
+  <ComponentPreview react={codeClickableReact} vue={codeClickableVue}>
+    <TagClickableDemo client:visible />
+  </ComponentPreview>
+
+  <h2 class="docs-h2">Tag props</h2>
+  <PropsTable props={tagProps} />
+
+  <h2 class="docs-h2">TagGroup props</h2>
+  <p class="docs-p">
+    <code>TagGroup</code> is a read-only layout container. It does not manage
+    tag state — render <code>Tag</code> children yourself.
+  </p>
+  <PropsTable props={tagGroupProps} />
+
+  <!-- AI Cheat Sheet -->
+  <AICheatSheet component="Tag" />
+
+  <div class="docs-pagination">
+    <a href="/docs/components/tabs" class="docs-pagination__link docs-pagination__link--prev">
+      ← Tabs
+    </a>
+    <a href="/docs/components/tags-input" class="docs-pagination__link docs-pagination__link--next">
+      Tags Input →
+    </a>
+  </div>
+</DocsLayout>

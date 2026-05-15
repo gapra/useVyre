@@ -1,88 +1,186 @@
 ---
-import DocsLayout from "@/layouts/DocsLayout.astro";
+import DocsLayout       from "@/layouts/DocsLayout.astro";
+import ComponentPreview from "@/components/docs/ComponentPreview.astro";
+import PropsTable       from "@/components/docs/PropsTable.astro";
+import AICheatSheet     from "@/components/docs/AICheatSheet.astro";
+import { DataGridBasicDemo, DataGridStickyDemo, DataGridLoadingDemo } from "@/components/demos/NewComponentsDemo";
+
+const codeBasicReact = `import { DataGrid } from "@usevyre/react";
+
+const columns = [
+  { key: "name",   label: "Name",   sortable: true },
+  { key: "email",  label: "Email",  sortable: true },
+  { key: "status", label: "Status", width: "120px" },
+];
+
+const rows = [
+  { name: "Alice Chen",   email: "alice@example.com",   status: "Active" },
+  { name: "Bob Martinez", email: "bob@example.com",     status: "Inactive" },
+  { name: "Carol Smith",  email: "carol@example.com",   status: "Active" },
+];
+
+<DataGrid columns={columns} rows={rows} />`;
+
+const codeBasicVue = `<script setup>
+import { DataGrid } from "@usevyre/vue";
+
+const columns = [
+  { key: "name",   label: "Name",   sortable: true },
+  { key: "email",  label: "Email",  sortable: true },
+  { key: "status", label: "Status", width: "120px" },
+];
+
+const rows = [
+  { name: "Alice Chen",   email: "alice@example.com",   status: "Active" },
+  { name: "Bob Martinez", email: "bob@example.com",     status: "Inactive" },
+  { name: "Carol Smith",  email: "carol@example.com",   status: "Active" },
+];
+</script>
+<template>
+  <DataGrid :columns="columns" :rows="rows" />
+</template>`;
+
+const codeSortReact = `import { DataGrid } from "@usevyre/react";
+import { useState } from "react";
+
+const [sortKey, setSortKey] = useState<string | undefined>();
+const [sortDir, setSortDir] = useState<"asc" | "desc">("asc");
+
+<DataGrid
+  columns={columns}
+  rows={rows}
+  sortKey={sortKey}
+  sortDir={sortDir}
+  onSort={(key, dir) => {
+    setSortKey(key);
+    setSortDir(dir);
+  }}
+/>`;
+
+const codeSortVue = `<script setup>
+import { DataGrid } from "@usevyre/vue";
+const sortKey = ref(undefined);
+const sortDir = ref("asc");
+</script>
+<template>
+  <DataGrid
+    :columns="columns"
+    :rows="rows"
+    v-model:sortKey="sortKey"
+    v-model:sortDir="sortDir"
+    @sort="({ key, dir }) => { sortKey = key; sortDir = dir; }"
+  />
+</template>`;
+
+const codeStickyReact = `<DataGrid
+  columns={columns}
+  rows={rows}
+  stickyHeader
+  style={{ maxHeight: "300px" }}
+/>`;
+
+const codeStickyVue = `<DataGrid
+  :columns="columns"
+  :rows="rows"
+  :sticky-header="true"
+  style="max-height: 300px"
+/>`;
+
+const codeLoadingReact = `// Shows 5 skeleton rows while data is fetching
+<DataGrid columns={columns} rows={[]} loading={isLoading} />`;
+
+const codeLoadingVue = `<DataGrid :columns="columns" :rows="[]" :loading="isLoading" />`;
+
+const props = [
+  { name: "columns",      type: "{ key: string; label: string; sortable?: boolean; width?: string }[]", default: "—",        description: "Column definitions. Set sortable: true to enable sort toggle on that column." },
+  { name: "rows",         type: "Record<string, unknown>[]", default: "—",                             description: "Array of row objects. Each key maps to a column key." },
+  { name: "sortKey",      type: "string",                    default: "—",                             description: "Controlled sort column key." },
+  { name: "sortDir",      type: `"asc" | "desc"`,           default: "—",                             description: "Controlled sort direction." },
+  { name: "onSort",       type: "(key: string, dir: \"asc\" | \"desc\") => void", default: "—",       description: "React only. Called when a sortable column header is clicked." },
+  { name: "loading",      type: "boolean",                   default: "false",                         description: "Displays 5 skeleton placeholder rows while data is loading." },
+  { name: "emptyText",    type: "string",                    default: `"No data"`,                     description: "Message shown when rows is an empty array." },
+  { name: "stickyHeader", type: "boolean",                   default: "false",                         description: "Fixes the header row when the grid container scrolls vertically." },
+  { name: "className",    type: "string",                    default: "—",                             description: "Additional CSS class on the grid wrapper." },
+];
 ---
 
-<DocsLayout title="Data Grid">
+<DocsLayout title="Data Grid" component="DataGrid">
   <div class="docs-header">
-    <div class="cs-title-row">
-      <h1 class="docs-title">Data Grid</h1>
-      <span class="vyre-badge vyre-badge--default">Coming in v1.1</span>
+    <div class="docs-header__meta">
+      <span class="vyre-badge vyre-badge--default">@usevyre/react</span>
+      <span class="vyre-badge vyre-badge--default">@usevyre/vue</span>
     </div>
+    <h1 class="docs-title">Data Grid</h1>
     <p class="docs-lead">
-      Advanced table with column-level filtering, multi-column sorting, row selection, and virtual scrolling for large datasets.
+      A performant, accessible data table with column sorting, loading skeletons, sticky header,
+      and empty state. Pair with the <code>Pagination</code> component for page navigation —
+      filtering and pagination are intentionally outside the component's scope.
     </p>
   </div>
 
   <hr class="docs-divider" />
 
-  <div class="cs-body">
-    <h2 class="cs-section-title">What's coming</h2>
-    <ul class="cs-feature-list">
-      <li>Multi-column sort with sort priority indicators</li>
-      <li>Per-column filter popover (text, select, date range)</li>
-      <li>Row selection with checkbox column and bulk actions</li>
-      <li>Virtual scrolling for datasets &gt; 10k rows</li>
-      <li>Column resize and column visibility toggle</li>
-      <li>Sticky header and frozen columns</li>
-      <li>React + Vue with identical API surface</li>
-      <li>Inline AI context block for zero-hallucination agent use</li>
-    </ul>
+  <h2 class="docs-h2">Basic</h2>
+  <p class="docs-p">
+    Define <code>columns</code> with a <code>key</code> and <code>label</code>, then pass
+    <code>rows</code> as plain objects. Each row value is coerced to a string for display.
+  </p>
+  <ComponentPreview react={codeBasicReact} vue={codeBasicVue}>
+    <DataGridBasicDemo client:visible />
+  </ComponentPreview>
 
-    <div class="cs-feedback">
-      <p>Have a use case in mind? Share it on GitHub and help shape the API.</p>
-      <a
-        href="https://github.com/gapra/usevyre/discussions"
-        target="_blank"
-        rel="noopener noreferrer"
-        class="vyre-btn vyre-btn--secondary vyre-btn--sm"
-      >
-        Vote or leave feedback →
-      </a>
-    </div>
+  <h2 class="docs-h2">Sorting</h2>
+  <p class="docs-p">
+    Mark columns with <code>sortable: true</code> to show sort toggle buttons. The grid is
+    fully controlled — manage <code>sortKey</code> and <code>sortDir</code> in your own
+    state and pass them back. Sort icons cycle: unsorted ↕ → ascending ↑ → descending ↓.
+  </p>
+  <ComponentPreview react={codeSortReact} vue={codeSortVue}>
+    <DataGridBasicDemo client:visible />
+  </ComponentPreview>
+
+  <h2 class="docs-h2">Sticky header</h2>
+  <p class="docs-p">
+    Set <code>stickyHeader</code> and constrain the wrapper height to enable vertical
+    scrolling with a fixed header row.
+  </p>
+  <ComponentPreview react={codeStickyReact} vue={codeStickyVue}>
+    <DataGridStickyDemo client:visible />
+  </ComponentPreview>
+
+  <h2 class="docs-h2">Loading state</h2>
+  <p class="docs-p">
+    Set <code>loading</code> to show 5 animated skeleton rows while data is fetching.
+    Pass an empty <code>rows</code> array alongside it to avoid rendering stale data.
+  </p>
+  <ComponentPreview react={codeLoadingReact} vue={codeLoadingVue}>
+    <DataGridLoadingDemo client:visible />
+  </ComponentPreview>
+
+  <h2 class="docs-h2">Pagination</h2>
+  <p class="docs-p">
+    DataGrid does not handle pagination internally — slice your <code>rows</code> array
+    to the current page and pair with the <code>Pagination</code> component.
+  </p>
+
+  <h2 class="docs-h2">Vue bindings</h2>
+  <p class="docs-p">
+    In Vue, use <code>v-model:sortKey</code> and <code>v-model:sortDir</code> for two-way
+    binding, or listen to the <code>@sort</code> event which receives <code>{"{ key, dir }"}</code>.
+  </p>
+
+  <h2 class="docs-h2">Props</h2>
+  <PropsTable props={props} />
+
+  <!-- AI Cheat Sheet -->
+  <AICheatSheet component="DataGrid" />
+
+  <div class="docs-pagination">
+    <a href="/docs/components/command" class="docs-pagination__link docs-pagination__link--prev">
+      ← Command
+    </a>
+    <a href="/docs/components/date-range-picker" class="docs-pagination__link docs-pagination__link--next">
+      Date Range Picker →
+    </a>
   </div>
 </DocsLayout>
-
-<style>
-  .cs-title-row {
-    display: flex;
-    align-items: center;
-    gap: var(--vyre-spacing-3);
-    flex-wrap: wrap;
-  }
-
-  .cs-body {
-    display: flex;
-    flex-direction: column;
-    gap: var(--vyre-spacing-8);
-    margin-top: var(--vyre-spacing-6);
-  }
-
-  .cs-section-title {
-    font-size: var(--vyre-typography-font-size-lg);
-    font-weight: var(--vyre-typography-font-weight-semibold);
-    color: var(--vyre-color-semantic-text-primary);
-    margin-bottom: var(--vyre-spacing-3);
-  }
-
-  .cs-feature-list {
-    display: flex;
-    flex-direction: column;
-    gap: var(--vyre-spacing-2);
-    padding-left: var(--vyre-spacing-5);
-    color: var(--vyre-color-semantic-text-secondary);
-    font-size: var(--vyre-typography-font-size-sm);
-    line-height: 1.6;
-  }
-
-  .cs-feedback {
-    display: flex;
-    flex-direction: column;
-    gap: var(--vyre-spacing-3);
-    padding: var(--vyre-spacing-5) var(--vyre-spacing-6);
-    background: var(--vyre-color-semantic-surface);
-    border: 1px solid var(--vyre-color-semantic-border-subtle);
-    border-radius: var(--vyre-border-radius-lg);
-    font-size: var(--vyre-typography-font-size-sm);
-    color: var(--vyre-color-semantic-text-secondary);
-  }
-</style>

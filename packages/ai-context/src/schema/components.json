@@ -1,11 +1,19 @@
 {
   "$schema": "http://json-schema.org/draft-07/schema#",
-  "version": "1.0.0",
-  "generatedAt": "2026-05-13",
+  "version": "1.1.0",
+  "generatedAt": "2026-05-15",
   "package": "@usevyre/react",
-  "packageVersion": "1.0.0",
-  "validFor": ["@usevyre/react@1.0.0+", "@usevyre/vue@1.0.0+"],
+  "packageVersion": "1.1.0",
+  "validFor": [
+    "@usevyre/react@1.1.0+",
+    "@usevyre/vue@1.1.0+"
+  ],
   "changelog": {
+    "1.1.0": {
+      "date": "2026-05-15",
+      "breaking": false,
+      "summary": "Added 6 components: ButtonGroup, TagsInput, Combobox, DataGrid, Tag, TagGroup"
+    },
     "1.0.0": {
       "date": "2026-05-13",
       "breaking": true,
@@ -26,7 +34,11 @@
     "Accordion": {
       "description": "Vertically stacked collapsible sections. Compose with AccordionItem, AccordionTrigger, AccordionContent.",
       "import": "import { Accordion, AccordionItem, AccordionTrigger, AccordionContent } from \"@usevyre/react\"",
-      "subcomponents": ["AccordionItem", "AccordionTrigger", "AccordionContent"],
+      "subcomponents": [
+        "AccordionItem",
+        "AccordionTrigger",
+        "AccordionContent"
+      ],
       "props": {},
       "antiPatterns": [
         {
@@ -48,7 +60,12 @@
       "props": {
         "variant": {
           "type": "enum",
-          "values": ["info", "success", "warning", "danger"],
+          "values": [
+            "info",
+            "success",
+            "warning",
+            "danger"
+          ],
           "default": "info",
           "description": "Visual severity style"
         },
@@ -103,13 +120,23 @@
         },
         "size": {
           "type": "enum",
-          "values": ["sm", "md", "lg", "xl"],
+          "values": [
+            "sm",
+            "md",
+            "lg",
+            "xl"
+          ],
           "default": "md",
           "description": "Avatar diameter"
         },
         "status": {
           "type": "enum",
-          "values": ["online", "offline", "busy", "away"],
+          "values": [
+            "online",
+            "offline",
+            "busy",
+            "away"
+          ],
           "description": "Optional status indicator dot"
         }
       },
@@ -142,7 +169,14 @@
       "props": {
         "variant": {
           "type": "enum",
-          "values": ["default", "accent", "teal", "success", "warning", "danger"],
+          "values": [
+            "default",
+            "accent",
+            "teal",
+            "success",
+            "warning",
+            "danger"
+          ],
           "default": "default",
           "description": "Color style of the badge"
         },
@@ -187,7 +221,11 @@
     "Breadcrumb": {
       "description": "Navigation trail showing current page location in hierarchy.",
       "import": "import { Breadcrumb, BreadcrumbItem, BreadcrumbLink, BreadcrumbSeparator } from \"@usevyre/react\"",
-      "subcomponents": ["BreadcrumbItem", "BreadcrumbLink", "BreadcrumbSeparator"],
+      "subcomponents": [
+        "BreadcrumbItem",
+        "BreadcrumbLink",
+        "BreadcrumbSeparator"
+      ],
       "props": {},
       "antiPatterns": [
         {
@@ -209,13 +247,25 @@
       "props": {
         "variant": {
           "type": "enum",
-          "values": ["primary", "secondary", "ghost", "accent", "teal", "danger"],
+          "values": [
+            "primary",
+            "secondary",
+            "ghost",
+            "accent",
+            "teal",
+            "danger"
+          ],
           "default": "secondary",
           "description": "Visual style. primary=high contrast CTA, secondary=bordered, ghost=minimal, accent=amber brand, teal=secondary accent, danger=destructive"
         },
         "size": {
           "type": "enum",
-          "values": ["sm", "md", "lg", "icon"],
+          "values": [
+            "sm",
+            "md",
+            "lg",
+            "icon"
+          ],
           "default": "md",
           "description": "Size scale. Use 'icon' for square icon-only buttons"
         },
@@ -244,7 +294,9 @@
         }
       },
       "accessibility": {
-        "notes": ["Always add aria-label when using size='icon' (no visible text)"]
+        "notes": [
+          "Always add aria-label when using size='icon' (no visible text)"
+        ]
       },
       "antiPatterns": [
         {
@@ -330,11 +382,21 @@
     "Card": {
       "description": "Content container with optional header, body, and footer sections.",
       "import": "import { Card, CardHeader, CardBody, CardFooter } from \"@usevyre/react\"",
-      "subcomponents": ["CardHeader", "CardBody", "CardFooter"],
+      "subcomponents": [
+        "CardHeader",
+        "CardBody",
+        "CardFooter"
+      ],
       "props": {
         "variant": {
           "type": "enum",
-          "values": ["default", "elevated", "outlined", "ghost", "accent"],
+          "values": [
+            "default",
+            "elevated",
+            "outlined",
+            "ghost",
+            "accent"
+          ],
           "default": "default",
           "description": "Visual style of the card"
         },
@@ -369,7 +431,10 @@
       "props": {
         "size": {
           "type": "enum",
-          "values": ["sm", "md"],
+          "values": [
+            "sm",
+            "md"
+          ],
           "default": "md"
         },
         "checked": {
@@ -407,7 +472,14 @@
     "Command": {
       "description": "Command palette / search dialog. Use for search-first navigation or quick actions.",
       "import": "import { Command, CommandInput, CommandList, CommandEmpty, CommandGroup, CommandItem, CommandDialog } from \"@usevyre/react\"",
-      "subcomponents": ["CommandInput", "CommandList", "CommandEmpty", "CommandGroup", "CommandItem", "CommandDialog"],
+      "subcomponents": [
+        "CommandInput",
+        "CommandList",
+        "CommandEmpty",
+        "CommandGroup",
+        "CommandItem",
+        "CommandDialog"
+      ],
       "props": {},
       "antiPatterns": [
         {
@@ -426,7 +498,14 @@
     "DropdownMenu": {
       "description": "Contextual menu triggered by a button. Supports items, separators, checkbox items, radio groups, and sub-menus.",
       "import": "import { DropdownMenu, DropdownItem, DropdownSeparator, DropdownCheckboxItem, DropdownRadioGroup, DropdownRadioItem, DropdownSub } from \"@usevyre/react\"",
-      "subcomponents": ["DropdownItem", "DropdownSeparator", "DropdownCheckboxItem", "DropdownRadioGroup", "DropdownRadioItem", "DropdownSub"],
+      "subcomponents": [
+        "DropdownItem",
+        "DropdownSeparator",
+        "DropdownCheckboxItem",
+        "DropdownRadioGroup",
+        "DropdownRadioItem",
+        "DropdownSub"
+      ],
       "props": {
         "trigger": {
           "type": "ReactElement",
@@ -436,7 +515,10 @@
       "itemProps": {
         "variant": {
           "type": "enum",
-          "values": ["default", "danger"],
+          "values": [
+            "default",
+            "danger"
+          ],
           "default": "default",
           "description": "Use 'danger' for destructive actions"
         }
@@ -469,7 +551,12 @@
         },
         "state": {
           "type": "enum",
-          "values": ["idle", "error", "success", "warning"],
+          "values": [
+            "idle",
+            "error",
+            "success",
+            "warning"
+          ],
           "default": "idle",
           "description": "Validation state — affects border color and hint text color"
         },
@@ -503,7 +590,11 @@
       "props": {
         "size": {
           "type": "enum",
-          "values": ["sm", "md", "lg"],
+          "values": [
+            "sm",
+            "md",
+            "lg"
+          ],
           "default": "md",
           "description": "Height and text size scale. Note: 'icon' size is NOT valid for Input"
         },
@@ -558,7 +649,11 @@
     "Modal": {
       "description": "Dialog overlay for confirmations, forms, or focused content.",
       "import": "import { Modal, ModalHeader, ModalBody, ModalFooter } from \"@usevyre/react\"",
-      "subcomponents": ["ModalHeader", "ModalBody", "ModalFooter"],
+      "subcomponents": [
+        "ModalHeader",
+        "ModalBody",
+        "ModalFooter"
+      ],
       "props": {
         "open": {
           "type": "boolean",
@@ -570,7 +665,12 @@
         },
         "size": {
           "type": "enum",
-          "values": ["sm", "md", "lg", "full"],
+          "values": [
+            "sm",
+            "md",
+            "lg",
+            "full"
+          ],
           "default": "md",
           "description": "Width of the modal dialog"
         },
@@ -627,7 +727,20 @@
         },
         "placement": {
           "type": "enum",
-          "values": ["top", "top-start", "top-end", "bottom", "bottom-start", "bottom-end", "left", "left-start", "left-end", "right", "right-start", "right-end"],
+          "values": [
+            "top",
+            "top-start",
+            "top-end",
+            "bottom",
+            "bottom-start",
+            "bottom-end",
+            "left",
+            "left-start",
+            "left-end",
+            "right",
+            "right-start",
+            "right-end"
+          ],
           "default": "bottom",
           "description": "Preferred placement relative to trigger"
         },
@@ -669,13 +782,23 @@
         },
         "size": {
           "type": "enum",
-          "values": ["sm", "md", "lg"],
+          "values": [
+            "sm",
+            "md",
+            "lg"
+          ],
           "default": "md",
           "description": "Height of the progress bar"
         },
         "variant": {
           "type": "enum",
-          "values": ["default", "accent", "teal", "success", "danger"],
+          "values": [
+            "default",
+            "accent",
+            "teal",
+            "success",
+            "danger"
+          ],
           "default": "default",
           "description": "Color variant"
         }
@@ -712,7 +835,11 @@
         },
         "size": {
           "type": "enum",
-          "values": ["sm", "md", "lg"],
+          "values": [
+            "sm",
+            "md",
+            "lg"
+          ],
           "default": "md"
         },
         "placeholder": {
@@ -744,7 +871,10 @@
       "props": {
         "orientation": {
           "type": "enum",
-          "values": ["horizontal", "vertical"],
+          "values": [
+            "horizontal",
+            "vertical"
+          ],
           "default": "horizontal"
         }
       },
@@ -762,7 +892,11 @@
     "Sheet": {
       "description": "Side panel (drawer) that slides in from the edge. For forms, detail views, or settings.",
       "import": "import { Sheet, SheetHeader, SheetBody, SheetFooter } from \"@usevyre/react\"",
-      "subcomponents": ["SheetHeader", "SheetBody", "SheetFooter"],
+      "subcomponents": [
+        "SheetHeader",
+        "SheetBody",
+        "SheetFooter"
+      ],
       "props": {
         "open": {
           "type": "boolean",
@@ -774,13 +908,21 @@
         },
         "size": {
           "type": "enum",
-          "values": ["sm", "md", "lg", "full"],
+          "values": [
+            "sm",
+            "md",
+            "lg",
+            "full"
+          ],
           "default": "md",
           "description": "Width of the sheet panel"
         },
         "side": {
           "type": "enum",
-          "values": ["left", "right"],
+          "values": [
+            "left",
+            "right"
+          ],
           "default": "right",
           "description": "Which edge the sheet slides from"
         },
@@ -799,11 +941,21 @@
     "Sidebar": {
       "description": "App navigation sidebar. Use AppLayout as the root layout wrapper.",
       "import": "import { AppLayout, Sidebar, SidebarHeader, SidebarContent, SidebarSection, SidebarItem, SidebarFooter } from \"@usevyre/react\"",
-      "subcomponents": ["AppLayout", "SidebarHeader", "SidebarContent", "SidebarSection", "SidebarItem", "SidebarFooter"],
+      "subcomponents": [
+        "AppLayout",
+        "SidebarHeader",
+        "SidebarContent",
+        "SidebarSection",
+        "SidebarItem",
+        "SidebarFooter"
+      ],
       "props": {
         "variant": {
           "type": "enum",
-          "values": ["default", "floating"],
+          "values": [
+            "default",
+            "floating"
+          ],
           "default": "default"
         }
       },
@@ -820,7 +972,11 @@
       "props": {
         "variant": {
           "type": "enum",
-          "values": ["rect", "circle", "text"],
+          "values": [
+            "rect",
+            "circle",
+            "text"
+          ],
           "default": "rect",
           "description": "Shape of the skeleton. 'circle' for avatars, 'text' for text lines, 'rect' for blocks"
         },
@@ -870,7 +1026,10 @@
         },
         "size": {
           "type": "enum",
-          "values": ["sm", "md"],
+          "values": [
+            "sm",
+            "md"
+          ],
           "default": "md"
         },
         "disabled": {
@@ -899,7 +1058,10 @@
         },
         "size": {
           "type": "enum",
-          "values": ["sm", "md"],
+          "values": [
+            "sm",
+            "md"
+          ],
           "default": "md"
         },
         "disabled": {
@@ -917,7 +1079,13 @@
     "Table": {
       "description": "Data table with optional sorting. Compose with TableHeader, TableRow, TableCell.",
       "import": "import { Table, TableHead, TableBody, TableRow, TableHeader, TableCell } from \"@usevyre/react\"",
-      "subcomponents": ["TableHead", "TableBody", "TableRow", "TableHeader", "TableCell"],
+      "subcomponents": [
+        "TableHead",
+        "TableBody",
+        "TableRow",
+        "TableHeader",
+        "TableCell"
+      ],
       "props": {},
       "examples": [
         {
@@ -929,7 +1097,12 @@
     "Tabs": {
       "description": "Tabbed navigation for switching between content panels.",
       "import": "import { Tabs, TabList, Tab, TabPanels, TabPanel } from \"@usevyre/react\"",
-      "subcomponents": ["TabList", "Tab", "TabPanels", "TabPanel"],
+      "subcomponents": [
+        "TabList",
+        "Tab",
+        "TabPanels",
+        "TabPanel"
+      ],
       "props": {
         "defaultIndex": {
           "type": "number",
@@ -958,7 +1131,12 @@
       "props": {
         "variant": {
           "type": "enum",
-          "values": ["default", "success", "warning", "danger"],
+          "values": [
+            "default",
+            "success",
+            "warning",
+            "danger"
+          ],
           "default": "default",
           "description": "Color and icon of the toast"
         },
@@ -1014,7 +1192,12 @@
         },
         "placement": {
           "type": "enum",
-          "values": ["top", "bottom", "left", "right"],
+          "values": [
+            "top",
+            "bottom",
+            "left",
+            "right"
+          ],
           "default": "top"
         },
         "delay": {
@@ -1040,23 +1223,50 @@
     "Typography": {
       "description": "Text rendering components with semantic scale. Includes Text, Heading, Lead, Code, Blockquote.",
       "import": "import { Text, Heading, Lead, Code, Blockquote } from \"@usevyre/react\"",
-      "subcomponents": ["Text", "Heading", "Lead", "Code", "Blockquote"],
+      "subcomponents": [
+        "Text",
+        "Heading",
+        "Lead",
+        "Code",
+        "Blockquote"
+      ],
       "textProps": {
         "size": {
           "type": "enum",
-          "values": ["xs", "sm", "md", "lg", "xl"],
+          "values": [
+            "xs",
+            "sm",
+            "md",
+            "lg",
+            "xl"
+          ],
           "default": "md"
         }
       },
       "headingProps": {
         "size": {
           "type": "enum",
-          "values": ["xs", "sm", "md", "lg", "xl", "2xl", "3xl"],
+          "values": [
+            "xs",
+            "sm",
+            "md",
+            "lg",
+            "xl",
+            "2xl",
+            "3xl"
+          ],
           "default": "lg"
         },
         "as": {
           "type": "enum",
-          "values": ["h1", "h2", "h3", "h4", "h5", "h6"],
+          "values": [
+            "h1",
+            "h2",
+            "h3",
+            "h4",
+            "h5",
+            "h6"
+          ],
           "default": "h2"
         }
       },
@@ -1071,6 +1281,364 @@
         {
           "description": "Page heading and body text",
           "code": "<Heading size=\"2xl\" as=\"h1\">Dashboard</Heading>\n<Lead>Welcome back. Here's what's happening today.</Lead>\n<Text size=\"sm\" style={{ color: 'var(--vyre-color-semantic-text-muted)' }}>Last updated 5 minutes ago.</Text>"
+        }
+      ]
+    },
+    "ButtonGroup": {
+      "description": "Groups multiple Button components into one visual unit (toolbar, segmented control). Pure layout — no internal state.",
+      "import": "import { ButtonGroup, Button } from \"@usevyre/react\"",
+      "props": {
+        "orientation": {
+          "type": "enum",
+          "values": [
+            "horizontal",
+            "vertical"
+          ],
+          "default": "horizontal",
+          "description": "Layout direction of grouped buttons"
+        },
+        "attached": {
+          "type": "boolean",
+          "default": false,
+          "description": "Remove gap so buttons share collapsed borders (segmented control look)"
+        },
+        "size": {
+          "type": "enum",
+          "values": [
+            "sm",
+            "md",
+            "lg",
+            "icon"
+          ],
+          "description": "Size forwarded to all child buttons"
+        }
+      },
+      "antiPatterns": [
+        {
+          "pattern": "ButtonGroup variant=\"...\"",
+          "reason": "ButtonGroup has no variant prop — variant goes on each child Button",
+          "fix": "Set variant on each <Button> inside the group"
+        },
+        {
+          "pattern": "ButtonGroup without Button children",
+          "reason": "ButtonGroup is a layout wrapper for Button elements",
+          "fix": "Place <Button> elements as direct children"
+        }
+      ],
+      "examples": [
+        {
+          "description": "Segmented control",
+          "code": "<ButtonGroup attached>\n  <Button variant=\"secondary\">Day</Button>\n  <Button variant=\"secondary\">Week</Button>\n  <Button variant=\"secondary\">Month</Button>\n</ButtonGroup>"
+        },
+        {
+          "description": "Vertical group",
+          "code": "<ButtonGroup orientation=\"vertical\" attached>\n  <Button variant=\"secondary\">Top</Button>\n  <Button variant=\"secondary\">Bottom</Button>\n</ButtonGroup>"
+        }
+      ]
+    },
+    "TagsInput": {
+      "description": "Multi-tag input. Type and press Enter or comma to add a tag, click x to remove, Backspace on empty input removes the last tag. Controlled.",
+      "import": "import { TagsInput } from \"@usevyre/react\"",
+      "props": {
+        "value": {
+          "type": "string[]",
+          "description": "Controlled list of tags (required)"
+        },
+        "onChange": {
+          "type": "(tags: string[]) => void",
+          "description": "Called with the new tag array on every change. React only — Vue uses v-model"
+        },
+        "placeholder": {
+          "type": "string",
+          "description": "Input placeholder, hidden when max is reached"
+        },
+        "disabled": {
+          "type": "boolean",
+          "default": false,
+          "description": "Disables all interaction"
+        },
+        "max": {
+          "type": "number",
+          "description": "Maximum number of tags; input is disabled when reached"
+        },
+        "size": {
+          "type": "enum",
+          "values": [
+            "sm",
+            "md",
+            "lg"
+          ],
+          "default": "md",
+          "description": "Size scale"
+        }
+      },
+      "antiPatterns": [
+        {
+          "pattern": "TagsInput value={string}",
+          "reason": "value must be a string array, not a string",
+          "fix": "Pass an array: value={['react','vue']}"
+        },
+        {
+          "pattern": "TagsInput without onChange",
+          "reason": "TagsInput is controlled — it needs onChange to update",
+          "fix": "Provide value and onChange (React) or v-model (Vue)"
+        }
+      ],
+      "examples": [
+        {
+          "description": "Basic tags input",
+          "code": "const [tags, setTags] = useState<string[]>([]);\n<TagsInput value={tags} onChange={setTags} placeholder=\"Add a tag…\" />"
+        },
+        {
+          "description": "Limited to 5 tags",
+          "code": "<TagsInput value={tags} onChange={setTags} max={5} />"
+        }
+      ]
+    },
+    "Combobox": {
+      "description": "Searchable single-select dropdown with typeahead filtering and keyboard navigation. Use when the list is long enough to need search. Differs from Select (no search) and Command (palette).",
+      "import": "import { Combobox } from \"@usevyre/react\"",
+      "props": {
+        "options": {
+          "type": "{ value: string; label: string; disabled?: boolean }[]",
+          "description": "Selectable options (required)"
+        },
+        "value": {
+          "type": "string | null",
+          "description": "Controlled selected value; null clears selection (required)"
+        },
+        "onChange": {
+          "type": "(value: string | null) => void",
+          "description": "Called when selection changes. React only — Vue uses v-model"
+        },
+        "placeholder": {
+          "type": "string",
+          "default": "\"Search…\"",
+          "description": "Input placeholder when nothing is selected"
+        },
+        "disabled": {
+          "type": "boolean",
+          "default": false,
+          "description": "Disables the combobox"
+        },
+        "size": {
+          "type": "enum",
+          "values": [
+            "sm",
+            "md",
+            "lg"
+          ],
+          "default": "md",
+          "description": "Height scale"
+        },
+        "emptyText": {
+          "type": "string",
+          "default": "\"No results\"",
+          "description": "Text shown when search matches no options"
+        }
+      },
+      "antiPatterns": [
+        {
+          "pattern": "Combobox value=\"\"",
+          "reason": "Empty selection must be null, not empty string",
+          "fix": "Use value={null} for no selection"
+        },
+        {
+          "pattern": "Combobox options={string[]}",
+          "reason": "options must be objects with value and label",
+          "fix": "Use [{ value: 'ts', label: 'TypeScript' }]"
+        },
+        {
+          "pattern": "Using Combobox for command palette",
+          "reason": "Combobox is single-value select, not an action palette",
+          "fix": "Use Command for command palettes"
+        }
+      ],
+      "examples": [
+        {
+          "description": "Searchable language picker",
+          "code": "const [lang, setLang] = useState<string | null>(null);\n<Combobox\n  options={[{ value: \"ts\", label: \"TypeScript\" }, { value: \"go\", label: \"Go\" }]}\n  value={lang}\n  onChange={setLang}\n  placeholder=\"Search language…\"\n/>"
+        }
+      ]
+    },
+    "DataGrid": {
+      "description": "Table with built-in column sorting, loading skeletons, and empty state. Filtering and pagination are out of scope — compose with the Pagination component.",
+      "import": "import { DataGrid } from \"@usevyre/react\"",
+      "props": {
+        "columns": {
+          "type": "{ key: string; label: string; sortable?: boolean; width?: string }[]",
+          "description": "Column definitions (required)"
+        },
+        "rows": {
+          "type": "Record<string, unknown>[]",
+          "description": "Row data; each object keyed by column key (required)"
+        },
+        "sortKey": {
+          "type": "string",
+          "description": "Controlled active sort column key"
+        },
+        "sortDir": {
+          "type": "enum",
+          "values": [
+            "asc",
+            "desc"
+          ],
+          "description": "Controlled sort direction"
+        },
+        "onSort": {
+          "type": "(key: string, dir: 'asc' | 'desc') => void",
+          "description": "Called when a sortable header is clicked. React only — Vue emits sort + v-model:sortKey/sortDir"
+        },
+        "loading": {
+          "type": "boolean",
+          "default": false,
+          "description": "Show skeleton placeholder rows"
+        },
+        "emptyText": {
+          "type": "string",
+          "default": "\"No data\"",
+          "description": "Message shown when rows is empty"
+        },
+        "stickyHeader": {
+          "type": "boolean",
+          "default": false,
+          "description": "Keep the header visible while scrolling"
+        }
+      },
+      "antiPatterns": [
+        {
+          "pattern": "DataGrid expecting built-in pagination",
+          "reason": "DataGrid does not paginate — it only sorts",
+          "fix": "Slice rows yourself and use the Pagination component"
+        },
+        {
+          "pattern": "DataGrid expecting built-in filtering",
+          "reason": "DataGrid does not filter rows",
+          "fix": "Filter the rows array before passing it in"
+        },
+        {
+          "pattern": "sortable without onSort",
+          "reason": "Sorting is controlled — the grid does not sort data itself",
+          "fix": "Handle onSort and sort the rows array in your state"
+        }
+      ],
+      "examples": [
+        {
+          "description": "Sortable grid",
+          "code": "const cols = [{ key: \"name\", label: \"Name\", sortable: true }];\n<DataGrid\n  columns={cols}\n  rows={people}\n  sortKey={sortKey}\n  sortDir={sortDir}\n  onSort={(k, d) => { setSortKey(k); setSortDir(d); }}\n/>"
+        },
+        {
+          "description": "Loading state",
+          "code": "<DataGrid columns={cols} rows={[]} loading />"
+        }
+      ]
+    },
+    "Tag": {
+      "description": "Standalone display tag/chip for categories, labels, or filter chips. NOT an input — for tag input use TagsInput. Group multiple with TagGroup.",
+      "import": "import { Tag } from \"@usevyre/react\"",
+      "props": {
+        "variant": {
+          "type": "enum",
+          "values": [
+            "default",
+            "accent",
+            "danger"
+          ],
+          "default": "default",
+          "description": "Visual style. default=neutral, accent=brand, danger=destructive/error"
+        },
+        "size": {
+          "type": "enum",
+          "values": [
+            "sm",
+            "md",
+            "lg"
+          ],
+          "default": "md",
+          "description": "Size scale"
+        },
+        "onRemove": {
+          "type": "() => void",
+          "description": "React only. When provided, renders a × remove button. Vue: use `removable` prop + @remove event"
+        },
+        "onClick": {
+          "type": "() => void",
+          "description": "React only. When provided, makes the whole tag interactive (keyboard accessible). Vue: use `clickable` prop + @click event"
+        },
+        "disabled": {
+          "type": "boolean",
+          "default": false,
+          "description": "Disables interaction (only relevant with onClick/onRemove)"
+        }
+      },
+      "antiPatterns": [
+        {
+          "pattern": "Tag variant=\"success\"",
+          "reason": "Tag only has default, accent, danger variants (unlike Badge which has more)",
+          "fix": "Use Badge for success/warning/teal status colors; Tag is for categories/filters"
+        },
+        {
+          "pattern": "Using Tag for tag input",
+          "reason": "Tag is display-only, it does not accept typed input",
+          "fix": "Use TagsInput for adding/removing tags via keyboard"
+        },
+        {
+          "pattern": "Tag size=\"xl\"",
+          "reason": "Maximum size is 'lg'",
+          "fix": "Use size=\"lg\""
+        }
+      ],
+      "examples": [
+        {
+          "description": "Category tags in a group",
+          "code": "<TagGroup>\n  <Tag>Design</Tag>\n  <Tag variant=\"accent\">Featured</Tag>\n  <Tag>Engineering</Tag>\n</TagGroup>"
+        },
+        {
+          "description": "Removable filter chip (React)",
+          "code": "<Tag onRemove={() => removeFilter(\"react\")}>react</Tag>"
+        },
+        {
+          "description": "Clickable toggle tag (React)",
+          "code": "<Tag onClick={() => toggleFilter(\"vue\")}>vue</Tag>"
+        }
+      ]
+    },
+    "TagGroup": {
+      "description": "Read-only container that lays out multiple Tag elements with automatic wrapping and consistent spacing. For tag input use TagsInput.",
+      "import": "import { TagGroup, Tag } from \"@usevyre/react\"",
+      "props": {
+        "gap": {
+          "type": "enum",
+          "values": [
+            "sm",
+            "md",
+            "lg"
+          ],
+          "default": "md",
+          "description": "Spacing between tags"
+        },
+        "wrap": {
+          "type": "boolean",
+          "default": true,
+          "description": "Wrap tags onto multiple lines when they overflow; set false for single-line scroll"
+        }
+      },
+      "antiPatterns": [
+        {
+          "pattern": "TagGroup without Tag children",
+          "reason": "TagGroup is a layout wrapper for Tag elements",
+          "fix": "Place <Tag> elements as direct children"
+        },
+        {
+          "pattern": "Using TagGroup for tag input",
+          "reason": "TagGroup is display-only",
+          "fix": "Use TagsInput for an editable tag field"
+        }
+      ],
+      "examples": [
+        {
+          "description": "Tag group with mixed variants",
+          "code": "<TagGroup gap=\"sm\">\n  <Tag>React</Tag>\n  <Tag>Vue</Tag>\n  <Tag variant=\"accent\">TypeScript</Tag>\n</TagGroup>"
         }
       ]
     }

@@ -35,6 +35,12 @@
  * - Breadcrumb     — Navigation trail (+ BreadcrumbItem)
  * - Pagination     — Page navigation control (v-model)
  * - Table          — Data table (+ TableHead, TableBody, TableRow, TableHeader, TableCell, TableCaption)
+ * - ButtonGroup    — Groups buttons horizontally/vertically with optional border collapse (attached mode)
+ * - TagsInput      — Multi-tag input (v-model): Enter/comma to add, × to remove, Backspace to delete last
+ * - Combobox       — Searchable select (v-model): type to filter options, keyboard navigation
+ * - DataGrid       — Table with built-in column sorting, loading skeletons, empty state (v-model:sort-key/sort-dir)
+ * - Tag            — Standalone display tag/chip: variant, size, removable (@remove), clickable (@click)
+ * - TagGroup       — Read-only container that lays out multiple Tag elements with wrapping + gap
  *
  * CSS must be imported separately:
  * import "@usevyre/tokens/css";           ← design tokens (required)
@@ -126,6 +132,13 @@ export { default as SidebarContent }    from "./components/Sidebar/SidebarConten
 export { default as SidebarSection }    from "./components/Sidebar/SidebarSection.vue";
 export { default as SidebarItem }       from "./components/Sidebar/SidebarItem.vue";
 export { default as SidebarFooter }     from "./components/Sidebar/SidebarFooter.vue";
+
+export { default as ButtonGroup }   from "./components/ButtonGroup/ButtonGroup.vue";
+export { default as TagsInput }     from "./components/TagsInput/TagsInput.vue";
+export { default as Combobox }      from "./components/Combobox/Combobox.vue";
+export { default as DataGrid }      from "./components/DataGrid/DataGrid.vue";
+export { default as Tag }           from "./components/Tag/Tag.vue";
+export { default as TagGroup }      from "./components/Tag/TagGroup.vue";
 
 // ── Composables ───────────────────────────────────────────────
 export { useToast }                 from "./composables/useToast";

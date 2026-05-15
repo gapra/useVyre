@@ -881,6 +881,188 @@ import { Text, Heading, Lead, Code, Blockquote } from "@usevyre/react"
 
 ---
 
+### ButtonGroup
+
+Groups multiple Button components into one visual unit (toolbar, segmented control). Pure layout — no internal state.
+
+```tsx
+import { ButtonGroup, Button } from "@usevyre/react"
+
+// Props:
+// orientation    = "horizontal" | "vertical" (default: horizontal)
+// attached       = boolean (default: false)
+// size           = "sm" | "md" | "lg" | "icon"
+
+// Examples:
+<ButtonGroup attached>
+  <Button variant="secondary">Day</Button>
+  <Button variant="secondary">Week</Button>
+  <Button variant="secondary">Month</Button>
+</ButtonGroup>
+<ButtonGroup orientation="vertical" attached>
+  <Button variant="secondary">Top</Button>
+  <Button variant="secondary">Bottom</Button>
+</ButtonGroup>
+```
+
+**Common mistakes:**
+- ❌ `ButtonGroup variant="..."` → Set variant on each <Button> inside the group
+- ❌ `ButtonGroup without Button children` → Place <Button> elements as direct children
+
+---
+
+### TagsInput
+
+Multi-tag input. Type and press Enter or comma to add a tag, click x to remove, Backspace on empty input removes the last tag. Controlled.
+
+```tsx
+import { TagsInput } from "@usevyre/react"
+
+// Props:
+// value          = string[]
+// onChange       = (tags: string[]) => void
+// placeholder    = string
+// disabled       = boolean (default: false)
+// max            = number
+// size           = "sm" | "md" | "lg" (default: md)
+
+// Examples:
+const [tags, setTags] = useState<string[]>([]);
+<TagsInput value={tags} onChange={setTags} placeholder="Add a tag…" />
+<TagsInput value={tags} onChange={setTags} max={5} />
+```
+
+**Common mistakes:**
+- ❌ `TagsInput value={string}` → Pass an array: value={['react','vue']}
+- ❌ `TagsInput without onChange` → Provide value and onChange (React) or v-model (Vue)
+
+---
+
+### Combobox
+
+Searchable single-select dropdown with typeahead filtering and keyboard navigation. Use when the list is long enough to need search. Differs from Select (no search) and Command (palette).
+
+```tsx
+import { Combobox } from "@usevyre/react"
+
+// Props:
+// options        = { value: string; label: string; disabled?: boolean }[]
+// value          = string | null
+// onChange       = (value: string | null) => void
+// placeholder    = string (default: "Search…")
+// disabled       = boolean (default: false)
+// size           = "sm" | "md" | "lg" (default: md)
+// emptyText      = string (default: "No results")
+
+// Examples:
+const [lang, setLang] = useState<string | null>(null);
+<Combobox
+  options={[{ value: "ts", label: "TypeScript" }, { value: "go", label: "Go" }]}
+  value={lang}
+  onChange={setLang}
+  placeholder="Search language…"
+/>
+```
+
+**Common mistakes:**
+- ❌ `Combobox value=""` → Use value={null} for no selection
+- ❌ `Combobox options={string[]}` → Use [{ value: 'ts', label: 'TypeScript' }]
+- ❌ `Using Combobox for command palette` → Use Command for command palettes
+
+---
+
+### DataGrid
+
+Table with built-in column sorting, loading skeletons, and empty state. Filtering and pagination are out of scope — compose with the Pagination component.
+
+```tsx
+import { DataGrid } from "@usevyre/react"
+
+// Props:
+// columns        = { key: string; label: string; sortable?: boolean; width?: string }[]
+// rows           = Record<string, unknown>[]
+// sortKey        = string
+// sortDir        = "asc" | "desc"
+// onSort         = (key: string, dir: 'asc' | 'desc') => void
+// loading        = boolean (default: false)
+// emptyText      = string (default: "No data")
+// stickyHeader   = boolean (default: false)
+
+// Examples:
+const cols = [{ key: "name", label: "Name", sortable: true }];
+<DataGrid
+  columns={cols}
+  rows={people}
+  sortKey={sortKey}
+  sortDir={sortDir}
+  onSort={(k, d) => { setSortKey(k); setSortDir(d); }}
+/>
+<DataGrid columns={cols} rows={[]} loading />
+```
+
+**Common mistakes:**
+- ❌ `DataGrid expecting built-in pagination` → Slice rows yourself and use the Pagination component
+- ❌ `DataGrid expecting built-in filtering` → Filter the rows array before passing it in
+- ❌ `sortable without onSort` → Handle onSort and sort the rows array in your state
+
+---
+
+### Tag
+
+Standalone display tag/chip for categories, labels, or filter chips. NOT an input — for tag input use TagsInput. Group multiple with TagGroup.
+
+```tsx
+import { Tag } from "@usevyre/react"
+
+// Props:
+// variant        = "default" | "accent" | "danger" (default: default)
+// size           = "sm" | "md" | "lg" (default: md)
+// onRemove       = () => void
+// onClick        = () => void
+// disabled       = boolean (default: false)
+
+// Examples:
+<TagGroup>
+  <Tag>Design</Tag>
+  <Tag variant="accent">Featured</Tag>
+  <Tag>Engineering</Tag>
+</TagGroup>
+<Tag onRemove={() => removeFilter("react")}>react</Tag>
+<Tag onClick={() => toggleFilter("vue")}>vue</Tag>
+```
+
+**Common mistakes:**
+- ❌ `Tag variant="success"` → Use Badge for success/warning/teal status colors; Tag is for categories/filters
+- ❌ `Using Tag for tag input` → Use TagsInput for adding/removing tags via keyboard
+- ❌ `Tag size="xl"` → Use size="lg"
+
+---
+
+### TagGroup
+
+Read-only container that lays out multiple Tag elements with automatic wrapping and consistent spacing. For tag input use TagsInput.
+
+```tsx
+import { TagGroup, Tag } from "@usevyre/react"
+
+// Props:
+// gap            = "sm" | "md" | "lg" (default: md)
+// wrap           = boolean (default: true)
+
+// Examples:
+<TagGroup gap="sm">
+  <Tag>React</Tag>
+  <Tag>Vue</Tag>
+  <Tag variant="accent">TypeScript</Tag>
+</TagGroup>
+```
+
+**Common mistakes:**
+- ❌ `TagGroup without Tag children` → Place <Tag> elements as direct children
+- ❌ `Using TagGroup for tag input` → Use TagsInput for an editable tag field
+
+---
+
 ## Hallucination Guard — Common AI Mistakes
 
 The following prop values and patterns do NOT exist in useVyre.
@@ -917,6 +1099,21 @@ If you generate these, you are hallucinating.
 - ❌ `<Toast variant="info">` → Use variant="default"
 - ❌ `<Tooltip Using Tooltip for rich content (forms, buttons, etc.)>` → Use Popover for rich interactive content
 - ❌ `<Typography Using raw <h1>, <p> tags instead of Typography components>` → Use <Heading>, <Text>, <Lead> from @usevyre/react
+- ❌ `<ButtonGroup ButtonGroup variant="...">` → Set variant on each <Button> inside the group
+- ❌ `<ButtonGroup ButtonGroup without Button children>` → Place <Button> elements as direct children
+- ❌ `<TagsInput TagsInput value={string}>` → Pass an array: value={['react','vue']}
+- ❌ `<TagsInput TagsInput without onChange>` → Provide value and onChange (React) or v-model (Vue)
+- ❌ `<Combobox Combobox value="">` → Use value={null} for no selection
+- ❌ `<Combobox Combobox options={string[]}>` → Use [{ value: 'ts', label: 'TypeScript' }]
+- ❌ `<Combobox Using Combobox for command palette>` → Use Command for command palettes
+- ❌ `<DataGrid DataGrid expecting built-in pagination>` → Slice rows yourself and use the Pagination component
+- ❌ `<DataGrid DataGrid expecting built-in filtering>` → Filter the rows array before passing it in
+- ❌ `<DataGrid sortable without onSort>` → Handle onSort and sort the rows array in your state
+- ❌ `<Tag Tag variant="success">` → Use Badge for success/warning/teal status colors; Tag is for categories/filters
+- ❌ `<Tag Using Tag for tag input>` → Use TagsInput for adding/removing tags via keyboard
+- ❌ `<Tag Tag size="xl">` → Use size="lg"
+- ❌ `<TagGroup TagGroup without Tag children>` → Place <Tag> elements as direct children
+- ❌ `<TagGroup Using TagGroup for tag input>` → Use TagsInput for an editable tag field
 
 ---
 

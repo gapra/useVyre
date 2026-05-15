@@ -1,86 +1,150 @@
 ---
-import DocsLayout from "@/layouts/DocsLayout.astro";
+import DocsLayout       from "@/layouts/DocsLayout.astro";
+import ComponentPreview from "@/components/docs/ComponentPreview.astro";
+import PropsTable       from "@/components/docs/PropsTable.astro";
+import AICheatSheet     from "@/components/docs/AICheatSheet.astro";
+import { ComboboxBasicDemo, ComboboxSizesDemo, ComboboxEmptyDemo } from "@/components/demos/NewComponentsDemo";
+
+const codeBasicReact = `import { Combobox } from "@usevyre/react";
+import { useState } from "react";
+
+const languages = [
+  { value: "ts",  label: "TypeScript" },
+  { value: "rs",  label: "Rust" },
+  { value: "go",  label: "Go" },
+  { value: "py",  label: "Python" },
+  { value: "rb",  label: "Ruby", disabled: true },
+];
+
+const [lang, setLang] = useState<string | null>(null);
+
+<Combobox
+  options={languages}
+  value={lang}
+  onChange={setLang}
+  placeholder="Search language…"
+/>`;
+
+const codeBasicVue = `<script setup>
+import { Combobox } from "@usevyre/vue";
+const languages = [
+  { value: "ts",  label: "TypeScript" },
+  { value: "rs",  label: "Rust" },
+  { value: "go",  label: "Go" },
+  { value: "py",  label: "Python" },
+  { value: "rb",  label: "Ruby", disabled: true },
+];
+const lang = ref(null);
+</script>
+<template>
+  <Combobox
+    :options="languages"
+    v-model="lang"
+    placeholder="Search language…"
+  />
+</template>`;
+
+const codeSizesReact = `<Combobox options={options} value={val} onChange={setVal} size="sm" placeholder="Small" />
+<Combobox options={options} value={val} onChange={setVal} size="md" placeholder="Medium" />
+<Combobox options={options} value={val} onChange={setVal} size="lg" placeholder="Large" />`;
+
+const codeSizesVue = `<Combobox :options="options" v-model="val" size="sm" placeholder="Small" />
+<Combobox :options="options" v-model="val" size="md" placeholder="Medium" />
+<Combobox :options="options" v-model="val" size="lg" placeholder="Large" />`;
+
+const codeEmptyReact = `<Combobox
+  options={options}
+  value={val}
+  onChange={setVal}
+  emptyText="No matching language found"
+  placeholder="Search…"
+/>`;
+
+const codeEmptyVue = `<Combobox
+  :options="options"
+  v-model="val"
+  empty-text="No matching language found"
+  placeholder="Search…"
+/>`;
+
+const props = [
+  { name: "options",     type: "{ value: string; label: string; disabled?: boolean }[]", default: "—",             description: "List of selectable options." },
+  { name: "value",       type: "string | null",         default: "—",             description: "Controlled selected value. Pass null to clear." },
+  { name: "onChange",    type: "(value: string | null) => void", default: "—",    description: "React only. Called when selection changes." },
+  { name: "placeholder", type: "string",                default: `"Search…"`,     description: "Input placeholder shown when no value is selected." },
+  { name: "disabled",    type: "boolean",               default: "false",          description: "Disables the combobox." },
+  { name: "size",        type: `"sm" | "md" | "lg"`,   default: `"md"`,           description: "Height scale." },
+  { name: "emptyText",   type: "string",                default: `"No results"`,   description: "Text shown when the search query matches no options." },
+  { name: "class / className", type: "string",          default: "—",             description: "Additional CSS class." },
+];
 ---
 
-<DocsLayout title="Combobox">
+<DocsLayout title="Combobox" component="Combobox">
   <div class="docs-header">
-    <div class="cs-title-row">
-      <h1 class="docs-title">Combobox</h1>
-      <span class="vyre-badge vyre-badge--default">Coming in v1.1</span>
+    <div class="docs-header__meta">
+      <span class="vyre-badge vyre-badge--default">@usevyre/react</span>
+      <span class="vyre-badge vyre-badge--default">@usevyre/vue</span>
     </div>
+    <h1 class="docs-title">Combobox</h1>
     <p class="docs-lead">
-      Searchable dropdown with typeahead autocomplete, keyboard navigation, and single or multi-select support.
+      A searchable dropdown with typeahead filtering, full keyboard navigation, and
+      per-option disabled state. Differs from <code>Select</code> in that it renders a
+      text input — use it when the list is long enough to warrant search.
     </p>
   </div>
 
   <hr class="docs-divider" />
 
-  <div class="cs-body">
-    <h2 class="cs-section-title">What's coming</h2>
-    <ul class="cs-feature-list">
-      <li>Typeahead search with debounce</li>
-      <li>Single and multi-select modes</li>
-      <li>Async data loading with loading state</li>
-      <li>Full keyboard navigation (WAI-ARIA combobox pattern)</li>
-      <li>React + Vue with identical API surface</li>
-      <li>Inline AI context block for zero-hallucination agent use</li>
-    </ul>
+  <h2 class="docs-h2">Basic</h2>
+  <p class="docs-p">
+    Pass <code>options</code>, a controlled <code>value</code>, and <code>onChange</code>.
+    Typing filters options by case-insensitive substring match. Options with <code>disabled: true</code>
+    are shown but not selectable.
+  </p>
+  <ComponentPreview react={codeBasicReact} vue={codeBasicVue}>
+    <ComboboxBasicDemo client:visible />
+  </ComponentPreview>
 
-    <div class="cs-feedback">
-      <p>Have a use case in mind? Share it on GitHub and help shape the API.</p>
-      <a
-        href="https://github.com/gapra/usevyre/discussions"
-        target="_blank"
-        rel="noopener noreferrer"
-        class="vyre-btn vyre-btn--secondary vyre-btn--sm"
-      >
-        Vote or leave feedback →
-      </a>
-    </div>
+  <h2 class="docs-h2">Sizes</h2>
+  <ComponentPreview react={codeSizesReact} vue={codeSizesVue}>
+    <ComboboxSizesDemo client:visible />
+  </ComponentPreview>
+
+  <h2 class="docs-h2">Custom empty state</h2>
+  <p class="docs-p">
+    Use <code>emptyText</code> to customise the message shown when no options match the
+    current search query.
+  </p>
+  <ComponentPreview react={codeEmptyReact} vue={codeEmptyVue}>
+    <ComboboxEmptyDemo client:visible />
+  </ComponentPreview>
+
+  <h2 class="docs-h2">Keyboard navigation</h2>
+  <p class="docs-p">
+    <kbd>↑</kbd> <kbd>↓</kbd> move between options. <kbd>Enter</kbd> selects the
+    highlighted option. <kbd>Escape</kbd> closes the dropdown without changing the value.
+    Clicking outside also closes the dropdown.
+  </p>
+
+  <h2 class="docs-h2">Vue v-model</h2>
+  <p class="docs-p">
+    In Vue, use <code>v-model</code> — it binds to <code>modelValue</code> and emits
+    <code>update:modelValue</code> automatically. Pass <code>null</code> as the initial
+    value to start with no selection.
+  </p>
+
+  <h2 class="docs-h2">Props</h2>
+  <PropsTable props={props} />
+
+  <!-- AI Cheat Sheet -->
+  <AICheatSheet component="Combobox" />
+
+  <div class="docs-pagination">
+    <a href="/docs/components/checkbox" class="docs-pagination__link docs-pagination__link--prev">
+      ← Checkbox
+    </a>
+    <a href="/docs/components/command" class="docs-pagination__link docs-pagination__link--next">
+      Command →
+    </a>
   </div>
 </DocsLayout>
-
-<style>
-  .cs-title-row {
-    display: flex;
-    align-items: center;
-    gap: var(--vyre-spacing-3);
-    flex-wrap: wrap;
-  }
-
-  .cs-body {
-    display: flex;
-    flex-direction: column;
-    gap: var(--vyre-spacing-8);
-    margin-top: var(--vyre-spacing-6);
-  }
-
-  .cs-section-title {
-    font-size: var(--vyre-typography-font-size-lg);
-    font-weight: var(--vyre-typography-font-weight-semibold);
-    color: var(--vyre-color-semantic-text-primary);
-    margin-bottom: var(--vyre-spacing-3);
-  }
-
-  .cs-feature-list {
-    display: flex;
-    flex-direction: column;
-    gap: var(--vyre-spacing-2);
-    padding-left: var(--vyre-spacing-5);
-    color: var(--vyre-color-semantic-text-secondary);
-    font-size: var(--vyre-typography-font-size-sm);
-    line-height: 1.6;
-  }
-
-  .cs-feedback {
-    display: flex;
-    flex-direction: column;
-    gap: var(--vyre-spacing-3);
-    padding: var(--vyre-spacing-5) var(--vyre-spacing-6);
-    background: var(--vyre-color-semantic-surface);
-    border: 1px solid var(--vyre-color-semantic-border-subtle);
-    border-radius: var(--vyre-border-radius-lg);
-    font-size: var(--vyre-typography-font-size-sm);
-    color: var(--vyre-color-semantic-text-secondary);
-  }
-</style>
