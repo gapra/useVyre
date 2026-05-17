@@ -134,18 +134,15 @@ pnpm install
 pnpm --filter @usevyre/tokens build
 
 # 3. Start the docs dev server
-SITE_MODE=live pnpm --filter @usevyre/docs dev
+pnpm --filter @usevyre/docs dev
 ```
 
 Open `http://localhost:4321` in your browser.
 
-> **Why `SITE_MODE=live`?** Without it the landing page shows a coming-soon screen.
-> All `/docs/*` pages are accessible either way.
-
 **Shortcut** — tokens build + dev server in one command:
 
 ```bash
-SITE_MODE=live pnpm dev:docs
+pnpm dev:docs
 ```
 
 ---
