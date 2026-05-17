@@ -1211,7 +1211,8 @@
         "SidebarContent",
         "SidebarSection",
         "SidebarItem",
-        "SidebarFooter"
+        "SidebarFooter",
+        "SidebarTrigger"
       ],
       "props": {
         "variant": {
@@ -1221,12 +1222,31 @@
             "floating"
           ],
           "default": "default"
+        },
+        "SidebarTrigger.icon": {
+          "type": "ReactNode",
+          "description": "Icon shown when the sidebar is expanded. Optional — defaults to the built-in menu icon. Vue: #icon slot."
+        },
+        "SidebarTrigger.collapsedIcon": {
+          "type": "ReactNode",
+          "description": "Icon shown when the sidebar is collapsed. Optional — falls back to icon, then the built-in icon. Vue: #collapsed-icon slot. Use a different glyph here to signal collapsed state (common UX pattern)."
         }
       },
       "examples": [
         {
           "description": "App layout with sidebar",
           "code": "<AppLayout>\n  <Sidebar>\n    <SidebarHeader>Logo</SidebarHeader>\n    <SidebarContent>\n      <SidebarSection heading=\"Main\">\n        <SidebarItem href=\"/\" active>Dashboard</SidebarItem>\n        <SidebarItem href=\"/settings\">Settings</SidebarItem>\n      </SidebarSection>\n    </SidebarContent>\n    <SidebarFooter><Avatar fallback=\"JD\" size=\"sm\" /></SidebarFooter>\n  </Sidebar>\n  <main>Page content</main>\n</AppLayout>"
+        },
+        {
+          "description": "SidebarTrigger with distinct open/collapsed icons",
+          "code": "<SidebarTrigger icon={<PanelLeftClose />} collapsedIcon={<PanelLeftOpen />} />\n\n// Vue:\n// <SidebarTrigger>\n//   <template #icon><PanelLeftClose /></template>\n//   <template #collapsed-icon><PanelLeftOpen /></template>\n// </SidebarTrigger>"
+        }
+      ],
+      "antiPatterns": [
+        {
+          "pattern": "Vue: passing icon/collapsedIcon as props on SidebarTrigger",
+          "reason": "Vue SidebarTrigger customises icons via slots, not props (consistent with SidebarItem)",
+          "fix": "Use <template #icon> and <template #collapsed-icon>; React uses icon / collapsedIcon props"
         }
       ]
     },

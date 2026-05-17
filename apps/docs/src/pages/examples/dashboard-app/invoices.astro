@@ -1,0 +1,36 @@
+---
+import BaseLayout from "@/layouts/BaseLayout.astro";
+import PreviewBar from "@/components/layout/PreviewBar.astro";
+import { DashboardApp } from "@/components/examples/DashboardApp";
+---
+
+<BaseLayout
+  title="Invoices — Acme Billing (useVyre example)"
+  description="A functional multi-page dashboard built entirely with useVyre components."
+  hideBanner
+>
+  <div class="dashboard-app-stage">
+    <PreviewBar label="Acme Billing dashboard" backHref="/examples" />
+    <main class="dashboard-app-stage__body">
+      <DashboardApp page="invoices" client:load />
+    </main>
+  </div>
+</BaseLayout>
+
+<style is:global>
+  /* Standalone preview: PreviewBar (sticky 40px) + app fills the rest.
+     AppLayout handles its own internal scrolling. */
+  html, body { height: 100%; }
+  .dashboard-app-stage {
+    display: flex;
+    flex-direction: column;
+    min-height: 100dvh;
+  }
+  .dashboard-app-stage__body {
+    flex: 1;
+    min-height: 0;
+    display: flex;
+    flex-direction: column;
+  }
+  .dashboard-app-stage__body > * { flex: 1; min-height: 0; }
+</style>

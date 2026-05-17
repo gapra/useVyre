@@ -791,6 +791,8 @@ import { AppLayout, Sidebar, SidebarHeader, SidebarContent, SidebarSection, Side
 
 // Props:
 // variant        = "default" | "floating" (default: default)
+// SidebarTrigger.icon = ReactNode
+// SidebarTrigger.collapsedIcon = ReactNode
 
 // Examples:
 <AppLayout>
@@ -806,7 +808,17 @@ import { AppLayout, Sidebar, SidebarHeader, SidebarContent, SidebarSection, Side
   </Sidebar>
   <main>Page content</main>
 </AppLayout>
+<SidebarTrigger icon={<PanelLeftClose />} collapsedIcon={<PanelLeftOpen />} />
+
+// Vue:
+// <SidebarTrigger>
+//   <template #icon><PanelLeftClose /></template>
+//   <template #collapsed-icon><PanelLeftOpen /></template>
+// </SidebarTrigger>
 ```
+
+**Common mistakes:**
+- ❌ `Vue: passing icon/collapsedIcon as props on SidebarTrigger` → Use <template #icon> and <template #collapsed-icon>; React uses icon / collapsedIcon props
 
 ---
 
@@ -1399,6 +1411,7 @@ If you generate these, you are hallucinating.
 - ❌ `<Popover placement="top-center">` → Use placement="top" for centered placement
 - ❌ `<Progress value > 100>` → Normalize your value to 0–100 range before passing
 - ❌ `<Select Passing strings directly as children>` → Pass options={[{ value: 'a', label: 'Option A' }]}
+- ❌ `<Sidebar Vue: passing icon/collapsedIcon as props on SidebarTrigger>` → Use <template #icon> and <template #collapsed-icon>; React uses icon / collapsedIcon props
 - ❌ `<Toast Rendering <Toast> directly in JSX>` → Use: const { toast } = useToast(); then toast({ title, variant })
 - ❌ `<Toast variant="error">` → Use variant="danger"
 - ❌ `<Toast variant="info">` → Use variant="default"

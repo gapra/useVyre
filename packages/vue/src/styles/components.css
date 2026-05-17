@@ -1136,7 +1136,7 @@
   max-width: 20rem;
   background: var(--vyre-color-semantic-surface-overlay);
   border: 1px solid var(--vyre-color-semantic-border);
-  border-radius: var(--vyre-radius-lg);
+  border-radius: var(--vyre-border-radius-lg);
   box-shadow: var(--vyre-shadow-lg);
   padding: var(--vyre-spacing-3);
   color: var(--vyre-color-semantic-text-primary);
@@ -1169,7 +1169,7 @@
   min-width: 10rem;
   background: var(--vyre-color-semantic-surface-overlay);
   border: 1px solid var(--vyre-color-semantic-border);
-  border-radius: var(--vyre-radius-md);
+  border-radius: var(--vyre-border-radius-md);
   box-shadow: var(--vyre-shadow-lg);
   padding: var(--vyre-spacing-1) 0;
   animation: vyre-dropdown-in var(--vyre-transition-duration-fast) var(--vyre-transition-easing-out) forwards;
@@ -1287,7 +1287,7 @@
   align-items: flex-start;
   gap: var(--vyre-spacing-3);
   padding: var(--vyre-spacing-3) var(--vyre-spacing-4);
-  border-radius: var(--vyre-radius-md);
+  border-radius: var(--vyre-border-radius-md);
   border-width: 1px;
   border-style: solid;
   font-size: var(--vyre-typography-font-size-sm);
@@ -1345,7 +1345,7 @@
   flex-shrink: 0;
   background: none;
   border: none;
-  border-radius: var(--vyre-radius-sm);
+  border-radius: var(--vyre-border-radius-sm);
   color: var(--vyre-color-semantic-text-muted);
   cursor: pointer;
   padding: 2px;
@@ -1385,7 +1385,7 @@
   max-width: 26rem;
   background: var(--vyre-color-semantic-surface-overlay);
   border: 1px solid var(--vyre-color-semantic-border);
-  border-radius: var(--vyre-radius-xl);
+  border-radius: var(--vyre-border-radius-xl);
   box-shadow: var(--vyre-shadow-xl);
   padding: var(--vyre-spacing-6);
   animation: vyre-alert-dialog-in var(--vyre-transition-duration-normal) var(--vyre-transition-easing-spring);
@@ -1571,7 +1571,7 @@
   width: 1.875rem;
   height: 1.875rem;
   border: none;
-  border-radius: var(--vyre-radius-md);
+  border-radius: var(--vyre-border-radius-md);
   background: none;
   color: var(--vyre-color-semantic-text-secondary);
   cursor: pointer;
@@ -1601,7 +1601,7 @@
   gap: 1px;
   background: var(--vyre-color-semantic-surface-raised);
   border: 1px solid var(--vyre-color-semantic-border);
-  border-radius: var(--vyre-radius-lg);
+  border-radius: var(--vyre-border-radius-lg);
 }
 .vyre-pagination__btn {
   display: inline-flex;
@@ -1611,7 +1611,7 @@
   height: 1.75rem;
   padding: 0 var(--vyre-spacing-1);
   border: none;
-  border-radius: calc(var(--vyre-radius-lg) - 3px);
+  border-radius: calc(var(--vyre-border-radius-lg) - 3px);
   background: none;
   color: var(--vyre-color-semantic-text-secondary);
   font-size: var(--vyre-typography-font-size-sm);
@@ -1777,7 +1777,7 @@
 .vyre-command {
   background: var(--vyre-color-semantic-surface);
   border: 1px solid var(--vyre-color-semantic-border);
-  border-radius: var(--vyre-radius-xl);
+  border-radius: var(--vyre-border-radius-xl);
   overflow: hidden;
   display: flex;
   flex-direction: column;
@@ -1822,7 +1822,7 @@
   justify-content: center;
   width: 1.25rem;
   height: 1.25rem;
-  border-radius: var(--vyre-radius-sm);
+  border-radius: var(--vyre-border-radius-sm);
   border: none;
   background: none;
   color: var(--vyre-color-semantic-text-muted);
@@ -1873,7 +1873,7 @@
   gap: var(--vyre-spacing-2);
   padding: var(--vyre-spacing-2) var(--vyre-spacing-3);
   margin: 1px var(--vyre-spacing-2);
-  border-radius: var(--vyre-radius-md);
+  border-radius: var(--vyre-border-radius-md);
   font-size: var(--vyre-typography-font-size-sm);
   color: var(--vyre-color-semantic-text-primary);
   cursor: pointer;
@@ -1911,7 +1911,7 @@
   color: var(--vyre-color-semantic-text-muted);
   background: var(--vyre-color-semantic-surface-raised);
   border: 1px solid var(--vyre-color-semantic-border);
-  border-radius: var(--vyre-radius-sm);
+  border-radius: var(--vyre-border-radius-sm);
   padding: 1px 5px;
   flex-shrink: 0;
 }
@@ -1931,7 +1931,7 @@
   padding: var(--vyre-spacing-3);
   background: var(--vyre-color-semantic-surface-raised);
   border: 1px solid var(--vyre-color-semantic-border);
-  border-radius: var(--vyre-radius-lg);
+  border-radius: var(--vyre-border-radius-lg);
   width: 280px;
   user-select: none;
 }
@@ -1954,14 +1954,14 @@
   border: none;
   cursor: pointer;
   padding: var(--vyre-spacing-1) var(--vyre-spacing-2);
-  border-radius: var(--vyre-radius-sm);
+  border-radius: var(--vyre-border-radius-sm);
   font-size: var(--vyre-typography-font-size-sm);
   font-weight: 600;
-  color: var(--vyre-color-semantic-text);
+  color: var(--vyre-color-semantic-text-primary);
   transition: background 120ms;
 }
 .vyre-calendar__header-btn:hover {
-  background: var(--vyre-color-semantic-surface-hover);
+  background: var(--vyre-color-semantic-surface-raised);
 }
 .vyre-calendar__nav {
   display: flex;
@@ -1971,15 +1971,15 @@
   height: 28px;
   border: none;
   background: none;
-  border-radius: var(--vyre-radius-sm);
+  border-radius: var(--vyre-border-radius-sm);
   cursor: pointer;
   color: var(--vyre-color-semantic-text-muted);
   transition: background 120ms, color 120ms;
   flex-shrink: 0;
 }
 .vyre-calendar__nav:hover {
-  background: var(--vyre-color-semantic-surface-hover);
-  color: var(--vyre-color-semantic-text);
+  background: var(--vyre-color-semantic-surface-raised);
+  color: var(--vyre-color-semantic-text-primary);
 }
 
 /* Day grid */
@@ -2002,15 +2002,15 @@
   justify-content: center;
   border: none;
   background: none;
-  border-radius: var(--vyre-radius-sm);
+  border-radius: var(--vyre-border-radius-sm);
   font-size: var(--vyre-typography-font-size-sm);
-  color: var(--vyre-color-semantic-text);
+  color: var(--vyre-color-semantic-text-primary);
   cursor: pointer;
   transition: background 100ms, color 100ms;
   position: relative;
 }
 .vyre-calendar__day:hover:not(:disabled) {
-  background: var(--vyre-color-semantic-surface-hover);
+  background: var(--vyre-color-semantic-surface-raised);
 }
 .vyre-calendar__day--today {
   font-weight: 700;
@@ -2031,7 +2031,7 @@
   background: var(--vyre-color-semantic-accent) !important;
   color: var(--vyre-color-semantic-accent-foreground) !important;
   font-weight: 600;
-  border-radius: var(--vyre-radius-sm);
+  border-radius: var(--vyre-border-radius-sm);
 }
 .vyre-calendar__day--selected.vyre-calendar__day--today::after {
   background: var(--vyre-color-semantic-accent-foreground);
@@ -2043,12 +2043,12 @@
 .vyre-calendar__day--range-start {
   background: var(--vyre-color-semantic-accent) !important;
   color: var(--vyre-color-semantic-accent-foreground) !important;
-  border-radius: var(--vyre-radius-sm) 0 0 var(--vyre-radius-sm);
+  border-radius: var(--vyre-border-radius-sm) 0 0 var(--vyre-border-radius-sm);
 }
 .vyre-calendar__day--range-end {
   background: var(--vyre-color-semantic-accent) !important;
   color: var(--vyre-color-semantic-accent-foreground) !important;
-  border-radius: 0 var(--vyre-radius-sm) var(--vyre-radius-sm) 0;
+  border-radius: 0 var(--vyre-border-radius-sm) var(--vyre-border-radius-sm) 0;
 }
 .vyre-calendar__day--disabled {
   color: var(--vyre-color-semantic-text-muted);
@@ -2066,15 +2066,15 @@
   padding: var(--vyre-spacing-2);
   border: none;
   background: none;
-  border-radius: var(--vyre-radius-sm);
+  border-radius: var(--vyre-border-radius-sm);
   font-size: var(--vyre-typography-font-size-sm);
-  color: var(--vyre-color-semantic-text);
+  color: var(--vyre-color-semantic-text-primary);
   cursor: pointer;
   transition: background 100ms;
   text-align: center;
 }
 .vyre-calendar__month-cell:hover {
-  background: var(--vyre-color-semantic-surface-hover);
+  background: var(--vyre-color-semantic-surface-raised);
 }
 .vyre-calendar__month-cell--active {
   background: var(--vyre-color-semantic-accent);
@@ -2092,15 +2092,15 @@
   padding: var(--vyre-spacing-2);
   border: none;
   background: none;
-  border-radius: var(--vyre-radius-sm);
+  border-radius: var(--vyre-border-radius-sm);
   font-size: var(--vyre-typography-font-size-sm);
-  color: var(--vyre-color-semantic-text);
+  color: var(--vyre-color-semantic-text-primary);
   cursor: pointer;
   transition: background 100ms;
   text-align: center;
 }
 .vyre-calendar__year-cell:hover {
-  background: var(--vyre-color-semantic-surface-hover);
+  background: var(--vyre-color-semantic-surface-raised);
 }
 .vyre-calendar__year-cell--active {
   background: var(--vyre-color-semantic-accent);
@@ -2121,9 +2121,9 @@
   width: 44px;
   padding: var(--vyre-spacing-1) var(--vyre-spacing-2);
   border: 1px solid var(--vyre-color-semantic-border);
-  border-radius: var(--vyre-radius-sm);
+  border-radius: var(--vyre-border-radius-sm);
   background: var(--vyre-color-semantic-surface);
-  color: var(--vyre-color-semantic-text);
+  color: var(--vyre-color-semantic-text-primary);
   font-size: var(--vyre-typography-font-size-sm);
   text-align: center;
   -moz-appearance: textfield;
@@ -2153,8 +2153,8 @@
   padding: var(--vyre-spacing-2) var(--vyre-spacing-3);
   background: var(--vyre-color-semantic-surface);
   border: 1px solid var(--vyre-color-semantic-border);
-  border-radius: var(--vyre-radius-md);
-  color: var(--vyre-color-semantic-text);
+  border-radius: var(--vyre-border-radius-md);
+  color: var(--vyre-color-semantic-text-primary);
   font-size: var(--vyre-typography-font-size-sm);
   cursor: pointer;
   min-width: 200px;
@@ -2187,11 +2187,11 @@
   cursor: pointer;
   color: var(--vyre-color-semantic-text-muted);
   padding: 2px;
-  border-radius: var(--vyre-radius-sm);
+  border-radius: var(--vyre-border-radius-sm);
   flex-shrink: 0;
 }
 .vyre-datepicker__clear:hover {
-  color: var(--vyre-color-semantic-text);
+  color: var(--vyre-color-semantic-text-primary);
 }
 
 /* DatePicker popover */
@@ -2199,7 +2199,7 @@
   position: absolute;
   z-index: 1060;
   box-shadow: var(--vyre-shadow-lg);
-  border-radius: var(--vyre-radius-lg);
+  border-radius: var(--vyre-border-radius-lg);
   animation: vyre-fade-in 120ms ease;
 }
 
@@ -2209,7 +2209,7 @@
   font-family: var(--vyre-typography-font-family-body);
   font-size: var(--vyre-typography-font-size-sm);
   line-height: var(--vyre-typography-line-height-normal);
-  color: var(--vyre-color-semantic-text);
+  color: var(--vyre-color-semantic-text-primary);
   margin: 0;
 }
 .vyre-text--xs  { font-size: var(--vyre-typography-font-size-xs); }
@@ -2217,7 +2217,7 @@
 .vyre-text--lg  { font-size: var(--vyre-typography-font-size-lg); }
 .vyre-text--xl  { font-size: var(--vyre-typography-font-size-xl); }
 
-.vyre-text--normal   { font-weight: var(--vyre-typography-font-weight-normal); }
+.vyre-text--normal   { font-weight: var(--vyre-typography-font-weight-regular); }
 .vyre-text--medium   { font-weight: var(--vyre-typography-font-weight-medium); }
 .vyre-text--semibold { font-weight: var(--vyre-typography-font-weight-semibold); }
 .vyre-text--bold     { font-weight: var(--vyre-typography-font-weight-bold); }
@@ -2242,7 +2242,7 @@
   font-family: var(--vyre-typography-font-family-body);
   font-weight: var(--vyre-typography-font-weight-bold);
   line-height: var(--vyre-typography-line-height-tight);
-  color: var(--vyre-color-semantic-text);
+  color: var(--vyre-color-semantic-text-primary);
   margin: 0;
 }
 .vyre-heading--xs  { font-size: var(--vyre-typography-font-size-sm); }
@@ -2253,7 +2253,7 @@
 .vyre-heading--2xl { font-size: var(--vyre-typography-font-size-3xl); }
 .vyre-heading--3xl { font-size: var(--vyre-typography-font-size-4xl); }
 
-.vyre-heading--normal   { font-weight: var(--vyre-typography-font-weight-normal); }
+.vyre-heading--normal   { font-weight: var(--vyre-typography-font-weight-regular); }
 .vyre-heading--medium   { font-weight: var(--vyre-typography-font-weight-medium); }
 .vyre-heading--semibold { font-weight: var(--vyre-typography-font-weight-semibold); }
 
@@ -2270,21 +2270,21 @@
   font-size: 0.875em;
   background: var(--vyre-color-semantic-surface-raised);
   border: 1px solid var(--vyre-color-semantic-border-subtle);
-  border-radius: var(--vyre-radius-sm);
+  border-radius: var(--vyre-border-radius-sm);
   padding: 1px 6px;
-  color: var(--vyre-color-semantic-text);
+  color: var(--vyre-color-semantic-text-primary);
 }
 .vyre-code-block {
   font-family: var(--vyre-typography-font-family-mono);
   font-size: var(--vyre-typography-font-size-sm);
   background: var(--vyre-color-semantic-surface-raised);
   border: 1px solid var(--vyre-color-semantic-border);
-  border-radius: var(--vyre-radius-md);
+  border-radius: var(--vyre-border-radius-md);
   padding: var(--vyre-spacing-4);
   overflow-x: auto;
   margin: 0;
   line-height: var(--vyre-typography-line-height-relaxed);
-  color: var(--vyre-color-semantic-text);
+  color: var(--vyre-color-semantic-text-primary);
 }
 .vyre-code-block code {
   background: none;
@@ -2302,7 +2302,7 @@
   font-style: italic;
   line-height: var(--vyre-typography-line-height-relaxed);
   background: color-mix(in srgb, var(--vyre-color-semantic-accent) 6%, transparent);
-  border-radius: 0 var(--vyre-radius-sm) var(--vyre-radius-sm) 0;
+  border-radius: 0 var(--vyre-border-radius-sm) var(--vyre-border-radius-sm) 0;
 }
 
 /* ── Sidebar ────────────────────────────────────────────────── */
@@ -2311,7 +2311,10 @@
   display: flex;
   flex-direction: column;
   width: 240px;
-  height: 100%;
+  /* No explicit height: as a flex child of .vyre-app-layout (which is
+     min-height: 100vh) it stretches to the layout height automatically,
+     so __content (flex: 1) pushes __footer to the bottom. */
+  align-self: stretch;
   background: var(--vyre-color-semantic-surface);
   border-right: 1px solid var(--vyre-color-semantic-border-subtle);
   padding: var(--vyre-spacing-4) 0;
@@ -2322,7 +2325,7 @@
 }
 .vyre-sidebar--floating {
   border: 1px solid var(--vyre-color-semantic-border);
-  border-radius: var(--vyre-radius-lg);
+  border-radius: var(--vyre-border-radius-lg);
   box-shadow: var(--vyre-shadow-md);
   min-height: auto;
 }
@@ -2344,13 +2347,26 @@
 .vyre-sidebar__title {
   font-size: var(--vyre-typography-font-size-sm);
   font-weight: var(--vyre-typography-font-weight-semibold);
-  color: var(--vyre-color-semantic-text);
+  color: var(--vyre-color-semantic-text-primary);
   overflow: hidden;
   text-overflow: ellipsis;
   white-space: nowrap;
   flex: 1;
 }
 .vyre-sidebar--collapsed .vyre-sidebar__title { display: none; }
+
+/* Collapsed: center the logo / footer content and trim padding so
+   nothing overflows the 56px rail. */
+.vyre-sidebar--collapsed .vyre-sidebar__header {
+  justify-content: center;
+  padding-left: 0;
+  padding-right: 0;
+}
+.vyre-sidebar--collapsed .vyre-sidebar__footer {
+  padding-left: 0;
+  padding-right: 0;
+  text-align: center;
+}
 
 .vyre-sidebar__content {
   flex: 1;
@@ -2384,7 +2400,7 @@
   align-items: center;
   gap: var(--vyre-spacing-2);
   padding: var(--vyre-spacing-2) var(--vyre-spacing-2);
-  border-radius: var(--vyre-radius-md);
+  border-radius: var(--vyre-border-radius-md);
   font-size: var(--vyre-typography-font-size-sm);
   color: var(--vyre-color-semantic-text-muted);
   cursor: pointer;
@@ -2397,8 +2413,8 @@
   position: relative;
 }
 .vyre-sidebar__item:hover {
-  background: var(--vyre-color-semantic-surface-hover);
-  color: var(--vyre-color-semantic-text);
+  background: var(--vyre-color-semantic-surface-raised);
+  color: var(--vyre-color-semantic-text-primary);
 }
 .vyre-sidebar__item--active {
   background: color-mix(in srgb, var(--vyre-color-semantic-accent) 12%, transparent);
@@ -2449,15 +2465,15 @@
   height: 28px;
   border: none;
   background: none;
-  border-radius: var(--vyre-radius-sm);
+  border-radius: var(--vyre-border-radius-sm);
   cursor: pointer;
   color: var(--vyre-color-semantic-text-muted);
   transition: background 120ms, color 120ms;
   flex-shrink: 0;
 }
 .vyre-sidebar__toggle:hover {
-  background: var(--vyre-color-semantic-surface-hover);
-  color: var(--vyre-color-semantic-text);
+  background: var(--vyre-color-semantic-surface-raised);
+  color: var(--vyre-color-semantic-text-primary);
 }
 
 .vyre-app-layout {
@@ -2493,15 +2509,15 @@
   height: 32px;
   border: none;
   background: none;
-  border-radius: var(--vyre-radius-sm);
+  border-radius: var(--vyre-border-radius-sm);
   cursor: pointer;
   color: var(--vyre-color-semantic-text-muted);
   transition: background 120ms, color 120ms;
   flex-shrink: 0;
 }
 .vyre-sidebar-trigger:hover {
-  background: var(--vyre-color-semantic-surface-hover);
-  color: var(--vyre-color-semantic-text);
+  background: var(--vyre-color-semantic-surface-raised);
+  color: var(--vyre-color-semantic-text-primary);
 }
 
 .vyre-page-content {

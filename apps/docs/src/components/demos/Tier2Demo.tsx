@@ -538,7 +538,7 @@ export function CommandInlineDemo() {
   const [last, setLast] = useState<string | null>(null);
   return (
     <div style={{ padding: "24px 0", display: "flex", flexDirection: "column", gap: 12 }}>
-      <Command style={{ border: "1px solid var(--vyre-color-semantic-border)", borderRadius: "var(--vyre-radius-xl)", maxWidth: 400, margin: "0 auto", width: "100%" }}>
+      <Command style={{ border: "1px solid var(--vyre-color-semantic-border)", borderRadius: "var(--vyre-border-radius-xl)", maxWidth: 400, margin: "0 auto", width: "100%" }}>
         <CommandInput placeholder="Search commands..." />
         <CommandList style={{ maxHeight: 280 }}>
           <CommandEmpty>No results found.</CommandEmpty>
@@ -740,7 +740,7 @@ function BellIcon() {
 export function SidebarDemo() {
   const [active, setActive] = useState("dashboard");
   return (
-    <div style={{ display: "flex", height: "320px", border: "1px solid var(--vyre-color-semantic-border)", borderRadius: "var(--vyre-radius-lg)", overflow: "hidden" }}>
+    <div style={{ display: "flex", height: "320px", border: "1px solid var(--vyre-color-semantic-border)", borderRadius: "var(--vyre-border-radius-lg)", overflow: "hidden" }}>
       <Sidebar>
         <SidebarHeader title="My App" logo={<svg width="24" height="24" viewBox="0 0 24 24" fill="var(--vyre-color-semantic-accent)"><rect width="24" height="24" rx="6"/><path d="M7 12l4 4 6-6" stroke="white" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/></svg>} />
         <SidebarContent>
@@ -765,7 +765,7 @@ export function SidebarDemo() {
 export function SidebarCollapsibleDemo() {
   const [active, setActive] = useState("dashboard");
   return (
-    <div style={{ height: "280px", border: "1px solid var(--vyre-color-semantic-border)", borderRadius: "var(--vyre-radius-lg)", overflow: "hidden" }}>
+    <div style={{ height: "280px", border: "1px solid var(--vyre-color-semantic-border)", borderRadius: "var(--vyre-border-radius-lg)", overflow: "hidden" }}>
       <AppLayout defaultCollapsed={false} style={{ height: "100%", minHeight: "unset" }}>
         <Sidebar>
           <SidebarHeader title="App" logo={<svg width="24" height="24" viewBox="0 0 24 24" fill="var(--vyre-color-semantic-accent)"><rect width="24" height="24" rx="6"/><path d="M7 12l4 4 6-6" stroke="white" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/></svg>} />
@@ -794,6 +794,49 @@ export function SidebarCollapsibleDemo() {
   );
 }
 
+const PanelCloseIcon = (
+  <svg width="18" height="18" viewBox="0 0 24 24" fill="none" aria-hidden="true">
+    <rect x="3" y="4" width="18" height="16" rx="2" stroke="currentColor" strokeWidth="1.7" />
+    <path d="M10 4v16" stroke="currentColor" strokeWidth="1.7" />
+    <path d="M16.5 9.5L14 12l2.5 2.5" stroke="currentColor" strokeWidth="1.7" strokeLinecap="round" strokeLinejoin="round" />
+  </svg>
+);
+const PanelOpenIcon = (
+  <svg width="18" height="18" viewBox="0 0 24 24" fill="none" aria-hidden="true">
+    <rect x="3" y="4" width="18" height="16" rx="2" stroke="currentColor" strokeWidth="1.7" />
+    <path d="M10 4v16" stroke="currentColor" strokeWidth="1.7" />
+    <path d="M14 9.5L16.5 12 14 14.5" stroke="currentColor" strokeWidth="1.7" strokeLinecap="round" strokeLinejoin="round" />
+  </svg>
+);
+
+export function SidebarTriggerIconDemo() {
+  const [active, setActive] = useState("dashboard");
+  return (
+    <div style={{ height: "280px", border: "1px solid var(--vyre-color-semantic-border)", borderRadius: "var(--vyre-border-radius-lg)", overflow: "hidden" }}>
+      <AppLayout defaultCollapsed={false} style={{ height: "100%", minHeight: "unset" }}>
+        <Sidebar>
+          <SidebarHeader title="App" logo={<svg width="24" height="24" viewBox="0 0 24 24" fill="var(--vyre-color-semantic-accent)"><rect width="24" height="24" rx="6"/><path d="M7 12l4 4 6-6" stroke="white" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/></svg>} />
+          <SidebarContent>
+            <SidebarSection>
+              <SidebarItem icon={<HomeIcon />} active={active === "dashboard"} onClick={() => setActive("dashboard")}>Dashboard</SidebarItem>
+              <SidebarItem icon={<UsersIcon />} active={active === "users"} onClick={() => setActive("users")}>Users</SidebarItem>
+            </SidebarSection>
+          </SidebarContent>
+        </Sidebar>
+        <AppShell>
+          <AppBar>
+            <SidebarTrigger icon={PanelCloseIcon} collapsedIcon={PanelOpenIcon} />
+            <Text size="sm" weight="medium">Toggle — the icon changes per state</Text>
+          </AppBar>
+          <PageContent>
+            <Text color="muted" size="sm">Active: {active}</Text>
+          </PageContent>
+        </AppShell>
+      </AppLayout>
+    </div>
+  );
+}
+
 const pages: Record<string, { title: string; description: string }> = {
   dashboard: { title: "Dashboard", description: "Overview of your workspace activity and key metrics." },
   users:     { title: "Users",     description: "Manage team members, roles, and access permissions." },
@@ -812,7 +855,7 @@ export function SidebarLayoutDemo() {
   const [active, setActive] = useState("dashboard");
   const page = pages[active];
   return (
-    <div style={{ height: "400px", border: "1px solid var(--vyre-color-semantic-border)", borderRadius: "var(--vyre-radius-lg)", overflow: "hidden" }}>
+    <div style={{ height: "400px", border: "1px solid var(--vyre-color-semantic-border)", borderRadius: "var(--vyre-border-radius-lg)", overflow: "hidden" }}>
       <AppLayout style={{ height: "100%", minHeight: "unset" }}>
         <Sidebar>
           <SidebarHeader title="Workspace" logo={<AppLogo />} />
@@ -836,7 +879,7 @@ export function SidebarLayoutDemo() {
             <Text color="muted" style={{ marginBottom: "20px" }}>{page.description}</Text>
             <div style={{ display: "grid", gridTemplateColumns: "repeat(3, 1fr)", gap: "12px" }}>
               {["Total users", "Active now", "Revenue"].map((label, i) => (
-                <div key={label} style={{ padding: "16px", background: "var(--vyre-color-semantic-surface-raised)", borderRadius: "var(--vyre-radius-md)", border: "1px solid var(--vyre-color-semantic-border-subtle)" }}>
+                <div key={label} style={{ padding: "16px", background: "var(--vyre-color-semantic-surface-raised)", borderRadius: "var(--vyre-border-radius-md)", border: "1px solid var(--vyre-color-semantic-border-subtle)" }}>
                   <Text size="xs" color="muted">{label}</Text>
                   <Heading size="lg" style={{ marginTop: "4px" }}>{["1,284", "42", "$9.4k"][i]}</Heading>
                 </div>

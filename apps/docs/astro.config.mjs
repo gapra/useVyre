@@ -10,11 +10,11 @@ export default defineConfig({
     // Prevent Vite from pre-bundling workspace packages —
     // let it resolve them directly from TypeScript source.
     optimizeDeps: {
-      exclude: ["@vyre/react", "@vyre/vue"],
+      exclude: ["@usevyre/react", "@usevyre/vue"],
     },
     ssr: {
       // Allow Vite SSR to process workspace TS source
-      noExternal: ["@vyre/react", "@vyre/vue"],
+      noExternal: ["@usevyre/react", "@usevyre/vue"],
     },
     resolve: {
       // Deduplicate React — prevents two React copies when @usevyre/react

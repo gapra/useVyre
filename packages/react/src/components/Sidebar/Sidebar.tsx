@@ -38,6 +38,12 @@
  * │   badge   = string | number                                 │
  * │   href    = string                                          │
  * │   onClick = () => void                                      │
+ * │                                                              │
+ * │ SidebarTrigger props (all optional):                         │
+ * │   icon          = ReactNode (shown when expanded;           │
+ * │                   default = built-in menu icon)             │
+ * │   collapsedIcon = ReactNode (shown when collapsed;          │
+ * │                   falls back to icon)                       │
  * └──────────────────────────────────────────────────────────────┘
  *
  * @example
@@ -290,12 +296,30 @@ AppBar.displayName = "VyreAppBar";
 
 // ── SidebarTrigger ────────────────────────────────────────────
 
+const DefaultTriggerIcon = (
+  <svg width="16" height="16" viewBox="0 0 16 16" fill="none" aria-hidden="true">
+    <rect x="2" y="4" width="12" height="1.5" rx="0.75" fill="currentColor"/>
+    <rect x="2" y="7.25" width="8" height="1.5" rx="0.75" fill="currentColor"/>
+    <rect x="2" y="10.5" width="12" height="1.5" rx="0.75" fill="currentColor"/>
+  </svg>
+);
+
 export interface SidebarTriggerProps {
   className?: string;
+  /** Icon shown when the sidebar is expanded. Defaults to the built-in menu icon. */
+  icon?: React.ReactNode;
+  /** Icon shown when the sidebar is collapsed. Falls back to `icon`, then the built-in icon. */
+  collapsedIcon?: React.ReactNode;
 }
 
-export const SidebarTrigger: React.FC<SidebarTriggerProps> = ({ className }) => {
+export const SidebarTrigger: React.FC<SidebarTriggerProps> = ({
+  className,
+  icon,
+  collapsedIcon,
+}) => {
   const { collapsed, toggleCollapsed } = useAppLayout();
+  const openIcon = icon ?? DefaultTriggerIcon;
+  const shutIcon = collapsedIcon ?? openIcon;
   return (
     <button
       type="button"
@@ -304,11 +328,7 @@ export const SidebarTrigger: React.FC<SidebarTriggerProps> = ({ className }) => 
       aria-label={collapsed ? "Expand sidebar" : "Collapse sidebar"}
       aria-expanded={!collapsed}
     >
-      <svg width="16" height="16" viewBox="0 0 16 16" fill="none" aria-hidden="true">
-        <rect x="2" y="4" width="12" height="1.5" rx="0.75" fill="currentColor"/>
-        <rect x="2" y="7.25" width="8" height="1.5" rx="0.75" fill="currentColor"/>
-        <rect x="2" y="10.5" width="12" height="1.5" rx="0.75" fill="currentColor"/>
-      </svg>
+      {collapsed ? shutIcon : openIcon}
     </button>
   );
 };

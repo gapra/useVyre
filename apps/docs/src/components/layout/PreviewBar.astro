@@ -1,0 +1,132 @@
+---
+/**
+ * Slim top bar for standalone example apps (replaces the early-access
+ * banner on preview pages). Shows a "Preview" label + a back button
+ * that returns to the examples index (history.back() when available).
+ */
+export interface Props {
+  /** Name of the example shown next to the Preview label. */
+  label?: string;
+  /** Where the back button goes when there is no history. */
+  backHref?: string;
+}
+const { label = "Example app", backHref = "/examples" } = Astro.props;
+---
+
+<div class="pvb" role="banner" aria-label="Preview mode">
+  <div class="pvb__inner">
+    <button
+      class="pvb__back"
+      id="pvb-back"
+      type="button"
+      data-back-href={backHref}
+      aria-label="Back to examples"
+    >
+      <svg width="14" height="14" viewBox="0 0 14 14" fill="none" aria-hidden="true">
+        <path d="M8.5 2L3.5 7l5 5" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/>
+      </svg>
+      Back
+    </button>
+
+    <span class="pvb__divider" aria-hidden="true"></span>
+
+    <span class="pvb__badge">Preview</span>
+    <span class="pvb__label">{label}</span>
+
+    <a class="pvb__close" href={backHref} aria-label="Close preview">
+      <svg width="14" height="14" viewBox="0 0 14 14" fill="none" aria-hidden="true">
+        <path d="M1 1l12 12M13 1L1 13" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/>
+      </svg>
+    </a>
+  </div>
+</div>
+
+<script>
+  const btn = document.getElementById("pvb-back");
+  btn?.addEventListener("click", () => {
+    window.location.href = btn.getAttribute("data-back-href") || "/examples";
+  });
+</script>
+
+<style>
+  .pvb {
+    position: sticky;
+    top: 0;
+    z-index: 50;
+    background: var(--vyre-color-semantic-surface-raised);
+    border-bottom: 1px solid var(--vyre-color-semantic-border-subtle);
+    flex-shrink: 0;
+  }
+  .pvb__inner {
+    display: flex;
+    align-items: center;
+    gap: var(--vyre-spacing-3);
+    height: 40px;
+    padding: 0 var(--vyre-spacing-4);
+  }
+  .pvb__back {
+    display: inline-flex;
+    align-items: center;
+    gap: var(--vyre-spacing-1);
+    padding: var(--vyre-spacing-1) var(--vyre-spacing-2);
+    font-size: var(--vyre-typography-font-size-sm);
+    font-weight: var(--vyre-typography-font-weight-medium);
+    color: var(--vyre-color-semantic-text-primary);
+    background: transparent;
+    border: 1px solid var(--vyre-color-semantic-border-subtle);
+    border-radius: var(--vyre-border-radius-md);
+    cursor: pointer;
+    transition:
+      background var(--vyre-transition-duration-fast) var(--vyre-transition-easing-out),
+      border-color var(--vyre-transition-duration-fast) var(--vyre-transition-easing-out);
+  }
+  .pvb__back:hover {
+    background: var(--vyre-color-semantic-surface);
+    border-color: var(--vyre-color-semantic-border);
+  }
+  .pvb__back:focus-visible {
+    outline: 2px solid var(--vyre-color-semantic-accent);
+    outline-offset: 2px;
+  }
+  .pvb__divider {
+    width: 1px;
+    height: 18px;
+    background: var(--vyre-color-semantic-border-subtle);
+  }
+  .pvb__badge {
+    font-family: var(--vyre-typography-font-family-mono);
+    font-size: var(--vyre-typography-font-size-2xs);
+    font-weight: var(--vyre-typography-font-weight-semibold);
+    text-transform: uppercase;
+    letter-spacing: 0.04em;
+    color: var(--vyre-color-semantic-accent-foreground);
+    background: var(--vyre-color-semantic-accent);
+    padding: 2px var(--vyre-spacing-2);
+    border-radius: var(--vyre-border-radius-full);
+  }
+  .pvb__label {
+    font-size: var(--vyre-typography-font-size-sm);
+    color: var(--vyre-color-semantic-text-secondary);
+  }
+  .pvb__close {
+    margin-left: auto;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 28px;
+    height: 28px;
+    color: var(--vyre-color-semantic-text-muted);
+    border-radius: var(--vyre-border-radius-md);
+    transition:
+      background var(--vyre-transition-duration-fast) var(--vyre-transition-easing-out),
+      color var(--vyre-transition-duration-fast) var(--vyre-transition-easing-out);
+  }
+  .pvb__close:hover {
+    background: var(--vyre-color-semantic-surface);
+    color: var(--vyre-color-semantic-text-primary);
+  }
+  .pvb__close:focus-visible {
+    outline: 2px solid var(--vyre-color-semantic-accent);
+    outline-offset: 2px;
+  }
+</style>

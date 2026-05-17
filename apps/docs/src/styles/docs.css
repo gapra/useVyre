@@ -1186,7 +1186,7 @@ pre code { background: none; padding: 0; color: inherit; font-size: inherit; }
 .docs-table-wrapper {
   overflow-x: auto;
   margin: 0 0 var(--vyre-spacing-6);
-  border-radius: var(--vyre-radius-lg);
+  border-radius: var(--vyre-border-radius-lg);
   border: 1px solid var(--vyre-color-semantic-border);
 }
 
@@ -1220,7 +1220,7 @@ pre code { background: none; padding: 0; color: inherit; font-size: inherit; }
 .docs-pre {
   background: var(--vyre-color-semantic-surface-raised);
   border: 1px solid var(--vyre-color-semantic-border-subtle);
-  border-radius: var(--vyre-radius-md);
+  border-radius: var(--vyre-border-radius-md);
   padding: var(--vyre-spacing-4);
   overflow-x: auto;
   margin: 0 0 var(--vyre-spacing-6);
@@ -1251,7 +1251,7 @@ pre code { background: none; padding: 0; color: inherit; font-size: inherit; }
   flex-direction: column;
   gap: 12px;
   padding: 20px;
-  border-radius: var(--vyre-radius-lg);
+  border-radius: var(--vyre-border-radius-lg);
   border: 1px solid var(--vyre-color-semantic-border-subtle);
   background: var(--vyre-color-semantic-surface-raised);
   text-decoration: none;
@@ -1316,7 +1316,7 @@ pre code { background: none; padding: 0; color: inherit; font-size: inherit; }
 .vyre-examples-stage {
   margin: 24px 0 32px;
   border: 1px solid var(--vyre-color-semantic-border-subtle);
-  border-radius: var(--vyre-radius-lg);
+  border-radius: var(--vyre-border-radius-lg);
   overflow: hidden;
   background: var(--vyre-color-semantic-background);
 }
@@ -1384,7 +1384,7 @@ pre code { background: none; padding: 0; color: inherit; font-size: inherit; }
   display: block;
   padding: 8px 12px;
   font-size: 14px;
-  border-radius: var(--vyre-radius-md);
+  border-radius: var(--vyre-border-radius-md);
   color: var(--vyre-color-semantic-text-secondary);
   text-decoration: none;
 }
