@@ -1,13 +1,14 @@
 <script setup lang="ts">
 /**
- * @vyre/vue — Textarea
+ * @usevyre/vue — Textarea
  *
  * AI CONTEXT:
  * ┌─────────────────────────────────────────────────────────┐
  * │ Component:  Textarea                                    │
- * │ Import:     import { Textarea } from "@vyre/vue"        │
+ * │ Import:     import { Textarea } from "@usevyre/vue"     │
  * │                                                         │
  * │ Props:                                                  │
+ * │   modelValue = string (v-model)                         │
  * │   size   = "sm"|"md"(default)|"lg"                      │
  * │   resize = "none"|"vertical"(default)|"horizontal"|     │
  * │            "both"                                       │
@@ -15,7 +16,7 @@
  * └─────────────────────────────────────────────────────────┘
  *
  * @example
- * <Textarea placeholder="Write your message..." :rows="4" />
+ * <Textarea v-model="bio" placeholder="Write…" :rows="4" />
  */
 
 import { computed } from "vue";
@@ -26,12 +27,17 @@ type TextareaResize = "none" | "vertical" | "horizontal" | "both";
 
 const props = withDefaults(
   defineProps<{
+    modelValue?: string;
     size?:   TextareaSize;
     resize?: TextareaResize;
     class?:  string;
   }>(),
   { size: "md", resize: "vertical" }
 );
+
+const emit = defineEmits<{
+  "update:modelValue": [value: string];
+}>();
 
 const classes = computed(() =>
   cn("vyre-textarea", `vyre-textarea--${props.size}`, props.class)
@@ -44,6 +50,8 @@ defineOptions({ inheritAttrs: false });
   <textarea
     :class="classes"
     :style="{ resize: resize }"
+    :value="modelValue"
     v-bind="$attrs"
+    @input="emit('update:modelValue', ($event.target as HTMLTextAreaElement).value)"
   />
 </template>

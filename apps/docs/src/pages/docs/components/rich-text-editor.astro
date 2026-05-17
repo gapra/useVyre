@@ -1,89 +1,117 @@
 ---
-import DocsLayout from "@/layouts/DocsLayout.astro";
+import DocsLayout       from "@/layouts/DocsLayout.astro";
+import ComponentPreview from "@/components/docs/ComponentPreview.astro";
+import PropsTable       from "@/components/docs/PropsTable.astro";
+import AICheatSheet     from "@/components/docs/AICheatSheet.astro";
+import {
+  RichTextEditorBasicDemo,
+  RichTextEditorMinimalDemo,
+} from "@/components/demos/NewComponentsDemo";
+
+const codeReact = `import { useState } from "react";
+import { RichTextEditor } from "@usevyre/react";
+
+const [html, setHtml] = useState(
+  "<h2>Release notes</h2><p>useVyre <strong>v1.2</strong> ships a zero-dep editor.</p>"
+);
+
+<RichTextEditor
+  value={html}
+  onChange={setHtml}
+  placeholder="Write release notes…"
+/>`;
+
+const codeVue = `<script setup>
+import { ref } from "vue";
+import { RichTextEditor } from "@usevyre/vue";
+
+const html = ref(
+  "<h2>Release notes</h2><p>useVyre <strong>v1.2</strong> ships a zero-dep editor.</p>"
+);
+</script>
+<template>
+  <RichTextEditor v-model="html" placeholder="Write release notes…" />
+</template>`;
+
+const codeMinimalReact = `<RichTextEditor
+  value={html}
+  onChange={setHtml}
+  toolbar={["bold", "italic", "link", "clear"]}
+  minHeight="6rem"
+/>`;
+
+const codeMinimalVue = `<RichTextEditor
+  v-model="html"
+  :toolbar="['bold', 'italic', 'link', 'clear']"
+  min-height="6rem"
+/>`;
+
+const props = [
+  { name: "value / v-model", type: "string",                 default: "—",     description: "HTML content (controlled). React: value + onChange; Vue: v-model." },
+  { name: "onChange / @update:modelValue", type: "(html: string) => void", default: "—", description: "Called with the next HTML string on every edit." },
+  { name: "placeholder",     type: "string",                 default: '"Write something…"', description: "Shown when the editor is empty." },
+  { name: "disabled",        type: "boolean",                default: "false", description: "Not editable, dimmed; toolbar buttons disabled." },
+  { name: "readOnly",        type: "boolean",                default: "false", description: "Not editable; toolbar hidden entirely (render-only)." },
+  { name: "toolbar",         type: "RichTextTool[]",         default: "all",   description: 'Which buttons to show: "bold" | "italic" | "underline" | "strike" | "h1" | "h2" | "h3" | "ul" | "ol" | "quote" | "code" | "link" | "clear".' },
+  { name: "minHeight",       type: "string",                 default: '"10rem"', description: "CSS min-height of the editable area." },
+  { name: "className / class", type: "string",               default: "—",     description: "Additional CSS class on the root element." },
+];
 ---
 
-<DocsLayout title="Rich Text Editor">
+<DocsLayout title="Rich Text Editor" component="RichTextEditor">
   <div class="docs-header">
-    <div class="cs-title-row">
-      <h1 class="docs-title">Rich Text Editor</h1>
-      <span class="vyre-badge vyre-badge--default">Coming soon</span>
+    <div class="docs-header__meta">
+      <span class="vyre-badge vyre-badge--default">@usevyre/react</span>
+      <span class="vyre-badge vyre-badge--default">@usevyre/vue</span>
     </div>
+    <h1 class="docs-title">Rich Text Editor</h1>
     <p class="docs-lead">
-      Minimal WYSIWYG editor with a focused formatting toolbar, markdown output, and zero external stylesheet dependencies.
+      A controlled WYSIWYG editor. <code>value</code> is an HTML string — you own
+      it in state and apply the next one in <code>onChange</code>
+      (<code>v-model</code> in Vue). Built on native
+      <code>contentEditable</code> with <strong>zero dependencies</strong>; output
+      is semantic HTML with no inline styles, so it's easy to sanitise and store.
     </p>
   </div>
 
   <hr class="docs-divider" />
 
-  <div class="cs-body">
-    <h2 class="cs-section-title">What's coming</h2>
-    <ul class="cs-feature-list">
-      <li>Bold, italic, underline, strikethrough</li>
-      <li>Headings (H1–H3), blockquote, code block</li>
-      <li>Ordered and unordered lists</li>
-      <li>Link insertion with inline editor</li>
-      <li>Markdown and HTML output modes</li>
-      <li>Controlled and uncontrolled usage</li>
-      <li>Fully themed via useVyre CSS tokens — no external stylesheet</li>
-      <li>React + Vue with identical API surface</li>
-      <li>Inline AI context block for zero-hallucination agent use</li>
-    </ul>
+  <h2 class="docs-h2">Basic</h2>
+  <p class="docs-p">
+    The full toolbar: bold, italic, underline, strikethrough, headings,
+    ordered/unordered lists, quote, code block, link, and clear formatting.
+    Every keystroke calls <code>onChange</code> with the latest HTML.
+  </p>
+  <ComponentPreview react={codeReact} vue={codeVue}>
+    <RichTextEditorBasicDemo client:visible />
+  </ComponentPreview>
 
-    <div class="cs-feedback">
-      <p>Have a use case in mind? Share it on GitHub and help shape the API.</p>
-      <a
-        href="https://github.com/gapra/usevyre/discussions"
-        target="_blank"
-        rel="noopener noreferrer"
-        class="vyre-btn vyre-btn--secondary vyre-btn--sm"
-      >
-        Vote or leave feedback →
-      </a>
-    </div>
+  <h2 class="docs-h2">Custom toolbar</h2>
+  <p class="docs-p">
+    Pass <code>toolbar</code> to limit the available actions to just what you
+    need, and <code>minHeight</code> to size the editing area.
+  </p>
+  <ComponentPreview react={codeMinimalReact} vue={codeMinimalVue}>
+    <RichTextEditorMinimalDemo client:visible />
+  </ComponentPreview>
+
+  <h2 class="docs-h2">Props</h2>
+  <PropsTable props={props} />
+
+  <p class="docs-p" style="margin-top: var(--vyre-spacing-4); font-size: var(--vyre-typography-font-size-sm); color: var(--vyre-color-semantic-text-muted);">
+    <strong>Security note:</strong> <code>value</code> is raw user-authored HTML.
+    Always sanitise it (e.g. with DOMPurify) before re-rendering it elsewhere
+    with <code>dangerouslySetInnerHTML</code> / <code>v-html</code>.
+  </p>
+
+  <AICheatSheet component="RichTextEditor" />
+
+  <div class="docs-pagination">
+    <a href="/docs/components/radio" class="docs-pagination__link docs-pagination__link--prev">
+      ← Radio
+    </a>
+    <a href="/docs/components/select" class="docs-pagination__link docs-pagination__link--next">
+      Select →
+    </a>
   </div>
 </DocsLayout>
-
-<style>
-  .cs-title-row {
-    display: flex;
-    align-items: center;
-    gap: var(--vyre-spacing-3);
-    flex-wrap: wrap;
-  }
-
-  .cs-body {
-    display: flex;
-    flex-direction: column;
-    gap: var(--vyre-spacing-8);
-    margin-top: var(--vyre-spacing-6);
-  }
-
-  .cs-section-title {
-    font-size: var(--vyre-typography-font-size-lg);
-    font-weight: var(--vyre-typography-font-weight-semibold);
-    color: var(--vyre-color-semantic-text-primary);
-    margin-bottom: var(--vyre-spacing-3);
-  }
-
-  .cs-feature-list {
-    display: flex;
-    flex-direction: column;
-    gap: var(--vyre-spacing-2);
-    padding-left: var(--vyre-spacing-5);
-    color: var(--vyre-color-semantic-text-secondary);
-    font-size: var(--vyre-typography-font-size-sm);
-    line-height: 1.6;
-  }
-
-  .cs-feedback {
-    display: flex;
-    flex-direction: column;
-    gap: var(--vyre-spacing-3);
-    padding: var(--vyre-spacing-5) var(--vyre-spacing-6);
-    background: var(--vyre-color-semantic-surface);
-    border: 1px solid var(--vyre-color-semantic-border-subtle);
-    border-radius: var(--vyre-border-radius-lg);
-    font-size: var(--vyre-typography-font-size-sm);
-    color: var(--vyre-color-semantic-text-secondary);
-  }
-</style>

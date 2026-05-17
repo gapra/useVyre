@@ -9,7 +9,7 @@
  * - Button         — Interactive actions and CTAs
  * - Badge          — Status labels and indicators
  * - Card           — Content containers (+ CardHeader, CardBody, CardFooter)
- * - Field          — Form field wrapper with label and hint
+ * - Field          — Form field wrapper (props-based) + composable parts (FieldLabel, FieldDescription, FieldError, FieldGroup, FieldSet)
  * - Input          — Text input with optional icons (left/right slot)
  * - Textarea       — Multi-line text input
  * - Modal          — Dialog overlay with focus trap (+ ModalHeader, ModalBody, ModalFooter)
@@ -21,6 +21,8 @@
  * - Accordion      — Collapsible sections (+ AccordionItem, AccordionTrigger, AccordionContent)
  * - Avatar         — User avatar with fallback initials and status indicator
  * - Checkbox       — Checkbox input with indeterminate state support
+ * - RadioGroup     — Controlled single-choice group (+ Radio); options array or composable children
+ * - RichTextEditor — Controlled WYSIWYG editor (HTML v-model); toolbar bold/italic/heading/list/link; zero deps
  * - Switch         — Toggle switch (role="switch")
  * - Progress       — Progress bar with indeterminate mode
  * - Slider         — Range slider with custom visual track
@@ -41,6 +43,12 @@
  * - DataGrid       — Table with built-in column sorting, loading skeletons, empty state (v-model:sort-key/sort-dir)
  * - Tag            — Standalone display tag/chip: variant, size, removable (@remove), clickable (@click)
  * - TagGroup       — Read-only container that lays out multiple Tag elements with wrapping + gap
+ * - Item           — Layout primitive for list/settings rows (+ ItemGroup, ItemMedia, ItemContent, ItemTitle, ItemDescription, ItemActions)
+ * - Calendar       — Inline date grid; mode single/range/multiple, optional time
+ * - DatePicker     — Input trigger + popover Calendar (single/range/multiple)
+ * - DateRangePicker — Start/end date range picker with dual-month view and preset shortcuts; built on Calendar
+ * - Kanban         — Controlled board with drag-and-drop cards between columns; native HTML5 DnD, zero deps
+ * - Conversation   — Controlled chat/inbox thread: grouped bubbles, avatars, day separators, status, optional composer
  *
  * CSS must be imported separately:
  * import "@usevyre/tokens/css";           ← design tokens (required)
@@ -54,7 +62,12 @@ export { default as Card }          from "./components/Card/Card.vue";
 export { default as CardHeader }    from "./components/Card/CardHeader.vue";
 export { default as CardBody }      from "./components/Card/CardBody.vue";
 export { default as CardFooter }    from "./components/Card/CardFooter.vue";
-export { default as Field }         from "./components/Input/Field.vue";
+export { default as Field }            from "./components/Input/Field.vue";
+export { default as FieldLabel }       from "./components/Input/FieldLabel.vue";
+export { default as FieldDescription } from "./components/Input/FieldDescription.vue";
+export { default as FieldError }       from "./components/Input/FieldError.vue";
+export { default as FieldGroup }       from "./components/Input/FieldGroup.vue";
+export { default as FieldSet }         from "./components/Input/FieldSet.vue";
 export { default as Input }         from "./components/Input/Input.vue";
 export { default as Textarea }      from "./components/Input/Textarea.vue";
 export { default as Modal }         from "./components/Modal/Modal.vue";
@@ -75,6 +88,9 @@ export { default as AccordionTrigger }  from "./components/Accordion/AccordionTr
 export { default as AccordionContent }  from "./components/Accordion/AccordionContent.vue";
 export { default as Avatar }            from "./components/Avatar/Avatar.vue";
 export { default as Checkbox }          from "./components/Checkbox/Checkbox.vue";
+export { default as RadioGroup }        from "./components/Radio/RadioGroup.vue";
+export { default as Radio }             from "./components/Radio/Radio.vue";
+export { default as RichTextEditor }    from "./components/RichTextEditor/RichTextEditor.vue";
 export { default as Switch }            from "./components/Switch/Switch.vue";
 export { default as Progress }          from "./components/Progress/Progress.vue";
 export { default as Slider }            from "./components/Slider/Slider.vue";
@@ -116,6 +132,7 @@ export { default as CommandSeparator }  from "./components/Command/CommandSepara
 export { default as CommandDialog }     from "./components/Command/CommandDialog.vue";
 export { default as Calendar }          from "./components/Calendar/Calendar.vue";
 export { default as DatePicker }        from "./components/Calendar/DatePicker.vue";
+export { default as DateRangePicker }   from "./components/DateRangePicker/DateRangePicker.vue";
 export { default as Text }              from "./components/Typography/Typography.vue";
 export { default as Heading }           from "./components/Typography/Heading.vue";
 export { default as Lead }              from "./components/Typography/Lead.vue";
@@ -139,6 +156,15 @@ export { default as Combobox }      from "./components/Combobox/Combobox.vue";
 export { default as DataGrid }      from "./components/DataGrid/DataGrid.vue";
 export { default as Tag }           from "./components/Tag/Tag.vue";
 export { default as TagGroup }      from "./components/Tag/TagGroup.vue";
+export { default as Item }            from "./components/Item/Item.vue";
+export { default as ItemGroup }       from "./components/Item/ItemGroup.vue";
+export { default as ItemMedia }       from "./components/Item/ItemMedia.vue";
+export { default as ItemContent }     from "./components/Item/ItemContent.vue";
+export { default as ItemTitle }       from "./components/Item/ItemTitle.vue";
+export { default as ItemDescription } from "./components/Item/ItemDescription.vue";
+export { default as ItemActions }     from "./components/Item/ItemActions.vue";
+export { default as Kanban }          from "./components/Kanban/Kanban.vue";
+export { default as Conversation }    from "./components/Conversation/Conversation.vue";
 
 // ── Composables ───────────────────────────────────────────────
 export { useToast }                 from "./composables/useToast";

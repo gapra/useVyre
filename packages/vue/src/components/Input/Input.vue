@@ -1,13 +1,14 @@
 <script setup lang="ts">
 /**
- * @vyre/vue — Input
+ * @usevyre/vue — Input
  *
  * AI CONTEXT:
  * ┌─────────────────────────────────────────────────────────┐
  * │ Component:  Input                                       │
- * │ Import:     import { Input } from "@vyre/vue"           │
+ * │ Import:     import { Input } from "@usevyre/vue"        │
  * │                                                         │
  * │ Props:                                                  │
+ * │   modelValue   = string (v-model)                       │
  * │   size         = "sm"|"md"(default)|"lg"                │
  * │   + all native input attributes (type, placeholder...)  │
  * │                                                         │
@@ -17,7 +18,7 @@
  * └─────────────────────────────────────────────────────────┘
  *
  * @example
- * <Input type="text" placeholder="Search..." size="md" />
+ * <Input v-model="email" type="email" placeholder="you@..." />
  *
  * <Input placeholder="Search...">
  *   <template #left-element><SearchIcon /></template>
@@ -31,11 +32,16 @@ type InputSize = "sm" | "md" | "lg";
 
 const props = withDefaults(
   defineProps<{
+    modelValue?: string | number;
     size?:  InputSize;
     class?: string;
   }>(),
   { size: "md" }
 );
+
+const emit = defineEmits<{
+  "update:modelValue": [value: string];
+}>();
 
 const slots = useSlots();
 const hasLeft  = computed(() => !!slots["left-element"]);
@@ -65,10 +71,21 @@ defineOptions({ inheritAttrs: false });
     <span v-if="hasLeft" class="vyre-input__element vyre-input__element--left" aria-hidden="true">
       <slot name="left-element" />
     </span>
-    <input :class="inputClasses" v-bind="$attrs" />
+    <input
+      :class="inputClasses"
+      :value="modelValue"
+      v-bind="$attrs"
+      @input="emit('update:modelValue', ($event.target as HTMLInputElement).value)"
+    />
     <span v-if="hasRight" class="vyre-input__element vyre-input__element--right" aria-hidden="true">
       <slot name="right-element" />
     </span>
   </div>
-  <input v-else :class="inputClasses" v-bind="$attrs" />
+  <input
+    v-else
+    :class="inputClasses"
+    :value="modelValue"
+    v-bind="$attrs"
+    @input="emit('update:modelValue', ($event.target as HTMLInputElement).value)"
+  />
 </template>

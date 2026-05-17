@@ -1,0 +1,325 @@
+---
+import DocsLayout       from "@/layouts/DocsLayout.astro";
+import ComponentPreview from "@/components/docs/ComponentPreview.astro";
+import PropsTable       from "@/components/docs/PropsTable.astro";
+import AICheatSheet     from "@/components/docs/AICheatSheet.astro";
+import {
+  ConversationBasicDemo,
+  ConversationAttachmentsDemo,
+  ConversationCustomDemo,
+} from "@/components/demos/NewComponentsDemo";
+
+// Snippets below are kept 1:1 with the live previews.
+
+const codeReact = `import { useState } from "react";
+import { Conversation } from "@usevyre/react";
+import type { ConversationMessage } from "@usevyre/react";
+
+const [messages, setMessages] = useState<ConversationMessage[]>([
+  { id: "1", authorId: "sam", authorName: "Sam Rivera", text: "Hey! Did you see the API draft?" },
+  { id: "2", authorId: "me", text: "Yep — looks solid.", status: "read" },
+  { id: "3", authorId: "sam", authorName: "Sam Rivera", text: "It's fully controlled, right?" },
+  { id: "4", authorId: "me", text: "Exactly — same as Kanban. You own the array.", status: "delivered" },
+]);
+
+let nextId = 100;
+
+// onSend receives (text, files). Basic chat ignores files —
+// see the Attachments example for the full signature.
+<Conversation
+  value={messages}
+  currentUserId="me"
+  composer
+  typing="Sam is typing"
+  onSend={(text) =>
+    setMessages((m) => [
+      ...m,
+      { id: String(++nextId), authorId: "me", text, status: "sent" },
+    ])
+  }
+/>`;
+
+const codeVue = `<script setup>
+import { ref } from "vue";
+import { Conversation } from "@usevyre/vue";
+
+const messages = ref([
+  { id: "1", authorId: "sam", authorName: "Sam Rivera", text: "Hey! Did you see the API draft?" },
+  { id: "2", authorId: "me", text: "Yep — looks solid.", status: "read" },
+  { id: "3", authorId: "sam", authorName: "Sam Rivera", text: "It's fully controlled, right?" },
+  { id: "4", authorId: "me", text: "Exactly — same as Kanban. You own the array.", status: "delivered" },
+]);
+
+// @send receives (text, files). Basic chat ignores files —
+// see the Attachments example for the full signature.
+let nextId = 100;
+function onSend(text) {
+  messages.value.push({ id: String(++nextId), authorId: "me", text, status: "sent" });
+}
+</script>
+<template>
+  <Conversation
+    :value="messages"
+    current-user-id="me"
+    composer
+    typing="Sam is typing"
+    @send="onSend"
+  />
+</template>`;
+
+const codeAttachReact = `const [messages, setMessages] = useState<ConversationMessage[]>([
+  {
+    id: "1", authorId: "sam", authorName: "Sam Rivera",
+    text: "Here's the moodboard 👇",
+    attachments: [
+      { kind: "image", url: "https://picsum.photos/seed/vyre/320/200", name: "moodboard.png" },
+    ],
+  },
+  {
+    id: "2", authorId: "me", text: "Love it. Specs attached.", status: "read",
+    attachments: [
+      { kind: "file", url: "#", name: "design-spec.pdf", size: "2.4 MB" },
+    ],
+  },
+  {
+    id: "3", authorId: "sam", authorName: "Sam Rivera",
+    attachments: [
+      { kind: "audio", url: "https://www.w3schools.com/html/horse.mp3" },
+    ],
+  },
+]);
+
+<Conversation
+  value={messages}
+  currentUserId="me"
+  composer
+  allowAttachments
+  onSend={(text, files) =>
+    setMessages((m) => [
+      ...m,
+      {
+        id: String(Date.now()),
+        authorId: "me",
+        text,
+        status: "sent",
+        attachments: files.map((f) =>
+          f.type.startsWith("image/")
+            ? { kind: "image", url: URL.createObjectURL(f), name: f.name }
+            : { kind: "file", url: URL.createObjectURL(f), name: f.name }
+        ),
+      },
+    ])
+  }
+/>`;
+
+const codeAttachVue = `<script setup>
+import { ref } from "vue";
+import { Conversation } from "@usevyre/vue";
+
+const messages = ref([
+  {
+    id: "1", authorId: "sam", authorName: "Sam Rivera",
+    text: "Here's the moodboard 👇",
+    attachments: [
+      { kind: "image", url: "https://picsum.photos/seed/vyre/320/200", name: "moodboard.png" },
+    ],
+  },
+  {
+    id: "2", authorId: "me", text: "Love it. Specs attached.", status: "read",
+    attachments: [
+      { kind: "file", url: "#", name: "design-spec.pdf", size: "2.4 MB" },
+    ],
+  },
+  {
+    id: "3", authorId: "sam", authorName: "Sam Rivera",
+    attachments: [
+      { kind: "audio", url: "https://www.w3schools.com/html/horse.mp3" },
+    ],
+  },
+]);
+
+function onSend(text, files) {
+  messages.value.push({
+    id: String(Date.now()),
+    authorId: "me",
+    text,
+    status: "sent",
+    attachments: files.map((f) =>
+      f.type.startsWith("image/")
+        ? { kind: "image", url: URL.createObjectURL(f), name: f.name }
+        : { kind: "file", url: URL.createObjectURL(f), name: f.name }
+    ),
+  });
+}
+</script>
+<template>
+  <Conversation
+    :value="messages"
+    current-user-id="me"
+    composer
+    allow-attachments
+    @send="onSend"
+  />
+</template>`;
+
+const codeCustomReact = `import { useState } from "react";
+import { Conversation, Badge } from "@usevyre/react";
+import type { ConversationMessage } from "@usevyre/react";
+
+const [messages, setMessages] = useState<ConversationMessage[]>([
+  { id: "a", authorId: "bot", authorName: "Vyre Bot", text: "Pick a component to scaffold:" },
+  { id: "b", authorId: "me", text: "Kanban please", status: "read" },
+  { id: "c", authorId: "bot", authorName: "Vyre Bot", text: "Done — added Kanban.tsx + Kanban.vue." },
+]);
+
+<Conversation
+  value={messages}
+  currentUserId="me"
+  composer
+  placeholder="Ask the bot…"
+  onSend={(text) =>
+    setMessages((m) => [
+      ...m,
+      { id: String(Date.now()), authorId: "me", text, status: "sent" },
+    ])
+  }
+  renderMessage={(msg, meta) => (
+    <span>
+      {!meta.outgoing && <Badge variant="teal">bot</Badge>} {msg.text}
+    </span>
+  )}
+/>`;
+
+const codeCustomVue = `<script setup>
+import { ref } from "vue";
+import { Conversation, Badge } from "@usevyre/vue";
+
+const messages = ref([
+  { id: "a", authorId: "bot", authorName: "Vyre Bot", text: "Pick a component to scaffold:" },
+  { id: "b", authorId: "me", text: "Kanban please", status: "read" },
+  { id: "c", authorId: "bot", authorName: "Vyre Bot", text: "Done — added Kanban.tsx + Kanban.vue." },
+]);
+
+function onSend(text) {
+  messages.value.push({ id: String(Date.now()), authorId: "me", text, status: "sent" });
+}
+</script>
+<template>
+  <Conversation
+    :value="messages"
+    current-user-id="me"
+    composer
+    placeholder="Ask the bot…"
+    @send="onSend"
+  >
+    <template #message="{ message, meta }">
+      <span>
+        <Badge v-if="!meta.outgoing" variant="teal">bot</Badge>
+        {{ message.text }}
+      </span>
+    </template>
+  </Conversation>
+</template>`;
+
+const props = [
+  { name: "value",                       type: "ConversationMessage[]",                  default: "—",     description: "Ordered messages. ConversationMessage = id, authorId, text?, authorName?, authorAvatar?, timestamp?, status?, attachments?. Required & controlled." },
+  { name: "currentUserId",               type: "string",                                 default: "—",     description: "Whose messages are outgoing (aligned right). Matched against message.authorId. Required." },
+  { name: "composer",                    type: "boolean",                                default: "false", description: "Show the built-in input + Send button. Pair with onSend / @send." },
+  { name: "onSend / @send",              type: "(text: string, files: File[]) => void",  default: "—",     description: "Called when the composer submits. files holds anything staged via the attach button (empty when allowAttachments is off). You own the upload." },
+  { name: "placeholder",                 type: "string",                                 default: '"Write a message…"', description: "Composer input placeholder." },
+  { name: "typing",                      type: "boolean | string",                       default: "false", description: "Show an incoming typing indicator. Pass a string to label it." },
+  { name: "allowAttachments",            type: "boolean",                                default: "false", description: "Show a 📎 attach button + staged-file chips in the built-in composer." },
+  { name: "accept",                      type: "string",                                 default: "—",     description: "Forwarded to the file input's accept attribute (e.g. \"image/*\")." },
+  { name: "renderMessage / #message",    type: "(message, meta) => ReactNode",           default: "—",     description: "Custom bubble body. meta = { outgoing, isGroupStart, isGroupEnd }. Vue: #message scoped slot." },
+  { name: "renderComposer / #composer",  type: "(api) => ReactNode",                     default: "—",     description: "Replace the composer entirely. api = { value, setValue, send }. Vue: #composer scoped slot." },
+  { name: "className / class",           type: "string",                                 default: "—",     description: "Additional CSS class on the root element." },
+];
+
+const attachmentProps = [
+  { name: "kind", type: '"image" | "audio" | "video" | "file"', default: "—", description: "Renders an image preview, an audio/video player, or a download chip for files." },
+  { name: "url",  type: "string",                                default: "—", description: "Media source (image/audio/video) or download href (file)." },
+  { name: "name", type: "string",                                default: "—", description: "Image alt text / file display name." },
+  { name: "size", type: "string",                                default: "—", description: "Optional human-readable file size, e.g. \"2.4 MB\" (file kind)." },
+];
+---
+
+<DocsLayout title="Conversation" component="Conversation">
+  <div class="docs-header">
+    <div class="docs-header__meta">
+      <span class="vyre-badge vyre-badge--default">@usevyre/react</span>
+      <span class="vyre-badge vyre-badge--default">@usevyre/vue</span>
+    </div>
+    <h1 class="docs-title">Conversation</h1>
+    <p class="docs-lead">
+      A chat / inbox message thread. Like
+      <a href="/docs/components/kanban"><code>Kanban</code></a>, it is fully
+      <strong>controlled and data-driven</strong> — you own the messages array and
+      append in your own send handler. Consecutive messages from the same author are
+      grouped (avatar &amp; name shown once), day separators are inserted on date
+      change, and your own messages (<code>authorId === currentUserId</code>) align
+      to the right.
+    </p>
+  </div>
+
+  <hr class="docs-divider" />
+
+  <h2 class="docs-h2">Basic</h2>
+  <p class="docs-p">
+    Pass a controlled <code>value</code> array and the <code>currentUserId</code> that
+    decides which messages are outgoing (rendered on the right). Enable the built-in
+    <code>composer</code> and append to your own state in <code>onSend</code>
+    (<code>@send</code> in Vue). Each message may carry a delivery
+    <code>status</code> (<code>sending</code> / <code>sent</code> /
+    <code>delivered</code> / <code>read</code>).
+  </p>
+  <ComponentPreview react={codeReact} vue={codeVue}>
+    <ConversationBasicDemo client:visible />
+  </ComponentPreview>
+
+  <h2 class="docs-h2">Custom bubbles</h2>
+  <p class="docs-p">
+    Use <code>renderMessage</code> (React render prop) or the <code>#message</code>
+    scoped slot (Vue) to render any content inside a bubble — badges, rich text,
+    custom layouts. The <code>meta</code> argument tells you whether the message is
+    outgoing and where it sits in its author group.
+  </p>
+  <ComponentPreview react={codeCustomReact} vue={codeCustomVue}>
+    <ConversationCustomDemo client:visible />
+  </ComponentPreview>
+
+  <h2 class="docs-h2">Attachments</h2>
+  <p class="docs-p">
+    Add an <code>attachments</code> array to any message. Each attachment has a
+    <code>kind</code> of <code>image</code>, <code>audio</code>, <code>video</code>,
+    or <code>file</code> — rendered inside the bubble as an image preview, a native
+    audio/video player, or a download chip (with optional <code>size</code>).
+  </p>
+  <p class="docs-p">
+    To let users <strong>attach files from the composer</strong>, set
+    <code>allowAttachments</code> — a 📎 button and staged-file chips appear, and
+    <code>onSend</code> (<code>@send</code> in Vue) is called with
+    <code>(text, files)</code> where <code>files</code> is a <code>File[]</code>.
+    You own the upload and turning each <code>File</code> into a message
+    <code>attachment</code> (use <code>accept</code> to restrict file types).
+  </p>
+  <ComponentPreview react={codeAttachReact} vue={codeAttachVue}>
+    <ConversationAttachmentsDemo client:visible />
+  </ComponentPreview>
+
+  <h2 class="docs-h2">Props</h2>
+  <PropsTable props={props} />
+
+  <h2 class="docs-h2">ConversationAttachment</h2>
+  <PropsTable props={attachmentProps} />
+
+  <AICheatSheet component="Conversation" />
+
+  <div class="docs-pagination">
+    <a href="/docs/components/command" class="docs-pagination__link docs-pagination__link--prev">
+      ← Command
+    </a>
+    <a href="/docs/components/data-grid" class="docs-pagination__link docs-pagination__link--next">
+      Data Grid →
+    </a>
+  </div>
+</DocsLayout>

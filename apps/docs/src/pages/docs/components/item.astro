@@ -1,88 +1,153 @@
 ---
-import DocsLayout from "@/layouts/DocsLayout.astro";
+import DocsLayout       from "@/layouts/DocsLayout.astro";
+import ComponentPreview from "@/components/docs/ComponentPreview.astro";
+import PropsTable       from "@/components/docs/PropsTable.astro";
+import AICheatSheet     from "@/components/docs/AICheatSheet.astro";
+import { ItemBasicDemo, ItemGroupDemo, ItemVariantsDemo } from "@/components/demos/NewComponentsDemo";
+
+const codeBasicReact = `import { Item, ItemMedia, ItemContent, ItemTitle, ItemDescription, ItemActions, Switch } from "@usevyre/react";
+
+<Item>
+  <ItemMedia><GearIcon /></ItemMedia>
+  <ItemContent>
+    <ItemTitle>Notifications</ItemTitle>
+    <ItemDescription>Receive an email when someone mentions you.</ItemDescription>
+  </ItemContent>
+  <ItemActions>
+    <Switch defaultChecked />
+  </ItemActions>
+</Item>`;
+
+const codeBasicVue = `<script setup>
+import { Item, ItemMedia, ItemContent, ItemTitle, ItemDescription, ItemActions, Switch } from "@usevyre/vue";
+</script>
+<template>
+  <Item>
+    <ItemMedia><GearIcon /></ItemMedia>
+    <ItemContent>
+      <ItemTitle>Notifications</ItemTitle>
+      <ItemDescription>Receive an email when someone mentions you.</ItemDescription>
+    </ItemContent>
+    <ItemActions>
+      <Switch :model-value="true" />
+    </ItemActions>
+  </Item>
+</template>`;
+
+const codeGroupReact = `import { ItemGroup, Item, ItemMedia, ItemContent, ItemTitle, ItemDescription, ItemActions, Avatar, Tag } from "@usevyre/react";
+
+<ItemGroup separated>
+  {members.map((m) => (
+    <Item key={m.email} clickable>
+      <ItemMedia><Avatar fallback={m.initials} size="sm" /></ItemMedia>
+      <ItemContent>
+        <ItemTitle>{m.name}</ItemTitle>
+        <ItemDescription>{m.email}</ItemDescription>
+      </ItemContent>
+      <ItemActions><Tag>{m.role}</Tag></ItemActions>
+    </Item>
+  ))}
+</ItemGroup>`;
+
+const codeGroupVue = `<ItemGroup separated>
+  <Item v-for="m in members" :key="m.email" clickable>
+    <ItemMedia><Avatar :fallback="m.initials" size="sm" /></ItemMedia>
+    <ItemContent>
+      <ItemTitle>{{ m.name }}</ItemTitle>
+      <ItemDescription>{{ m.email }}</ItemDescription>
+    </ItemContent>
+    <ItemActions><Tag>{{ m.role }}</Tag></ItemActions>
+  </Item>
+</ItemGroup>`;
+
+const codeVariantsReact = `<Item variant="default">…</Item>
+<Item variant="outlined">…</Item>
+<Item variant="muted">…</Item>
+<Item variant="plain">…</Item>   {/* transparent — compose inside Card etc. */}`;
+
+const codeVariantsVue = `<Item variant="default">…</Item>
+<Item variant="outlined">…</Item>
+<Item variant="muted">…</Item>
+<Item variant="plain">…</Item>   <!-- transparent — compose inside Card etc. -->`;
+
+const itemProps = [
+  { name: "variant",   type: `"default" | "outlined" | "muted" | "plain"`, default: `"default"`, description: "Visual style of the row. plain = transparent + no border — use when composing Item inside another surface (Card, Kanban card) to avoid a double background." },
+  { name: "size",      type: `"sm" | "md" | "lg"`,               default: `"md"`,       description: "Vertical density and text size of the row." },
+  { name: "clickable", type: "boolean",                          default: "false",      description: "Adds pointer cursor, hover background, focus ring, and role=\"button\"." },
+  { name: "className", type: "string",                           default: "—",          description: "Additional CSS class." },
+];
+
+const groupProps = [
+  { name: "separated", type: "boolean", default: "false", description: "Adds dividers between items and rounds the outer corners — turns loose rows into a bordered list." },
+  { name: "className", type: "string",  default: "—",     description: "Additional CSS class." },
+];
 ---
 
-<DocsLayout title="Item">
+<DocsLayout title="Item" component="Item">
   <div class="docs-header">
-    <div class="cs-title-row">
-      <h1 class="docs-title">Item</h1>
-      <span class="vyre-badge vyre-badge--default">Coming soon</span>
+    <div class="docs-header__meta">
+      <span class="vyre-badge vyre-badge--default">@usevyre/react</span>
+      <span class="vyre-badge vyre-badge--default">@usevyre/vue</span>
     </div>
+    <h1 class="docs-title">Item</h1>
     <p class="docs-lead">
-      Flexible list-row primitive for menus, feeds, settings lists, and any layout that needs a consistent row structure.
+      A composable layout primitive for list rows, settings rows, and notification rows.
+      Denser than <code>Card</code> — reach for <code>Item</code> whenever you render a
+      repeated row with a leading media slot, a title/description column, and trailing actions.
     </p>
   </div>
 
   <hr class="docs-divider" />
 
-  <div class="cs-body">
-    <h2 class="cs-section-title">What's coming</h2>
-    <ul class="cs-feature-list">
-      <li>Leading icon or avatar slot</li>
-      <li>Title + description two-line layout</li>
-      <li>Trailing action slot (badge, button, or chevron)</li>
-      <li>Clickable variant with hover and active states</li>
-      <li>Compact and default size variants</li>
-      <li>Composable with Separator for grouped lists</li>
-      <li>React + Vue with identical API surface</li>
-      <li>Inline AI context block for zero-hallucination agent use</li>
-    </ul>
+  <h2 class="docs-h2">Basic</h2>
+  <p class="docs-p">
+    Compose a row from <code>ItemMedia</code> (icon / avatar), <code>ItemContent</code>
+    (with <code>ItemTitle</code> and <code>ItemDescription</code>), and
+    <code>ItemActions</code> (pinned to the right via <code>margin-left: auto</code>).
+    Every slot is optional except <code>ItemContent</code>.
+  </p>
+  <ComponentPreview react={codeBasicReact} vue={codeBasicVue}>
+    <ItemBasicDemo client:visible />
+  </ComponentPreview>
 
-    <div class="cs-feedback">
-      <p>Have a use case in mind? Share it on GitHub and help shape the API.</p>
-      <a
-        href="https://github.com/gapra/usevyre/discussions"
-        target="_blank"
-        rel="noopener noreferrer"
-        class="vyre-btn vyre-btn--secondary vyre-btn--sm"
-      >
-        Vote or leave feedback →
-      </a>
-    </div>
+  <h2 class="docs-h2">Grouped list</h2>
+  <p class="docs-p">
+    Wrap rows in <code>ItemGroup</code> with <code>separated</code> to render a bordered
+    list with dividers between rows. Add <code>clickable</code> to each
+    <code>Item</code> for keyboard-focusable, hoverable rows (<code>role="button"</code>).
+  </p>
+  <ComponentPreview react={codeGroupReact} vue={codeGroupVue}>
+    <ItemGroupDemo client:visible />
+  </ComponentPreview>
+
+  <h2 class="docs-h2">Variants</h2>
+  <p class="docs-p">
+    <code>default</code> sits on the surface, <code>outlined</code> adds a subtle border,
+    <code>muted</code> uses a raised background to de-emphasise the row, and
+    <code>plain</code> is transparent with no border — use it when composing
+    <code>Item</code> inside another surface (a <a href="/docs/components/card"><code>Card</code></a>,
+    a <a href="/docs/components/kanban"><code>Kanban</code></a> card, a list) so you
+    don't get a double background.
+  </p>
+  <ComponentPreview react={codeVariantsReact} vue={codeVariantsVue}>
+    <ItemVariantsDemo client:visible />
+  </ComponentPreview>
+
+  <h2 class="docs-h2">Item props</h2>
+  <PropsTable props={itemProps} />
+
+  <h2 class="docs-h2">ItemGroup props</h2>
+  <PropsTable props={groupProps} />
+
+  <!-- AI Cheat Sheet -->
+  <AICheatSheet component="Item" />
+
+  <div class="docs-pagination">
+    <a href="/docs/components/input" class="docs-pagination__link docs-pagination__link--prev">
+      ← Input
+    </a>
+    <a href="/docs/components/label" class="docs-pagination__link docs-pagination__link--next">
+      Label →
+    </a>
   </div>
 </DocsLayout>
-
-<style>
-  .cs-title-row {
-    display: flex;
-    align-items: center;
-    gap: var(--vyre-spacing-3);
-    flex-wrap: wrap;
-  }
-
-  .cs-body {
-    display: flex;
-    flex-direction: column;
-    gap: var(--vyre-spacing-8);
-    margin-top: var(--vyre-spacing-6);
-  }
-
-  .cs-section-title {
-    font-size: var(--vyre-typography-font-size-lg);
-    font-weight: var(--vyre-typography-font-weight-semibold);
-    color: var(--vyre-color-semantic-text-primary);
-    margin-bottom: var(--vyre-spacing-3);
-  }
-
-  .cs-feature-list {
-    display: flex;
-    flex-direction: column;
-    gap: var(--vyre-spacing-2);
-    padding-left: var(--vyre-spacing-5);
-    color: var(--vyre-color-semantic-text-secondary);
-    font-size: var(--vyre-typography-font-size-sm);
-    line-height: 1.6;
-  }
-
-  .cs-feedback {
-    display: flex;
-    flex-direction: column;
-    gap: var(--vyre-spacing-3);
-    padding: var(--vyre-spacing-5) var(--vyre-spacing-6);
-    background: var(--vyre-color-semantic-surface);
-    border: 1px solid var(--vyre-color-semantic-border-subtle);
-    border-radius: var(--vyre-border-radius-lg);
-    font-size: var(--vyre-typography-font-size-sm);
-    color: var(--vyre-color-semantic-text-secondary);
-  }
-</style>

@@ -30,6 +30,7 @@ const props = withDefaults(defineProps<{
   disabled?: (date: Date) => boolean;
   class?: string;
   weekStartsOn?: 0 | 1;
+  defaultMonth?: Date;
 }>(), {
   mode: "single",
   showTime: false,
@@ -65,10 +66,10 @@ const YEARS_RANGE = 12;
 const today = startOfDay(new Date());
 
 function getInitialDate(): Date {
-  if (!props.modelValue) return today;
-  if (props.mode === "range") return (props.modelValue as [Date|null,Date|null])[0] ?? today;
-  if (props.mode === "multiple") return (props.modelValue as Date[])[0] ?? today;
-  return (props.modelValue as Date) ?? today;
+  if (!props.modelValue) return props.defaultMonth ?? today;
+  if (props.mode === "range") return (props.modelValue as [Date|null,Date|null])[0] ?? props.defaultMonth ?? today;
+  if (props.mode === "multiple") return (props.modelValue as Date[])[0] ?? props.defaultMonth ?? today;
+  return (props.modelValue as Date) ?? props.defaultMonth ?? today;
 }
 
 const viewYear = ref(getInitialDate().getFullYear());

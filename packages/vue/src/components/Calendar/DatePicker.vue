@@ -1,15 +1,22 @@
 <script setup lang="ts">
 /**
- * @vyre/vue — DatePicker
+ * @usevyre/vue — DatePicker
  *
  * AI CONTEXT:
  * ┌─────────────────────────────────────────────────────────────┐
- * │ Component:  DatePicker                                      │
- * │ = all Calendar props +                                      │
- * │ placeholder = string                                        │
- * │ inputClass  = string                                        │
+ * │ Component:  DatePicker (input trigger + popover Calendar)   │
+ * │ Import:     import { DatePicker } from "@usevyre/vue"       │
  * │                                                             │
+ * │ = all Calendar props +                                       │
+ * │   placeholder = string (default "Pick a date")              │
+ * │   inputClass  = string                                       │
+ * │                                                             │
+ * │ mode = "single"(default) | "range" | "multiple"             │
+ * │ modelValue = Date | [Date,Date] | Date[] (matches mode)     │
  * │ Events: @update:modelValue                                  │
+ * │                                                             │
+ * │ For an always-visible inline grid, use Calendar.            │
+ * │ For start/end ranges with presets, use DateRangePicker.     │
  * └─────────────────────────────────────────────────────────────┘
  *
  * @example

@@ -305,7 +305,7 @@ import { Button } from "@usevyre/react"
 
 ### Calendar
 
-Date picker calendar widget for selecting single dates or ranges.
+Inline date-grid widget (always visible, no input). mode: single | range | multiple, optional time picker. For an input + popover use DatePicker; for start/end ranges with presets use DateRangePicker.
 
 ```tsx
 import { Calendar } from "@usevyre/react"
@@ -314,6 +314,7 @@ import { Calendar } from "@usevyre/react"
 // value          = Date | null
 // onChange       = function
 // disabled       = boolean (default: false)
+// defaultMonth   = Date
 
 // Examples:
 const [date, setDate] = useState(null);
@@ -321,7 +322,39 @@ const [date, setDate] = useState(null);
 ```
 
 **Common mistakes:**
-- ❌ `Using Calendar for time selection` → Combine with a separate time Input if time selection is needed
+- ❌ `Calendar for an input field that opens a popover` → Use <DatePicker /> (single date) or <DateRangePicker /> (range)
+- ❌ `value as tuple for mode="single"` → Pass value matching mode; use mode="range" for [start,end]
+
+---
+
+### DatePicker
+
+Input trigger that opens a Calendar in a popover. Same modes as Calendar (single | range | multiple) plus a placeholder. Use this for a compact date field; use Calendar for an always-visible grid, or DateRangePicker for start/end ranges with presets.
+
+```tsx
+import { DatePicker } from "@usevyre/react"
+
+// Props:
+// value          = Date | [Date, Date] | Date[] | null
+// onChange       = function
+// mode           = "single" | "range" | "multiple" (default: single)
+// placeholder    = string (default: Pick a date)
+// showTime       = boolean (default: false)
+// minDate        = Date
+// maxDate        = Date
+// disabled       = function
+// weekStartsOn   = "0" | "1" (default: 1)
+// inputClassName = string
+
+// Examples:
+const [date, setDate] = useState(null);
+<DatePicker value={date} onChange={setDate} placeholder="Pick a date" />
+<DatePicker value={date} onChange={setDate} showTime />
+```
+
+**Common mistakes:**
+- ❌ `DatePicker mode="range" for { from, to } object` → Use <DateRangePicker /> for the { from, to } object API + presets + dual month
+- ❌ `DatePicker without value/onChange` → Provide value and onChange (e.g. from useState)
 
 ---
 
@@ -381,6 +414,78 @@ import { Checkbox } from "@usevyre/react"
 
 ---
 
+### RadioGroup
+
+Controlled single-choice group. RadioGroup owns the selected value; render it data-driven via the options array OR with composable <Radio> children for custom content. role=radiogroup with proper labelling. For multi-select use Checkbox; for a compact dropdown use Select.
+
+```tsx
+import { RadioGroup, Radio } from "@usevyre/react"
+
+// Props:
+// value          = string
+// defaultValue   = string
+// onChange       = function
+// name           = string
+// disabled       = boolean (default: false)
+// size           = "sm" | "md" (default: md)
+// orientation    = "vertical" | "horizontal" (default: vertical)
+// options        = { value: string; label?: string; description?: string; disabled?: boolean }[]
+
+// Examples:
+<RadioGroup
+  value={plan}
+  onChange={setPlan}
+  options={[
+    { value: "free", label: "Free", description: "For hobby projects" },
+    { value: "pro",  label: "Pro",  description: "For teams" },
+  ]}
+/>
+<RadioGroup value={plan} onChange={setPlan} orientation="horizontal">
+  <Radio value="free" label="Free" />
+  <Radio value="pro"  label="Pro" />
+</RadioGroup>
+```
+
+**Common mistakes:**
+- ❌ `<Radio> used outside a <RadioGroup>` → Always wrap <Radio> in <RadioGroup>
+- ❌ `RadioGroup without value/onChange (React) or v-model (Vue)` → Bind value + onChange (React) or v-model (Vue); or defaultValue for uncontrolled in React
+- ❌ `Using Checkbox for mutually-exclusive choices` → Use RadioGroup + Radio (or options) for one-of-many
+
+---
+
+### RichTextEditor
+
+Controlled WYSIWYG editor. value is an HTML string; you own it in state and set it in onChange (React) / v-model (Vue). Native contentEditable + execCommand — zero dependencies. Toolbar: bold, italic, underline, strike, h1-h3, ordered/unordered lists, quote, code block, link, clear formatting.
+
+```tsx
+import { RichTextEditor } from "@usevyre/react"
+
+// Props:
+// value          = string
+// onChange       = function
+// placeholder    = string (default: Write something…)
+// disabled       = boolean (default: false)
+// readOnly       = boolean (default: false)
+// toolbar        = RichTextTool[]
+// minHeight      = string (default: 10rem)
+
+// Examples:
+const [html, setHtml] = useState("<p>Hello <strong>world</strong></p>");
+<RichTextEditor value={html} onChange={setHtml} placeholder="Write…" />
+<RichTextEditor
+  value={html}
+  onChange={setHtml}
+  toolbar={["bold", "italic", "link"]}
+/>
+```
+
+**Common mistakes:**
+- ❌ `RichTextEditor without value/onChange (React) or v-model (Vue)` → Keep the HTML string in state and update it in onChange / v-model
+- ❌ `Rendering value as text or with dangerouslySetInnerHTML elsewhere without sanitising` → Sanitise (e.g. DOMPurify) before re-rendering untrusted RTE output
+- ❌ `toolbar="bold" (string)` → Pass an array, e.g. toolbar={["bold","italic","link"]}
+
+---
+
 ### Command
 
 Command palette / search dialog. Use for search-first navigation or quick actions.
@@ -432,7 +537,7 @@ import { DropdownMenu, DropdownItem, DropdownSeparator, DropdownCheckboxItem, Dr
 
 ### Field
 
-Form field wrapper providing label, hint text, and validation state for Input or Textarea.
+Form field wrapper. Two ways to use it (both supported): (1) props-based — pass label/hint/state/required for the common case; (2) composable — use the parts FieldLabel, FieldDescription, FieldError, FieldGroup, FieldSet for richer layouts (multiple controls, custom error placement). The props-based API is unchanged and still works.
 
 ```tsx
 import { Field, Input, Textarea } from "@usevyre/react"
@@ -450,10 +555,23 @@ import { Field, Input, Textarea } from "@usevyre/react"
 <Field label="Search">
   <Input leftElement={<SearchIcon />} placeholder="Search..." />
 </Field>
+<Field>
+  <FieldLabel required htmlFor="email">Email</FieldLabel>
+  <Input id="email" type="email" />
+  <FieldDescription>We\u2019ll never share it.</FieldDescription>
+  <FieldError>{errors.email}</FieldError>
+</Field>
+
+// Two controls side by side
+<FieldGroup orientation="horizontal">
+  <Field label="First name"><Input /></Field>
+  <Field label="Last name"><Input /></Field>
+</FieldGroup>
 ```
 
 **Common mistakes:**
 - ❌ `Applying state prop directly to Input` → Wrap Input in <Field state="error"> to apply validation styling
+- ❌ `Mixing props label/hint AND FieldLabel/FieldError for the same field` → Pick one: either props-based (label/hint/state) OR composable parts
 
 ---
 
@@ -465,6 +583,7 @@ Text input field. Wrap in Field for labels and validation. Use leftElement/right
 import { Input } from "@usevyre/react"
 
 // Props:
+// modelValue     = string | number
 // size           = "sm" | "md" | "lg" (default: md)
 // leftElement    = ReactNode
 // rightElement   = ReactNode
@@ -476,6 +595,7 @@ import { Input } from "@usevyre/react"
 **Common mistakes:**
 - ❌ `size="icon"` → Use size="sm" | "md" | "lg"
 - ❌ `type="search" for search UI` → Import Command from @usevyre/react for search palettes
+- ❌ `Vue: binding Input/Textarea value without v-model` → Use v-model on <Input>/<Textarea> in Vue; in React use value + onChange
 
 ---
 
@@ -1063,6 +1183,180 @@ import { TagGroup, Tag } from "@usevyre/react"
 
 ---
 
+### Item
+
+Layout primitive for list rows, settings rows, and notification rows. Denser than Card — use Item (not Card) for repeated list rows.
+
+```tsx
+import { Item, ItemMedia, ItemContent, ItemTitle, ItemDescription, ItemActions, ItemGroup } from "@usevyre/react"
+
+// Props:
+// variant        = "default" | "outlined" | "muted" | "plain" (default: default)
+// size           = "sm" | "md" | "lg" (default: md)
+// clickable      = boolean (default: false)
+
+// Examples:
+<Item>
+  <ItemMedia><BellIcon /></ItemMedia>
+  <ItemContent>
+    <ItemTitle>Notifications</ItemTitle>
+    <ItemDescription>Receive an email when someone mentions you.</ItemDescription>
+  </ItemContent>
+  <ItemActions>
+    <Switch defaultChecked />
+  </ItemActions>
+</Item>
+<ItemGroup separated>
+  <Item clickable>
+    <ItemContent><ItemTitle>Profile</ItemTitle></ItemContent>
+  </Item>
+  <Item clickable>
+    <ItemContent><ItemTitle>Billing</ItemTitle></ItemContent>
+  </Item>
+</ItemGroup>
+```
+
+**Common mistakes:**
+- ❌ `Card used for repeated list rows` → Use <Item> (optionally inside <ItemGroup separated>) for list/settings rows
+- ❌ `Item variant="primary"` → Use variant="default" | "outlined" | "muted"
+- ❌ `raw text directly inside Item` → Wrap text in <ItemContent><ItemTitle>…</ItemTitle></ItemContent>
+
+---
+
+### Kanban
+
+Drag-and-drop board: cards move between columns (or reorder within a column). CONTROLLED & data-driven like DataGrid. While dragging, a placeholder shows the exact drop position. Each card is wrapped in a Card (variant="outlined"); renderCard (React) / #card slot (Vue) can render ANY content incl. complex components (Avatar/Badge/Progress). Columns and cards accept an optional semantic color tint. Native HTML5 DnD, zero deps.
+
+```tsx
+import { Kanban } from "@usevyre/react"
+
+// Props:
+// value          = KanbanColumn[]
+// onChange       = function
+// renderCard     = function
+// onCardClick    = function
+
+// Examples:
+const [columns, setColumns] = useState([
+  { id: "todo",  title: "To Do",       cards: [{ id: "1", title: "Spec API" }] },
+  { id: "doing", title: "In Progress", cards: [] },
+  { id: "done",  title: "Done",        cards: [{ id: "2", title: "Kickoff" }] },
+]);
+<Kanban value={columns} onChange={setColumns} />
+<Kanban
+  value={columns}
+  onChange={setColumns}
+  onCardClick={(card) => openDetail(card.id)}
+  renderCard={(card) => (
+    <><strong>{card.title}</strong><Badge>{card.id}</Badge></>
+  )}
+/>
+const [cols, setCols] = useState([
+  { id: "doing", title: "In Progress", color: "teal", cards: [
+    { id: "t1", title: "OAuth", assignee: "AK", progress: 60, color: "warning" },
+  ]},
+]);
+<Kanban
+  value={cols}
+  onChange={setCols}
+  renderCard={(card) => (
+    <><strong>{card.title}</strong><Progress value={card.progress} /></>
+  )}
+/>
+```
+
+**Common mistakes:**
+- ❌ `Kanban without onChange (or ignoring it)` → Store columns in state and setColumns in onChange (v-model in Vue)
+- ❌ `Duplicate card ids across columns` → Use globally-unique card ids across the entire board
+- ❌ `Mutating value in place then calling onChange` → Pass the new array Kanban gives you straight to setState / v-model
+- ❌ `color="blue" (or any non-semantic value)` → Use one of: "default" | "accent" | "teal" | "success" | "warning" | "danger"
+
+---
+
+### Conversation
+
+Chat / inbox message thread. CONTROLLED & data-driven like Kanban — you own `value` (messages array) and append in your own send handler; Conversation holds no message state. Consecutive messages from the same author are grouped (avatar + name shown once), day separators are inserted on date change, and outgoing messages (authorId === currentUserId) align right.
+
+```tsx
+import { Conversation } from "@usevyre/react"
+
+// Props:
+// value          = ConversationMessage[]
+// currentUserId  = string
+// composer       = boolean (default: false)
+// onSend         = function
+// placeholder    = string (default: Write a message…)
+// typing         = boolean | string (default: false)
+// allowAttachments = boolean (default: false)
+// accept         = string
+// renderMessage  = function
+// renderComposer = function
+
+// Examples:
+const [messages, setMessages] = useState([
+  { id: "1", authorId: "sam", authorName: "Sam", text: "Hey!" },
+  { id: "2", authorId: "me", text: "Hi \ud83d\udc4b", status: "read" },
+]);
+<Conversation
+  value={messages}
+  currentUserId="me"
+  composer
+  onSend={(t) => setMessages((m) => [...m, { id: crypto.randomUUID(), authorId: "me", text: t }])}
+/>
+<Conversation
+  value={messages}
+  currentUserId="me"
+  typing="Sam is typing"
+  renderMessage={(m) => <strong>{m.text}</strong>}
+/>
+const messages = [
+  { id: "1", authorId: "sam", authorName: "Sam", text: "Moodboard \ud83d\udc47",
+    attachments: [{ kind: "image", url: "/board.png", name: "board.png" }] },
+  { id: "2", authorId: "me", text: "Specs:", status: "read",
+    attachments: [{ kind: "file", url: "/spec.pdf", name: "spec.pdf", size: "2.4 MB" }] },
+];
+<Conversation value={messages} currentUserId="me" />
+```
+
+**Common mistakes:**
+- ❌ `Conversation without currentUserId` → Always pass currentUserId matching one of the message authorId values
+- ❌ `Expecting Conversation to store/append messages` → Append to your own state in onSend (or @send) and pass it back via value
+- ❌ `composer without onSend (React) / @send (Vue)` → Provide onSend / @send to append the message to value
+- ❌ `Treating onSend as (text) only when using allowAttachments` → Handle onSend(text, files) — map files to message attachments and append
+
+---
+
+### DateRangePicker
+
+Start/end date range picker. Built on Calendar (mode=range) with a friendlier { from, to } object API, a two-month side-by-side view, and preset shortcuts. Use this for report/filter date ranges; use DatePicker for a single date.
+
+```tsx
+import { DateRangePicker } from "@usevyre/react"
+
+// Props:
+// value          = { from: Date | null; to: Date | null } | null
+// onChange       = function
+// placeholder    = string (default: Pick a date range)
+// numberOfMonths = "1" | "2" (default: 2)
+// presets        = boolean | DateRangePreset[] (default: false)
+// minDate        = Date
+// maxDate        = Date
+// disabled       = function
+// weekStartsOn   = "0" | "1" (default: 1)
+
+// Examples:
+const [range, setRange] = useState({ from: null, to: null });
+<DateRangePicker value={range} onChange={setRange} presets />
+<DateRangePicker value={range} onChange={setRange} numberOfMonths={1} />
+```
+
+**Common mistakes:**
+- ❌ `value={[from, to]}` → Use value={{ from, to }} and read range.from / range.to
+- ❌ `DateRangePicker for a single date` → Use <DatePicker /> for a single date
+- ❌ `presets="true" (string)` → Use the bare prop: presets  (or presets={true})
+
+---
+
 ## Hallucination Guard — Common AI Mistakes
 
 The following prop values and patterns do NOT exist in useVyre.
@@ -1082,14 +1376,25 @@ If you generate these, you are hallucinating.
 - ❌ `<Button color="...">` → Use variant prop instead
 - ❌ `<Button icon={...}>` → Use leftIcon={...} or rightIcon={...}
 - ❌ `<Button size="icon" without aria-label>` → Add aria-label describing the action
-- ❌ `<Calendar Using Calendar for time selection>` → Combine with a separate time Input if time selection is needed
+- ❌ `<Calendar Calendar for an input field that opens a popover>` → Use <DatePicker /> (single date) or <DateRangePicker /> (range)
+- ❌ `<Calendar value as tuple for mode="single">` → Pass value matching mode; use mode="range" for [start,end]
+- ❌ `<DatePicker DatePicker mode="range" for { from, to } object>` → Use <DateRangePicker /> for the { from, to } object API + presets + dual month
+- ❌ `<DatePicker DatePicker without value/onChange>` → Provide value and onChange (e.g. from useState)
 - ❌ `<Card variant="primary">` → Use variant="elevated" | "outlined" | "ghost" | "accent"
 - ❌ `<Checkbox size="lg">` → Use size="md"
+- ❌ `<RadioGroup <Radio> used outside a <RadioGroup>>` → Always wrap <Radio> in <RadioGroup>
+- ❌ `<RadioGroup RadioGroup without value/onChange (React) or v-model (Vue)>` → Bind value + onChange (React) or v-model (Vue); or defaultValue for uncontrolled in React
+- ❌ `<RadioGroup Using Checkbox for mutually-exclusive choices>` → Use RadioGroup + Radio (or options) for one-of-many
+- ❌ `<RichTextEditor RichTextEditor without value/onChange (React) or v-model (Vue)>` → Keep the HTML string in state and update it in onChange / v-model
+- ❌ `<RichTextEditor Rendering value as text or with dangerouslySetInnerHTML elsewhere without sanitising>` → Sanitise (e.g. DOMPurify) before re-rendering untrusted RTE output
+- ❌ `<RichTextEditor toolbar="bold" (string)>` → Pass an array, e.g. toolbar={["bold","italic","link"]}
 - ❌ `<Command Using Input type="search" for search UI>` → Use Command + CommandInput + CommandList + CommandItem
 - ❌ `<DropdownMenu DropdownItem variant="primary">` → Use variant="danger" for destructive items only
 - ❌ `<Field Applying state prop directly to Input>` → Wrap Input in <Field state="error"> to apply validation styling
+- ❌ `<Field Mixing props label/hint AND FieldLabel/FieldError for the same field>` → Pick one: either props-based (label/hint/state) OR composable parts
 - ❌ `<Input size="icon">` → Use size="sm" | "md" | "lg"
 - ❌ `<Input type="search" for search UI>` → Import Command from @usevyre/react for search palettes
+- ❌ `<Input Vue: binding Input/Textarea value without v-model>` → Use v-model on <Input>/<Textarea> in Vue; in React use value + onChange
 - ❌ `<Modal size="xl">` → Use size="lg" or size="full"
 - ❌ `<Popover placement="top-center">` → Use placement="top" for centered placement
 - ❌ `<Progress value > 100>` → Normalize your value to 0–100 range before passing
@@ -1114,6 +1419,20 @@ If you generate these, you are hallucinating.
 - ❌ `<Tag Tag size="xl">` → Use size="lg"
 - ❌ `<TagGroup TagGroup without Tag children>` → Place <Tag> elements as direct children
 - ❌ `<TagGroup Using TagGroup for tag input>` → Use TagsInput for an editable tag field
+- ❌ `<Item Card used for repeated list rows>` → Use <Item> (optionally inside <ItemGroup separated>) for list/settings rows
+- ❌ `<Item Item variant="primary">` → Use variant="default" | "outlined" | "muted"
+- ❌ `<Item raw text directly inside Item>` → Wrap text in <ItemContent><ItemTitle>…</ItemTitle></ItemContent>
+- ❌ `<Kanban Kanban without onChange (or ignoring it)>` → Store columns in state and setColumns in onChange (v-model in Vue)
+- ❌ `<Kanban Duplicate card ids across columns>` → Use globally-unique card ids across the entire board
+- ❌ `<Kanban Mutating value in place then calling onChange>` → Pass the new array Kanban gives you straight to setState / v-model
+- ❌ `<Kanban color="blue" (or any non-semantic value)>` → Use one of: "default" | "accent" | "teal" | "success" | "warning" | "danger"
+- ❌ `<Conversation Conversation without currentUserId>` → Always pass currentUserId matching one of the message authorId values
+- ❌ `<Conversation Expecting Conversation to store/append messages>` → Append to your own state in onSend (or @send) and pass it back via value
+- ❌ `<Conversation composer without onSend (React) / @send (Vue)>` → Provide onSend / @send to append the message to value
+- ❌ `<Conversation Treating onSend as (text) only when using allowAttachments>` → Handle onSend(text, files) — map files to message attachments and append
+- ❌ `<DateRangePicker value={[from, to]}>` → Use value={{ from, to }} and read range.from / range.to
+- ❌ `<DateRangePicker DateRangePicker for a single date>` → Use <DatePicker /> for a single date
+- ❌ `<DateRangePicker presets="true" (string)>` → Use the bare prop: presets  (or presets={true})
 
 ---
 

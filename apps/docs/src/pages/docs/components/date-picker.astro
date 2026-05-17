@@ -1,0 +1,101 @@
+---
+import DocsLayout       from "@/layouts/DocsLayout.astro";
+import ComponentPreview from "@/components/docs/ComponentPreview.astro";
+import PropsTable       from "@/components/docs/PropsTable.astro";
+import AICheatSheet     from "@/components/docs/AICheatSheet.astro";
+import { DatePickerDemo } from "@/components/demos/Tier2Demo";
+
+const codeReact = `import { useState } from "react";
+import { DatePicker } from "@usevyre/react";
+
+const [date, setDate] = useState<Date | null>(null);
+const [range, setRange] = useState<[Date | null, Date | null]>([null, null]);
+
+// Single
+<DatePicker mode="single" value={date} onChange={setDate} placeholder="Pick a date" />
+
+// Range
+<DatePicker mode="range" value={range} onChange={setRange} placeholder="Pick a range" />`;
+
+const codeVue = `<script setup>
+import { ref } from "vue";
+import { DatePicker } from "@usevyre/vue";
+
+const date = ref(null);
+const range = ref([null, null]);
+</script>
+<template>
+  <!-- Single -->
+  <DatePicker mode="single" v-model="date" placeholder="Pick a date" />
+
+  <!-- Range -->
+  <DatePicker mode="range" v-model="range" placeholder="Pick a range" />
+</template>`;
+
+const codeTimeReact = `<DatePicker value={date} onChange={setDate} showTime />`;
+const codeTimeVue   = `<DatePicker v-model="date" :show-time="true" />`;
+
+const props = [
+  { name: "mode",           type: '"single" | "range" | "multiple"',       default: '"single"',      description: "Selection mode. The value/onChange shape matches the mode." },
+  { name: "value / v-model", type: "Date | [Date|null, Date|null] | Date[]", default: "—",            description: "Controlled selected value. Type depends on mode." },
+  { name: "onChange / @update:modelValue", type: "(v) => void",             default: "—",             description: "Called when the selection changes." },
+  { name: "placeholder",    type: "string",                                 default: '"Pick a date"', description: "Text shown on the trigger when nothing is selected." },
+  { name: "showTime",       type: "boolean",                                default: "false",         description: "Adds an HH:MM time picker (single mode)." },
+  { name: "minDate",        type: "Date",                                   default: "—",             description: "Dates before this are disabled." },
+  { name: "maxDate",        type: "Date",                                   default: "—",             description: "Dates after this are disabled." },
+  { name: "disabled",       type: "(date: Date) => boolean",                default: "—",             description: "Custom callback to disable specific dates." },
+  { name: "weekStartsOn",   type: "0 | 1",                                  default: "1",             description: "First day of the week. 0 = Sunday, 1 = Monday." },
+  { name: "inputClass / inputClassName", type: "string",                    default: "—",             description: "Additional CSS class on the trigger button." },
+];
+---
+
+<DocsLayout title="Date Picker" component="DatePicker">
+  <div class="docs-header">
+    <div class="docs-header__meta">
+      <span class="vyre-badge vyre-badge--default">@usevyre/react</span>
+      <span class="vyre-badge vyre-badge--default">@usevyre/vue</span>
+    </div>
+    <h1 class="docs-title">Date Picker</h1>
+    <p class="docs-lead">
+      An input trigger that opens a <a href="/docs/components/calendar"><code>Calendar</code></a>
+      in a popover. Forwards all Calendar props and supports the same
+      <code>single</code> / <code>range</code> / <code>multiple</code> modes. The popover
+      closes automatically after selection. For an always-visible grid use
+      <code>Calendar</code>; for start/end ranges with presets and a dual-month view use
+      <a href="/docs/components/date-range-picker"><code>DateRangePicker</code></a>.
+    </p>
+  </div>
+
+  <hr class="docs-divider" />
+
+  <h2 class="docs-h2">Basic</h2>
+  <p class="docs-p">
+    Render a controlled <code>DatePicker</code> with <code>value</code> and
+    <code>onChange</code> (or <code>v-model</code> in Vue). Set <code>mode="range"</code>
+    for a start–end selection; the popover closes once both dates are picked.
+  </p>
+  <ComponentPreview react={codeReact} vue={codeVue}>
+    <DatePickerDemo client:visible />
+  </ComponentPreview>
+
+  <h2 class="docs-h2">With time</h2>
+  <p class="docs-p">
+    Add <code>showTime</code> to include an HH:MM input in the popover. The time is
+    stored in the same <code>Date</code> object as the selected day.
+  </p>
+  <ComponentPreview react={codeTimeReact} vue={codeTimeVue} />
+
+  <h2 class="docs-h2">Props</h2>
+  <PropsTable props={props} />
+
+  <AICheatSheet component="DatePicker" />
+
+  <div class="docs-pagination">
+    <a href="/docs/components/data-grid" class="docs-pagination__link docs-pagination__link--prev">
+      ← Data Grid
+    </a>
+    <a href="/docs/components/date-range-picker" class="docs-pagination__link docs-pagination__link--next">
+      Date Range Picker →
+    </a>
+  </div>
+</DocsLayout>

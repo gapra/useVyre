@@ -1,0 +1,341 @@
+---
+import DocsLayout       from "@/layouts/DocsLayout.astro";
+import ComponentPreview from "@/components/docs/ComponentPreview.astro";
+import PropsTable       from "@/components/docs/PropsTable.astro";
+import AICheatSheet     from "@/components/docs/AICheatSheet.astro";
+import {
+  FieldPropsDemo,
+  FieldComposableDemo,
+  FieldGroupDemo,
+  FieldFormDemo,
+} from "@/components/demos/NewComponentsDemo";
+
+const codePropsReact = `import { Field, Input } from "@usevyre/react";
+
+<Field label="Email" hint="We'll never share it." required>
+  <Input type="email" placeholder="you@example.com" />
+</Field>`;
+
+const codePropsVue = `<script setup>
+import { Field, Input } from "@usevyre/vue";
+</script>
+<template>
+  <Field label="Email" hint="We'll never share it." required>
+    <Input type="email" placeholder="you@example.com" />
+  </Field>
+</template>`;
+
+const codeComposableReact = `import {
+  Field, FieldLabel, FieldDescription, FieldError, Input,
+} from "@usevyre/react";
+
+const [val, setVal] = useState("");
+const invalid = val.length > 0 && !val.includes("@");
+
+<Field state={invalid ? "error" : "idle"}>
+  <FieldLabel required htmlFor="email">Email</FieldLabel>
+  <Input
+    id="email"
+    type="email"
+    value={val}
+    onChange={(e) => setVal(e.target.value)}
+  />
+  {invalid ? (
+    <FieldError>Enter a valid email address.</FieldError>
+  ) : (
+    <FieldDescription>Used for sign-in and receipts.</FieldDescription>
+  )}
+</Field>`;
+
+const codeComposableVue = `<script setup>
+import { ref, computed } from "vue";
+import {
+  Field, FieldLabel, FieldDescription, FieldError, Input,
+} from "@usevyre/vue";
+
+const val = ref("");
+const invalid = computed(() => val.value.length > 0 && !val.value.includes("@"));
+</script>
+<template>
+  <Field :state="invalid ? 'error' : 'idle'">
+    <FieldLabel required for="email">Email</FieldLabel>
+    <Input id="email" type="email" v-model="val" />
+    <FieldError v-if="invalid">Enter a valid email address.</FieldError>
+    <FieldDescription v-else>Used for sign-in and receipts.</FieldDescription>
+  </Field>
+</template>`;
+
+const codeGroupReact = `import { FieldGroup, Field, Input } from "@usevyre/react";
+
+<FieldGroup orientation="horizontal">
+  <Field label="First name"><Input placeholder="Ada" /></Field>
+  <Field label="Last name"><Input placeholder="Lovelace" /></Field>
+</FieldGroup>`;
+
+const codeGroupVue = `<script setup>
+import { FieldGroup, Field, Input } from "@usevyre/vue";
+</script>
+<template>
+  <FieldGroup orientation="horizontal">
+    <Field label="First name"><Input placeholder="Ada" /></Field>
+    <Field label="Last name"><Input placeholder="Lovelace" /></Field>
+  </FieldGroup>
+</template>`;
+
+const codeFormReact = `import { useState } from "react";
+import {
+  Field, FieldLabel, FieldDescription, FieldError, FieldGroup, FieldSet,
+  Input, Textarea, Checkbox, RadioGroup, Button,
+} from "@usevyre/react";
+
+const [form, setForm] = useState({
+  name: "", email: "", plan: "pro", bio: "", notify: "email", terms: false,
+});
+const set = (k, v) => setForm((f) => ({ ...f, [k]: v }));
+const emailInvalid = form.email.length > 0 && !form.email.includes("@");
+
+<form onSubmit={handleSubmit}>
+  <FieldGroup orientation="horizontal">
+    <Field label="First name" required>
+      <Input value={form.name} onChange={(e) => set("name", e.target.value)} />
+    </Field>
+    <Field label="Last name">
+      <Input placeholder="Lovelace" />
+    </Field>
+  </FieldGroup>
+
+  <Field state={emailInvalid ? "error" : "idle"}>
+    <FieldLabel required htmlFor="email">Email</FieldLabel>
+    <Input
+      id="email"
+      type="email"
+      value={form.email}
+      onChange={(e) => set("email", e.target.value)}
+    />
+    {emailInvalid ? (
+      <FieldError>Enter a valid email address.</FieldError>
+    ) : (
+      <FieldDescription>Used for sign-in and receipts.</FieldDescription>
+    )}
+  </Field>
+
+  <Field>
+    <FieldLabel>Plan</FieldLabel>
+    <RadioGroup
+      value={form.plan}
+      onChange={(v) => set("plan", v)}
+      options={[
+        { value: "free", label: "Free", description: "For hobby projects" },
+        { value: "pro",  label: "Pro",  description: "For small teams" },
+        { value: "ent",  label: "Enterprise", description: "SSO, audit log, SLA" },
+      ]}
+    />
+  </Field>
+
+  <Field>
+    <FieldLabel htmlFor="bio">Bio</FieldLabel>
+    <Textarea
+      id="bio"
+      rows={3}
+      value={form.bio}
+      onChange={(e) => set("bio", e.target.value)}
+    />
+    <FieldDescription>Markdown is supported.</FieldDescription>
+  </Field>
+
+  <FieldSet legend="Notifications">
+    <RadioGroup
+      value={form.notify}
+      onChange={(v) => set("notify", v)}
+      orientation="horizontal"
+      options={[
+        { value: "email", label: "Email" },
+        { value: "sms",   label: "SMS" },
+        { value: "none",  label: "None" },
+      ]}
+    />
+  </FieldSet>
+
+  <Field>
+    <div style={{ display: "flex", alignItems: "flex-start", gap: 8 }}>
+      <Checkbox
+        id="terms"
+        checked={form.terms}
+        onCheckedChange={(c) => set("terms", c)}
+      />
+      <label htmlFor="terms">I accept the terms and conditions</label>
+    </div>
+  </Field>
+
+  <Button type="submit" variant="primary">Create account</Button>
+</form>`;
+
+const codeFormVue = `<script setup>
+import { ref, computed } from "vue";
+import {
+  Field, FieldLabel, FieldDescription, FieldError, FieldGroup, FieldSet,
+  Input, Textarea, Checkbox, RadioGroup, Button,
+} from "@usevyre/vue";
+
+const form = ref({
+  name: "", email: "", plan: "pro", bio: "", notify: "email", terms: false,
+});
+const emailInvalid = computed(
+  () => form.value.email.length > 0 && !form.value.email.includes("@")
+);
+</script>
+<template>
+  <form @submit.prevent="handleSubmit">
+    <FieldGroup orientation="horizontal">
+      <Field label="First name" required>
+        <Input v-model="form.name" />
+      </Field>
+      <Field label="Last name">
+        <Input placeholder="Lovelace" />
+      </Field>
+    </FieldGroup>
+
+    <Field :state="emailInvalid ? 'error' : 'idle'">
+      <FieldLabel required for="email">Email</FieldLabel>
+      <Input id="email" type="email" v-model="form.email" />
+      <FieldError v-if="emailInvalid">Enter a valid email address.</FieldError>
+      <FieldDescription v-else>Used for sign-in and receipts.</FieldDescription>
+    </Field>
+
+    <Field>
+      <FieldLabel>Plan</FieldLabel>
+      <RadioGroup
+        v-model="form.plan"
+        :options="[
+          { value: 'free', label: 'Free', description: 'For hobby projects' },
+          { value: 'pro',  label: 'Pro',  description: 'For small teams' },
+          { value: 'ent',  label: 'Enterprise', description: 'SSO, audit log, SLA' },
+        ]"
+      />
+    </Field>
+
+    <Field>
+      <FieldLabel for="bio">Bio</FieldLabel>
+      <Textarea id="bio" :rows="3" v-model="form.bio" />
+      <FieldDescription>Markdown is supported.</FieldDescription>
+    </Field>
+
+    <FieldSet legend="Notifications">
+      <RadioGroup
+        v-model="form.notify"
+        orientation="horizontal"
+        :options="[
+          { value: 'email', label: 'Email' },
+          { value: 'sms',   label: 'SMS' },
+          { value: 'none',  label: 'None' },
+        ]"
+      />
+    </FieldSet>
+
+    <Field>
+      <div style="display:flex; align-items:flex-start; gap:8px">
+        <Checkbox id="terms" v-model="form.terms" />
+        <label for="terms">I accept the terms and conditions</label>
+      </div>
+    </Field>
+
+    <Button type="submit" variant="primary">Create account</Button>
+  </form>
+</template>`;
+
+const fieldProps = [
+  { name: "label",    type: "string",                                          default: "—",      description: "Visible field label (props-based API)." },
+  { name: "hint",     type: "string",                                          default: "—",      description: "Helper text below the control. Turns into an error message when state=\"error\"." },
+  { name: "state",    type: '"idle" | "error" | "success" | "warning"',        default: '"idle"', description: "Validation state — also styles the hint." },
+  { name: "required", type: "boolean",                                         default: "false",  description: "Appends a required asterisk to the label." },
+  { name: "htmlFor / for", type: "string",                                     default: "—",      description: "Links the label to a control id." },
+  { name: "className / class", type: "string",                                 default: "—",      description: "Additional CSS class." },
+];
+
+const partsProps = [
+  { name: "FieldLabel",       type: "required?: boolean, htmlFor/for",  default: "—", description: "Explicit label; required adds the asterisk." },
+  { name: "FieldDescription", type: "—",                                default: "—", description: "Muted helper text below the control." },
+  { name: "FieldError",       type: "—",                                default: "—", description: "Error message (role=\"alert\"); renders nothing when empty." },
+  { name: "FieldGroup",       type: 'orientation?: "vertical" | "horizontal"', default: '"vertical"', description: "Lays out multiple fields/controls in a row or column." },
+  { name: "FieldSet",         type: "legend?: string",                  default: "—", description: "Semantic <fieldset> with optional <legend> for grouped inputs." },
+];
+---
+
+<DocsLayout title="Field" component="Field">
+  <div class="docs-header">
+    <div class="docs-header__meta">
+      <span class="vyre-badge vyre-badge--default">@usevyre/react</span>
+      <span class="vyre-badge vyre-badge--default">@usevyre/vue</span>
+    </div>
+    <h1 class="docs-title">Field</h1>
+    <p class="docs-lead">
+      A form-field wrapper for labels, descriptions, validation messages, and
+      layout. Use the <strong>props-based</strong> API for the common case, or the
+      <strong>composable parts</strong> (<code>FieldLabel</code>,
+      <code>FieldDescription</code>, <code>FieldError</code>,
+      <code>FieldGroup</code>, <code>FieldSet</code>) for richer layouts. Both
+      APIs work together — the props-based form is unchanged and fully supported.
+    </p>
+  </div>
+
+  <hr class="docs-divider" />
+
+  <h2 class="docs-h2">Props-based</h2>
+  <p class="docs-p">
+    The simplest form: pass <code>label</code>, <code>hint</code>,
+    <code>state</code>, and <code>required</code>. The control goes in the
+    default slot.
+  </p>
+  <ComponentPreview react={codePropsReact} vue={codePropsVue}>
+    <FieldPropsDemo client:visible />
+  </ComponentPreview>
+
+  <h2 class="docs-h2">Composable</h2>
+  <p class="docs-p">
+    Compose a field from explicit parts when you need custom message placement
+    or conditional error vs. description. <code>FieldError</code> renders
+    nothing when it has no children, so you can keep it always mounted.
+  </p>
+  <ComponentPreview react={codeComposableReact} vue={codeComposableVue}>
+    <FieldComposableDemo client:visible />
+  </ComponentPreview>
+
+  <h2 class="docs-h2">Field group</h2>
+  <p class="docs-p">
+    Wrap multiple fields in <code>FieldGroup</code> to lay them out
+    horizontally (equal columns) or vertically.
+  </p>
+  <ComponentPreview react={codeGroupReact} vue={codeGroupVue}>
+    <FieldGroupDemo client:visible />
+  </ComponentPreview>
+
+  <h2 class="docs-h2">Complete form</h2>
+  <p class="docs-p">
+    A real registration form composing many fields together —
+    <code>FieldGroup</code> for the name row, validated <code>Input</code>
+    with conditional <code>FieldError</code>, a <code>RadioGroup</code> for the
+    plan, a <code>Textarea</code> bio, a <code>FieldSet</code> for grouped
+    notification options, and a <code>Checkbox</code> with an inline label.
+    Everything is controlled state — submit is disabled until it's valid.
+  </p>
+  <ComponentPreview react={codeFormReact} vue={codeFormVue}>
+    <FieldFormDemo client:visible />
+  </ComponentPreview>
+
+  <h2 class="docs-h2">Field props</h2>
+  <PropsTable props={fieldProps} />
+
+  <h2 class="docs-h2">Composable parts</h2>
+  <PropsTable props={partsProps} />
+
+  <AICheatSheet component="Field" />
+
+  <div class="docs-pagination">
+    <a href="/docs/components/dropdown-menu" class="docs-pagination__link docs-pagination__link--prev">
+      ← Dropdown Menu
+    </a>
+    <a href="/docs/components/input" class="docs-pagination__link docs-pagination__link--next">
+      Input →
+    </a>
+  </div>
+</DocsLayout>

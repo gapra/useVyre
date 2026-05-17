@@ -1,88 +1,312 @@
 ---
-import DocsLayout from "@/layouts/DocsLayout.astro";
+import DocsLayout       from "@/layouts/DocsLayout.astro";
+import ComponentPreview from "@/components/docs/ComponentPreview.astro";
+import PropsTable       from "@/components/docs/PropsTable.astro";
+import AICheatSheet     from "@/components/docs/AICheatSheet.astro";
+import { KanbanBasicDemo, KanbanCustomDemo, KanbanComplexDemo, KanbanColorsDemo } from "@/components/demos/NewComponentsDemo";
+
+const codeReact = `import { useState } from "react";
+import { Kanban } from "@usevyre/react";
+import type { KanbanColumn } from "@usevyre/react";
+
+const [columns, setColumns] = useState<KanbanColumn[]>([
+  { id: "todo", title: "To Do", cards: [
+    { id: "c1", title: "Spec the API", description: "Define value/onChange shape" },
+    { id: "c2", title: "Write docs page" },
+  ]},
+  { id: "doing", title: "In Progress", cards: [
+    { id: "c3", title: "Drag-and-drop logic", description: "Native HTML5 DnD" },
+  ]},
+  { id: "done", title: "Done", cards: [
+    { id: "c4", title: "Project kickoff" },
+    { id: "c5", title: "Design tokens" },
+  ]},
+]);
+
+<Kanban value={columns} onChange={setColumns} />`;
+
+const codeVue = `<script setup>
+import { ref } from "vue";
+import { Kanban } from "@usevyre/vue";
+
+const columns = ref([
+  { id: "todo", title: "To Do", cards: [
+    { id: "c1", title: "Spec the API", description: "Define value/onChange shape" },
+    { id: "c2", title: "Write docs page" },
+  ]},
+  { id: "doing", title: "In Progress", cards: [
+    { id: "c3", title: "Drag-and-drop logic", description: "Native HTML5 DnD" },
+  ]},
+  { id: "done", title: "Done", cards: [
+    { id: "c4", title: "Project kickoff" },
+    { id: "c5", title: "Design tokens" },
+  ]},
+]);
+</script>
+<template>
+  <Kanban v-model="columns" />
+</template>`;
+
+const codeCustomReact = `import {
+  Kanban, Item, ItemMedia, ItemContent,
+  ItemTitle, ItemDescription, ItemActions, Avatar, Badge,
+} from "@usevyre/react";
+
+<Kanban
+  value={columns}
+  onChange={setColumns}
+  onCardClick={(card) => openDetail(card.id)}
+  renderCard={(card) => (
+    <Item variant="plain" size="sm" style={{ padding: 0 }}>
+      <ItemMedia>
+        <Avatar fallback={card.description?.[0] ?? "?"} size="sm" />
+      </ItemMedia>
+      <ItemContent>
+        <ItemTitle>{card.title}</ItemTitle>
+        <ItemDescription>{card.description}</ItemDescription>
+      </ItemContent>
+      <ItemActions><Badge variant="teal">{card.id}</Badge></ItemActions>
+    </Item>
+  )}
+/>`;
+
+const codeCustomVue = `<Kanban v-model="columns" @card-click="onCardClick">
+  <template #card="{ card }">
+    <Item variant="plain" size="sm" style="padding:0">
+      <ItemMedia>
+        <Avatar :fallback="card.description?.[0] ?? '?'" size="sm" />
+      </ItemMedia>
+      <ItemContent>
+        <ItemTitle>{{ card.title }}</ItemTitle>
+        <ItemDescription>{{ card.description }}</ItemDescription>
+      </ItemContent>
+      <ItemActions><Badge variant="teal">{{ card.id }}</Badge></ItemActions>
+    </Item>
+  </template>
+</Kanban>`;
+
+const codeComplexReact = `import {
+  Kanban, ItemContent, ItemTitle, ItemMedia, ItemActions,
+  Item, TagGroup, Tag, Badge, Progress, Avatar,
+} from "@usevyre/react";
+
+// A card only needs { id, title }. Attach any extra app fields
+// and read them back in renderCard — no extra CSS needed, the
+// content is composed from useVyre components.
+interface TaskCard {
+  id: string; title: string;
+  assignee: string; initials: string;
+  tags: string[]; progress: number;
+  priority: "Low" | "Medium" | "High";
+}
+
+const priorityColor = {
+  High: "danger", Medium: "warning", Low: "default",
+} as const;
+
+const [columns, setColumns] = useState<KanbanColumn[]>([
+  { id: "todo", title: "To Do", cards: [{
+    id: "t1", title: "Implement OAuth callback",
+    assignee: "Alex Kim", initials: "AK",
+    tags: ["backend", "security"], progress: 20, priority: "High",
+  } satisfies TaskCard] },
+]);
+
+<Kanban
+  value={columns}
+  onChange={setColumns}
+  onCardClick={(card) => openDetail(card.id)}
+  renderCard={(card) => {
+    const c = card as unknown as TaskCard;
+    return (
+      <ItemContent>
+        <div style={{ display: "flex", alignItems: "center", gap: 8 }}>
+          <ItemTitle style={{ flex: 1 }}>{c.title}</ItemTitle>
+          <Badge variant={priorityColor[c.priority]}>{c.priority}</Badge>
+        </div>
+        <TagGroup gap="sm">
+          {c.tags.map((t) => <Tag key={t}>{t}</Tag>)}
+        </TagGroup>
+        <Progress value={c.progress} size="sm" />
+        <Item variant="plain" size="sm" style={{ padding: 0 }}>
+          <ItemMedia><Avatar fallback={c.initials} size="sm" /></ItemMedia>
+          <ItemContent><ItemTitle>{c.assignee}</ItemTitle></ItemContent>
+          <ItemActions>{c.progress}%</ItemActions>
+        </Item>
+      </ItemContent>
+    );
+  }}
+/>`;
+
+const codeComplexVue = `<script setup>
+import {
+  Kanban, ItemContent, ItemTitle, ItemMedia, ItemActions,
+  Item, TagGroup, Tag, Badge, Progress, Avatar,
+} from "@usevyre/vue";
+
+const priorityColor = {
+  High: "danger", Medium: "warning", Low: "default",
+};
+// columns: ref of KanbanColumn[]; cards carry extra fields
+// (assignee, tags, progress, priority) read in the #card slot.
+</script>
+<template>
+  <Kanban v-model="columns" @card-click="openDetail">
+    <template #card="{ card }">
+      <ItemContent>
+        <div style="display:flex; align-items:center; gap:8px">
+          <ItemTitle style="flex:1">{{ card.title }}</ItemTitle>
+          <Badge :variant="priorityColor[card.priority]">
+            {{ card.priority }}
+          </Badge>
+        </div>
+        <TagGroup gap="sm">
+          <Tag v-for="t in card.tags" :key="t">{{ t }}</Tag>
+        </TagGroup>
+        <Progress :value="card.progress" size="sm" />
+        <Item variant="plain" size="sm" style="padding:0">
+          <ItemMedia><Avatar :fallback="card.initials" size="sm" /></ItemMedia>
+          <ItemContent><ItemTitle>{{ card.assignee }}</ItemTitle></ItemContent>
+          <ItemActions>{{ card.progress }}%</ItemActions>
+        </Item>
+      </ItemContent>
+    </template>
+  </Kanban>
+</template>`;
+
+const codeColorsReact = `import { Kanban } from "@usevyre/react";
+import type { KanbanColumn } from "@usevyre/react";
+
+// color is a semantic tint: "accent" | "teal" | "success"
+//                          | "warning" | "danger" | "default"
+const [columns, setColumns] = useState<KanbanColumn[]>([
+  { id: "active", title: "Active", color: "teal", cards: [
+    { id: "g2", title: "API rate limiting", color: "warning" },
+  ]},
+  { id: "blocked", title: "Blocked", color: "danger", cards: [
+    { id: "g4", title: "Vendor SDK upgrade", color: "danger" },
+  ]},
+  { id: "shipped", title: "Shipped", color: "success", cards: [
+    { id: "g5", title: "Onboarding flow", color: "success" },
+  ]},
+]);
+
+<Kanban value={columns} onChange={setColumns} />`;
+
+const codeColorsVue = `<script setup>
+import { ref } from "vue";
+import { Kanban } from "@usevyre/vue";
+
+const columns = ref([
+  { id: "active", title: "Active", color: "teal", cards: [
+    { id: "g2", title: "API rate limiting", color: "warning" },
+  ]},
+  { id: "blocked", title: "Blocked", color: "danger", cards: [
+    { id: "g4", title: "Vendor SDK upgrade", color: "danger" },
+  ]},
+  { id: "shipped", title: "Shipped", color: "success", cards: [
+    { id: "g5", title: "Onboarding flow", color: "success" },
+  ]},
+]);
+</script>
+<template>
+  <Kanban v-model="columns" />
+</template>`;
+
+const props = [
+  { name: "value / v-model", type: "KanbanColumn[]",                  default: "—",     description: "Controlled board data. KanbanColumn = { id, title, cards, color? }. KanbanCard = { id, title, description?, color? }. Card ids must be unique across the whole board." },
+  { name: "onChange / @update:modelValue", type: "(next: KanbanColumn[]) => void", default: "—", description: "Called with the next columns array after a drag move. Apply it back to your state — Kanban holds no internal data." },
+  { name: "renderCard",      type: "(card, column) => ReactNode",     default: "—",     description: "Custom card body, rendered inside the wrapping Card. React: render prop. Vue: #card scoped slot. Can return any components." },
+  { name: "onCardClick / @card-click", type: "(card, column) => void", default: "—",    description: "Fired on click / Enter / Space (suppressed right after a drag)." },
+  { name: "className / class", type: "string",                        default: "—",     description: "Additional CSS class on the board root." },
+];
+
+const colorValues = [
+  { name: "color (column & card)", type: '"default" | "accent" | "teal" | "success" | "warning" | "danger"', default: '"default"', description: "Semantic background tint. Set on a KanbanColumn to tint the whole column, or on a KanbanCard to tint that card. Token-based — adapts to theme." },
+];
 ---
 
-<DocsLayout title="Kanban">
+<DocsLayout title="Kanban" component="Kanban">
   <div class="docs-header">
-    <div class="cs-title-row">
-      <h1 class="docs-title">Kanban</h1>
-      <span class="vyre-badge vyre-badge--default">Coming soon</span>
+    <div class="docs-header__meta">
+      <span class="vyre-badge vyre-badge--default">@usevyre/react</span>
+      <span class="vyre-badge vyre-badge--default">@usevyre/vue</span>
     </div>
+    <h1 class="docs-title">Kanban</h1>
     <p class="docs-lead">
-      Drag-and-drop board built on the useVyre Card primitive — columns, cards, and reorder all handled out of the box.
+      A drag-and-drop board. Cards move between columns or reorder within one.
+      Like <a href="/docs/components/data-grid"><code>DataGrid</code></a>, Kanban is
+      fully <strong>controlled and data-driven</strong> — you own the columns array and
+      apply the next one in <code>onChange</code> (<code>v-model</code> in Vue).
+      Uses native HTML5 drag-and-drop with zero dependencies.
     </p>
   </div>
 
   <hr class="docs-divider" />
 
-  <div class="cs-body">
-    <h2 class="cs-section-title">What's coming</h2>
-    <ul class="cs-feature-list">
-      <li>Drag-and-drop cards between columns</li>
-      <li>Reorder cards within a column</li>
-      <li>Add and rename columns</li>
-      <li>Card built on the existing useVyre Card component</li>
-      <li>Controlled state — bring your own data model</li>
-      <li>Keyboard-accessible drag interactions</li>
-      <li>React + Vue with identical API surface</li>
-      <li>Inline AI context block for zero-hallucination agent use</li>
-    </ul>
+  <h2 class="docs-h2">Basic</h2>
+  <p class="docs-p">
+    Pass a controlled array of columns, each with its own <code>cards</code>. When a
+    card is dropped, Kanban calls <code>onChange</code> with the next array — store it
+    in state to complete the move. Card ids must be unique across the whole board.
+  </p>
+  <ComponentPreview react={codeReact} vue={codeVue}>
+    <KanbanBasicDemo client:visible />
+  </ComponentPreview>
 
-    <div class="cs-feedback">
-      <p>Have a use case in mind? Share it on GitHub and help shape the API.</p>
-      <a
-        href="https://github.com/gapra/usevyre/discussions"
-        target="_blank"
-        rel="noopener noreferrer"
-        class="vyre-btn vyre-btn--secondary vyre-btn--sm"
-      >
-        Vote or leave feedback →
-      </a>
-    </div>
+  <h2 class="docs-h2">Custom cards & click handler</h2>
+  <p class="docs-p">
+    Use <code>renderCard</code> (React render prop) or the <code>#card</code> scoped
+    slot (Vue) for custom card content, and <code>onCardClick</code> /
+    <code>@card-click</code> to open a detail view. Clicks are suppressed immediately
+    after a drag so dropping never triggers a click. Compose the body from useVyre
+    primitives — here <code>Item</code> with <code>ItemMedia</code> /
+    <code>ItemContent</code> / <code>ItemActions</code> — so no extra CSS is needed.
+  </p>
+  <ComponentPreview react={codeCustomReact} vue={codeCustomVue}>
+    <KanbanCustomDemo client:visible />
+  </ComponentPreview>
+
+  <h2 class="docs-h2">Complex card content</h2>
+  <p class="docs-p">
+    A card only needs <code>id</code> and <code>title</code> — attach any extra
+    fields (assignee, tags, progress, priority…) to the card object and read them
+    back inside <code>renderCard</code>. Each card is automatically wrapped in a
+    <a href="/docs/components/card"><code>Card</code></a>, so you only supply the
+    body. This example composes <code>ItemContent</code>, <code>TagGroup</code> /
+    <code>Tag</code>, <code>Progress</code> and <code>Avatar</code> — all useVyre
+    components, no custom CSS — and stays fully draggable.
+  </p>
+  <ComponentPreview react={codeComplexReact} vue={codeComplexVue}>
+    <KanbanComplexDemo client:visible />
+  </ComponentPreview>
+
+  <h2 class="docs-h2">Custom colors</h2>
+  <p class="docs-p">
+    Set <code>color</code> on a column to tint the whole column, or on an
+    individual card to tint just that card. Values are semantic and token-based,
+    so they adapt to light/dark themes automatically. Available:
+    <code>accent</code>, <code>teal</code>, <code>success</code>,
+    <code>warning</code>, <code>danger</code> (and the implicit <code>default</code>).
+  </p>
+  <ComponentPreview react={codeColorsReact} vue={codeColorsVue}>
+    <KanbanColorsDemo client:visible />
+  </ComponentPreview>
+
+  <h2 class="docs-h2">Props</h2>
+  <PropsTable props={props} />
+
+  <h2 class="docs-h2">Color values</h2>
+  <PropsTable props={colorValues} />
+
+  <AICheatSheet component="Kanban" />
+
+  <div class="docs-pagination">
+    <a href="/docs/components/item" class="docs-pagination__link docs-pagination__link--prev">
+      ← Item
+    </a>
+    <a href="/docs/components/label" class="docs-pagination__link docs-pagination__link--next">
+      Label →
+    </a>
   </div>
 </DocsLayout>
-
-<style>
-  .cs-title-row {
-    display: flex;
-    align-items: center;
-    gap: var(--vyre-spacing-3);
-    flex-wrap: wrap;
-  }
-
-  .cs-body {
-    display: flex;
-    flex-direction: column;
-    gap: var(--vyre-spacing-8);
-    margin-top: var(--vyre-spacing-6);
-  }
-
-  .cs-section-title {
-    font-size: var(--vyre-typography-font-size-lg);
-    font-weight: var(--vyre-typography-font-weight-semibold);
-    color: var(--vyre-color-semantic-text-primary);
-    margin-bottom: var(--vyre-spacing-3);
-  }
-
-  .cs-feature-list {
-    display: flex;
-    flex-direction: column;
-    gap: var(--vyre-spacing-2);
-    padding-left: var(--vyre-spacing-5);
-    color: var(--vyre-color-semantic-text-secondary);
-    font-size: var(--vyre-typography-font-size-sm);
-    line-height: 1.6;
-  }
-
-  .cs-feedback {
-    display: flex;
-    flex-direction: column;
-    gap: var(--vyre-spacing-3);
-    padding: var(--vyre-spacing-5) var(--vyre-spacing-6);
-    background: var(--vyre-color-semantic-surface);
-    border: 1px solid var(--vyre-color-semantic-border-subtle);
-    border-radius: var(--vyre-border-radius-lg);
-    font-size: var(--vyre-typography-font-size-sm);
-    color: var(--vyre-color-semantic-text-secondary);
-  }
-</style>

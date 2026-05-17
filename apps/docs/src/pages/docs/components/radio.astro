@@ -1,0 +1,147 @@
+---
+import DocsLayout       from "@/layouts/DocsLayout.astro";
+import ComponentPreview from "@/components/docs/ComponentPreview.astro";
+import PropsTable       from "@/components/docs/PropsTable.astro";
+import AICheatSheet     from "@/components/docs/AICheatSheet.astro";
+import {
+  RadioOptionsDemo,
+  RadioComposableDemo,
+} from "@/components/demos/NewComponentsDemo";
+
+const codeOptionsReact = `import { useState } from "react";
+import { RadioGroup } from "@usevyre/react";
+
+const [plan, setPlan] = useState("pro");
+
+<RadioGroup
+  value={plan}
+  onChange={setPlan}
+  options={[
+    { value: "free", label: "Free", description: "For hobby projects" },
+    { value: "pro",  label: "Pro",  description: "For small teams" },
+    { value: "ent",  label: "Enterprise", description: "SSO, audit log, SLA" },
+    { value: "legacy", label: "Legacy (unavailable)", disabled: true },
+  ]}
+/>`;
+
+const codeOptionsVue = `<script setup>
+import { ref } from "vue";
+import { RadioGroup } from "@usevyre/vue";
+
+const plan = ref("pro");
+</script>
+<template>
+  <RadioGroup
+    v-model="plan"
+    :options="[
+      { value: 'free', label: 'Free', description: 'For hobby projects' },
+      { value: 'pro',  label: 'Pro',  description: 'For small teams' },
+      { value: 'ent',  label: 'Enterprise', description: 'SSO, audit log, SLA' },
+      { value: 'legacy', label: 'Legacy (unavailable)', disabled: true },
+    ]"
+  />
+</template>`;
+
+const codeComposableReact = `import { useState } from "react";
+import { RadioGroup, Radio } from "@usevyre/react";
+
+const [val, setVal] = useState("b");
+
+<RadioGroup value={val} onChange={setVal} orientation="horizontal">
+  <Radio value="a" label="Option A" />
+  <Radio value="b" label="Option B" />
+  <Radio value="c" label="Option C" />
+</RadioGroup>`;
+
+const codeComposableVue = `<script setup>
+import { ref } from "vue";
+import { RadioGroup, Radio } from "@usevyre/vue";
+
+const val = ref("b");
+</script>
+<template>
+  <RadioGroup v-model="val" orientation="horizontal">
+    <Radio value="a" label="Option A" />
+    <Radio value="b" label="Option B" />
+    <Radio value="c" label="Option C" />
+  </RadioGroup>
+</template>`;
+
+const groupProps = [
+  { name: "value / v-model",     type: "string",                                  default: "—",          description: "Selected value (controlled). React: value + onChange; Vue: v-model." },
+  { name: "defaultValue",        type: "string",                                  default: "—",          description: "Initial value for uncontrolled use (React only)." },
+  { name: "onChange / @update:modelValue", type: "(value: string) => void",       default: "—",          description: "Called with the newly selected value." },
+  { name: "name",                type: "string",                                  default: "auto",       description: "Radio input name; auto-generated if omitted." },
+  { name: "disabled",            type: "boolean",                                 default: "false",      description: "Disables the entire group." },
+  { name: "size",                type: '"sm" | "md"',                             default: '"md"',       description: "Control size." },
+  { name: "orientation",         type: '"vertical" | "horizontal"',               default: '"vertical"', description: "Layout direction." },
+  { name: "options",             type: "{ value; label?; description?; disabled? }[]", default: "—",     description: "Data-driven options. Omit to pass <Radio> children instead." },
+];
+
+const radioProps = [
+  { name: "value",       type: "string",  default: "—",   description: "This option's value (required). Must be unique in the group." },
+  { name: "label",       type: "string",  default: "—",   description: "Visible label." },
+  { name: "description", type: "string",  default: "—",   description: "Secondary muted text under the label." },
+  { name: "disabled",    type: "boolean", default: "false", description: "Disables just this option." },
+];
+---
+
+<DocsLayout title="Radio" component="RadioGroup">
+  <div class="docs-header">
+    <div class="docs-header__meta">
+      <span class="vyre-badge vyre-badge--default">@usevyre/react</span>
+      <span class="vyre-badge vyre-badge--default">@usevyre/vue</span>
+    </div>
+    <h1 class="docs-title">Radio</h1>
+    <p class="docs-lead">
+      A controlled single-choice group. <code>RadioGroup</code> owns the selected
+      value; render it <strong>data-driven</strong> with an
+      <code>options</code> array, or <strong>composable</strong> with
+      <code>&lt;Radio&gt;</code> children for custom content. Uses
+      <code>role="radiogroup"</code> with native radio inputs for full
+      keyboard and screen-reader support. For multi-select use
+      <a href="/docs/components/checkbox"><code>Checkbox</code></a>; for a
+      compact picker use <a href="/docs/components/select"><code>Select</code></a>.
+    </p>
+  </div>
+
+  <hr class="docs-divider" />
+
+  <h2 class="docs-h2">Options array</h2>
+  <p class="docs-p">
+    The quickest form — pass <code>options</code> with
+    <code>value</code> / <code>label</code> / optional
+    <code>description</code> and <code>disabled</code>. Bind with
+    <code>value</code> + <code>onChange</code> (or <code>v-model</code> in Vue).
+  </p>
+  <ComponentPreview react={codeOptionsReact} vue={codeOptionsVue}>
+    <RadioOptionsDemo client:visible />
+  </ComponentPreview>
+
+  <h2 class="docs-h2">Composable</h2>
+  <p class="docs-p">
+    Pass <code>&lt;Radio&gt;</code> children instead of <code>options</code>
+    when you need custom layout or content per option. The selected value and
+    grouping still come from <code>RadioGroup</code>.
+  </p>
+  <ComponentPreview react={codeComposableReact} vue={codeComposableVue}>
+    <RadioComposableDemo client:visible />
+  </ComponentPreview>
+
+  <h2 class="docs-h2">RadioGroup props</h2>
+  <PropsTable props={groupProps} />
+
+  <h2 class="docs-h2">Radio props</h2>
+  <PropsTable props={radioProps} />
+
+  <AICheatSheet component="RadioGroup" />
+
+  <div class="docs-pagination">
+    <a href="/docs/components/progress" class="docs-pagination__link docs-pagination__link--prev">
+      ← Progress
+    </a>
+    <a href="/docs/components/select" class="docs-pagination__link docs-pagination__link--next">
+      Select →
+    </a>
+  </div>
+</DocsLayout>

@@ -14,7 +14,8 @@ import {
   Command, CommandInput, CommandList, CommandEmpty,
   CommandGroup, CommandItem, CommandSeparator, CommandDialog,
 } from "@usevyre/react";
-import { Calendar, DatePicker } from "@usevyre/react";
+import { Calendar, DatePicker, DateRangePicker } from "@usevyre/react";
+import type { DateRange } from "@usevyre/react";
 import { Text, Heading, Lead, Code, Blockquote } from "@usevyre/react";
 import {
   AppLayout, AppShell, AppBar, PageContent, SidebarTrigger,
@@ -844,6 +845,47 @@ export function SidebarLayoutDemo() {
           </PageContent>
         </AppShell>
       </AppLayout>
+    </div>
+  );
+}
+
+// ── DateRangePicker ───────────────────────────────────────────
+function fmt(d: Date | null) {
+  return d ? new Intl.DateTimeFormat("default", { dateStyle: "medium" }).format(d) : "—";
+}
+
+export function DateRangePickerBasicDemo() {
+  const [range, setRange] = useState<DateRange>({ from: null, to: null });
+  return (
+    <div style={{ display: "flex", flexDirection: "column", alignItems: "center", gap: "12px" }}>
+      <DateRangePicker value={range} onChange={setRange} />
+      <p style={{ fontSize: "13px", color: "var(--vyre-color-semantic-text-muted)" }}>
+        {fmt(range.from)} → {fmt(range.to)}
+      </p>
+    </div>
+  );
+}
+
+export function DateRangePickerPresetsDemo() {
+  const [range, setRange] = useState<DateRange>({ from: null, to: null });
+  return (
+    <div style={{ display: "flex", flexDirection: "column", alignItems: "center", gap: "12px" }}>
+      <DateRangePicker value={range} onChange={setRange} presets />
+      <p style={{ fontSize: "13px", color: "var(--vyre-color-semantic-text-muted)" }}>
+        {fmt(range.from)} → {fmt(range.to)}
+      </p>
+    </div>
+  );
+}
+
+export function DateRangePickerSingleMonthDemo() {
+  const [range, setRange] = useState<DateRange>({ from: null, to: null });
+  return (
+    <div style={{ display: "flex", flexDirection: "column", alignItems: "center", gap: "12px" }}>
+      <DateRangePicker value={range} onChange={setRange} numberOfMonths={1} />
+      <p style={{ fontSize: "13px", color: "var(--vyre-color-semantic-text-muted)" }}>
+        {fmt(range.from)} → {fmt(range.to)}
+      </p>
     </div>
   );
 }

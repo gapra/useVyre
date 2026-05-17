@@ -7,7 +7,6 @@ import {
   CalendarSingleDemo,
   CalendarRangeDemo,
   CalendarTimeDemo,
-  DatePickerDemo,
 } from "@/components/demos/Tier2Demo";
 
 const codeSingleReact = `import { Calendar } from "@usevyre/react";
@@ -52,30 +51,6 @@ const date = ref(null);
   <Calendar mode="single" :show-time="true" v-model="date" />
 </template>`;
 
-const codeDatePickerReact = `import { DatePicker } from "@usevyre/react";
-
-const [date, setDate] = useState<Date | null>(null);
-const [range, setRange] = useState<[Date | null, Date | null]>([null, null]);
-
-// Single
-<DatePicker mode="single" value={date} onChange={setDate} placeholder="Pick a date" />
-
-// Range
-<DatePicker mode="range" value={range} onChange={setRange} placeholder="Pick a range" />`;
-
-const codeDatePickerVue = `<script setup>
-import { DatePicker } from "@usevyre/vue";
-const date = ref(null);
-const range = ref([null, null]);
-</script>
-<template>
-  <!-- Single -->
-  <DatePicker mode="single" v-model="date" placeholder="Pick a date" />
-
-  <!-- Range -->
-  <DatePicker mode="range" v-model="range" placeholder="Pick a range" />
-</template>`;
-
 const calendarProps = [
   { name: "mode",           type: '"single" | "range" | "multiple"',    default: '"single"',  description: "Selection mode. single picks one date, range picks start–end, multiple picks any number of dates." },
   { name: "value / v-model", type: "Date | [Date|null, Date|null] | Date[]", default: "—",    description: "Controlled selected value. Type depends on mode." },
@@ -85,13 +60,8 @@ const calendarProps = [
   { name: "maxDate",        type: "Date",                                default: "—",         description: "Dates after this are disabled." },
   { name: "disabled",       type: "(date: Date) => boolean",             default: "—",         description: "Custom callback to disable specific dates." },
   { name: "weekStartsOn",   type: "0 | 1",                              default: "1",         description: "First day of the week. 0 = Sunday, 1 = Monday." },
+  { name: "defaultMonth",   type: "Date",                                default: "—",         description: "Month displayed initially when value is empty (uncontrolled view)." },
   { name: "class / className", type: "string",                          default: "—",         description: "Additional CSS class on the root element." },
-];
-
-const datePickerProps = [
-  { name: "+ Calendar props", type: "—",                               default: "—",          description: "All Calendar props are forwarded." },
-  { name: "placeholder",    type: "string",                             default: '"Pick a date"', description: "Placeholder text shown when no date is selected." },
-  { name: "inputClass / inputClassName", type: "string",               default: "—",          description: "Additional CSS class on the trigger button." },
 ];
 ---
 
@@ -103,10 +73,13 @@ const datePickerProps = [
     </div>
     <h1 class="docs-title">Calendar</h1>
     <p class="docs-lead">
-      A flexible date picker supporting single date, date range, and multiple date selection.
-      Use <code>Calendar</code> for an always-visible grid or <code>DatePicker</code> for
-      an input-triggered popover. Includes month/year navigation, time picker, and
-      min/max/disabled constraints. Zero dependencies — built on native <code>Intl</code> APIs.
+      An always-visible date grid supporting single date, date range, and multiple
+      date selection, with month/year navigation, an optional time picker, and
+      min/max/disabled constraints. For an input-triggered popover use
+      <a href="/docs/components/date-picker"><code>DatePicker</code></a>; for start/end
+      ranges with presets use
+      <a href="/docs/components/date-range-picker"><code>DateRangePicker</code></a>.
+      Zero dependencies — built on native <code>Intl</code> APIs.
     </p>
   </div>
 
@@ -138,21 +111,8 @@ const datePickerProps = [
     <CalendarTimeDemo client:visible />
   </ComponentPreview>
 
-  <h2 class="docs-h2">DatePicker — input + popover</h2>
-  <p class="docs-p">
-    <code>DatePicker</code> wraps <code>Calendar</code> in a trigger button that opens a popover.
-    All Calendar props are forwarded. The popover closes automatically after selection
-    (or when both range dates are picked).
-  </p>
-  <ComponentPreview react={codeDatePickerReact} vue={codeDatePickerVue}>
-    <DatePickerDemo client:visible />
-  </ComponentPreview>
-
-  <h2 class="docs-h2">Props — Calendar</h2>
+  <h2 class="docs-h2">Props</h2>
   <PropsTable props={calendarProps} />
-
-  <h2 class="docs-h2">Props — DatePicker</h2>
-  <PropsTable props={datePickerProps} />
 
   <AICheatSheet component="Calendar" />
 

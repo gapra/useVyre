@@ -9,7 +9,7 @@
  * - Button         — Interactive actions and CTAs
  * - Badge          — Status labels and indicators
  * - Card           — Content containers (+ CardHeader, CardBody, CardFooter)
- * - Field          — Form field wrapper with label and hint
+ * - Field          — Form field wrapper (props-based) + composable parts (FieldLabel, FieldDescription, FieldError, FieldGroup, FieldSet)
  * - Input          — Text input with optional icons
  * - Textarea       — Multi-line text input
  * - Modal          — Dialog overlay with focus trap (+ ModalHeader, ModalBody, ModalFooter)
@@ -21,6 +21,8 @@
  * - Accordion      — Collapsible sections (+ AccordionItem, AccordionTrigger, AccordionContent)
  * - Avatar         — User avatar with image fallback and status dot
  * - Checkbox       — Checkbox input with indeterminate state
+ * - RadioGroup     — Controlled single-choice group (+ Radio); options array or composable children
+ * - RichTextEditor — Controlled WYSIWYG editor (HTML value); toolbar bold/italic/heading/list/link; zero deps
  * - Switch         — Toggle switch (on/off)
  * - Slider         — Range input with custom track
  * - Progress       — Linear progress bar with indeterminate mode
@@ -41,6 +43,12 @@
  * - DataGrid       — Table with built-in column sorting (asc/desc), loading skeletons, empty state
  * - Tag            — Standalone display tag/chip: variant, size, onRemove (× button), onClick (interactive)
  * - TagGroup       — Read-only container that lays out multiple Tag elements with wrapping + gap
+ * - Item           — Layout primitive for list/settings rows (+ ItemGroup, ItemMedia, ItemContent, ItemTitle, ItemDescription, ItemActions)
+ * - Calendar       — Inline date grid; mode single/range/multiple, optional time
+ * - DatePicker     — Input trigger + popover Calendar (single/range/multiple)
+ * - DateRangePicker — Start/end date range picker with dual-month view and preset shortcuts; built on Calendar
+ * - Kanban         — Controlled board with drag-and-drop cards between columns; native HTML5 DnD, zero deps
+ * - Conversation   — Controlled chat/inbox thread: grouped bubbles, avatars, day separators, status, optional composer
  *
  * CSS must be imported separately:
  * import "@usevyre/tokens/css";           ← design tokens (required)
@@ -51,7 +59,10 @@
 export { Button }                                           from "./components/Button/Button";
 export { Badge }                                            from "./components/Badge/Badge";
 export { Card, CardHeader, CardBody, CardFooter }           from "./components/Card/Card";
-export { Field, Input, Textarea }                           from "./components/Input/Input";
+export {
+  Field, FieldLabel, FieldDescription, FieldError,
+  FieldGroup, FieldSet, Input, Textarea,
+}                                                           from "./components/Input/Input";
 export { Modal, ModalHeader, ModalBody, ModalFooter }       from "./components/Modal/Modal";
 export { ToastProvider, useToast }                          from "./components/Toast/Toast";
 export { Select }                                           from "./components/Select/Select";
@@ -60,6 +71,8 @@ export { Tooltip }                                          from "./components/T
 export { Accordion, AccordionItem, AccordionTrigger, AccordionContent } from "./components/Accordion/Accordion";
 export { Avatar }                                           from "./components/Avatar/Avatar";
 export { Checkbox }                                         from "./components/Checkbox/Checkbox";
+export { RadioGroup, Radio }                                from "./components/Radio/Radio";
+export { RichTextEditor }                                   from "./components/RichTextEditor/RichTextEditor";
 export { Switch }                                           from "./components/Switch/Switch";
 export { Slider }                                           from "./components/Slider/Slider";
 export { Progress }                                         from "./components/Progress/Progress";
@@ -91,7 +104,15 @@ export { Combobox }                                         from "./components/C
 export { DataGrid }                                         from "./components/DataGrid/DataGrid";
 export { Tag }                                              from "./components/Tag/Tag";
 export { TagGroup }                                         from "./components/Tag/TagGroup";
-export { Calendar, DatePicker }                             from "./components/Calendar/Calendar";
+export { Calendar }                                         from "./components/Calendar/Calendar";
+export { DatePicker }                                       from "./components/Calendar/DatePicker";
+export { DateRangePicker }                                  from "./components/DateRangePicker/DateRangePicker";
+export {
+  Item, ItemGroup, ItemMedia, ItemContent,
+  ItemTitle, ItemDescription, ItemActions,
+}                                                           from "./components/Item/Item";
+export { Kanban }                                           from "./components/Kanban/Kanban";
+export { Conversation }                                     from "./components/Conversation/Conversation";
 export type {
   CalendarProps, CalendarSingleProps, CalendarRangeProps,
   CalendarMultipleProps, CalendarBaseProps, DatePickerProps, CalendarMode,
@@ -117,7 +138,10 @@ export type {
 export type { ButtonProps }                                 from "./components/Button/Button";
 export type { BadgeProps }                                  from "./components/Badge/Badge";
 export type { CardProps, CardSectionProps }                 from "./components/Card/Card";
-export type { FieldProps, InputProps, TextareaProps }       from "./components/Input/Input";
+export type {
+  FieldProps, FieldLabelProps, FieldDescriptionProps, FieldErrorProps,
+  FieldGroupProps, FieldSetProps, InputProps, TextareaProps,
+}                                                           from "./components/Input/Input";
 export type { ModalProps, ModalSectionProps, ModalSize }    from "./components/Modal/Modal";
 export type { ToastInput, ToastVariant }                    from "./components/Toast/Toast";
 export type { SelectProps, SelectOption, SelectSize }       from "./components/Select/Select";
@@ -126,6 +150,12 @@ export type { TooltipProps, TooltipPlacement }              from "./components/T
 export type { AccordionProps, AccordionItemProps, AccordionTriggerProps, AccordionContentProps } from "./components/Accordion/Accordion";
 export type { AvatarProps }                                 from "./components/Avatar/Avatar";
 export type { CheckboxProps }                               from "./components/Checkbox/Checkbox";
+export type {
+  RadioGroupProps, RadioProps, RadioOption,
+}                                                           from "./components/Radio/Radio";
+export type {
+  RichTextEditorProps, RichTextTool,
+}                                                           from "./components/RichTextEditor/RichTextEditor";
 export type { SwitchProps }                                 from "./components/Switch/Switch";
 export type { SliderProps }                                 from "./components/Slider/Slider";
 export type { ProgressProps }                               from "./components/Progress/Progress";
@@ -153,6 +183,20 @@ export type { ComboboxProps, ComboboxOption }                from "./components/
 export type { DataGridProps, DataGridColumn }                from "./components/DataGrid/DataGrid";
 export type { TagProps, TagVariant, TagSize }                from "./components/Tag/Tag";
 export type { TagGroupProps, TagGroupGap }                   from "./components/Tag/TagGroup";
+export type {
+  ItemProps, ItemGroupProps, ItemSectionProps,
+}                                                            from "./components/Item/Item";
+export type {
+  KanbanProps, KanbanColumn, KanbanCard,
+}                                                            from "./components/Kanban/Kanban";
+export type {
+  ConversationProps, ConversationMessage, ConversationStatus,
+  ConversationMessageMeta, ConversationComposerApi,
+  ConversationAttachment, ConversationAttachmentKind,
+}                                                            from "./components/Conversation/Conversation";
+export type {
+  DateRangePickerProps, DateRange, DateRangePreset,
+}                                                            from "./components/DateRangePicker/DateRangePicker";
 
 // ── Shared types ──────────────────────────────────────────────
 export type { Variant, Size, FieldState, BadgeVariant, BaseProps } from "./types";
