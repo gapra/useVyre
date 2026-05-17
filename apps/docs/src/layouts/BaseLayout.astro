@@ -4,6 +4,7 @@ import "@usevyre/tokens/css";        // design tokens (CSS variables)
 import "@usevyre/react/styles";      // component styles (framework-agnostic)
 import "@/styles/docs.css";       // docs site-specific styles
 import EarlyAccessBanner from "@/components/layout/EarlyAccessBanner.astro";
+import Analytics from "@vercel/analytics/astro";
 
 export interface Props {
   title:        string;
@@ -48,6 +49,9 @@ const canonical = new URL(Astro.url.pathname, Astro.site);
     <meta property="og:description" content={description} />
     <meta property="og:type"        content="website" />
     <meta property="og:url"         content={canonical} />
+
+    <!-- Vercel Web Analytics (placed in <head> per Vercel docs) -->
+    <Analytics />
   </head>
   <body>
     {!hideBanner && <EarlyAccessBanner />}
