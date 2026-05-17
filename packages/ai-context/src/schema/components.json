@@ -106,6 +106,79 @@
         }
       ]
     },
+    "AlertDialog": {
+      "description": "Blocking confirmation modal (focus-trapped). Controlled via open + onOpenChange (React) / v-model (Vue). Use for destructive or irreversible actions that need explicit confirm/cancel. For non-blocking inline feedback use Alert; for general dialogs use Modal.",
+      "import": "import { AlertDialog } from \"@usevyre/react\"",
+      "props": {
+        "open": {
+          "type": "boolean",
+          "description": "Controlled visibility. Vue: v-model."
+        },
+        "onOpenChange": {
+          "type": "function",
+          "description": "(open: boolean) => void — called when the dialog requests to close (backdrop, Esc, cancel). Vue: update:modelValue / v-model."
+        },
+        "title": {
+          "type": "string",
+          "description": "Dialog heading (required)."
+        },
+        "description": {
+          "type": "string",
+          "description": "Supporting body text."
+        },
+        "variant": {
+          "type": "enum",
+          "values": [
+            "danger",
+            "warning",
+            "info"
+          ],
+          "default": "info",
+          "description": "Visual tone of the confirm action / icon."
+        },
+        "confirmLabel": {
+          "type": "string",
+          "default": "Confirm",
+          "description": "Confirm button text."
+        },
+        "cancelLabel": {
+          "type": "string",
+          "default": "Cancel",
+          "description": "Cancel button text."
+        },
+        "onConfirm": {
+          "type": "function",
+          "description": "Called when the confirm button is pressed."
+        },
+        "onCancel": {
+          "type": "function",
+          "description": "Called when cancelled (button, Esc, backdrop)."
+        }
+      },
+      "antiPatterns": [
+        {
+          "pattern": "AlertDialog without open/onOpenChange (React) or v-model (Vue)",
+          "reason": "It is controlled; it never shows/closes without state",
+          "fix": "Drive open from state; close in onOpenChange / via v-model"
+        },
+        {
+          "pattern": "Using Alert (inline banner) for a confirm/cancel decision",
+          "reason": "Alert is non-blocking inline feedback, has no confirm flow",
+          "fix": "Use AlertDialog for blocking confirmation; Alert for passive messages"
+        },
+        {
+          "pattern": "variant=\"success\" or \"error\"",
+          "reason": "AlertDialog variant is \"danger\" | \"warning\" | \"info\" only",
+          "fix": "Use \"danger\" for destructive, \"warning\" to caution, \"info\" otherwise"
+        }
+      ],
+      "examples": [
+        {
+          "description": "Destructive confirmation",
+          "code": "const [open, setOpen] = useState(false);\n<Button variant=\"danger\" onClick={() => setOpen(true)}>Delete</Button>\n<AlertDialog\n  open={open}\n  onOpenChange={setOpen}\n  variant=\"danger\"\n  title=\"Delete project?\"\n  description=\"This cannot be undone.\"\n  confirmLabel=\"Delete\"\n  onConfirm={() => deleteProject()}\n/>"
+        }
+      ]
+    },
     "Avatar": {
       "description": "User profile image with fallback initials or icon.",
       "import": "import { Avatar } from \"@usevyre/react\"",

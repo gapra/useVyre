@@ -197,6 +197,45 @@ import { Alert } from "@usevyre/react"
 
 ---
 
+### AlertDialog
+
+Blocking confirmation modal (focus-trapped). Controlled via open + onOpenChange (React) / v-model (Vue). Use for destructive or irreversible actions that need explicit confirm/cancel. For non-blocking inline feedback use Alert; for general dialogs use Modal.
+
+```tsx
+import { AlertDialog } from "@usevyre/react"
+
+// Props:
+// open           = boolean
+// onOpenChange   = function
+// title          = string
+// description    = string
+// variant        = "danger" | "warning" | "info" (default: info)
+// confirmLabel   = string (default: Confirm)
+// cancelLabel    = string (default: Cancel)
+// onConfirm      = function
+// onCancel       = function
+
+// Examples:
+const [open, setOpen] = useState(false);
+<Button variant="danger" onClick={() => setOpen(true)}>Delete</Button>
+<AlertDialog
+  open={open}
+  onOpenChange={setOpen}
+  variant="danger"
+  title="Delete project?"
+  description="This cannot be undone."
+  confirmLabel="Delete"
+  onConfirm={() => deleteProject()}
+/>
+```
+
+**Common mistakes:**
+- ❌ `AlertDialog without open/onOpenChange (React) or v-model (Vue)` → Drive open from state; close in onOpenChange / via v-model
+- ❌ `Using Alert (inline banner) for a confirm/cancel decision` → Use AlertDialog for blocking confirmation; Alert for passive messages
+- ❌ `variant="success" or "error"` → Use "danger" for destructive, "warning" to caution, "info" otherwise
+
+---
+
 ### Avatar
 
 User profile image with fallback initials or icon.
@@ -1377,6 +1416,9 @@ If you generate these, you are hallucinating.
 - ❌ `<Accordion Accordion without AccordionItem>` → Always compose: Accordion > AccordionItem > AccordionTrigger + AccordionContent
 - ❌ `<Alert variant="error">` → Use variant="danger"
 - ❌ `<Alert variant="primary">` → Use variant="info" | "success" | "warning" | "danger"
+- ❌ `<AlertDialog AlertDialog without open/onOpenChange (React) or v-model (Vue)>` → Drive open from state; close in onOpenChange / via v-model
+- ❌ `<AlertDialog Using Alert (inline banner) for a confirm/cancel decision>` → Use AlertDialog for blocking confirmation; Alert for passive messages
+- ❌ `<AlertDialog variant="success" or "error">` → Use "danger" for destructive, "warning" to caution, "info" otherwise
 - ❌ `<Avatar size="xs">` → Use size="sm"
 - ❌ `<Avatar size="2xl">` → Use size="xl"
 - ❌ `<Badge variant="primary">` → Use variant="accent" for brand color

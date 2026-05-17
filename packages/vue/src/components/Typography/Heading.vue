@@ -1,6 +1,6 @@
 <script setup lang="ts">
 /**
- * @vyre/vue — Heading
+ * @usevyre/vue — Heading
  *
  * AI CONTEXT:
  * ┌─────────────────────────────────────────────┐

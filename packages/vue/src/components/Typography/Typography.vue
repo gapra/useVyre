@@ -1,6 +1,6 @@
 <script setup lang="ts">
 /**
- * @vyre/vue — Typography (Text)
+ * @usevyre/vue — Typography (Text)
  *
  * AI CONTEXT:
  * ┌─────────────────────────────────────────────┐

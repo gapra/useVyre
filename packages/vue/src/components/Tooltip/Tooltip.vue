@@ -1,11 +1,11 @@
 <script setup lang="ts">
 /**
- * @vyre/vue — Tooltip
+ * @usevyre/vue — Tooltip
  *
  * AI CONTEXT:
  * ┌─────────────────────────────────────────────────────────┐
  * │ Component:  Tooltip                                     │
- * │ Import:     import { Tooltip } from "@vyre/vue"         │
+ * │ Import:     import { Tooltip } from "@usevyre/vue"         │
  * │                                                         │
  * │ Props:                                                  │
  * │   content    = string (tooltip text)                    │

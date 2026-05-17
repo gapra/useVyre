@@ -1,11 +1,11 @@
 <script setup lang="ts">
 /**
- * @vyre/vue — Alert
+ * @usevyre/vue — Alert
  *
  * AI CONTEXT:
  * ┌─────────────────────────────────────────────────────────┐
  * │ Component:  Alert                                       │
- * │ Import:     import { Alert } from "@vyre/vue"           │
+ * │ Import:     import { Alert } from "@usevyre/vue"           │
  * │                                                         │
  * │ Props:                                                  │
  * │   variant = "info"(default)|"success"|"warning"|"danger"│

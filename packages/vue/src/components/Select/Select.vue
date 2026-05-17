@@ -1,11 +1,11 @@
 <script setup lang="ts">
 /**
- * @vyre/vue — Select
+ * @usevyre/vue — Select
  *
  * AI CONTEXT:
  * ┌─────────────────────────────────────────────────────────┐
  * │ Component:  Select                                      │
- * │ Import:     import { Select } from "@vyre/vue"          │
+ * │ Import:     import { Select } from "@usevyre/vue"          │
  * │                                                         │
  * │ Props:                                                  │
  * │   options      = { value: string; label: string;        │

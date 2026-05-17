@@ -1,11 +1,11 @@
 <script setup lang="ts">
 /**
- * @vyre/vue — Field
+ * @usevyre/vue — Field
  *
  * AI CONTEXT:
  * ┌─────────────────────────────────────────────────────────┐
  * │ Component:  Field                                       │
- * │ Import:     import { Field } from "@vyre/vue"           │
+ * │ Import:     import { Field } from "@usevyre/vue"           │
  * │                                                         │
  * │ Props:                                                  │
  * │   label    = string                                     │

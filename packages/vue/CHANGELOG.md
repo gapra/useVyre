@@ -1,5 +1,16 @@
 # @usevyre/vue
 
+## 1.2.2
+
+### Patch Changes
+
+- Docs/schema audit fixes
+
+  - **`@usevyre/ai-context`:** added the missing `AlertDialog` schema entry (it was exported and documented in the Alert page but absent from the AI schema, so agents had no context/anti-patterns for it — a zero-hallucination gap). Includes props, anti-patterns, and an example.
+  - **`@usevyre/vue`:** corrected stale `@vyre/vue` / `@vyre/react` references in the AI CONTEXT JSDoc headers of ~23 Vue components (Button, Card, Modal, Sheet, Select, Sidebar, Tooltip, etc.) to the current `@usevyre/*` package names, so AI agents reading the inline context get the correct import path.
+
+  No runtime/API changes — documentation/metadata only.
+
 ## 1.2.1
 
 ### Patch Changes

@@ -1,11 +1,11 @@
 <script setup lang="ts">
 /**
- * @vyre/vue — Badge
+ * @usevyre/vue — Badge
  *
  * AI CONTEXT:
  * ┌─────────────────────────────────────────────────────────┐
  * │ Component:  Badge                                       │
- * │ Import:     import { Badge } from "@vyre/vue"           │
+ * │ Import:     import { Badge } from "@usevyre/vue"           │
  * │                                                         │
  * │ Props:                                                  │
  * │   variant = "default"|"accent"|"teal"|                  │

@@ -1,11 +1,11 @@
 <script setup lang="ts">
 /**
- * @vyre/vue — AlertDialog
+ * @usevyre/vue — AlertDialog
  *
  * AI CONTEXT:
  * ┌─────────────────────────────────────────────────────────┐
  * │ Component:  AlertDialog                                 │
- * │ Import:     import { AlertDialog } from "@vyre/vue"     │
+ * │ Import:     import { AlertDialog } from "@usevyre/vue"     │
  * │                                                         │
  * │ Props:                                                  │
  * │   modelValue  = boolean (v-model, controlled open)      │

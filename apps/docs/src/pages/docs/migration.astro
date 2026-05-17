@@ -103,7 +103,7 @@ const codeShadcnTokensBefore = `/* shadcn/ui — Tailwind classes */
 const codeShadcnTokensAfter = `/* useVyre — CSS variables, no Tailwind required */
 <div style={{
   background: "var(--vyre-color-semantic-accent)",
-  color: "var(--vyre-color-semantic-on-accent)",
+  color: "var(--vyre-color-semantic-accent-foreground)",
   borderRadius: "var(--vyre-border-radius-md)",
   padding: "var(--vyre-spacing-4)",
 }}>`;
@@ -210,7 +210,7 @@ const codeTailwindTokensBefore = `/* Tailwind — arbitrary color values or conf
 const codeTailwindTokensAfter = `/* useVyre — semantic CSS variables, theme-aware */
 <div style={{
   background: "var(--vyre-color-semantic-accent)",
-  color: "var(--vyre-color-semantic-on-accent)",
+  color: "var(--vyre-color-semantic-accent-foreground)",
   borderRadius: "var(--vyre-border-radius-lg)",
   padding: "var(--vyre-spacing-4)",
   boxShadow: "var(--vyre-shadow-md)",

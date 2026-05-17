@@ -1,11 +1,11 @@
 <script setup lang="ts">
 /**
- * @vyre/vue — Button
+ * @usevyre/vue — Button
  *
  * AI CONTEXT:
  * ┌─────────────────────────────────────────────────────────┐
  * │ Component:  Button                                      │
- * │ Import:     import { Button } from "@vyre/vue"          │
+ * │ Import:     import { Button } from "@usevyre/vue"          │
  * │                                                         │
  * │ Props:                                                  │
  * │   variant  = "primary"|"secondary"|"ghost"|             │

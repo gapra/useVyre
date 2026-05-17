@@ -1,11 +1,11 @@
 <script setup lang="ts">
 /**
- * @vyre/vue — ToastViewport
+ * @usevyre/vue — ToastViewport
  *
  * AI CONTEXT:
  * ┌─────────────────────────────────────────────────────────┐
  * │ Component:  ToastViewport                               │
- * │ Import:     import { ToastViewport } from "@vyre/vue"   │
+ * │ Import:     import { ToastViewport } from "@usevyre/vue"   │
  * │                                                         │
  * │ Place once in your app root (App.vue or layout).        │
  * │ Renders the toast stack via Teleport to <body>.         │

@@ -673,6 +673,18 @@ export function DatePickerDemo() {
   );
 }
 
+export function DatePickerTimeDemo() {
+  const [date, setDate] = useState<Date | null>(null);
+  return (
+    <div style={{ display: "flex", flexDirection: "column", gap: "8px" }}>
+      <DatePicker mode="single" value={date} onChange={setDate} showTime placeholder="Pick date & time" />
+      <span style={{ fontSize: "13px", color: "var(--vyre-color-semantic-text-muted)" }}>
+        {date ? date.toLocaleString() : "No date selected"}
+      </span>
+    </div>
+  );
+}
+
 // ── Typography demos ───────────────────────────────────────────
 
 export function TypographyHeadingDemo() {

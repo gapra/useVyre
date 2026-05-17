@@ -1,6 +1,6 @@
 <script setup lang="ts">
 /**
- * @vyre/vue — Command
+ * @usevyre/vue — Command
  *
  * AI CONTEXT:
  * ┌─────────────────────────────────────────────────────────┐
@@ -8,7 +8,7 @@
  * │             CommandEmpty + CommandGroup + CommandItem + │
  * │             CommandSeparator + CommandDialog            │
  * │ Import:     import { Command, CommandDialog, ... }      │
- * │             from "@vyre/vue"                            │
+ * │             from "@usevyre/vue"                            │
  * │                                                         │
  * │ Command props:                                          │
  * │   modelValue  = string (v-model search value)           │

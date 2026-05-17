@@ -1,11 +1,11 @@
 <script setup lang="ts">
 /**
- * @vyre/vue — Pagination
+ * @usevyre/vue — Pagination
  *
  * AI CONTEXT:
  * ┌─────────────────────────────────────────────────────────┐
  * │ Component:  Pagination                                  │
- * │ Import:     import { Pagination } from "@vyre/vue"      │
+ * │ Import:     import { Pagination } from "@usevyre/vue"      │
  * │                                                         │
  * │ Props:                                                  │
  * │   modelValue = number (current page, 1-indexed, v-model)│

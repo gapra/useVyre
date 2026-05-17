@@ -3,7 +3,7 @@ import DocsLayout       from "@/layouts/DocsLayout.astro";
 import ComponentPreview from "@/components/docs/ComponentPreview.astro";
 import PropsTable       from "@/components/docs/PropsTable.astro";
 import AICheatSheet     from "@/components/docs/AICheatSheet.astro";
-import { DatePickerDemo } from "@/components/demos/Tier2Demo";
+import { DatePickerDemo, DatePickerTimeDemo } from "@/components/demos/Tier2Demo";
 
 const codeReact = `import { useState } from "react";
 import { DatePicker } from "@usevyre/react";
@@ -83,7 +83,9 @@ const props = [
     Add <code>showTime</code> to include an HH:MM input in the popover. The time is
     stored in the same <code>Date</code> object as the selected day.
   </p>
-  <ComponentPreview react={codeTimeReact} vue={codeTimeVue} />
+  <ComponentPreview react={codeTimeReact} vue={codeTimeVue}>
+    <DatePickerTimeDemo client:visible />
+  </ComponentPreview>
 
   <h2 class="docs-h2">Props</h2>
   <PropsTable props={props} />

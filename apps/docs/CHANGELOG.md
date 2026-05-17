@@ -1,5 +1,13 @@
 # @usevyre/docs
 
+## 1.0.5
+
+### Patch Changes
+
+- Updated dependencies
+  - @usevyre/vue@1.2.2
+  - @usevyre/ai-context@1.2.2
+
 ## 1.0.4
 
 ### Patch Changes

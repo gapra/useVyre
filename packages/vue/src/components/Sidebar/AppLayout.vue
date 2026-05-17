@@ -1,6 +1,6 @@
 <script setup lang="ts">
 /**
- * @vyre/vue — AppLayout
+ * @usevyre/vue — AppLayout
  * Root layout provider. Manages collapsed state for the whole app shell.
  *
  * Props:

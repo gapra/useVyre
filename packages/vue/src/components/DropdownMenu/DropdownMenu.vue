@@ -1,6 +1,6 @@
 <script setup lang="ts">
 /**
- * @vyre/vue — DropdownMenu
+ * @usevyre/vue — DropdownMenu
  *
  * AI CONTEXT:
  * ┌─────────────────────────────────────────────────────────┐
@@ -10,7 +10,7 @@
  * │   DropdownSeparator                                     │
  * │                                                         │
  * │ Import:     import { DropdownMenu, DropdownItem, ... }  │
- * │             from "@vyre/vue"                            │
+ * │             from "@usevyre/vue"                            │
  * │                                                         │
  * │ DropdownMenu props:                                     │
  * │   placement = "bottom-start"(default)|"bottom-end"      │

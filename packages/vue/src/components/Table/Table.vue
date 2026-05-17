@@ -1,6 +1,6 @@
 <script setup lang="ts">
 /**
- * @vyre/vue — Table
+ * @usevyre/vue — Table
  *
  * AI CONTEXT:
  * ┌─────────────────────────────────────────────────────────┐
@@ -8,7 +8,7 @@
  * │             TableHeader + TableCell + TableCaption      │
  * │ Import:     import { Table, TableHead, TableBody,       │
  * │             TableRow, TableHeader, TableCell,           │
- * │             TableCaption } from "@vyre/vue"             │
+ * │             TableCaption } from "@usevyre/vue"             │
  * │                                                         │
  * │ Table props:                                            │
  * │   striped   = boolean (default: false)                  │

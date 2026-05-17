@@ -1,6 +1,6 @@
 <script setup lang="ts">
 /**
- * @vyre/vue — Sidebar
+ * @usevyre/vue — Sidebar
  * Must be used inside <AppLayout>. Reads collapsed state from AppLayout context.
  *
  * Props:

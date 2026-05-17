@@ -1,12 +1,12 @@
 <script setup lang="ts">
 /**
- * @vyre/vue — Modal / Dialog
+ * @usevyre/vue — Modal / Dialog
  *
  * AI CONTEXT:
  * ┌─────────────────────────────────────────────────────────┐
  * │ Components: Modal + ModalHeader + ModalBody + ModalFooter│
  * │ Import:     import { Modal, ModalHeader, ModalBody,     │
- * │             ModalFooter } from "@vyre/vue"              │
+ * │             ModalFooter } from "@usevyre/vue"              │
  * │                                                         │
  * │ Props:                                                  │
  * │   open             = boolean (required, v-model:open)   │

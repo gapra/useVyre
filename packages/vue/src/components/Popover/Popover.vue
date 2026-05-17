@@ -1,11 +1,11 @@
 <script setup lang="ts">
 /**
- * @vyre/vue — Popover
+ * @usevyre/vue — Popover
  *
  * AI CONTEXT:
  * ┌─────────────────────────────────────────────────────────┐
  * │ Component:  Popover                                     │
- * │ Import:     import { Popover } from "@vyre/vue"         │
+ * │ Import:     import { Popover } from "@usevyre/vue"         │
  * │                                                         │
  * │ Props:                                                  │
  * │   placement      = "bottom"(default)                    │

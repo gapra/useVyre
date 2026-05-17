@@ -1,12 +1,12 @@
 <script setup lang="ts">
 /**
- * @vyre/vue — Tabs
+ * @usevyre/vue — Tabs
  *
  * AI CONTEXT:
  * ┌─────────────────────────────────────────────────────────┐
  * │ Components: Tabs + TabList + Tab + TabPanels + TabPanel │
  * │ Import:     import { Tabs, TabList, Tab,                │
- * │             TabPanels, TabPanel } from "@vyre/vue"      │
+ * │             TabPanels, TabPanel } from "@usevyre/vue"      │
  * │                                                         │
  * │ Tabs props:                                             │
  * │   modelValue   = string (v-model, controlled)           │

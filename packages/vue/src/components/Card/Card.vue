@@ -1,12 +1,12 @@
 <script setup lang="ts">
 /**
- * @vyre/vue — Card
+ * @usevyre/vue — Card
  *
  * AI CONTEXT:
  * ┌─────────────────────────────────────────────────────────┐
  * │ Components: Card + CardHeader + CardBody + CardFooter   │
  * │ Import:     import { Card, CardHeader, CardBody,        │
- * │             CardFooter } from "@vyre/vue"               │
+ * │             CardFooter } from "@usevyre/vue"               │
  * │                                                         │
  * │ Card props:                                             │
  * │   variant   = "default"|"elevated"|"outlined"|          │

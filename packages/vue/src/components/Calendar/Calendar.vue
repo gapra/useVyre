@@ -1,6 +1,6 @@
 <script setup lang="ts">
 /**
- * @vyre/vue — Calendar
+ * @usevyre/vue — Calendar
  *
  * AI CONTEXT:
  * ┌─────────────────────────────────────────────────────────────┐

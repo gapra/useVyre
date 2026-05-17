@@ -1,12 +1,12 @@
 <script setup lang="ts">
 /**
- * @vyre/vue — Breadcrumb
+ * @usevyre/vue — Breadcrumb
  *
  * AI CONTEXT:
  * ┌─────────────────────────────────────────────────────────┐
  * │ Components: Breadcrumb + BreadcrumbItem                 │
  * │ Import:     import { Breadcrumb, BreadcrumbItem }       │
- * │             from "@vyre/vue"                            │
+ * │             from "@usevyre/vue"                            │
  * │                                                         │
  * │ Breadcrumb props:                                       │
  * │   separator = string (default: "/")                     │

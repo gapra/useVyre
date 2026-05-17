@@ -1,12 +1,12 @@
 <script setup lang="ts">
 /**
- * @vyre/vue — Sheet
+ * @usevyre/vue — Sheet
  *
  * AI CONTEXT:
  * ┌─────────────────────────────────────────────────────────┐
  * │ Components: Sheet + SheetHeader + SheetBody + SheetFooter│
  * │ Import:     import { Sheet, SheetHeader, SheetBody,     │
- * │             SheetFooter } from "@vyre/vue"              │
+ * │             SheetFooter } from "@usevyre/vue"              │
  * │                                                         │
  * │ Props:                                                  │
  * │   modelValue      = boolean (v-model)                   │
