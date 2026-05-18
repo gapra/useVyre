@@ -84,8 +84,8 @@ importers:
   packages/eslint-plugin:
     dependencies:
       '@usevyre/ai-context':
-        specifier: ^1.0.0
-        version: 1.0.0
+        specifier: workspace:*
+        version: link:../ai-context
       eslint:
         specifier: '>=8.0.0'
         version: 10.3.0
@@ -171,8 +171,8 @@ importers:
   packages/validate-ai-context:
     dependencies:
       '@usevyre/ai-context':
-        specifier: ^1.0.0
-        version: 1.0.0
+        specifier: workspace:*
+        version: link:../ai-context
 
   packages/vue:
     dependencies:

@@ -1,5 +1,40 @@
 # @usevyre/react
 
+## 1.3.0
+
+### Minor Changes
+
+- Expand and fix the Stack / Grid / Box layout primitives.
+
+  **Bug fix (Grid):** when a `style` prop was passed to `<Grid>`, the user's style object overwrote the internal `--vyre-grid-columns` custom property, so `columns` was silently ignored and the grid collapsed to a single column (rows of stacked cells). Internal CSS-variable styles are now merged with any user `style` instead of being replaced.
+
+  **Stack** now covers the full CSS flexbox surface, still token-locked: `direction` adds `row-reverse`/`column-reverse`; `inline`; per-axis `rowGap`/`columnGap`; `alignContent`; `alignSelf`; `wrap` is now `"nowrap" | "wrap" | "wrap-reverse"` (was a boolean); `grow`, `shrink`, and token `basis`.
+
+  **Grid** gains `rows`, `flow` (grid-auto-flow), `justify` (justify-items), and per-axis `rowGap`/`columnGap`, plus a new **`GridItem`** subcomponent for `colSpan` / `rowSpan` / `colStart` / `rowStart` placement instead of nested inline `grid-column`.
+
+  **Box** padding/margin are now controllable per axis and per side: `paddingX`/`paddingY`/`paddingTop`/`paddingRight`/`paddingBottom`/`paddingLeft` (and the `margin*` equivalents), all token-locked, with per-side overriding the axis/shorthand.
+
+  Non-breaking: `wrap` on `<Stack>` accepts the new string enum `"nowrap" | "wrap" | "wrap-reverse"` but still accepts a boolean — `wrap` / `wrap={true}` resolves to `"wrap"`, `wrap={false}` to `"nowrap"` — so existing usage keeps working.
+
+- Add Stack, Grid and Box layout primitives.
+
+  These replace hand-written inline `display: flex` / `display: grid` containers — the single biggest source of AI-hallucinated frontend code. Every spacing value is a closed design-token enum (`none`/`xs`/`sm`/`md`/`lg`/`xl`/`2xl` → `--vyre-spacing-*`), never a raw px/rem number, and `align`/`justify` use canonical names only (no `flex-end` vs `self-end` ambiguity).
+
+  - `Stack` — one-dimensional flex (`direction`, `gap`, `align`, `justify`, `wrap`, `as`)
+  - `Grid` — two-dimensional grid (`columns` 1–12 or `auto-fit`, `gap`, `align`, `as`)
+  - `Box` — spacing-only container (`padding`, `margin`, `as`) plus a documented `style` escape hatch flagged as an anti-pattern
+
+  All three render a plain `<div>` (or the `as` element) in the browser, with React and Vue APIs in sync. Props, anti-patterns and examples are added to `@usevyre/ai-context` so agents pick these over raw inline styles.
+
+- Add token-locked `width` / `height` props to Stack, Grid and Box.
+
+  Previously the only way to size a layout primitive was an inline `style={{ width: "100%" }}` — the exact escape hatch useVyre tries to avoid, and a common source of AI magic numbers. Both props now accept:
+
+  - Keywords: `"auto"`, `"full"` (100%), `"fit"` (fit-content), `"screen"` (100vw width / 100vh height)
+  - Fixed-rem token sizes: `xs` 8 · `sm` 12 · `md` 16 · `lg` 24 · `xl` 32 · `2xl` 42
+
+  This also fixes a confusing docs preview: a `<Stack justify="between">` with no width only hugs its content (so `justify` looked like it did nothing). The Stack example now uses `width="full"`, making `justify`/`align` behaviour visible. Inline `width`/`height` styles are added as a documented anti-pattern in `@usevyre/ai-context`.
+
 ## 1.2.1
 
 ### Patch Changes

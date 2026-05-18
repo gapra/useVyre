@@ -339,6 +339,7 @@ import { Button } from "@usevyre/react"
 - ❌ `color="..."` → Use variant prop instead
 - ❌ `icon={...}` → Use leftIcon={...} or rightIcon={...}
 - ❌ `size="icon" without aria-label` → Add aria-label describing the action
+- ❌ `padding / margin / marginTop (any spacing prop) on a useVyre component` → Space BETWEEN components with <Stack gap> / <Grid gap>; space AROUND a block with <Box padding/margin> wrapping it
 
 ---
 
@@ -424,6 +425,7 @@ import { Card, CardHeader, CardBody, CardFooter } from "@usevyre/react"
 
 **Common mistakes:**
 - ❌ `variant="primary"` → Use variant="elevated" | "outlined" | "ghost" | "accent"
+- ❌ `padding / margin / marginTop (any spacing prop) on a useVyre component` → Space BETWEEN components with <Stack gap> / <Grid gap>; space AROUND a block with <Box padding/margin> wrapping it
 
 ---
 
@@ -635,6 +637,7 @@ import { Input } from "@usevyre/react"
 - ❌ `size="icon"` → Use size="sm" | "md" | "lg"
 - ❌ `type="search" for search UI` → Import Command from @usevyre/react for search palettes
 - ❌ `Vue: binding Input/Textarea value without v-model` → Use v-model on <Input>/<Textarea> in Vue; in React use value + onChange
+- ❌ `padding / margin / marginTop (any spacing prop) on a useVyre component` → Space BETWEEN components with <Stack gap> / <Grid gap>; space AROUND a block with <Box padding/margin> wrapping it
 
 ---
 
@@ -1377,6 +1380,157 @@ const messages = [
 
 ---
 
+### Stack
+
+Full one-dimensional flex layout primitive. USE INSTEAD OF <div style={{display:'flex'}}>. Covers the whole CSS flexbox surface (direction incl. reverse, wrap, align/justify/alignContent/alignSelf, grow/shrink/basis, per-axis gap) with token-locked spacing. Renders a plain <div> (or `as`).
+
+```tsx
+import { Stack } from "@usevyre/react"
+
+// Props:
+// direction      = "row" | "column" | "row-reverse" | "column-reverse" (default: row)
+// inline         = boolean (default: false)
+// gap            = "none" | "xs" | "sm" | "md" | "lg" | "xl" | "2xl" (default: md)
+// rowGap         = "none" | "xs" | "sm" | "md" | "lg" | "xl" | "2xl"
+// columnGap      = "none" | "xs" | "sm" | "md" | "lg" | "xl" | "2xl"
+// align          = "start" | "center" | "end" | "stretch" | "baseline" (default: stretch)
+// justify        = "start" | "center" | "end" | "between" | "around" | "evenly" (default: start)
+// alignContent   = "start" | "center" | "end" | "stretch" | "between" | "around" | "evenly"
+// alignSelf      = "auto" | "start" | "center" | "end" | "stretch" | "baseline"
+// wrap           = "nowrap" | "wrap" | "wrap-reverse" (default: nowrap)
+// grow           = number
+// shrink         = number
+// basis          = "none" | "xs" | "sm" | "md" | "lg" | "xl" | "2xl" | "auto" | "content" | "0"
+// width          = "auto" | "full" | "fit" | "screen" | "xs" | "sm" | "md" | "lg" | "xl" | "2xl"
+// height         = "auto" | "full" | "fit" | "screen" | "xs" | "sm" | "md" | "lg" | "xl" | "2xl"
+// as             = string (default: div)
+
+// Examples:
+<Stack direction="row" gap="md" align="center" justify="between">
+  <Avatar src={user.avatar} />
+  <Text>{user.name}</Text>
+  <Button>Edit</Button>
+</Stack>
+<Stack wrap="wrap" rowGap="lg" columnGap="md">
+  {tags.map((t) => <Tag key={t}>{t}</Tag>)}
+</Stack>
+```
+
+**Common mistakes:**
+- ❌ `<div style={{ display: 'flex', gap: 12 }}>` → Use <Stack gap="md"> — gap is a token
+- ❌ `gap={12} or gap="12px"` → Use gap="none|xs|sm|md|lg|xl|2xl"
+- ❌ `direction="vertical" / "horizontal"` → Use direction="row" or "column" (also row-reverse / column-reverse)
+- ❌ `style={{ width: "100%" }} / style={{ height: 320 }}` → Use the width / height prop: width="full", width="md", height="screen", etc.
+
+---
+
+### Grid
+
+Two-dimensional CSS grid primitive. Explicit column/row counts (or auto-fit), auto-flow control, token gap. Pair with GridItem for cell spanning/placement. Renders a plain <div> (or `as`).
+
+```tsx
+import { Grid, GridItem } from "@usevyre/react"
+
+// Props:
+// columns        = number | "auto-fit" (default: 1)
+// rows           = number | "auto"
+// flow           = "row" | "column" | "dense" | "row-dense" | "column-dense"
+// gap            = "none" | "xs" | "sm" | "md" | "lg" | "xl" | "2xl" (default: md)
+// rowGap         = "none" | "xs" | "sm" | "md" | "lg" | "xl" | "2xl"
+// columnGap      = "none" | "xs" | "sm" | "md" | "lg" | "xl" | "2xl"
+// align          = "start" | "center" | "end" | "stretch" (default: stretch)
+// justify        = "start" | "center" | "end" | "stretch"
+// width          = "auto" | "full" | "fit" | "screen" | "xs" | "sm" | "md" | "lg" | "xl" | "2xl"
+// height         = "auto" | "full" | "fit" | "screen" | "xs" | "sm" | "md" | "lg" | "xl" | "2xl"
+// as             = string (default: div)
+
+// Examples:
+<Grid columns={3} gap="lg">
+  <GridItem colSpan={2}><Card>Wide</Card></GridItem>
+  <Card>Two</Card>
+  <Card>Three</Card>
+</Grid>
+<Grid columns="auto-fit" gap="md">
+  {items.map((i) => <Card key={i.id}>{i.title}</Card>)}
+</Grid>
+```
+
+**Common mistakes:**
+- ❌ `<div style={{ display:'grid', gridTemplateColumns:'1fr 1fr 1fr' }}>` → Use <Grid columns={3} gap="md">
+- ❌ `columns="3" (string)` → Use columns={3} or columns="auto-fit"
+- ❌ `Nested div with inline grid-column for spanning` → Wrap the cell in <GridItem colSpan={2}>
+- ❌ `style={{ width: "100%" }} / style={{ height: 320 }}` → Use the width / height prop: width="full", width="md", height="screen", etc.
+
+---
+
+### GridItem
+
+Child placement inside <Grid>. Sets column/row span and start lines. Renders a plain <div> (or `as`).
+
+```tsx
+import { GridItem } from "@usevyre/react"
+
+// Props:
+// colSpan        = number
+// rowSpan        = number
+// colStart       = number
+// rowStart       = number
+// as             = string (default: div)
+
+// Examples:
+<Grid columns={4} gap="md">
+  <GridItem colSpan={2}>Featured</GridItem>
+  <div>a</div>
+  <div>b</div>
+</Grid>
+```
+
+**Common mistakes:**
+- ❌ `GridItem outside a Grid` → Place <GridItem> directly inside <Grid>
+
+---
+
+### Box
+
+Spacing-only container plus a controlled escape hatch. Token padding/margin with shorthand, per-axis (X/Y) and per-side (Top/Right/Bottom/Left) overrides. The `style` prop is an explicit anti-pattern escape hatch. Renders a plain <div> (or `as`).
+
+```tsx
+import { Box } from "@usevyre/react"
+
+// Props:
+// padding        = "none" | "xs" | "sm" | "md" | "lg" | "xl" | "2xl"
+// paddingX       = "none" | "xs" | "sm" | "md" | "lg" | "xl" | "2xl"
+// paddingY       = "none" | "xs" | "sm" | "md" | "lg" | "xl" | "2xl"
+// paddingTop     = "none" | "xs" | "sm" | "md" | "lg" | "xl" | "2xl"
+// paddingRight   = "none" | "xs" | "sm" | "md" | "lg" | "xl" | "2xl"
+// paddingBottom  = "none" | "xs" | "sm" | "md" | "lg" | "xl" | "2xl"
+// paddingLeft    = "none" | "xs" | "sm" | "md" | "lg" | "xl" | "2xl"
+// margin         = "none" | "xs" | "sm" | "md" | "lg" | "xl" | "2xl"
+// marginX        = "none" | "xs" | "sm" | "md" | "lg" | "xl" | "2xl"
+// marginY        = "none" | "xs" | "sm" | "md" | "lg" | "xl" | "2xl"
+// marginTop      = "none" | "xs" | "sm" | "md" | "lg" | "xl" | "2xl"
+// marginRight    = "none" | "xs" | "sm" | "md" | "lg" | "xl" | "2xl"
+// marginBottom   = "none" | "xs" | "sm" | "md" | "lg" | "xl" | "2xl"
+// marginLeft     = "none" | "xs" | "sm" | "md" | "lg" | "xl" | "2xl"
+// width          = "auto" | "full" | "fit" | "screen" | "xs" | "sm" | "md" | "lg" | "xl" | "2xl"
+// height         = "auto" | "full" | "fit" | "screen" | "xs" | "sm" | "md" | "lg" | "xl" | "2xl"
+// as             = string (default: div)
+// style          = React.CSSProperties
+
+// Examples:
+<Box as="section" paddingX="lg" paddingY="md">
+  <Heading>Settings</Heading>
+</Box>
+<Box marginTop="xl"><Separator /></Box>
+```
+
+**Common mistakes:**
+- ❌ `<Box style={{ padding: 16 }}>` → Use <Box padding="md"> (or paddingX/paddingTop/...)
+- ❌ `Using Box for flex/grid layout` → Use <Stack> or <Grid>
+- ❌ `style={{ width: "100%" }} / style={{ height: 320 }}` → Use the width / height prop: width="full", width="md", height="screen", etc.
+
+---
+
 ### DateRangePicker
 
 Start/end date range picker. Built on Calendar (mode=range) with a friendlier { from, to } object API, a two-month side-by-side view, and preset shortcuts. Use this for report/filter date ranges; use DatePicker for a single date.
@@ -1430,11 +1584,13 @@ If you generate these, you are hallucinating.
 - ❌ `<Button color="...">` → Use variant prop instead
 - ❌ `<Button icon={...}>` → Use leftIcon={...} or rightIcon={...}
 - ❌ `<Button size="icon" without aria-label>` → Add aria-label describing the action
+- ❌ `<Button padding / margin / marginTop (any spacing prop) on a useVyre component>` → Space BETWEEN components with <Stack gap> / <Grid gap>; space AROUND a block with <Box padding/margin> wrapping it
 - ❌ `<Calendar Calendar for an input field that opens a popover>` → Use <DatePicker /> (single date) or <DateRangePicker /> (range)
 - ❌ `<Calendar value as tuple for mode="single">` → Pass value matching mode; use mode="range" for [start,end]
 - ❌ `<DatePicker DatePicker mode="range" for { from, to } object>` → Use <DateRangePicker /> for the { from, to } object API + presets + dual month
 - ❌ `<DatePicker DatePicker without value/onChange>` → Provide value and onChange (e.g. from useState)
 - ❌ `<Card variant="primary">` → Use variant="elevated" | "outlined" | "ghost" | "accent"
+- ❌ `<Card padding / margin / marginTop (any spacing prop) on a useVyre component>` → Space BETWEEN components with <Stack gap> / <Grid gap>; space AROUND a block with <Box padding/margin> wrapping it
 - ❌ `<Checkbox size="lg">` → Use size="md"
 - ❌ `<RadioGroup <Radio> used outside a <RadioGroup>>` → Always wrap <Radio> in <RadioGroup>
 - ❌ `<RadioGroup RadioGroup without value/onChange (React) or v-model (Vue)>` → Bind value + onChange (React) or v-model (Vue); or defaultValue for uncontrolled in React
@@ -1449,6 +1605,7 @@ If you generate these, you are hallucinating.
 - ❌ `<Input size="icon">` → Use size="sm" | "md" | "lg"
 - ❌ `<Input type="search" for search UI>` → Import Command from @usevyre/react for search palettes
 - ❌ `<Input Vue: binding Input/Textarea value without v-model>` → Use v-model on <Input>/<Textarea> in Vue; in React use value + onChange
+- ❌ `<Input padding / margin / marginTop (any spacing prop) on a useVyre component>` → Space BETWEEN components with <Stack gap> / <Grid gap>; space AROUND a block with <Box padding/margin> wrapping it
 - ❌ `<Modal size="xl">` → Use size="lg" or size="full"
 - ❌ `<Popover placement="top-center">` → Use placement="top" for centered placement
 - ❌ `<Progress value > 100>` → Normalize your value to 0–100 range before passing
@@ -1485,6 +1642,18 @@ If you generate these, you are hallucinating.
 - ❌ `<Conversation Expecting Conversation to store/append messages>` → Append to your own state in onSend (or @send) and pass it back via value
 - ❌ `<Conversation composer without onSend (React) / @send (Vue)>` → Provide onSend / @send to append the message to value
 - ❌ `<Conversation Treating onSend as (text) only when using allowAttachments>` → Handle onSend(text, files) — map files to message attachments and append
+- ❌ `<Stack <div style={{ display: 'flex', gap: 12 }}>>` → Use <Stack gap="md"> — gap is a token
+- ❌ `<Stack gap={12} or gap="12px">` → Use gap="none|xs|sm|md|lg|xl|2xl"
+- ❌ `<Stack direction="vertical" / "horizontal">` → Use direction="row" or "column" (also row-reverse / column-reverse)
+- ❌ `<Stack style={{ width: "100%" }} / style={{ height: 320 }}>` → Use the width / height prop: width="full", width="md", height="screen", etc.
+- ❌ `<Grid <div style={{ display:'grid', gridTemplateColumns:'1fr 1fr 1fr' }}>>` → Use <Grid columns={3} gap="md">
+- ❌ `<Grid columns="3" (string)>` → Use columns={3} or columns="auto-fit"
+- ❌ `<Grid Nested div with inline grid-column for spanning>` → Wrap the cell in <GridItem colSpan={2}>
+- ❌ `<Grid style={{ width: "100%" }} / style={{ height: 320 }}>` → Use the width / height prop: width="full", width="md", height="screen", etc.
+- ❌ `<GridItem GridItem outside a Grid>` → Place <GridItem> directly inside <Grid>
+- ❌ `<Box <Box style={{ padding: 16 }}>>` → Use <Box padding="md"> (or paddingX/paddingTop/...)
+- ❌ `<Box Using Box for flex/grid layout>` → Use <Stack> or <Grid>
+- ❌ `<Box style={{ width: "100%" }} / style={{ height: 320 }}>` → Use the width / height prop: width="full", width="md", height="screen", etc.
 - ❌ `<DateRangePicker value={[from, to]}>` → Use value={{ from, to }} and read range.from / range.to
 - ❌ `<DateRangePicker DateRangePicker for a single date>` → Use <DatePicker /> for a single date
 - ❌ `<DateRangePicker presets="true" (string)>` → Use the bare prop: presets  (or presets={true})

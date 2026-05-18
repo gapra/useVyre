@@ -49,6 +49,9 @@
  * - DateRangePicker — Start/end date range picker with dual-month view and preset shortcuts; built on Calendar
  * - Kanban         — Controlled board with drag-and-drop cards between columns; native HTML5 DnD, zero deps
  * - Conversation   — Controlled chat/inbox thread: grouped bubbles, avatars, day separators, status, optional composer
+ * - Stack          — Flex layout primitive (use instead of <div :style="{display:'flex'}">); token-locked gap/align/justify
+ * - Grid           — CSS grid primitive: columns (1-12 or auto-fit), rows, flow, token-locked gap (+ GridItem for colSpan/rowSpan placement)
+ * - Box            — Spacing-only container (padding/margin tokens) + controlled style escape hatch
  *
  * CSS must be imported separately:
  * import "@usevyre/tokens/css";           ← design tokens (required)
@@ -165,6 +168,11 @@ export { default as ItemDescription } from "./components/Item/ItemDescription.vu
 export { default as ItemActions }     from "./components/Item/ItemActions.vue";
 export { default as Kanban }          from "./components/Kanban/Kanban.vue";
 export { default as Conversation }    from "./components/Conversation/Conversation.vue";
+
+export { default as Stack }           from "./components/Layout/Stack.vue";
+export { default as Grid }            from "./components/Layout/Grid.vue";
+export { default as GridItem }        from "./components/Layout/GridItem.vue";
+export { default as Box }             from "./components/Layout/Box.vue";
 
 // ── Composables ───────────────────────────────────────────────
 export { useToast }                 from "./composables/useToast";

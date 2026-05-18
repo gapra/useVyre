@@ -1,0 +1,173 @@
+---
+import DocsLayout       from "@/layouts/DocsLayout.astro";
+import ComponentPreview from "@/components/docs/ComponentPreview.astro";
+import PropsTable       from "@/components/docs/PropsTable.astro";
+import AICheatSheet     from "@/components/docs/AICheatSheet.astro";
+import { StackBasicDemo, StackColumnDemo, StackWrapDemo } from "@/components/demos/LayoutDemos";
+
+// Row — the answer to <div style={{ display: "flex" }}>.
+// Stack IS flex layout: nest Stacks to build a real toolbar —
+// a left identity group pushed apart from right-side actions.
+const codeRowReact = `import { Stack, Avatar, Text, Button } from "@usevyre/react";
+
+<Stack width="full" direction="row" gap="md" align="center" justify="between">
+  <Stack direction="row" gap="sm" align="center">
+    <Avatar fallback="AL" />
+    <Stack direction="column" gap="none">
+      <Text>Ada Lovelace</Text>
+      <Text size="sm" color="muted">Owner</Text>
+    </Stack>
+  </Stack>
+  <Stack direction="row" gap="sm" align="center">
+    <Button variant="ghost">Cancel</Button>
+    <Button variant="primary">Save</Button>
+  </Stack>
+</Stack>`;
+
+const codeRowVue = `<script setup>
+import { Stack, Avatar, Text, Button } from "@usevyre/vue";
+</script>
+<template>
+  <Stack width="full" direction="row" gap="md" align="center" justify="between">
+    <Stack direction="row" gap="sm" align="center">
+      <Avatar fallback="AL" />
+      <Stack direction="column" gap="none">
+        <Text>Ada Lovelace</Text>
+        <Text size="sm" color="muted">Owner</Text>
+      </Stack>
+    </Stack>
+    <Stack direction="row" gap="sm" align="center">
+      <Button variant="ghost">Cancel</Button>
+      <Button variant="primary">Save</Button>
+    </Stack>
+  </Stack>
+</template>`;
+
+// Column — vertical stack
+const codeColumnReact = `import { Stack, Badge } from "@usevyre/react";
+
+<Stack direction="column" gap="sm">
+  <Badge variant="success">Step 1</Badge>
+  <Badge variant="success">Step 2</Badge>
+  <Badge>Step 3</Badge>
+</Stack>`;
+
+const codeColumnVue = `<script setup>
+import { Stack, Badge } from "@usevyre/vue";
+</script>
+<template>
+  <Stack direction="column" gap="sm">
+    <Badge variant="success">Step 1</Badge>
+    <Badge variant="success">Step 2</Badge>
+    <Badge>Step 3</Badge>
+  </Stack>
+</template>`;
+
+// Wrapping with per-axis gap
+const codeWrapReact = `import { Stack, Tag } from "@usevyre/react";
+
+<Stack wrap="wrap" rowGap="md" columnGap="sm">
+  <Tag>react</Tag>
+  <Tag>vue</Tag>
+  <Tag>typescript</Tag>
+  <Tag>design-systems</Tag>
+  <Tag>accessibility</Tag>
+  <Tag>tokens</Tag>
+</Stack>`;
+
+const codeWrapVue = `<script setup>
+import { Stack, Tag } from "@usevyre/vue";
+</script>
+<template>
+  <Stack wrap="wrap" rowGap="md" columnGap="sm">
+    <Tag>react</Tag>
+    <Tag>vue</Tag>
+    <Tag>typescript</Tag>
+    <Tag>design-systems</Tag>
+    <Tag>accessibility</Tag>
+    <Tag>tokens</Tag>
+  </Stack>
+</template>`;
+
+const SPACE = `"none" | "xs" | "sm" | "md" | "lg" | "xl" | "2xl"`;
+const SIZE = `"auto" | "full" | "fit" | "screen" | "xs" | "sm" | "md" | "lg" | "xl" | "2xl"`;
+const props = [
+  { name: "direction",    type: `"row" | "column" | "row-reverse" | "column-reverse"`, default: `"row"`, description: "flex-direction." },
+  { name: "inline",       type: "boolean", default: "false", description: "Render as inline-flex instead of flex." },
+  { name: "gap",          type: SPACE, default: `"md"`, description: "Space between children. Maps to a --vyre-spacing token — never a raw number." },
+  { name: "rowGap",       type: SPACE, default: "—", description: "row-gap override (token)." },
+  { name: "columnGap",    type: SPACE, default: "—", description: "column-gap override (token)." },
+  { name: "align",        type: `"start" | "center" | "end" | "stretch" | "baseline"`, default: `"stretch"`, description: "align-items (cross axis)." },
+  { name: "justify",      type: `"start" | "center" | "end" | "between" | "around" | "evenly"`, default: `"start"`, description: "justify-content (main axis)." },
+  { name: "alignContent", type: `"start" | "center" | "end" | "stretch" | "between" | "around" | "evenly"`, default: "—", description: "align-content (multi-line cross axis)." },
+  { name: "alignSelf",    type: `"auto" | "start" | "center" | "end" | "stretch" | "baseline"`, default: "—", description: "align-self for this element." },
+  { name: "wrap",         type: `"nowrap" | "wrap" | "wrap-reverse"`, default: `"nowrap"`, description: "flex-wrap." },
+  { name: "grow",         type: "number", default: "—", description: "flex-grow." },
+  { name: "shrink",       type: "number", default: "—", description: "flex-shrink." },
+  { name: "basis",        type: `${SPACE} | "auto" | "content" | "0"`, default: "—", description: "flex-basis — token or keyword." },
+  { name: "width",        type: SIZE, default: "—", description: "Width — keyword (full=100%, fit, screen) or fixed-rem token size. Replaces inline width style." },
+  { name: "height",       type: SIZE, default: "—", description: "Height — keyword or fixed-rem token size. Replaces inline height style." },
+  { name: "as",           type: "string", default: `"div"`, description: "HTML tag to render. Still a real DOM element." },
+  { name: "class",        type: "string", default: "—", description: "Additional CSS class." },
+];
+---
+
+<DocsLayout title="Stack" component="Stack">
+  <div class="docs-header">
+    <div class="docs-header__meta">
+      <span class="vyre-badge vyre-badge--default">@usevyre/react</span>
+      <span class="vyre-badge vyre-badge--default">@usevyre/vue</span>
+    </div>
+    <h1 class="docs-title">Stack</h1>
+    <p class="docs-lead">
+      The one-dimensional flex layout primitive — the answer to
+      <code>&lt;div style="display:flex"&gt;</code>. Every spacing value is a
+      design token, so AI never invents a magic-number gap. Renders a plain
+      <code>&lt;div&gt;</code> (or <code>as</code>) in the browser.
+    </p>
+  </div>
+
+  <hr class="docs-divider" />
+
+  <h2 class="docs-h2">Flex layout (row)</h2>
+  <p class="docs-p">
+    Stack <em>is</em> flexbox. The outer row sets <code>width="full"</code> so
+    <code>justify="between"</code> has room to push the identity group away
+    from the action buttons; nested Stacks group each side.
+    <code>justify</code> needs free space to distribute — without a width the
+    row only hugs its content.
+  </p>
+  <ComponentPreview react={codeRowReact} vue={codeRowVue}>
+    <StackBasicDemo client:visible />
+  </ComponentPreview>
+
+  <h2 class="docs-h2">Column</h2>
+  <p class="docs-p">Set <code>direction="column"</code> for a vertical stack.</p>
+  <ComponentPreview react={codeColumnReact} vue={codeColumnVue}>
+    <StackColumnDemo client:visible />
+  </ComponentPreview>
+
+  <h2 class="docs-h2">Wrapping & per-axis gap</h2>
+  <p class="docs-p">
+    <code>wrap="wrap"</code> lets children flow onto multiple lines;
+    <code>rowGap</code> and <code>columnGap</code> control each axis
+    independently — both token-locked.
+  </p>
+  <ComponentPreview react={codeWrapReact} vue={codeWrapVue}>
+    <StackWrapDemo client:visible />
+  </ComponentPreview>
+
+  <h2 class="docs-h2">Props</h2>
+  <PropsTable props={props} />
+
+  <AICheatSheet component="Stack" />
+
+  <div class="docs-pagination">
+    <a href="/docs/components/sidebar" class="docs-pagination__link docs-pagination__link--prev">
+      ← Sidebar
+    </a>
+    <a href="/docs/components/skeleton" class="docs-pagination__link docs-pagination__link--next">
+      Skeleton →
+    </a>
+  </div>
+</DocsLayout>

@@ -20,6 +20,7 @@ module.exports = {
   plugins: ['@usevyre'],
   rules: {
     '@usevyre/no-invalid-vyre-props': 'error',
+    '@usevyre/no-inline-layout-styles': 'warn',
   },
 };`;
 
@@ -36,13 +37,27 @@ const codeHallucinated = `// ❌ ESLint error
 
 // ✅ Valid
 <Badge variant="success" />`;
+
+const codeInlineLayout = `// ⚠️ ESLint warning
+<div style={{ display: 'flex', gap: 12, alignItems: 'center' }}>…</div>
+// Avoid inline display:flex. Use <Stack> — gap/align/justify are design tokens.
+
+<div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr 1fr' }}>…</div>
+// Avoid inline display:grid. Use <Grid> — columns and gap are design tokens.
+
+// ✅ Valid
+<Stack direction="row" gap="md" align="center">…</Stack>
+<Grid columns={3} gap="md">…</Grid>
+
+// ✅ Still allowed — Box exposes style as a documented escape hatch
+<Box style={{ display: 'flex' }}>…</Box>`;
 ---
 
 <DocsLayout title="@usevyre/eslint-plugin">
   <div class="docs-header">
     <div class="docs-header__meta">
       <span class="vyre-badge vyre-badge--accent">npm</span>
-      <span class="vyre-badge vyre-badge--default">v1.0.1</span>
+      <span class="vyre-badge vyre-badge--default">v1.1.0</span>
     </div>
     <h1 class="docs-title">@usevyre/eslint-plugin</h1>
     <p class="docs-lead">
@@ -68,13 +83,28 @@ pnpm add -D @usevyre/eslint-plugin</code></pre>
   <pre class="docs-pre"><code set:text={codeLegacy} /></pre>
 
   <h2 class="docs-h2">Rule: no-invalid-vyre-props</h2>
-  <p class="docs-p">The plugin ships one rule that covers two categories of errors:</p>
+  <p class="docs-p">
+    Errors on invalid component usage. Covers two categories
+    (severity <code>error</code> in the recommended config):
+  </p>
 
   <h3 class="docs-h3">Invalid enum values</h3>
   <pre class="docs-pre"><code set:text={codeEnumError} /></pre>
 
   <h3 class="docs-h3">Hallucinated props</h3>
   <pre class="docs-pre"><code set:text={codeHallucinated} /></pre>
+
+  <h2 class="docs-h2">Rule: no-inline-layout-styles</h2>
+  <p class="docs-p">
+    Flags hand-written <code>display: flex</code> / <code>display: grid</code>
+    inline styles — the single biggest source of AI-hallucinated layout code —
+    and points to the <a href="/docs/components/stack">Stack</a> and
+    <a href="/docs/components/grid">Grid</a> primitives, where spacing is a
+    design token instead of a magic number. Severity <code>warn</code> in the
+    recommended config so it does not block adoption. <a href="/docs/components/box">Box</a>'s
+    documented <code>style</code> escape hatch is intentionally exempt.
+  </p>
+  <pre class="docs-pre"><code set:text={codeInlineLayout} /></pre>
 
   <h2 class="docs-h2">Editor integration</h2>
   <p class="docs-p">

@@ -1,0 +1,222 @@
+---
+import DocsLayout       from "@/layouts/DocsLayout.astro";
+import ComponentPreview from "@/components/docs/ComponentPreview.astro";
+import PropsTable       from "@/components/docs/PropsTable.astro";
+import AICheatSheet     from "@/components/docs/AICheatSheet.astro";
+import { GridBasicDemo, GridSpanDemo, GridAutoFitDemo } from "@/components/demos/LayoutDemos";
+
+const codeStats = `const stats = [
+  { label: "Revenue", value: "$48.2k" },
+  { label: "Users", value: "12,840" },
+  { label: "Orders", value: "1,204" },
+  { label: "Refunds", value: "32" },
+  { label: "Churn", value: "2.1%" },
+  { label: "MRR", value: "$9.6k" },
+];`;
+
+// Fixed column count — a real KPI dashboard grid
+const codeBasicReact = `import { Grid, Card, CardBody, Text, Heading } from "@usevyre/react";
+
+${codeStats}
+
+<Grid columns={3} gap="md">
+  {stats.map((s) => (
+    <Card key={s.label}>
+      <CardBody>
+        <Text size="sm" color="muted">{s.label}</Text>
+        <Heading size="lg">{s.value}</Heading>
+      </CardBody>
+    </Card>
+  ))}
+</Grid>`;
+
+const codeBasicVue = `<script setup>
+import { Grid, Card, CardBody, Text, Heading } from "@usevyre/vue";
+
+${codeStats}
+</script>
+<template>
+  <Grid :columns="3" gap="md">
+    <Card v-for="s in stats" :key="s.label">
+      <CardBody>
+        <Text size="sm" color="muted">{{ s.label }}</Text>
+        <Heading size="lg">{{ s.value }}</Heading>
+      </CardBody>
+    </Card>
+  </Grid>
+</template>`;
+
+// Cell spanning with GridItem — content + sidebar layout
+const codeSpanReact = `import { Grid, GridItem, Card, CardBody, Text, Heading } from "@usevyre/react";
+
+<Grid columns={3} gap="md">
+  <GridItem colSpan={2}>
+    <Card>
+      <CardBody>
+        <Heading size="sm">Main content</Heading>
+        <Text color="muted">Spans 2 of 3 columns</Text>
+      </CardBody>
+    </Card>
+  </GridItem>
+  <Card>
+    <CardBody>
+      <Heading size="sm">Sidebar</Heading>
+      <Text color="muted">1 column</Text>
+    </CardBody>
+  </Card>
+  <Card>
+    <CardBody><Text>Footer A</Text></CardBody>
+  </Card>
+  <Card>
+    <CardBody><Text>Footer B</Text></CardBody>
+  </Card>
+  <Card>
+    <CardBody><Text>Footer C</Text></CardBody>
+  </Card>
+</Grid>`;
+
+const codeSpanVue = `<script setup>
+import { Grid, GridItem, Card, CardBody, Text, Heading } from "@usevyre/vue";
+</script>
+<template>
+  <Grid :columns="3" gap="md">
+    <GridItem :col-span="2">
+      <Card>
+        <CardBody>
+          <Heading size="sm">Main content</Heading>
+          <Text color="muted">Spans 2 of 3 columns</Text>
+        </CardBody>
+      </Card>
+    </GridItem>
+    <Card>
+      <CardBody>
+        <Heading size="sm">Sidebar</Heading>
+        <Text color="muted">1 column</Text>
+      </CardBody>
+    </Card>
+    <Card>
+      <CardBody><Text>Footer A</Text></CardBody>
+    </Card>
+    <Card>
+      <CardBody><Text>Footer B</Text></CardBody>
+    </Card>
+    <Card>
+      <CardBody><Text>Footer C</Text></CardBody>
+    </Card>
+  </Grid>
+</template>`;
+
+// Responsive auto-fit
+const codeAutoFitReact = `import { Grid, Card, CardBody, Text, Heading } from "@usevyre/react";
+
+<Grid columns="auto-fit" gap="md">
+  {stats.slice(0, 4).map((s) => (
+    <Card key={s.label}>
+      <CardBody>
+        <Text size="sm" color="muted">{s.label}</Text>
+        <Heading size="lg">{s.value}</Heading>
+      </CardBody>
+    </Card>
+  ))}
+</Grid>`;
+
+const codeAutoFitVue = `<script setup>
+import { Grid, Card, CardBody, Text, Heading } from "@usevyre/vue";
+</script>
+<template>
+  <Grid columns="auto-fit" gap="md">
+    <Card v-for="s in stats.slice(0, 4)" :key="s.label">
+      <CardBody>
+        <Text size="sm" color="muted">{{ s.label }}</Text>
+        <Heading size="lg">{{ s.value }}</Heading>
+      </CardBody>
+    </Card>
+  </Grid>
+</template>`;
+
+const SPACE = `"none" | "xs" | "sm" | "md" | "lg" | "xl" | "2xl"`;
+const SIZE = `"auto" | "full" | "fit" | "screen" | "xs" | "sm" | "md" | "lg" | "xl" | "2xl"`;
+const props = [
+  { name: "columns",   type: `number | "auto-fit"`, default: "1",    description: "Equal-width column count (1–12), or 'auto-fit' for responsive wrapping." },
+  { name: "rows",      type: `number | "auto"`, default: "—", description: "Explicit row count, or 'auto'." },
+  { name: "flow",      type: `"row" | "column" | "dense" | "row-dense" | "column-dense"`, default: "—", description: "grid-auto-flow." },
+  { name: "gap",       type: SPACE, default: `"md"`, description: "Space between cells. Maps to a --vyre-spacing token." },
+  { name: "rowGap",    type: SPACE, default: "—", description: "row-gap override (token)." },
+  { name: "columnGap", type: SPACE, default: "—", description: "column-gap override (token)." },
+  { name: "align",     type: `"start" | "center" | "end" | "stretch"`, default: `"stretch"`, description: "align-items." },
+  { name: "justify",   type: `"start" | "center" | "end" | "stretch"`, default: "—", description: "justify-items." },
+  { name: "width",     type: SIZE, default: "—", description: "Width — keyword (full=100%, fit, screen) or fixed-rem token size." },
+  { name: "height",    type: SIZE, default: "—", description: "Height — keyword or fixed-rem token size." },
+  { name: "as",        type: "string", default: `"div"`, description: "HTML tag to render." },
+  { name: "class",     type: "string", default: "—",     description: "Additional CSS class." },
+];
+const itemProps = [
+  { name: "colSpan",  type: "number", default: "—", description: "Columns this item spans." },
+  { name: "rowSpan",  type: "number", default: "—", description: "Rows this item spans." },
+  { name: "colStart", type: "number", default: "—", description: "1-based column line to start at." },
+  { name: "rowStart", type: "number", default: "—", description: "1-based row line to start at." },
+  { name: "as",       type: "string", default: `"div"`, description: "HTML tag to render." },
+];
+---
+
+<DocsLayout title="Grid" component="Grid">
+  <div class="docs-header">
+    <div class="docs-header__meta">
+      <span class="vyre-badge vyre-badge--default">@usevyre/react</span>
+      <span class="vyre-badge vyre-badge--default">@usevyre/vue</span>
+    </div>
+    <h1 class="docs-title">Grid</h1>
+    <p class="docs-lead">
+      A two-dimensional CSS grid primitive. Use it instead of an inline
+      <code>display: grid</code> — columns are an explicit count and gap is a
+      design token, so AI never has to guess a track template.
+    </p>
+  </div>
+
+  <hr class="docs-divider" />
+
+  <h2 class="docs-h2">Fixed columns</h2>
+  <p class="docs-p">
+    A set number of equal-width columns with a token gap. No track template to
+    hand-write, so AI cannot drift.
+  </p>
+  <ComponentPreview react={codeBasicReact} vue={codeBasicVue}>
+    <GridBasicDemo client:visible />
+  </ComponentPreview>
+
+  <h2 class="docs-h2">Spanning cells with GridItem</h2>
+  <p class="docs-p">
+    Wrap a cell in <code>&lt;GridItem&gt;</code> to span columns/rows or pin it
+    to a specific grid line — instead of a nested div with an inline
+    <code>grid-column</code>.
+  </p>
+  <ComponentPreview react={codeSpanReact} vue={codeSpanVue}>
+    <GridSpanDemo client:visible />
+  </ComponentPreview>
+
+  <h2 class="docs-h2">Responsive auto-fit</h2>
+  <p class="docs-p">
+    <code>columns="auto-fit"</code> fits as many columns as the container
+    width allows and wraps the rest — responsive with zero media queries.
+  </p>
+  <ComponentPreview react={codeAutoFitReact} vue={codeAutoFitVue}>
+    <GridAutoFitDemo client:visible />
+  </ComponentPreview>
+
+  <h2 class="docs-h2">Props</h2>
+  <PropsTable props={props} />
+
+  <h2 class="docs-h2">GridItem props</h2>
+  <PropsTable props={itemProps} />
+
+  <AICheatSheet component="Grid" />
+
+  <div class="docs-pagination">
+    <a href="/docs/components/dropdown-menu" class="docs-pagination__link docs-pagination__link--prev">
+      ← Dropdown Menu
+    </a>
+    <a href="/docs/components/input" class="docs-pagination__link docs-pagination__link--next">
+      Input →
+    </a>
+  </div>
+</DocsLayout>

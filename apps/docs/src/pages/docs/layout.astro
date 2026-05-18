@@ -1,0 +1,103 @@
+---
+import DocsLayout from "@/layouts/DocsLayout.astro";
+import { Code }    from "astro:components";
+
+const codeWrong = `// ❌ NOT how useVyre works — components have no spacing props
+<Button margin="lg">Save</Button>
+<Card padding="xl">…</Card>
+<Input marginTop="md" />`;
+
+const codeRight = `// ✅ Spacing lives in layout primitives, by composition
+import { Stack, Box } from "@usevyre/react";
+
+// Space BETWEEN components → Stack/Grid gap
+<Stack direction="row" gap="md">
+  <Button variant="ghost">Cancel</Button>
+  <Button variant="primary">Save</Button>
+</Stack>
+
+// Space AROUND a block → wrap it in a Box
+<Box marginTop="lg">
+  <Card>…</Card>
+</Box>`;
+
+const codeEscape = `// Last resort only — flagged as an anti-pattern by the ESLint plugin
+<Box style={{ marginTop: "13px" }}>
+  <ThirdPartyEmbed />
+</Box>`;
+---
+
+<DocsLayout title="Layout & Spacing">
+  <div class="docs-header">
+    <h1 class="docs-title">Layout &amp; Spacing</h1>
+    <p class="docs-lead">
+      How useVyre handles spacing — and why components deliberately have no
+      <code>padding</code>/<code>margin</code> props.
+    </p>
+  </div>
+
+  <hr class="docs-divider" />
+
+  <h2 class="docs-h2">The rule</h2>
+  <p class="docs-p">
+    useVyre components — <code>Button</code>, <code>Card</code>,
+    <code>Input</code>, and the rest — <strong>do not accept spacing
+    props</strong>. This is intentional. Internal spacing is fixed by each
+    component's design tokens so a <code>Button</code> always looks like a
+    <code>Button</code>, on every page, in every codebase. That consistency is
+    the whole point of a design system, and it is what keeps AI agents from
+    hallucinating one-off spacing.
+  </p>
+
+  <h2 class="docs-h2">Where spacing lives instead</h2>
+  <table class="docs-table">
+    <thead>
+      <tr><th>You need…</th><th>Use</th></tr>
+    </thead>
+    <tbody>
+      <tr><td>Space <em>between</em> components</td><td><a href="/docs/components/stack">Stack</a> / <a href="/docs/components/grid">Grid</a> <code>gap</code></td></tr>
+      <tr><td>Space <em>around</em> a block</td><td><a href="/docs/components/box">Box</a> <code>padding</code> / <code>margin</code></td></tr>
+      <tr><td>Spacing <em>inside</em> a component</td><td>Already set by its tokens — not adjustable</td></tr>
+      <tr><td>Something the system can't express</td><td><code>Box</code> <code>style</code> / <code>className</code> escape hatch</td></tr>
+    </tbody>
+  </table>
+
+  <h2 class="docs-h2">Not this</h2>
+  <pre class="docs-pre"><code set:text={codeWrong} /></pre>
+
+  <h2 class="docs-h2">This</h2>
+  <pre class="docs-pre"><Code code={codeRight} lang="tsx" theme="github-dark" /></pre>
+  <p class="docs-p">
+    You still have full control over spacing — through <strong>composition</strong>,
+    not by leaking <code>padding</code>/<code>margin</code> into every
+    component. AI only needs to learn <em>one</em> spacing pattern
+    (<code>Stack</code>/<code>Box</code>), not memorize spacing props across
+    every component.
+  </p>
+
+  <h2 class="docs-h2">The escape hatch</h2>
+  <p class="docs-p">
+    For the rare value the design system genuinely cannot express, every
+    component accepts <code>className</code> and <code>style</code>. On
+    <code>Box</code> this is the documented escape hatch — and the
+    <a href="/docs/ai-tooling/eslint-plugin">ESLint plugin</a> flags it so it
+    stays a deliberate exception, never the default.
+  </p>
+  <pre class="docs-pre"><Code code={codeEscape} lang="tsx" theme="github-dark" /></pre>
+
+  <div class="docs-callout docs-callout--accent">
+    <strong>Why so strict?</strong> Every spacing prop you add to a component
+    is another value an AI agent has to guess. useVyre trades a little
+    verbosity for layouts that are predictable, consistent, and
+    hallucination-resistant.
+  </div>
+
+  <div class="docs-pagination">
+    <a href="/docs/theming" class="docs-pagination__link docs-pagination__link--prev">
+      ← Theming
+    </a>
+    <a href="/docs/migration" class="docs-pagination__link docs-pagination__link--next">
+      Migration Guide →
+    </a>
+  </div>
+</DocsLayout>

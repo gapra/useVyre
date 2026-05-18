@@ -1,0 +1,160 @@
+---
+import DocsLayout       from "@/layouts/DocsLayout.astro";
+import ComponentPreview from "@/components/docs/ComponentPreview.astro";
+import PropsTable       from "@/components/docs/PropsTable.astro";
+import AICheatSheet     from "@/components/docs/AICheatSheet.astro";
+import { BoxBasicDemo, BoxAxisDemo, BoxSideDemo } from "@/components/demos/LayoutDemos";
+
+// Uniform padding
+const codeBasicReact = `import { Card, Box, Text } from "@usevyre/react";
+
+<Card>
+  <Box padding="lg">
+    <Text>padding="lg" on every side</Text>
+  </Box>
+</Card>`;
+
+const codeBasicVue = `<script setup>
+import { Card, Box, Text } from "@usevyre/vue";
+</script>
+<template>
+  <Card>
+    <Box padding="lg">
+      <Text>padding="lg" on every side</Text>
+    </Box>
+  </Card>
+</template>`;
+
+// Per-axis padding
+const codeAxisReact = `import { Card, Box, Text } from "@usevyre/react";
+
+<Card>
+  <Box paddingX="xl" paddingY="sm">
+    <Text>paddingX="xl" · paddingY="sm"</Text>
+  </Box>
+</Card>`;
+
+const codeAxisVue = `<script setup>
+import { Card, Box, Text } from "@usevyre/vue";
+</script>
+<template>
+  <Card>
+    <Box padding-x="xl" padding-y="sm">
+      <Text>paddingX="xl" · paddingY="sm"</Text>
+    </Box>
+  </Card>
+</template>`;
+
+// Per-side margin for vertical rhythm
+const codeSideReact = `import { Stack, Card, Box } from "@usevyre/react";
+
+<Stack direction="column" gap="none">
+  <Card>
+    <Box padding="md">First card</Box>
+  </Card>
+  <Box marginTop="lg">
+    <Card>
+      <Box padding="md">Pushed down with marginTop="lg"</Box>
+    </Card>
+  </Box>
+</Stack>`;
+
+const codeSideVue = `<script setup>
+import { Stack, Card, Box } from "@usevyre/vue";
+</script>
+<template>
+  <Stack direction="column" gap="none">
+    <Card>
+      <Box padding="md">First card</Box>
+    </Card>
+    <Box margin-top="lg">
+      <Card>
+        <Box padding="md">Pushed down with marginTop="lg"</Box>
+      </Card>
+    </Box>
+  </Stack>
+</template>`;
+
+const SPACE = `"none" | "xs" | "sm" | "md" | "lg" | "xl" | "2xl"`;
+const SIZE = `"auto" | "full" | "fit" | "screen" | "xs" | "sm" | "md" | "lg" | "xl" | "2xl"`;
+const props = [
+  { name: "padding",       type: SPACE, default: "—", description: "Inner spacing, all sides." },
+  { name: "paddingX",      type: SPACE, default: "—", description: "Inner spacing, left + right." },
+  { name: "paddingY",      type: SPACE, default: "—", description: "Inner spacing, top + bottom." },
+  { name: "paddingTop",    type: SPACE, default: "—", description: "Inner spacing, top (overrides paddingY/padding)." },
+  { name: "paddingRight",  type: SPACE, default: "—", description: "Inner spacing, right (overrides paddingX/padding)." },
+  { name: "paddingBottom", type: SPACE, default: "—", description: "Inner spacing, bottom (overrides paddingY/padding)." },
+  { name: "paddingLeft",   type: SPACE, default: "—", description: "Inner spacing, left (overrides paddingX/padding)." },
+  { name: "margin",        type: SPACE, default: "—", description: "Outer spacing, all sides." },
+  { name: "marginX",       type: SPACE, default: "—", description: "Outer spacing, left + right." },
+  { name: "marginY",       type: SPACE, default: "—", description: "Outer spacing, top + bottom." },
+  { name: "marginTop",     type: SPACE, default: "—", description: "Outer spacing, top (overrides marginY/margin)." },
+  { name: "marginRight",   type: SPACE, default: "—", description: "Outer spacing, right (overrides marginX/margin)." },
+  { name: "marginBottom",  type: SPACE, default: "—", description: "Outer spacing, bottom (overrides marginY/margin)." },
+  { name: "marginLeft",    type: SPACE, default: "—", description: "Outer spacing, left (overrides marginX/margin)." },
+  { name: "width",         type: SIZE,  default: "—", description: "Width — keyword (full=100%, fit, screen) or fixed-rem token size." },
+  { name: "height",        type: SIZE,  default: "—", description: "Height — keyword or fixed-rem token size." },
+  { name: "as",            type: "string",        default: `"div"`, description: "HTML tag to render. Still a real DOM element." },
+  { name: "style",         type: "CSSProperties", default: "—",     description: "Anti-pattern escape hatch. Prefer tokens; flagged by the ESLint plugin." },
+  { name: "class",         type: "string",        default: "—",     description: "Additional CSS class." },
+];
+---
+
+<DocsLayout title="Box" component="Box">
+  <div class="docs-header">
+    <div class="docs-header__meta">
+      <span class="vyre-badge vyre-badge--default">@usevyre/react</span>
+      <span class="vyre-badge vyre-badge--default">@usevyre/vue</span>
+    </div>
+    <h1 class="docs-title">Box</h1>
+    <p class="docs-lead">
+      A spacing-only container with a controlled escape hatch. Use it for
+      token-based <code>padding</code>/<code>margin</code> instead of an inline
+      <code>style</code>. For layout, reach for <a href="/docs/components/stack">Stack</a>
+      or <a href="/docs/components/grid">Grid</a>.
+    </p>
+  </div>
+
+  <hr class="docs-divider" />
+
+  <h2 class="docs-h2">Uniform padding</h2>
+  <p class="docs-p">
+    <code>padding</code> applies a token to all four sides — spacing comes
+    from the scale, never a magic number.
+  </p>
+  <ComponentPreview react={codeBasicReact} vue={codeBasicVue}>
+    <BoxBasicDemo client:visible />
+  </ComponentPreview>
+
+  <h2 class="docs-h2">Per-axis padding</h2>
+  <p class="docs-p">
+    <code>paddingX</code> (left + right) and <code>paddingY</code> (top +
+    bottom) set each axis independently.
+  </p>
+  <ComponentPreview react={codeAxisReact} vue={codeAxisVue}>
+    <BoxAxisDemo client:visible />
+  </ComponentPreview>
+
+  <h2 class="docs-h2">Per-side margin</h2>
+  <p class="docs-p">
+    Side-specific props like <code>marginTop</code> give you vertical rhythm
+    without an inline style. Per-side overrides the axis/shorthand.
+  </p>
+  <ComponentPreview react={codeSideReact} vue={codeSideVue}>
+    <BoxSideDemo client:visible />
+  </ComponentPreview>
+
+  <h2 class="docs-h2">Props</h2>
+  <PropsTable props={props} />
+
+  <AICheatSheet component="Box" />
+
+  <div class="docs-pagination">
+    <a href="/docs/components/badge" class="docs-pagination__link docs-pagination__link--prev">
+      ← Badge
+    </a>
+    <a href="/docs/components/breadcrumb" class="docs-pagination__link docs-pagination__link--next">
+      Breadcrumb →
+    </a>
+  </div>
+</DocsLayout>

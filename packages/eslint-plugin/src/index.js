@@ -1,4 +1,5 @@
 import { noInvalidVyreProps } from "./rules/no-invalid-vyre-props.js";
+import { noInlineLayoutStyles } from "./rules/no-inline-layout-styles.js";
 
 const plugin = {
   meta: {
@@ -7,6 +8,7 @@ const plugin = {
   },
   rules: {
     "no-invalid-vyre-props": noInvalidVyreProps,
+    "no-inline-layout-styles": noInlineLayoutStyles,
   },
   configs: {},
 };
@@ -17,6 +19,7 @@ plugin.configs.recommended = {
   plugins: { vyre: plugin },
   rules: {
     "vyre/no-invalid-vyre-props": "error",
+    "vyre/no-inline-layout-styles": "warn",
   },
 };
 
@@ -25,6 +28,7 @@ plugin.configs["recommended-legacy"] = {
   plugins: ["vyre"],
   rules: {
     "vyre/no-invalid-vyre-props": "error",
+    "vyre/no-inline-layout-styles": "warn",
   },
 };
 

@@ -1,14 +1,34 @@
 {
   "$schema": "http://json-schema.org/draft-07/schema#",
-  "version": "1.2.0",
-  "generatedAt": "2026-05-16",
+  "version": "1.6.0",
+  "generatedAt": "2026-05-18",
   "package": "@usevyre/react",
-  "packageVersion": "1.1.0",
+  "packageVersion": "1.6.0",
   "validFor": [
     "@usevyre/react@1.1.0+",
     "@usevyre/vue@1.1.0+"
   ],
   "changelog": {
+    "1.6.0": {
+      "date": "2026-05-18",
+      "breaking": false,
+      "summary": "Documented the spacing model as an explicit anti-pattern on representative components (Button, Card, Input): useVyre components take no padding/margin props — use Stack/Grid gap or a Box wrapper. No API change."
+    },
+    "1.5.0": {
+      "date": "2026-05-18",
+      "breaking": false,
+      "summary": "Stack, Grid and Box gain token-locked width / height props (keywords auto/full/fit/screen + fixed-rem token sizes xs–2xl), removing the need for an inline width/height style for common layout sizing."
+    },
+    "1.4.0": {
+      "date": "2026-05-18",
+      "breaking": false,
+      "summary": "Layout primitives expanded: Stack now covers the full CSS flexbox surface (reverse directions, wrap modes, alignContent/alignSelf, grow/shrink/basis, per-axis gap); Grid gains rows/flow/justify + a new GridItem subcomponent for span/placement; Box gains per-axis (X/Y) and per-side (Top/Right/Bottom/Left) token padding/margin. Fixes Grid columns being overwritten when a user style prop was passed."
+    },
+    "1.3.0": {
+      "date": "2026-05-18",
+      "breaking": false,
+      "summary": "Added Stack, Grid and Box layout primitives. Token-locked spacing (no raw px/rem) to eliminate hallucinated inline flex/grid styles; Box exposes a documented style escape hatch flagged as an anti-pattern."
+    },
     "1.2.0": {
       "date": "2026-05-16",
       "breaking": false,
@@ -401,6 +421,11 @@
           "pattern": "size=\"icon\" without aria-label",
           "reason": "Icon-only buttons have no visible text — screen readers need aria-label",
           "fix": "Add aria-label describing the action"
+        },
+        {
+          "pattern": "padding / margin / marginTop (any spacing prop) on a useVyre component",
+          "reason": "Components have NO spacing props by design — internal spacing is fixed by tokens for visual consistency",
+          "fix": "Space BETWEEN components with <Stack gap> / <Grid gap>; space AROUND a block with <Box padding/margin> wrapping it"
         }
       ],
       "examples": [
@@ -584,6 +609,11 @@
           "pattern": "variant=\"primary\"",
           "reason": "Card has no 'primary' variant",
           "fix": "Use variant=\"elevated\" | \"outlined\" | \"ghost\" | \"accent\""
+        },
+        {
+          "pattern": "padding / margin / marginTop (any spacing prop) on a useVyre component",
+          "reason": "Components have NO spacing props by design — internal spacing is fixed by tokens for visual consistency",
+          "fix": "Space BETWEEN components with <Stack gap> / <Grid gap>; space AROUND a block with <Box padding/margin> wrapping it"
         }
       ],
       "examples": [
@@ -954,6 +984,11 @@
           "pattern": "Vue: binding Input/Textarea value without v-model",
           "reason": "Vue Input & Textarea support v-model (modelValue); manual :value alone won't update",
           "fix": "Use v-model on <Input>/<Textarea> in Vue; in React use value + onChange"
+        },
+        {
+          "pattern": "padding / margin / marginTop (any spacing prop) on a useVyre component",
+          "reason": "Components have NO spacing props by design — internal spacing is fixed by tokens for visual consistency",
+          "fix": "Space BETWEEN components with <Stack gap> / <Grid gap>; space AROUND a block with <Box padding/margin> wrapping it"
         }
       ],
       "examples": [
@@ -2207,6 +2242,676 @@
         {
           "description": "Message with image + file attachments",
           "code": "const messages = [\n  { id: \"1\", authorId: \"sam\", authorName: \"Sam\", text: \"Moodboard \\ud83d\\udc47\",\n    attachments: [{ kind: \"image\", url: \"/board.png\", name: \"board.png\" }] },\n  { id: \"2\", authorId: \"me\", text: \"Specs:\", status: \"read\",\n    attachments: [{ kind: \"file\", url: \"/spec.pdf\", name: \"spec.pdf\", size: \"2.4 MB\" }] },\n];\n<Conversation value={messages} currentUserId=\"me\" />"
+        }
+      ]
+    },
+    "Stack": {
+      "description": "Full one-dimensional flex layout primitive. USE INSTEAD OF <div style={{display:'flex'}}>. Covers the whole CSS flexbox surface (direction incl. reverse, wrap, align/justify/alignContent/alignSelf, grow/shrink/basis, per-axis gap) with token-locked spacing. Renders a plain <div> (or `as`).",
+      "import": "import { Stack } from \"@usevyre/react\"",
+      "props": {
+        "direction": {
+          "type": "enum",
+          "values": [
+            "row",
+            "column",
+            "row-reverse",
+            "column-reverse"
+          ],
+          "default": "row",
+          "description": "flex-direction"
+        },
+        "inline": {
+          "type": "boolean",
+          "default": false,
+          "description": "Render as inline-flex instead of flex"
+        },
+        "gap": {
+          "type": "enum",
+          "values": [
+            "none",
+            "xs",
+            "sm",
+            "md",
+            "lg",
+            "xl",
+            "2xl"
+          ],
+          "default": "md",
+          "description": "Space between children. Maps to --vyre-spacing tokens. NEVER a raw px/rem value."
+        },
+        "rowGap": {
+          "type": "enum",
+          "values": [
+            "none",
+            "xs",
+            "sm",
+            "md",
+            "lg",
+            "xl",
+            "2xl"
+          ],
+          "description": "Row-gap override. Maps to --vyre-spacing tokens. NEVER a raw px/rem value."
+        },
+        "columnGap": {
+          "type": "enum",
+          "values": [
+            "none",
+            "xs",
+            "sm",
+            "md",
+            "lg",
+            "xl",
+            "2xl"
+          ],
+          "description": "Column-gap override. Maps to --vyre-spacing tokens. NEVER a raw px/rem value."
+        },
+        "align": {
+          "type": "enum",
+          "values": [
+            "start",
+            "center",
+            "end",
+            "stretch",
+            "baseline"
+          ],
+          "default": "stretch",
+          "description": "align-items (cross axis)"
+        },
+        "justify": {
+          "type": "enum",
+          "values": [
+            "start",
+            "center",
+            "end",
+            "between",
+            "around",
+            "evenly"
+          ],
+          "default": "start",
+          "description": "justify-content (main axis)"
+        },
+        "alignContent": {
+          "type": "enum",
+          "values": [
+            "start",
+            "center",
+            "end",
+            "stretch",
+            "between",
+            "around",
+            "evenly"
+          ],
+          "description": "align-content (multi-line cross axis)"
+        },
+        "alignSelf": {
+          "type": "enum",
+          "values": [
+            "auto",
+            "start",
+            "center",
+            "end",
+            "stretch",
+            "baseline"
+          ],
+          "description": "align-self for this element"
+        },
+        "wrap": {
+          "type": "enum",
+          "values": [
+            "nowrap",
+            "wrap",
+            "wrap-reverse"
+          ],
+          "default": "nowrap",
+          "description": "flex-wrap"
+        },
+        "grow": {
+          "type": "number",
+          "description": "flex-grow"
+        },
+        "shrink": {
+          "type": "number",
+          "description": "flex-shrink"
+        },
+        "basis": {
+          "type": "enum",
+          "values": [
+            "none",
+            "xs",
+            "sm",
+            "md",
+            "lg",
+            "xl",
+            "2xl",
+            "auto",
+            "content",
+            "0"
+          ],
+          "description": "flex-basis — token, 'auto', 'content', or '0'"
+        },
+        "width": {
+          "type": "enum",
+          "values": [
+            "auto",
+            "full",
+            "fit",
+            "screen",
+            "xs",
+            "sm",
+            "md",
+            "lg",
+            "xl",
+            "2xl"
+          ],
+          "description": "Width — keyword (auto/full=100%/fit=fit-content/screen) or a fixed-rem token size (xs 8 · sm 12 · md 16 · lg 24 · xl 32 · 2xl 42). Avoids an inline width style."
+        },
+        "height": {
+          "type": "enum",
+          "values": [
+            "auto",
+            "full",
+            "fit",
+            "screen",
+            "xs",
+            "sm",
+            "md",
+            "lg",
+            "xl",
+            "2xl"
+          ],
+          "description": "Height — keyword (auto/full=100%/fit=fit-content/screen) or a fixed-rem token size (xs 8 · sm 12 · md 16 · lg 24 · xl 32 · 2xl 42). Avoids an inline height style."
+        },
+        "as": {
+          "type": "string",
+          "default": "div",
+          "description": "HTML tag to render"
+        }
+      },
+      "antiPatterns": [
+        {
+          "pattern": "<div style={{ display: 'flex', gap: 12 }}>",
+          "reason": "Inline flex styles bypass the design system and use magic-number spacing",
+          "fix": "Use <Stack gap=\"md\"> — gap is a token"
+        },
+        {
+          "pattern": "gap={12} or gap=\"12px\"",
+          "reason": "Stack gap is a closed token enum",
+          "fix": "Use gap=\"none|xs|sm|md|lg|xl|2xl\""
+        },
+        {
+          "pattern": "direction=\"vertical\" / \"horizontal\"",
+          "reason": "Stack mirrors CSS flex-direction names",
+          "fix": "Use direction=\"row\" or \"column\" (also row-reverse / column-reverse)"
+        },
+        {
+          "pattern": "style={{ width: \"100%\" }} / style={{ height: 320 }}",
+          "reason": "Inline width/height bypass the design system and use magic numbers",
+          "fix": "Use the width / height prop: width=\"full\", width=\"md\", height=\"screen\", etc."
+        }
+      ],
+      "examples": [
+        {
+          "description": "Row, vertically centered, spaced apart",
+          "code": "<Stack direction=\"row\" gap=\"md\" align=\"center\" justify=\"between\">\n  <Avatar src={user.avatar} />\n  <Text>{user.name}</Text>\n  <Button>Edit</Button>\n</Stack>"
+        },
+        {
+          "description": "Wrapping grid-ish gallery with per-axis gap",
+          "code": "<Stack wrap=\"wrap\" rowGap=\"lg\" columnGap=\"md\">\n  {tags.map((t) => <Tag key={t}>{t}</Tag>)}\n</Stack>"
+        }
+      ]
+    },
+    "Grid": {
+      "description": "Two-dimensional CSS grid primitive. Explicit column/row counts (or auto-fit), auto-flow control, token gap. Pair with GridItem for cell spanning/placement. Renders a plain <div> (or `as`).",
+      "import": "import { Grid, GridItem } from \"@usevyre/react\"",
+      "subcomponents": [
+        "GridItem"
+      ],
+      "props": {
+        "columns": {
+          "type": "number | \"auto-fit\"",
+          "default": 1,
+          "description": "Equal-width column count (1-12), or 'auto-fit' for responsive wrapping"
+        },
+        "rows": {
+          "type": "number | \"auto\"",
+          "description": "Explicit row count, or 'auto'"
+        },
+        "flow": {
+          "type": "enum",
+          "values": [
+            "row",
+            "column",
+            "dense",
+            "row-dense",
+            "column-dense"
+          ],
+          "description": "grid-auto-flow"
+        },
+        "gap": {
+          "type": "enum",
+          "values": [
+            "none",
+            "xs",
+            "sm",
+            "md",
+            "lg",
+            "xl",
+            "2xl"
+          ],
+          "default": "md",
+          "description": "Space between cells. Maps to --vyre-spacing tokens. NEVER a raw px/rem value."
+        },
+        "rowGap": {
+          "type": "enum",
+          "values": [
+            "none",
+            "xs",
+            "sm",
+            "md",
+            "lg",
+            "xl",
+            "2xl"
+          ],
+          "description": "Row-gap override. Maps to --vyre-spacing tokens. NEVER a raw px/rem value."
+        },
+        "columnGap": {
+          "type": "enum",
+          "values": [
+            "none",
+            "xs",
+            "sm",
+            "md",
+            "lg",
+            "xl",
+            "2xl"
+          ],
+          "description": "Column-gap override. Maps to --vyre-spacing tokens. NEVER a raw px/rem value."
+        },
+        "align": {
+          "type": "enum",
+          "values": [
+            "start",
+            "center",
+            "end",
+            "stretch"
+          ],
+          "default": "stretch",
+          "description": "align-items"
+        },
+        "justify": {
+          "type": "enum",
+          "values": [
+            "start",
+            "center",
+            "end",
+            "stretch"
+          ],
+          "description": "justify-items"
+        },
+        "width": {
+          "type": "enum",
+          "values": [
+            "auto",
+            "full",
+            "fit",
+            "screen",
+            "xs",
+            "sm",
+            "md",
+            "lg",
+            "xl",
+            "2xl"
+          ],
+          "description": "Width — keyword (auto/full=100%/fit=fit-content/screen) or a fixed-rem token size (xs 8 · sm 12 · md 16 · lg 24 · xl 32 · 2xl 42). Avoids an inline width style."
+        },
+        "height": {
+          "type": "enum",
+          "values": [
+            "auto",
+            "full",
+            "fit",
+            "screen",
+            "xs",
+            "sm",
+            "md",
+            "lg",
+            "xl",
+            "2xl"
+          ],
+          "description": "Height — keyword (auto/full=100%/fit=fit-content/screen) or a fixed-rem token size (xs 8 · sm 12 · md 16 · lg 24 · xl 32 · 2xl 42). Avoids an inline height style."
+        },
+        "as": {
+          "type": "string",
+          "default": "div",
+          "description": "HTML tag to render"
+        }
+      },
+      "antiPatterns": [
+        {
+          "pattern": "<div style={{ display:'grid', gridTemplateColumns:'1fr 1fr 1fr' }}>",
+          "reason": "Inline grid styles bypass the design system",
+          "fix": "Use <Grid columns={3} gap=\"md\">"
+        },
+        {
+          "pattern": "columns=\"3\" (string)",
+          "reason": "columns is a number or the literal 'auto-fit'",
+          "fix": "Use columns={3} or columns=\"auto-fit\""
+        },
+        {
+          "pattern": "Nested div with inline grid-column for spanning",
+          "reason": "Spanning has a dedicated primitive",
+          "fix": "Wrap the cell in <GridItem colSpan={2}>"
+        },
+        {
+          "pattern": "style={{ width: \"100%\" }} / style={{ height: 320 }}",
+          "reason": "Inline width/height bypass the design system and use magic numbers",
+          "fix": "Use the width / height prop: width=\"full\", width=\"md\", height=\"screen\", etc."
+        }
+      ],
+      "examples": [
+        {
+          "description": "Three-column grid with a wide first cell",
+          "code": "<Grid columns={3} gap=\"lg\">\n  <GridItem colSpan={2}><Card>Wide</Card></GridItem>\n  <Card>Two</Card>\n  <Card>Three</Card>\n</Grid>"
+        },
+        {
+          "description": "Responsive auto-fit grid",
+          "code": "<Grid columns=\"auto-fit\" gap=\"md\">\n  {items.map((i) => <Card key={i.id}>{i.title}</Card>)}\n</Grid>"
+        }
+      ]
+    },
+    "GridItem": {
+      "description": "Child placement inside <Grid>. Sets column/row span and start lines. Renders a plain <div> (or `as`).",
+      "import": "import { GridItem } from \"@usevyre/react\"",
+      "props": {
+        "colSpan": {
+          "type": "number",
+          "description": "Number of columns this item spans"
+        },
+        "rowSpan": {
+          "type": "number",
+          "description": "Number of rows this item spans"
+        },
+        "colStart": {
+          "type": "number",
+          "description": "1-based column line to start at"
+        },
+        "rowStart": {
+          "type": "number",
+          "description": "1-based row line to start at"
+        },
+        "as": {
+          "type": "string",
+          "default": "div",
+          "description": "HTML tag to render"
+        }
+      },
+      "antiPatterns": [
+        {
+          "pattern": "GridItem outside a Grid",
+          "reason": "GridItem only has effect as a direct child of Grid",
+          "fix": "Place <GridItem> directly inside <Grid>"
+        }
+      ],
+      "examples": [
+        {
+          "description": "Span two columns",
+          "code": "<Grid columns={4} gap=\"md\">\n  <GridItem colSpan={2}>Featured</GridItem>\n  <div>a</div>\n  <div>b</div>\n</Grid>"
+        }
+      ]
+    },
+    "Box": {
+      "description": "Spacing-only container plus a controlled escape hatch. Token padding/margin with shorthand, per-axis (X/Y) and per-side (Top/Right/Bottom/Left) overrides. The `style` prop is an explicit anti-pattern escape hatch. Renders a plain <div> (or `as`).",
+      "import": "import { Box } from \"@usevyre/react\"",
+      "props": {
+        "padding": {
+          "type": "enum",
+          "values": [
+            "none",
+            "xs",
+            "sm",
+            "md",
+            "lg",
+            "xl",
+            "2xl"
+          ],
+          "description": "Inner spacing, all sides. Maps to --vyre-spacing tokens. NEVER a raw px/rem value."
+        },
+        "paddingX": {
+          "type": "enum",
+          "values": [
+            "none",
+            "xs",
+            "sm",
+            "md",
+            "lg",
+            "xl",
+            "2xl"
+          ],
+          "description": "Inner spacing, left + right. Maps to --vyre-spacing tokens. NEVER a raw px/rem value."
+        },
+        "paddingY": {
+          "type": "enum",
+          "values": [
+            "none",
+            "xs",
+            "sm",
+            "md",
+            "lg",
+            "xl",
+            "2xl"
+          ],
+          "description": "Inner spacing, top + bottom. Maps to --vyre-spacing tokens. NEVER a raw px/rem value."
+        },
+        "paddingTop": {
+          "type": "enum",
+          "values": [
+            "none",
+            "xs",
+            "sm",
+            "md",
+            "lg",
+            "xl",
+            "2xl"
+          ],
+          "description": "Inner spacing, top. Maps to --vyre-spacing tokens. NEVER a raw px/rem value."
+        },
+        "paddingRight": {
+          "type": "enum",
+          "values": [
+            "none",
+            "xs",
+            "sm",
+            "md",
+            "lg",
+            "xl",
+            "2xl"
+          ],
+          "description": "Inner spacing, right. Maps to --vyre-spacing tokens. NEVER a raw px/rem value."
+        },
+        "paddingBottom": {
+          "type": "enum",
+          "values": [
+            "none",
+            "xs",
+            "sm",
+            "md",
+            "lg",
+            "xl",
+            "2xl"
+          ],
+          "description": "Inner spacing, bottom. Maps to --vyre-spacing tokens. NEVER a raw px/rem value."
+        },
+        "paddingLeft": {
+          "type": "enum",
+          "values": [
+            "none",
+            "xs",
+            "sm",
+            "md",
+            "lg",
+            "xl",
+            "2xl"
+          ],
+          "description": "Inner spacing, left. Maps to --vyre-spacing tokens. NEVER a raw px/rem value."
+        },
+        "margin": {
+          "type": "enum",
+          "values": [
+            "none",
+            "xs",
+            "sm",
+            "md",
+            "lg",
+            "xl",
+            "2xl"
+          ],
+          "description": "Outer spacing, all sides. Maps to --vyre-spacing tokens. NEVER a raw px/rem value."
+        },
+        "marginX": {
+          "type": "enum",
+          "values": [
+            "none",
+            "xs",
+            "sm",
+            "md",
+            "lg",
+            "xl",
+            "2xl"
+          ],
+          "description": "Outer spacing, left + right. Maps to --vyre-spacing tokens. NEVER a raw px/rem value."
+        },
+        "marginY": {
+          "type": "enum",
+          "values": [
+            "none",
+            "xs",
+            "sm",
+            "md",
+            "lg",
+            "xl",
+            "2xl"
+          ],
+          "description": "Outer spacing, top + bottom. Maps to --vyre-spacing tokens. NEVER a raw px/rem value."
+        },
+        "marginTop": {
+          "type": "enum",
+          "values": [
+            "none",
+            "xs",
+            "sm",
+            "md",
+            "lg",
+            "xl",
+            "2xl"
+          ],
+          "description": "Outer spacing, top. Maps to --vyre-spacing tokens. NEVER a raw px/rem value."
+        },
+        "marginRight": {
+          "type": "enum",
+          "values": [
+            "none",
+            "xs",
+            "sm",
+            "md",
+            "lg",
+            "xl",
+            "2xl"
+          ],
+          "description": "Outer spacing, right. Maps to --vyre-spacing tokens. NEVER a raw px/rem value."
+        },
+        "marginBottom": {
+          "type": "enum",
+          "values": [
+            "none",
+            "xs",
+            "sm",
+            "md",
+            "lg",
+            "xl",
+            "2xl"
+          ],
+          "description": "Outer spacing, bottom. Maps to --vyre-spacing tokens. NEVER a raw px/rem value."
+        },
+        "marginLeft": {
+          "type": "enum",
+          "values": [
+            "none",
+            "xs",
+            "sm",
+            "md",
+            "lg",
+            "xl",
+            "2xl"
+          ],
+          "description": "Outer spacing, left. Maps to --vyre-spacing tokens. NEVER a raw px/rem value."
+        },
+        "width": {
+          "type": "enum",
+          "values": [
+            "auto",
+            "full",
+            "fit",
+            "screen",
+            "xs",
+            "sm",
+            "md",
+            "lg",
+            "xl",
+            "2xl"
+          ],
+          "description": "Width — keyword (auto/full=100%/fit=fit-content/screen) or a fixed-rem token size (xs 8 · sm 12 · md 16 · lg 24 · xl 32 · 2xl 42). Avoids an inline width style."
+        },
+        "height": {
+          "type": "enum",
+          "values": [
+            "auto",
+            "full",
+            "fit",
+            "screen",
+            "xs",
+            "sm",
+            "md",
+            "lg",
+            "xl",
+            "2xl"
+          ],
+          "description": "Height — keyword (auto/full=100%/fit=fit-content/screen) or a fixed-rem token size (xs 8 · sm 12 · md 16 · lg 24 · xl 32 · 2xl 42). Avoids an inline height style."
+        },
+        "as": {
+          "type": "string",
+          "default": "div",
+          "description": "HTML tag to render"
+        },
+        "style": {
+          "type": "React.CSSProperties",
+          "description": "ANTI-PATTERN escape hatch. Only for values the design system cannot express. Flagged by @usevyre/eslint-plugin."
+        }
+      },
+      "antiPatterns": [
+        {
+          "pattern": "<Box style={{ padding: 16 }}>",
+          "reason": "padding is a token prop; style is a last resort",
+          "fix": "Use <Box padding=\"md\"> (or paddingX/paddingTop/...)"
+        },
+        {
+          "pattern": "Using Box for flex/grid layout",
+          "reason": "Box is spacing-only and has no layout props",
+          "fix": "Use <Stack> or <Grid>"
+        },
+        {
+          "pattern": "style={{ width: \"100%\" }} / style={{ height: 320 }}",
+          "reason": "Inline width/height bypass the design system and use magic numbers",
+          "fix": "Use the width / height prop: width=\"full\", width=\"md\", height=\"screen\", etc."
+        }
+      ],
+      "examples": [
+        {
+          "description": "Asymmetric padding",
+          "code": "<Box as=\"section\" paddingX=\"lg\" paddingY=\"md\">\n  <Heading>Settings</Heading>\n</Box>"
+        },
+        {
+          "description": "Vertical rhythm via margin-top",
+          "code": "<Box marginTop=\"xl\"><Separator /></Box>"
         }
       ]
     },

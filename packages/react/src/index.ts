@@ -49,6 +49,9 @@
  * - DateRangePicker — Start/end date range picker with dual-month view and preset shortcuts; built on Calendar
  * - Kanban         — Controlled board with drag-and-drop cards between columns; native HTML5 DnD, zero deps
  * - Conversation   — Controlled chat/inbox thread: grouped bubbles, avatars, day separators, status, optional composer
+ * - Stack          — Flex layout primitive (use instead of <div style="display:flex">); token-locked gap/align/justify
+ * - Grid           — CSS grid primitive: columns (1-12 or auto-fit), rows, flow, token-locked gap (+ GridItem for colSpan/rowSpan placement)
+ * - Box            — Spacing-only container (padding/margin tokens) + controlled style escape hatch
  *
  * CSS must be imported separately:
  * import "@usevyre/tokens/css";           ← design tokens (required)
@@ -121,6 +124,13 @@ export { Text, Heading, Lead, Code, Blockquote }            from "./components/T
 export type {
   TextProps, HeadingProps, LeadProps, CodeProps, BlockquoteProps,
 }                                                           from "./components/Typography/Typography";
+export { Stack, Grid, GridItem, Box }                       from "./components/Layout/Layout";
+export type {
+  StackProps, GridProps, GridItemProps, BoxProps, SpaceToken,
+  StackDirection, StackWrap, StackAlign, StackJustify,
+  StackAlignContent, StackAlignSelf, StackBasis,
+  GridAlign, GridFlow, GridColumns,
+}                                                           from "./components/Layout/Layout";
 export {
   AppLayout, AppShell, AppBar, PageContent, SidebarTrigger,
   Sidebar, SidebarHeader, SidebarContent,

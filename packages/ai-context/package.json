@@ -1,6 +1,6 @@
 {
   "name": "@usevyre/ai-context",
-  "version": "1.2.2",
+  "version": "1.3.0",
   "description": "useVyre AI context — inject into LLM system prompts to eliminate UI hallucinations",
   "keywords": [
     "design-system",
