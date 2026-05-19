@@ -1,5 +1,55 @@
 # @usevyre/vue
 
+## 1.4.0
+
+### Minor Changes
+
+- 6cfc93b: Add `Carousel` + `CarouselSlide` — an accessible content slider.
+
+  For galleries, onboarding, and testimonials. Controlled by a 0-based slide index (`value`/`onChange` in React, `v-model` in Vue; `defaultValue` for uncontrolled). Compose `CarouselSlide` children. Snap scrolling, clickable dot indicators, prev/next arrows, ArrowLeft/Right keyboard navigation, and optional `loop` and `autoPlay` (with `interval`) — autoplay pauses on hover/focus. `showArrows`/`showIndicators` toggle the controls. ARIA carousel/slide roles throughout.
+
+  Completes the post-1.3 backlog — all 10 components (Form, Number Input, Toggle Group, Stepper, Empty State, Stat, Timeline, Tree, OTP Input, Carousel) are now implemented.
+
+- 6cfc93b: Add `EmptyState` — a presentational placeholder for empty lists, tables, and search results.
+
+  `title` (required), `description`, `variant` (`default` box / `search` magnifier / `error` warning, with preset icons), and `size` (`sm`/`md`/`lg`) are props; a custom `icon` overrides the preset, and the call-to-action is composed as children (React) or the default slot (Vue). Zero state, token-styled. Backlog component #5 — "soon" badge removed.
+
+- 6cfc93b: Add `Form` + `FormField` — a controlled, data-driven, zero-dependency form.
+
+  `Form` owns the values (controlled via `values`/`onChange`, or uncontrolled via `defaultValues`) and validates on submit, then live on blur/change after the first submit attempt. `FormField` declares a field's `name`, `label`, `hint` and validation `rules`, wires `name`/`value`/`onChange`/`onBlur` into its single control child, and renders it inside a `Field` so errors map to `state="error"` + `hint=message` automatically.
+
+  Built-in rules (no zod/yup needed): `required`, `minLength`, `maxLength`, `min`, `max`, `pattern` (RegExp), `email`, and a custom `validate(value, allValues) => string | null` for cross-field checks.
+
+  React uses `values`/`onChange`/`onSubmit`/`onInvalid`; Vue uses `v-model` + `@submit`/`@invalid` with a scoped slot exposing `{ value, error, onInput, onBlur }`. First of the post-1.3 backlog components ("soon" badge removed).
+
+- 6cfc93b: Add `NumberInput` — a controlled numeric input with −/+ stepper buttons.
+
+  `onChange` emits a real `number` (or `null` when empty), not an event or a string, so it drops directly into `FormField` and into form state without any parsing. Supports `min`/`max` (clamped on blur), `step`, `precision` (decimal rounding), `size`, `disabled`/`readOnly`, and keyboard stepping (`ArrowUp`/`ArrowDown` ±step, `Shift`+Arrow ±step×10). React uses `value`/`onChange`; Vue uses `v-model` (number|null). Backlog component #2 — "soon" badge removed.
+
+- 6cfc93b: Add `OTPInput` — a segmented one-time-code input for verification and 2FA.
+
+  Controlled: `onChange` emits the combined code **string** (not an event), and `onComplete` fires once every slot is filled. Paste-aware (pasting a full code fills all slots), auto-advance on input, backspace steps to the previous slot, arrow keys navigate. Supports `length` (default 6), `type` (`numeric`/`alphanumeric`), `mask` (dots like a password), `size`, `disabled`, `autoFocus`. Because it emits a string, it drops straight into `FormField`. React uses `value`/`onChange`/`onComplete`; Vue uses `v-model` + `@complete`. Backlog component #9 — "soon" badge removed.
+
+- 6cfc93b: Add `Stat` + `StatGroup` — a presentational dashboard KPI.
+
+  `label` + a large `value`, with an optional `delta`, `deltaLabel`, and leading `icon` (Vue: `#icon` slot). The arrow **direction** follows the sign of `delta` (the real change: `-0.4%` → down arrow); the **color** is set separately by `trend` (`up`=success, `down`=danger, `neutral`=muted). So a "lower is better" metric (churn, bounce) that decreases shows a green _down_ arrow — direction stays honest, color stays semantic. `size` (`sm`/`md`/`lg`) scales the value; `StatGroup` lays several Stats out as an evenly-split row with dividers. Zero state, token-styled. Backlog component #6 — "soon" badge removed.
+
+- 6cfc93b: Add `Stepper` + `StepperNav` + `Step` + `StepPanel` — a controlled multi-step flow.
+
+  For onboarding, checkout, and wizards. Controlled by a 0-based index (`value`/`onChange` in React, `v-model` in Vue; `defaultValue` for uncontrolled). `StepperNav` lays out `Step` indicators that automatically resolve to `completed` / `current` / `upcoming` state; `StepPanel` renders its content only when its `index` matches the active step. Supports `orientation` (horizontal/vertical), `clickable` (jump back to a completed step), per-step `label`/`description`/custom `icon`. Distinct from `Tabs` — Stepper is an ordered linear flow. Backlog component #4 — "soon" badge removed.
+
+- 6cfc93b: Add `Timeline` + `TimelineItem` — a vertical activity feed for audit logs and history.
+
+  Each entry has a status-colored marker dot (`default`/`success`/`warning`/`danger`/`info`, overridable with a custom `icon`), an optional right-aligned `time`, a `title`, and optional rich content. Pass an `items` array for plain logs or compose `TimelineItem` children (React children / Vue slot) for badges, links, and custom markup. Connector line drawn between items; Timeline does not reorder — items render in given order. Distinct from `Stepper` (an ordered flow with current/upcoming state). Backlog component #7 — "soon" badge removed.
+
+- 6cfc93b: Add `ToggleGroup` + `ToggleItem` — a controlled segmented control.
+
+  Supports single-select (`type="single"`, value `string | null`) and multi-select (`type="multiple"`, value `string[]`); `onChange` emits the value, never an event. Compose with an `options` array for simple lists or `<ToggleItem>` children for custom content (icons, mixed markup). Includes arrow-key roving focus, `size`, `orientation`, and `disabled`. React uses `value`/`onChange`; Vue uses `v-model` (shape adapts to `type`). Distinct from `Switch` (boolean), `ButtonGroup` (layout only) and `RadioGroup` (form radios). Backlog component #3 — "soon" badge removed.
+
+- 6cfc93b: Add `Tree` — a data-driven, controlled hierarchical tree view.
+
+  For file explorers and nested navigation. Pass a nested `data` array (`{ id, label, icon?, disabled?, children? }`) and the Tree renders recursively. Single selection, fully controlled: `selectedId`/`onSelect` and `expandedIds`/`onExpandedChange` (plus `defaultSelectedId`/`defaultExpandedIds` for uncontrolled). A node with `children` is a folder (click toggles); leaves fire `onSelect`. Full keyboard nav (Arrow up/down move, Arrow right/left expand/collapse, Enter/Space select) and ARIA tree roles. React uses `selectedId`/`onSelect`; Vue uses `v-model:selected` / `v-model:expanded`. Backlog component #8 — "soon" badge removed.
+
 ## 1.3.0
 
 ### Minor Changes
