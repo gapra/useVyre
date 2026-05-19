@@ -439,13 +439,13 @@ import { Checkbox } from "@usevyre/react"
 // Props:
 // size           = "sm" | "md" (default: md)
 // checked        = boolean
-// onChange       = function
+// onCheckedChange = function
 // disabled       = boolean (default: false)
 // indeterminate  = boolean (default: false)
 
 // Examples:
 <label style={{ display: 'flex', alignItems: 'center', gap: 'var(--vyre-spacing-2)' }}>
-  <Checkbox checked={agreed} onChange={e => setAgreed(e.target.checked)} />
+  <Checkbox checked={agreed} onCheckedChange={setAgreed} />
   I agree to the terms
 </label>
 ```
@@ -697,10 +697,10 @@ import { Pagination } from "@usevyre/react"
 // Props:
 // page           = number
 // total          = number
-// onChange       = function
+// onPageChange   = function
 
 // Examples:
-<Pagination page={currentPage} total={totalPages} onChange={setCurrentPage} />
+<Pagination page={currentPage} totalPages={totalPages} onPageChange={setCurrentPage} />
 ```
 
 ---
@@ -893,7 +893,7 @@ import { Slider } from "@usevyre/react"
 
 // Props:
 // value          = number
-// onChange       = function
+// onValueChange  = function
 // min            = number (default: 0)
 // max            = number (default: 100)
 // step           = number (default: 1)
@@ -901,7 +901,7 @@ import { Slider } from "@usevyre/react"
 // disabled       = boolean (default: false)
 
 // Examples:
-<Slider value={volume} onChange={setVolume} min={0} max={100} step={5} />
+<Slider value={volume} onValueChange={setVolume} min={0} max={100} step={5} />
 ```
 
 ---
@@ -915,13 +915,13 @@ import { Switch } from "@usevyre/react"
 
 // Props:
 // checked        = boolean
-// onChange       = function
+// onCheckedChange = function
 // size           = "sm" | "md" (default: md)
 // disabled       = boolean (default: false)
 
 // Examples:
 <label style={{ display: 'flex', alignItems: 'center', gap: 'var(--vyre-spacing-2)' }}>
-  <Switch checked={notifications} onChange={setNotifications} />
+  <Switch checked={notifications} onCheckedChange={setNotifications} />
   Enable notifications
 </label>
 ```
