@@ -3,8 +3,6 @@ import DocsLayout from "@/layouts/DocsLayout.astro";
 import { navigation } from "@/data/nav";
 
 const components = navigation.find(s => s.title === "Components")?.items ?? [];
-const liveComponents = components.filter(c => !c.badge);
-const soonComponents = components.filter(c => c.badge === "soon");
 
 const descriptions: Record<string, string> = {
   Accordion:          "Collapsible sections with smooth animation.",
@@ -69,23 +67,15 @@ const descriptions: Record<string, string> = {
   <div class="docs-header">
     <h1 class="docs-title">Components</h1>
     <p class="docs-lead">
-      {liveComponents.length} components available now, {soonComponents.length} more coming soon —
-      all AI-native with inline context blocks for Claude, Cursor, Copilot, and Windsurf.
+      {components.length} components — all AI-native with inline context blocks
+      for Claude, Cursor, Copilot, and Windsurf.
     </p>
   </div>
 
   <hr class="docs-divider" />
 
   <div class="comp-grid">
-    {components.map(item => item.badge === "soon" ? (
-      <div class="comp-card comp-card--soon" aria-disabled="true">
-        <div class="comp-card__header">
-          <span class="comp-card__name">{item.title}</span>
-          <span class="vyre-badge vyre-badge--default comp-card__badge">Soon</span>
-        </div>
-        <span class="comp-card__desc">{descriptions[item.title] ?? ""}</span>
-      </div>
-    ) : (
+    {components.map(item => (
       <a href={item.href} class="comp-card">
         <span class="comp-card__name">{item.title}</span>
         <span class="comp-card__desc">{descriptions[item.title] ?? ""}</span>
@@ -132,22 +122,4 @@ const descriptions: Record<string, string> = {
     line-height: 1.5;
   }
 
-  .comp-card--soon {
-    opacity: 0.55;
-    cursor: default;
-    pointer-events: none;
-  }
-
-  .comp-card__header {
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    gap: var(--vyre-spacing-2);
-  }
-
-  .comp-card__badge {
-    flex-shrink: 0;
-    font-size: 0.6rem !important;
-    padding: 1px 5px !important;
-  }
 </style>
