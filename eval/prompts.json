@@ -1,0 +1,29 @@
+{
+  "_README": "Hand-curated eval corpus. Each scenario has a prompt and two outputs: 'without' = what a model typically produces with NO useVyre context (realistic mistakes — invented props, raw hex colors, plausible-but-wrong variant names), 'with' = what the same model produces when given @usevyre/ai-context. Outputs live as files under fixtures/{with,without}-context/<id>.tsx. The scorer never trusts these labels — it re-measures every file with useVyre's own validator + a raw-color check.",
+  "scenarios": [
+    {
+      "id": "cta-button",
+      "prompt": "Build a primary call-to-action button that says 'Get Started'."
+    },
+    {
+      "id": "delete-confirm",
+      "prompt": "A destructive 'Delete account' button."
+    },
+    {
+      "id": "status-badges",
+      "prompt": "Render success, warning, and danger status badges."
+    },
+    {
+      "id": "error-alert",
+      "prompt": "Show an inline error alert telling the user their payment failed."
+    },
+    {
+      "id": "search-input",
+      "prompt": "A medium-size search input with a leading search icon."
+    },
+    {
+      "id": "pricing-card",
+      "prompt": "An elevated pricing card with a highlighted accent border."
+    }
+  ]
+}

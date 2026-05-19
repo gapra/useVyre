@@ -1,0 +1,6 @@
+{
+  "name": "@usevyre-internal/eval",
+  "private": true,
+  "type": "module",
+  "description": "Deterministic hallucination-reduction eval for useVyre (not published)"
+}

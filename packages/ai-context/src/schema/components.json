@@ -1,14 +1,19 @@
 {
   "$schema": "http://json-schema.org/draft-07/schema#",
-  "version": "1.16.0",
+  "version": "1.16.1",
   "generatedAt": "2026-05-18",
   "package": "@usevyre/react",
-  "packageVersion": "1.16.0",
+  "packageVersion": "1.16.1",
   "validFor": [
     "@usevyre/react@1.1.0+",
     "@usevyre/vue@1.1.0+"
   ],
   "changelog": {
+    "1.16.1": {
+      "date": "2026-05-19",
+      "breaking": false,
+      "summary": "Fix schema↔code drift: Switch/Checkbox onChange→onCheckedChange, Slider onChange→onValueChange, Pagination onChange→onPageChange (+ example total→totalPages). Schema now matches the shipped React/Vue prop names."
+    },
     "1.16.0": {
       "date": "2026-05-18",
       "breaking": false,
@@ -694,9 +699,9 @@
           "type": "boolean",
           "description": "Controlled checked state"
         },
-        "onChange": {
+        "onCheckedChange": {
           "type": "function",
-          "description": "Callback on change"
+          "description": "Called with the new boolean checked state"
         },
         "disabled": {
           "type": "boolean",
@@ -718,7 +723,7 @@
       "examples": [
         {
           "description": "Labeled checkbox",
-          "code": "<label style={{ display: 'flex', alignItems: 'center', gap: 'var(--vyre-spacing-2)' }}>\n  <Checkbox checked={agreed} onChange={e => setAgreed(e.target.checked)} />\n  I agree to the terms\n</label>"
+          "code": "<label style={{ display: 'flex', alignItems: 'center', gap: 'var(--vyre-spacing-2)' }}>\n  <Checkbox checked={agreed} onCheckedChange={setAgreed} />\n  I agree to the terms\n</label>"
         }
       ]
     },
@@ -1132,15 +1137,15 @@
           "type": "number",
           "description": "Total number of pages"
         },
-        "onChange": {
+        "onPageChange": {
           "type": "function",
-          "description": "Called with new page number when user navigates"
+          "description": "Called with the new page number when the user navigates"
         }
       },
       "examples": [
         {
           "description": "Basic pagination",
-          "code": "<Pagination page={currentPage} total={totalPages} onChange={setCurrentPage} />"
+          "code": "<Pagination page={currentPage} totalPages={totalPages} onPageChange={setCurrentPage} />"
         }
       ]
     },
@@ -1455,9 +1460,9 @@
           "type": "number",
           "description": "Controlled value"
         },
-        "onChange": {
+        "onValueChange": {
           "type": "function",
-          "description": "Called with new numeric value"
+          "description": "Called with the new numeric value"
         },
         "min": {
           "type": "number",
@@ -1487,7 +1492,7 @@
       "examples": [
         {
           "description": "Volume slider",
-          "code": "<Slider value={volume} onChange={setVolume} min={0} max={100} step={5} />"
+          "code": "<Slider value={volume} onValueChange={setVolume} min={0} max={100} step={5} />"
         }
       ]
     },
@@ -1499,9 +1504,9 @@
           "type": "boolean",
           "description": "Controlled checked state"
         },
-        "onChange": {
+        "onCheckedChange": {
           "type": "function",
-          "description": "Called with new boolean value"
+          "description": "Called with the new boolean checked state"
         },
         "size": {
           "type": "enum",
@@ -1519,7 +1524,7 @@
       "examples": [
         {
           "description": "Notifications toggle",
-          "code": "<label style={{ display: 'flex', alignItems: 'center', gap: 'var(--vyre-spacing-2)' }}>\n  <Switch checked={notifications} onChange={setNotifications} />\n  Enable notifications\n</label>"
+          "code": "<label style={{ display: 'flex', alignItems: 'center', gap: 'var(--vyre-spacing-2)' }}>\n  <Switch checked={notifications} onCheckedChange={setNotifications} />\n  Enable notifications\n</label>"
         }
       ]
     },
