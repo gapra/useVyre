@@ -7,19 +7,30 @@
     "apps/*"
   ],
   "scripts": {
-    "build":       "pnpm -r build",
-    "dev":         "pnpm -r --parallel dev",
-    "dev:docs":    "pnpm --filter @usevyre/tokens build && pnpm --filter @usevyre/docs dev",
-    "build:docs":  "pnpm --filter @usevyre/tokens build && pnpm --filter @usevyre/docs build",
-    "typecheck":   "pnpm -r typecheck",
-    "clean":       "pnpm -r clean && rm -rf node_modules",
-    "changeset":   "changeset",
-    "version":     "changeset version",
-    "release":     "pnpm build && changeset publish"
+    "build": "pnpm -r build",
+    "dev": "pnpm -r --parallel dev",
+    "dev:docs": "pnpm --filter @usevyre/tokens build && pnpm --filter @usevyre/docs dev",
+    "build:docs": "pnpm --filter @usevyre/tokens build && pnpm --filter @usevyre/docs build",
+    "test": "vitest run",
+    "test:watch": "vitest",
+    "eval": "node eval/report.js",
+    "typecheck": "pnpm -r typecheck",
+    "clean": "pnpm -r clean && rm -rf node_modules",
+    "changeset": "changeset",
+    "version": "changeset version",
+    "release": "pnpm build && changeset publish"
   },
   "devDependencies": {
     "@changesets/cli": "^2.27.0",
-    "typescript": "^5.4.0"
+    "@testing-library/dom": "^10.4.1",
+    "@testing-library/jest-dom": "^6.9.1",
+    "@testing-library/react": "^16.3.2",
+    "@vitest/ui": "^3",
+    "jsdom": "^29.1.1",
+    "react": "^18.3.0",
+    "react-dom": "^18.3.0",
+    "typescript": "^5.4.0",
+    "vitest": "^3"
   },
   "engines": {
     "node": ">=18.0.0",
