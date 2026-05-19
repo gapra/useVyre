@@ -1,47 +1,133 @@
 ---
-import DocsLayout from "@/layouts/DocsLayout.astro";
+import DocsLayout          from "@/layouts/DocsLayout.astro";
+import ComponentPreview    from "@/components/docs/ComponentPreview.astro";
+import PropsTable          from "@/components/docs/PropsTable.astro";
+import AICheatSheet        from "@/components/docs/AICheatSheet.astro";
+import { ToggleGroupDemo } from "@/components/demos/ToggleGroupDemo";
+
+const codeReact = `import { useState } from "react";
+import { ToggleGroup, ToggleItem, Stack, Text } from "@usevyre/react";
+
+const [view, setView] = useState<string | null>("grid");
+const [fmt, setFmt] = useState<string[]>(["bold"]);
+
+<Stack direction="column" gap="lg">
+  <Stack direction="column" gap="xs">
+    <Text size="sm" color="muted">Single — view ({view ?? "none"})</Text>
+    <ToggleGroup
+      value={view}
+      onChange={setView}
+      options={[
+        { value: "grid", label: "Grid" },
+        { value: "list", label: "List" },
+        { value: "board", label: "Board" },
+      ]}
+    />
+  </Stack>
+  <Stack direction="column" gap="xs">
+    <Text size="sm" color="muted">Multiple — format ({fmt.join(", ") || "none"})</Text>
+    <ToggleGroup type="multiple" value={fmt} onChange={setFmt}>
+      <ToggleItem value="bold">B</ToggleItem>
+      <ToggleItem value="italic">I</ToggleItem>
+      <ToggleItem value="underline">U</ToggleItem>
+    </ToggleGroup>
+  </Stack>
+</Stack>`;
+
+const codeVue = `<script setup>
+import { ref } from "vue";
+import { ToggleGroup, ToggleItem, Stack, Text } from "@usevyre/vue";
+
+const view = ref("grid");
+const fmt = ref(["bold"]);
+</script>
+<template>
+  <Stack direction="column" gap="lg">
+    <Stack direction="column" gap="xs">
+      <Text size="sm" color="muted">Single — view ({{ view ?? "none" }})</Text>
+      <ToggleGroup
+        v-model="view"
+        :options="[
+          { value: 'grid', label: 'Grid' },
+          { value: 'list', label: 'List' },
+          { value: 'board', label: 'Board' },
+        ]"
+      />
+    </Stack>
+    <Stack direction="column" gap="xs">
+      <Text size="sm" color="muted">Multiple — format ({{ fmt.join(', ') || 'none' }})</Text>
+      <ToggleGroup type="multiple" v-model="fmt">
+        <ToggleItem value="bold">B</ToggleItem>
+        <ToggleItem value="italic">I</ToggleItem>
+        <ToggleItem value="underline">U</ToggleItem>
+      </ToggleGroup>
+    </Stack>
+  </Stack>
+</template>`;
+
+const props = [
+  { name: "type",        type: `"single" | "multiple"`, default: `"single"`, description: "single → value string|null; multiple → value string[]." },
+  { name: "value",       type: "string | null | string[]", default: "—", description: "Controlled selected value (shape depends on type)." },
+  { name: "onChange",    type: "(value) => void", default: "—", description: "Emits the value — string|null or string[]. Not an event." },
+  { name: "options",     type: "{ value; label?; icon?; disabled? }[]", default: "—", description: "Alternative to ToggleItem children for simple lists." },
+  { name: "size",        type: `"sm" | "md" | "lg"`, default: `"md"`, description: "Control size." },
+  { name: "orientation", type: `"horizontal" | "vertical"`, default: `"horizontal"`, description: "Layout direction." },
+  { name: "disabled",    type: "boolean", default: "false", description: "Disable the whole group." },
+];
+
+const itemProps = [
+  { name: "value",    type: "string",    default: "—", description: "This item's value (required)." },
+  { name: "icon",     type: "ReactNode", default: "—", description: "Optional leading icon." },
+  { name: "disabled", type: "boolean",   default: "false", description: "Disable just this item." },
+];
 ---
 
-<DocsLayout title="Toggle Group">
+<DocsLayout title="Toggle Group" component="ToggleGroup">
   <div class="docs-header">
-    <div class="cs-title-row">
-      <h1 class="docs-title">Toggle Group</h1>
-      <span class="vyre-badge vyre-badge--default">Coming soon</span>
+    <div class="docs-header__meta">
+      <span class="vyre-badge vyre-badge--default">@usevyre/react</span>
+      <span class="vyre-badge vyre-badge--default">@usevyre/vue</span>
     </div>
+    <h1 class="docs-title">Toggle Group</h1>
     <p class="docs-lead">
-      Single- or multi-select toggle buttons (segmented control) — controlled, keyboard-accessible.
+      A segmented control for choosing one or many options. Controlled —
+      <code>onChange</code> emits the value, not an event. Use
+      <code>type="single"</code> (string) or <code>type="multiple"</code>
+      (array). Not a <a href="/docs/components/switch">Switch</a> (boolean) or
+      <a href="/docs/components/button-group">ButtonGroup</a> (layout only).
     </p>
   </div>
 
   <hr class="docs-divider" />
 
-  <div class="cs-body">
-    <h2 class="cs-section-title">What's coming</h2>
-    <ul class="cs-feature-list">
-      <li>Controlled, data-driven API — predictable for AI agents</li>
-      <li>React + Vue with an identical API surface</li>
-      <li>Themed entirely via useVyre CSS tokens — no external stylesheet</li>
-      <li>Inline AI context block, schema, and anti-patterns for zero-hallucination use</li>
-    </ul>
+  <h2 class="docs-h2">Single & multiple</h2>
+  <p class="docs-p">
+    The first group is single-select via <code>options</code>; the second is
+    multi-select with composable <code>ToggleItem</code> children. Arrow keys
+    move focus between items.
+  </p>
+  <ComponentPreview react={codeReact} vue={codeVue}>
+    <ToggleGroupDemo client:visible />
+  </ComponentPreview>
 
-    <div class="cs-feedback">
-      <p>Have a use case in mind? Share it on GitHub and help shape the API.</p>
-      <a
-        href="https://github.com/gapra/usevyre/discussions"
-        target="_blank"
-        rel="noopener noreferrer"
-        class="vyre-btn vyre-btn--secondary vyre-btn--sm"
-      >
-        Vote or leave feedback →
-      </a>
-    </div>
+  <h2 class="docs-h2">Props</h2>
+  <PropsTable props={props} />
+
+  <h2 class="docs-h2">ToggleItem props</h2>
+  <p class="docs-p">
+    Use <code>ToggleItem</code> children for custom content (icons, mixed
+    markup). For plain lists, prefer <code>options</code>.
+  </p>
+  <PropsTable props={itemProps} />
+
+  <AICheatSheet component="ToggleGroup" />
+
+  <div class="docs-pagination">
+    <a href="/docs/components/toast" class="docs-pagination__link docs-pagination__link--prev">
+      ← Toast
+    </a>
+    <a href="/docs/components/tooltip" class="docs-pagination__link docs-pagination__link--next">
+      Tooltip →
+    </a>
   </div>
 </DocsLayout>
-
-<style>
-  .cs-title-row { display: flex; align-items: center; gap: var(--vyre-spacing-3); flex-wrap: wrap; }
-  .cs-body { display: flex; flex-direction: column; gap: var(--vyre-spacing-8); margin-top: var(--vyre-spacing-6); }
-  .cs-section-title { font-size: var(--vyre-typography-font-size-lg); font-weight: var(--vyre-typography-font-weight-semibold); color: var(--vyre-color-semantic-text-primary); margin-bottom: var(--vyre-spacing-3); }
-  .cs-feature-list { display: flex; flex-direction: column; gap: var(--vyre-spacing-2); padding-left: var(--vyre-spacing-5); color: var(--vyre-color-semantic-text-secondary); font-size: var(--vyre-typography-font-size-sm); line-height: 1.6; }
-  .cs-feedback { display: flex; flex-direction: column; gap: var(--vyre-spacing-3); padding: var(--vyre-spacing-5) var(--vyre-spacing-6); background: var(--vyre-color-semantic-surface); border: 1px solid var(--vyre-color-semantic-border-subtle); border-radius: var(--vyre-border-radius-lg); font-size: var(--vyre-typography-font-size-sm); color: var(--vyre-color-semantic-text-secondary); }
-</style>

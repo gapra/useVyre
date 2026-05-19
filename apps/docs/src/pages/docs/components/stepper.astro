@@ -1,47 +1,207 @@
 ---
-import DocsLayout from "@/layouts/DocsLayout.astro";
+import DocsLayout       from "@/layouts/DocsLayout.astro";
+import ComponentPreview from "@/components/docs/ComponentPreview.astro";
+import PropsTable       from "@/components/docs/PropsTable.astro";
+import AICheatSheet     from "@/components/docs/AICheatSheet.astro";
+import { StepperDemo, StepperVerticalDemo } from "@/components/demos/StepperDemo";
+
+const codeReact = `import { useState } from "react";
+import { Stepper, StepperNav, Step, StepPanel, Stack, Button, Text } from "@usevyre/react";
+
+const [step, setStep] = useState(0);
+const last = 2;
+
+<Stepper value={step} onChange={setStep} clickable>
+  <StepperNav>
+    <Step index={0} label="Account" description="Email & password" />
+    <Step index={1} label="Profile" description="Your details" />
+    <Step index={2} label="Done" description="Review" />
+  </StepperNav>
+  <StepPanel index={0}>
+    <Text>Step 1 — create your account.</Text>
+  </StepPanel>
+  <StepPanel index={1}>
+    <Text>Step 2 — fill in your profile.</Text>
+  </StepPanel>
+  <StepPanel index={2}>
+    <Text>Step 3 — review and finish. 🎉</Text>
+  </StepPanel>
+  <Stack direction="row" gap="sm" justify="between">
+    <Button variant="ghost" onClick={() => setStep((s) => s - 1)} disabled={step === 0}>
+      Back
+    </Button>
+    <Button
+      variant="primary"
+      onClick={() => setStep((s) => Math.min(s + 1, last))}
+      disabled={step === last}
+    >
+      {step === last ? "Finish" : "Next"}
+    </Button>
+  </Stack>
+</Stepper>`;
+
+const codeVue = `<script setup>
+import { ref } from "vue";
+import { Stepper, StepperNav, Step, StepPanel, Stack, Button, Text } from "@usevyre/vue";
+
+const step = ref(0);
+const last = 2;
+</script>
+<template>
+  <Stepper v-model="step" clickable>
+    <StepperNav>
+      <Step :index="0" label="Account" description="Email & password" />
+      <Step :index="1" label="Profile" description="Your details" />
+      <Step :index="2" label="Done" description="Review" />
+    </StepperNav>
+    <StepPanel :index="0">
+      <Text>Step 1 — create your account.</Text>
+    </StepPanel>
+    <StepPanel :index="1">
+      <Text>Step 2 — fill in your profile.</Text>
+    </StepPanel>
+    <StepPanel :index="2">
+      <Text>Step 3 — review and finish. 🎉</Text>
+    </StepPanel>
+    <Stack direction="row" gap="sm" justify="between">
+      <Button variant="ghost" :disabled="step === 0" @click="step--">Back</Button>
+      <Button
+        variant="primary"
+        :disabled="step === last"
+        @click="step = Math.min(step + 1, last)"
+      >
+        {{ step === last ? "Finish" : "Next" }}
+      </Button>
+    </Stack>
+  </Stepper>
+</template>`;
+
+const codeVerticalReact = `import { useState } from "react";
+import { Stepper, StepperNav, Step, Stack, Button } from "@usevyre/react";
+
+const [step, setStep] = useState(1);
+
+<Stepper orientation="vertical" value={step} onChange={setStep} clickable>
+  <StepperNav>
+    <Step index={0} label="Cart" description="2 items" />
+    <Step index={1} label="Shipping" description="Enter address" />
+    <Step index={2} label="Payment" description="Card details" />
+    <Step index={3} label="Review" description="Confirm order" />
+  </StepperNav>
+  <Stack direction="row" gap="sm" justify="end">
+    <Button variant="ghost" onClick={() => setStep((s) => s - 1)} disabled={step === 0}>
+      Back
+    </Button>
+    <Button
+      variant="primary"
+      onClick={() => setStep((s) => Math.min(s + 1, 3))}
+      disabled={step === 3}
+    >
+      Next
+    </Button>
+  </Stack>
+</Stepper>`;
+
+const codeVerticalVue = `<script setup>
+import { ref } from "vue";
+import { Stepper, StepperNav, Step, Stack, Button } from "@usevyre/vue";
+
+const step = ref(1);
+</script>
+<template>
+  <Stepper orientation="vertical" v-model="step" clickable>
+    <StepperNav>
+      <Step :index="0" label="Cart" description="2 items" />
+      <Step :index="1" label="Shipping" description="Enter address" />
+      <Step :index="2" label="Payment" description="Card details" />
+      <Step :index="3" label="Review" description="Confirm order" />
+    </StepperNav>
+    <Stack direction="row" gap="sm" justify="end">
+      <Button variant="ghost" :disabled="step === 0" @click="step--">Back</Button>
+      <Button
+        variant="primary"
+        :disabled="step === 3"
+        @click="step = Math.min(step + 1, 3)"
+      >
+        Next
+      </Button>
+    </Stack>
+  </Stepper>
+</template>`;
+
+const props = [
+  { name: "value",        type: "number", default: "—", description: "Controlled active step (0-based). Omit for uncontrolled." },
+  { name: "defaultValue", type: "number", default: "0", description: "Initial active step when uncontrolled." },
+  { name: "onChange",     type: "(index: number) => void", default: "—", description: "Emits the new active index. Not an event." },
+  { name: "orientation",  type: `"horizontal" | "vertical"`, default: `"horizontal"`, description: "Layout direction." },
+  { name: "clickable",    type: "boolean", default: "false", description: "Click a completed Step to jump back to it." },
+];
+
+const stepProps = [
+  { name: "index",       type: "number",    default: "—", description: "0-based position (required)." },
+  { name: "label",       type: "ReactNode", default: "—", description: "Step label." },
+  { name: "description", type: "ReactNode", default: "—", description: "Secondary text under the label." },
+  { name: "icon",        type: "ReactNode", default: "—", description: "Custom indicator (defaults to number, ✓ when completed)." },
+];
 ---
 
-<DocsLayout title="Stepper">
+<DocsLayout title="Stepper" component="Stepper">
   <div class="docs-header">
-    <div class="cs-title-row">
-      <h1 class="docs-title">Stepper</h1>
-      <span class="vyre-badge vyre-badge--default">Coming soon</span>
+    <div class="docs-header__meta">
+      <span class="vyre-badge vyre-badge--default">@usevyre/react</span>
+      <span class="vyre-badge vyre-badge--default">@usevyre/vue</span>
     </div>
+    <h1 class="docs-title">Stepper</h1>
     <p class="docs-lead">
-      Multi-step flow indicator and controller for onboarding, checkout, and wizards.
+      A multi-step flow indicator and controller for onboarding, checkout, and
+      wizards. Controlled by a 0-based index; each step is automatically
+      <strong>completed</strong>, <strong>current</strong>, or
+      <strong>upcoming</strong>. Not <a href="/docs/components/tabs">Tabs</a> —
+      this is an ordered linear flow.
     </p>
   </div>
 
   <hr class="docs-divider" />
 
-  <div class="cs-body">
-    <h2 class="cs-section-title">What's coming</h2>
-    <ul class="cs-feature-list">
-      <li>Controlled, data-driven API — predictable for AI agents</li>
-      <li>React + Vue with an identical API surface</li>
-      <li>Themed entirely via useVyre CSS tokens — no external stylesheet</li>
-      <li>Inline AI context block, schema, and anti-patterns for zero-hallucination use</li>
-    </ul>
+  <h2 class="docs-h2">Wizard with Back / Next</h2>
+  <p class="docs-p">
+    <code>StepperNav</code> holds the <code>Step</code> indicators;
+    <code>StepPanel</code> renders only when its <code>index</code> is active.
+    With <code>clickable</code>, completed steps are clickable to go back.
+  </p>
+  <ComponentPreview react={codeReact} vue={codeVue}>
+    <StepperDemo client:visible />
+  </ComponentPreview>
 
-    <div class="cs-feedback">
-      <p>Have a use case in mind? Share it on GitHub and help shape the API.</p>
-      <a
-        href="https://github.com/gapra/usevyre/discussions"
-        target="_blank"
-        rel="noopener noreferrer"
-        class="vyre-btn vyre-btn--secondary vyre-btn--sm"
-      >
-        Vote or leave feedback →
-      </a>
-    </div>
+  <h2 class="docs-h2">Vertical orientation</h2>
+  <p class="docs-p">
+    Set <code>orientation="vertical"</code> for a stacked layout — common for
+    checkout sidebars and onboarding panels. The connector runs down the side
+    instead of across.
+  </p>
+  <ComponentPreview react={codeVerticalReact} vue={codeVerticalVue}>
+    <StepperVerticalDemo client:visible />
+  </ComponentPreview>
+
+  <h2 class="docs-h2">Props</h2>
+  <PropsTable props={props} />
+
+  <h2 class="docs-h2">Step props</h2>
+  <p class="docs-p">
+    <code>Step</code> goes inside <code>StepperNav</code>;
+    <code>StepPanel</code> takes a matching <code>index</code> and shows its
+    content when active. Both require an explicit 0-based <code>index</code>.
+  </p>
+  <PropsTable props={stepProps} />
+
+  <AICheatSheet component="Stepper" />
+
+  <div class="docs-pagination">
+    <a href="/docs/components/slider" class="docs-pagination__link docs-pagination__link--prev">
+      ← Slider
+    </a>
+    <a href="/docs/components/switch" class="docs-pagination__link docs-pagination__link--next">
+      Switch →
+    </a>
   </div>
 </DocsLayout>
-
-<style>
-  .cs-title-row { display: flex; align-items: center; gap: var(--vyre-spacing-3); flex-wrap: wrap; }
-  .cs-body { display: flex; flex-direction: column; gap: var(--vyre-spacing-8); margin-top: var(--vyre-spacing-6); }
-  .cs-section-title { font-size: var(--vyre-typography-font-size-lg); font-weight: var(--vyre-typography-font-weight-semibold); color: var(--vyre-color-semantic-text-primary); margin-bottom: var(--vyre-spacing-3); }
-  .cs-feature-list { display: flex; flex-direction: column; gap: var(--vyre-spacing-2); padding-left: var(--vyre-spacing-5); color: var(--vyre-color-semantic-text-secondary); font-size: var(--vyre-typography-font-size-sm); line-height: 1.6; }
-  .cs-feedback { display: flex; flex-direction: column; gap: var(--vyre-spacing-3); padding: var(--vyre-spacing-5) var(--vyre-spacing-6); background: var(--vyre-color-semantic-surface); border: 1px solid var(--vyre-color-semantic-border-subtle); border-radius: var(--vyre-border-radius-lg); font-size: var(--vyre-typography-font-size-sm); color: var(--vyre-color-semantic-text-secondary); }
-</style>

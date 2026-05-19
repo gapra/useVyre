@@ -1,47 +1,157 @@
 ---
-import DocsLayout from "@/layouts/DocsLayout.astro";
+import DocsLayout       from "@/layouts/DocsLayout.astro";
+import ComponentPreview from "@/components/docs/ComponentPreview.astro";
+import PropsTable       from "@/components/docs/PropsTable.astro";
+import AICheatSheet     from "@/components/docs/AICheatSheet.astro";
+import { FormDemo }     from "@/components/demos/FormDemo";
+
+const codeReact = `import { useState } from "react";
+import { Form, FormField, Input, Button, Stack } from "@usevyre/react";
+
+const [values, setValues] = useState({ email: "", password: "", confirm: "" });
+
+<Form values={values} onChange={setValues} onSubmit={() => save(values)}>
+  <FormField name="email" label="Email" rules={{ required: true, email: true }}>
+    <Input type="email" placeholder="you@example.com" />
+  </FormField>
+  <FormField
+    name="password"
+    label="Password"
+    hint="At least 8 characters"
+    rules={{ required: true, minLength: 8 }}
+  >
+    <Input type="password" placeholder="••••••••" />
+  </FormField>
+  <FormField
+    name="confirm"
+    label="Confirm password"
+    rules={{
+      required: true,
+      validate: (v, all) =>
+        v === all.password ? null : "Passwords do not match",
+    }}
+  >
+    <Input type="password" placeholder="••••••••" />
+  </FormField>
+  <Stack direction="row" gap="sm" justify="end">
+    <Button type="submit" variant="primary">Create account</Button>
+  </Stack>
+</Form>`;
+
+const codeVue = `<script setup>
+import { ref } from "vue";
+import { Form, FormField, Input, Button, Stack } from "@usevyre/vue";
+
+const values = ref({ email: "", password: "", confirm: "" });
+</script>
+<template>
+  <Form v-model="values" @submit="save(values)">
+    <FormField
+      name="email"
+      label="Email"
+      :rules="{ required: true, email: true }"
+      v-slot="{ value, onInput, onBlur }"
+    >
+      <Input
+        :model-value="value"
+        @update:model-value="onInput"
+        @blur="onBlur"
+        type="email"
+        placeholder="you@example.com"
+      />
+    </FormField>
+
+    <FormField
+      name="password"
+      label="Password"
+      hint="At least 8 characters"
+      :rules="{ required: true, minLength: 8 }"
+      v-slot="{ value, onInput, onBlur }"
+    >
+      <Input
+        :model-value="value"
+        @update:model-value="onInput"
+        @blur="onBlur"
+        type="password"
+      />
+    </FormField>
+
+    <Stack direction="row" gap="sm" justify="end">
+      <Button type="submit" variant="primary">Create account</Button>
+    </Stack>
+  </Form>
+</template>`;
+
+const props = [
+  { name: "values",        type: "Record<string, any>", default: "—", description: "Controlled values map. Omit for uncontrolled." },
+  { name: "defaultValues", type: "Record<string, any>", default: "{}", description: "Initial values when uncontrolled." },
+  { name: "onChange",      type: "(values) => void",    default: "—", description: "Fires whenever any field value changes." },
+  { name: "onSubmit",      type: "(values) => void | Promise", default: "—", description: "Fires on submit ONLY when the form is valid." },
+  { name: "onInvalid",     type: "(errors) => void",    default: "—", description: "Fires on submit when validation fails." },
+  { name: "class",         type: "string",              default: "—", description: "Additional CSS class." },
+];
+
+const fieldProps = [
+  { name: "name",  type: "string", default: "—", description: "Key into the form's values map (required)." },
+  { name: "label", type: "string", default: "—", description: "Label rendered by the wrapping Field." },
+  { name: "hint",  type: "string", default: "—", description: "Helper text shown when there is no error." },
+  { name: "rules", type: "object", default: "—", description: "required | minLength | maxLength | min | max | pattern (RegExp) | email | validate(value, allValues) => string | null." },
+];
 ---
 
-<DocsLayout title="Form">
+<DocsLayout title="Form" component="Form">
   <div class="docs-header">
-    <div class="cs-title-row">
-      <h1 class="docs-title">Form</h1>
-      <span class="vyre-badge vyre-badge--default">Coming soon</span>
+    <div class="docs-header__meta">
+      <span class="vyre-badge vyre-badge--default">@usevyre/react</span>
+      <span class="vyre-badge vyre-badge--default">@usevyre/vue</span>
     </div>
+    <h1 class="docs-title">Form</h1>
     <p class="docs-lead">
-      Schema-driven form wrapper: validation, submit handling, and error mapping into Field — built on the existing Field/Input/Radio/Checkbox primitives.
+      A controlled, data-driven form with zero dependencies. Declare validation
+      rules per field; errors map into the wrapped <a href="/docs/components/field">Field</a>
+      automatically. Validates on submit and — after the first submit — live on
+      blur and change.
     </p>
   </div>
 
   <hr class="docs-divider" />
 
-  <div class="cs-body">
-    <h2 class="cs-section-title">What's coming</h2>
-    <ul class="cs-feature-list">
-      <li>Controlled, data-driven API — predictable for AI agents</li>
-      <li>React + Vue with an identical API surface</li>
-      <li>Themed entirely via useVyre CSS tokens — no external stylesheet</li>
-      <li>Inline AI context block, schema, and anti-patterns for zero-hallucination use</li>
-    </ul>
+  <h2 class="docs-h2">Sign-up form with validation</h2>
+  <p class="docs-p">
+    Submit with empty or invalid fields to see errors appear inline, then
+    correct them and watch the errors clear live. The confirm field uses a
+    custom cross-field <code>validate</code> rule.
+  </p>
+  <ComponentPreview react={codeReact} vue={codeVue}>
+    <FormDemo client:visible />
+  </ComponentPreview>
 
-    <div class="cs-feedback">
-      <p>Have a use case in mind? Share it on GitHub and help shape the API.</p>
-      <a
-        href="https://github.com/gapra/usevyre/discussions"
-        target="_blank"
-        rel="noopener noreferrer"
-        class="vyre-btn vyre-btn--secondary vyre-btn--sm"
-      >
-        Vote or leave feedback →
-      </a>
-    </div>
+  <h2 class="docs-h2">Form props</h2>
+  <PropsTable props={props} />
+
+  <h2 class="docs-h2">FormField props</h2>
+  <p class="docs-p">
+    Wrap a single control. <code>FormField</code> injects
+    <code>name</code>/<code>value</code>/<code>onChange</code>/<code>onBlur</code>
+    and renders it inside a <code>Field</code> with the right label and error
+    state.
+  </p>
+  <PropsTable props={fieldProps} />
+
+  <div class="docs-callout docs-callout--accent">
+    <strong>Zero dependencies.</strong> Validation is built in — no zod/yup
+    needed. For anything custom, <code>rules.validate(value, allValues)</code>
+    returns an error string or <code>null</code>.
+  </div>
+
+  <AICheatSheet component="Form" />
+
+  <div class="docs-pagination">
+    <a href="/docs/components/field" class="docs-pagination__link docs-pagination__link--prev">
+      ← Field
+    </a>
+    <a href="/docs/components/grid" class="docs-pagination__link docs-pagination__link--next">
+      Grid →
+    </a>
   </div>
 </DocsLayout>
-
-<style>
-  .cs-title-row { display: flex; align-items: center; gap: var(--vyre-spacing-3); flex-wrap: wrap; }
-  .cs-body { display: flex; flex-direction: column; gap: var(--vyre-spacing-8); margin-top: var(--vyre-spacing-6); }
-  .cs-section-title { font-size: var(--vyre-typography-font-size-lg); font-weight: var(--vyre-typography-font-weight-semibold); color: var(--vyre-color-semantic-text-primary); margin-bottom: var(--vyre-spacing-3); }
-  .cs-feature-list { display: flex; flex-direction: column; gap: var(--vyre-spacing-2); padding-left: var(--vyre-spacing-5); color: var(--vyre-color-semantic-text-secondary); font-size: var(--vyre-typography-font-size-sm); line-height: 1.6; }
-  .cs-feedback { display: flex; flex-direction: column; gap: var(--vyre-spacing-3); padding: var(--vyre-spacing-5) var(--vyre-spacing-6); background: var(--vyre-color-semantic-surface); border: 1px solid var(--vyre-color-semantic-border-subtle); border-radius: var(--vyre-border-radius-lg); font-size: var(--vyre-typography-font-size-sm); color: var(--vyre-color-semantic-text-secondary); }
-</style>

@@ -52,6 +52,16 @@
  * - Stack          — Flex layout primitive (use instead of <div :style="{display:'flex'}">); token-locked gap/align/justify
  * - Grid           — CSS grid primitive: columns (1-12 or auto-fit), rows, flow, token-locked gap (+ GridItem for colSpan/rowSpan placement)
  * - Box            — Spacing-only container (padding/margin tokens) + controlled style escape hatch
+ * - Form           — Controlled, data-driven form: built-in validation rules, errors auto-map to Field (+ FormField)
+ * - NumberInput    — Controlled numeric input with −/+ stepper; v-model number|null; clamp/keyboard; works in FormField
+ * - ToggleGroup    — Segmented control: single/multiple, v-model adaptive, options[] or ToggleItem children (+ ToggleItem)
+ * - Stepper        — Multi-step flow indicator + controller; v-model 0-based index (+ StepperNav, Step, StepPanel)
+ * - EmptyState     — Placeholder for empty lists/tables/search: icon + title + description + CTA slot; variant default/search/error
+ * - Stat           — Dashboard KPI: label + large value + delta with explicit trend (up/down/neutral) (+ StatGroup)
+ * - Timeline       — Vertical activity feed for audit logs/history: items[] or TimelineItem children; status dot + connector (+ TimelineItem)
+ * - Tree           — Hierarchical view (file explorer/nested nav): nested :data[], v-model expanded/selected, recursive, keyboard
+ * - OTPInput       — Segmented one-time-code input (2FA/verification): v-model string, paste-aware, auto-advance, @complete
+ * - Carousel       — Accessible content slider: v-model index, snap scroll, dots, arrows, keyboard, loop/autoPlay (+ CarouselSlide)
  *
  * CSS must be imported separately:
  * import "@usevyre/tokens/css";           ← design tokens (required)
@@ -173,6 +183,26 @@ export { default as Stack }           from "./components/Layout/Stack.vue";
 export { default as Grid }            from "./components/Layout/Grid.vue";
 export { default as GridItem }        from "./components/Layout/GridItem.vue";
 export { default as Box }             from "./components/Layout/Box.vue";
+
+export { default as Form }            from "./components/Form/Form.vue";
+export { default as FormField }       from "./components/Form/FormField.vue";
+export type { FormRules }             from "./components/Form/form-context";
+export { default as NumberInput }     from "./components/NumberInput/NumberInput.vue";
+export { default as ToggleGroup }     from "./components/ToggleGroup/ToggleGroup.vue";
+export { default as ToggleItem }      from "./components/ToggleGroup/ToggleItem.vue";
+export { default as Stepper }         from "./components/Stepper/Stepper.vue";
+export { default as StepperNav }      from "./components/Stepper/StepperNav.vue";
+export { default as Step }            from "./components/Stepper/Step.vue";
+export { default as StepPanel }       from "./components/Stepper/StepPanel.vue";
+export { default as EmptyState }      from "./components/EmptyState/EmptyState.vue";
+export { default as Stat }            from "./components/Stat/Stat.vue";
+export { default as StatGroup }       from "./components/Stat/StatGroup.vue";
+export { default as Timeline }        from "./components/Timeline/Timeline.vue";
+export { default as TimelineItem }    from "./components/Timeline/TimelineItem.vue";
+export { default as Tree }            from "./components/Tree/Tree.vue";
+export { default as OTPInput }        from "./components/OTPInput/OTPInput.vue";
+export { default as Carousel }        from "./components/Carousel/Carousel.vue";
+export { default as CarouselSlide }   from "./components/Carousel/CarouselSlide.vue";
 
 // ── Composables ───────────────────────────────────────────────
 export { useToast }                 from "./composables/useToast";

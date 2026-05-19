@@ -52,6 +52,16 @@
  * - Stack          — Flex layout primitive (use instead of <div style="display:flex">); token-locked gap/align/justify
  * - Grid           — CSS grid primitive: columns (1-12 or auto-fit), rows, flow, token-locked gap (+ GridItem for colSpan/rowSpan placement)
  * - Box            — Spacing-only container (padding/margin tokens) + controlled style escape hatch
+ * - Form           — Controlled, data-driven form: built-in validation rules, errors auto-map to Field (+ FormField)
+ * - NumberInput    — Controlled numeric input with −/+ stepper; emits number|null; clamp/keyboard; drops into FormField
+ * - ToggleGroup    — Segmented control: single/multiple select, options[] or ToggleItem children; emits value (+ ToggleItem)
+ * - Stepper        — Multi-step flow indicator + controller (wizard/checkout); controlled 0-based index (+ StepperNav, Step, StepPanel)
+ * - EmptyState     — Placeholder for empty lists/tables/search: icon + title + description + CTA; variant default/search/error
+ * - Stat           — Dashboard KPI: label + large value + delta with explicit trend (up/down/neutral) (+ StatGroup)
+ * - Timeline       — Vertical activity feed for audit logs/history: items[] or TimelineItem children; status dot + connector (+ TimelineItem)
+ * - Tree           — Hierarchical view (file explorer/nested nav): nested data[], controlled expanded/selected, recursive, keyboard
+ * - OTPInput       — Segmented one-time-code input (2FA/verification): controlled string, paste-aware, auto-advance, onComplete
+ * - Carousel       — Accessible content slider: controlled index, snap scroll, dots, arrows, keyboard, loop/autoPlay (+ CarouselSlide)
  *
  * CSS must be imported separately:
  * import "@usevyre/tokens/css";           ← design tokens (required)
@@ -131,6 +141,26 @@ export type {
   StackAlignContent, StackAlignSelf, StackBasis,
   GridAlign, GridFlow, GridColumns,
 }                                                           from "./components/Layout/Layout";
+export { Form, FormField }                                  from "./components/Form/Form";
+export type { FormProps, FormFieldProps, FormRules }        from "./components/Form/Form";
+export { NumberInput }                                      from "./components/NumberInput/NumberInput";
+export type { NumberInputProps }                            from "./components/NumberInput/NumberInput";
+export { ToggleGroup, ToggleItem }                          from "./components/ToggleGroup/ToggleGroup";
+export type { ToggleGroupProps, ToggleItemProps, ToggleOption } from "./components/ToggleGroup/ToggleGroup";
+export { Stepper, StepperNav, Step, StepPanel }             from "./components/Stepper/Stepper";
+export type { StepperProps, StepperNavProps, StepProps, StepPanelProps } from "./components/Stepper/Stepper";
+export { EmptyState }                                       from "./components/EmptyState/EmptyState";
+export type { EmptyStateProps, EmptyStateVariant }          from "./components/EmptyState/EmptyState";
+export { Stat, StatGroup }                                  from "./components/Stat/Stat";
+export type { StatProps, StatGroupProps, StatTrend }        from "./components/Stat/Stat";
+export { Timeline, TimelineItem }                           from "./components/Timeline/Timeline";
+export type { TimelineProps, TimelineItemProps, TimelineItemData, TimelineStatus } from "./components/Timeline/Timeline";
+export { Tree }                                             from "./components/Tree/Tree";
+export type { TreeProps, TreeNode }                         from "./components/Tree/Tree";
+export { OTPInput }                                         from "./components/OTPInput/OTPInput";
+export type { OTPInputProps }                               from "./components/OTPInput/OTPInput";
+export { Carousel, CarouselSlide }                          from "./components/Carousel/Carousel";
+export type { CarouselProps, CarouselSlideProps }           from "./components/Carousel/Carousel";
 export {
   AppLayout, AppShell, AppBar, PageContent, SidebarTrigger,
   Sidebar, SidebarHeader, SidebarContent,

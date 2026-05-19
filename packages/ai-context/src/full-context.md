@@ -1531,6 +1531,565 @@ import { Box } from "@usevyre/react"
 
 ---
 
+### Form
+
+Controlled, data-driven form. Zero dependencies. Validation runs on submit and (after the first submit) on blur. Errors map into the wrapped Field automatically (state=error + hint=message). Compose with FormField, which wires name/value/onChange/onBlur into a single control child.
+
+```tsx
+import { Form, FormField } from "@usevyre/react"
+
+// Props:
+// values         = Record<string, any>
+// defaultValues  = Record<string, any>
+// onChange       = function
+// onSubmit       = function
+// onInvalid      = function
+
+// Examples:
+const [values, setValues] = useState({ email: "", password: "" });
+
+<Form values={values} onChange={setValues} onSubmit={(v) => signIn(v)}>
+  <FormField name="email" label="Email" rules={{ required: true, email: true }}>
+    <Input type="email" />
+  </FormField>
+  <FormField name="password" label="Password" rules={{ required: true, minLength: 8 }}>
+    <Input type="password" />
+  </FormField>
+  <Button type="submit" variant="primary">Sign in</Button>
+</Form>
+<FormField
+  name="confirm"
+  label="Confirm password"
+  rules={{
+    required: true,
+    validate: (v, all) => v === all.password ? null : "Passwords do not match",
+  }}
+>
+  <Input type="password" />
+</FormField>
+```
+
+**Common mistakes:**
+- ❌ `Manually tracking each field's error state with useState` → Wrap controls in <FormField name rules> and let Form manage errors
+- ❌ `Adding a validation library (zod/yup) just for basic rules` → Use rules={{ required, minLength, pattern, email, validate }}
+- ❌ `<FormField> with multiple control children` → Use one control per FormField (Input/Textarea/Select/etc.)
+- ❌ `<FormField> outside a <Form>` → Always nest FormField inside <Form>
+
+---
+
+### FormField
+
+A single labelled, validated field inside <Form>. Injects name/value/onChange/onBlur into its one control child and wraps it in <Field> (label + error state + hint).
+
+```tsx
+import { FormField } from "@usevyre/react"
+
+// Props:
+// name           = string
+// label          = string
+// hint           = string
+// rules          = object
+
+// Examples:
+<FormField name="bio" label="Bio" hint="Max 200 characters" rules={{ maxLength: 200 }}>
+  <Textarea />
+</FormField>
+```
+
+**Common mistakes:**
+- ❌ `Putting onChange/value manually on the control inside FormField` → Let FormField wire the control; only pass static props (type, placeholder)
+
+---
+
+### NumberInput
+
+Controlled numeric input with −/+ stepper buttons. onChange emits a NUMBER (or null when empty) — NOT an event. Drops straight into <FormField> (Form handles the non-event value). Clamps to min/max on blur; keyboard ArrowUp/Down ±step, Shift+Arrow ±step×10.
+
+```tsx
+import { NumberInput } from "@usevyre/react"
+
+// Props:
+// value          = number | null
+// defaultValue   = number | null (default: null)
+// onChange       = function
+// min            = number
+// max            = number
+// step           = number (default: 1)
+// precision      = number
+// size           = "sm" | "md" | "lg" (default: md)
+// disabled       = boolean (default: false)
+// readOnly       = boolean (default: false)
+
+// Examples:
+const [qty, setQty] = useState<number | null>(1);
+
+<NumberInput value={qty} onChange={setQty} min={1} max={99} />
+<FormField name="age" label="Age" rules={{ required: true, min: 18 }}>
+  <NumberInput min={0} max={120} />
+</FormField>
+```
+
+**Common mistakes:**
+- ❌ `onChange={(e) => set(e.target.value)}` → onChange={(value) => set(value)} — value is number | null
+- ❌ `Using <Input type="number"> for numeric fields` → Use <NumberInput value onChange min max step />
+- ❌ `Parsing the value with Number() in form state` → Store the value directly; it is already number | null
+
+---
+
+### ToggleGroup
+
+Segmented control. CONTROLLED — the group owns the value. onChange emits the VALUE (not an event). type=single → value:string|null; type=multiple → value:string[]. Provide options[] for simple lists or <ToggleItem value> children for custom content. Distinct from Switch (boolean), ButtonGroup (layout only), RadioGroup (form radios, single only).
+
+```tsx
+import { ToggleGroup, ToggleItem } from "@usevyre/react"
+
+// Props:
+// type           = "single" | "multiple" (default: single)
+// value          = string | null | string[]
+// onChange       = function
+// options        = array
+// size           = "sm" | "md" | "lg" (default: md)
+// orientation    = "horizontal" | "vertical" (default: horizontal)
+// disabled       = boolean (default: false)
+
+// Examples:
+const [view, setView] = useState<string | null>("grid");
+
+<ToggleGroup
+  value={view}
+  onChange={setView}
+  options={[
+    { value: "grid", label: "Grid" },
+    { value: "list", label: "List" },
+  ]}
+/>
+const [fmt, setFmt] = useState<string[]>(["bold"]);
+
+<ToggleGroup type="multiple" value={fmt} onChange={setFmt}>
+  <ToggleItem value="bold">B</ToggleItem>
+  <ToggleItem value="italic">I</ToggleItem>
+  <ToggleItem value="underline">U</ToggleItem>
+</ToggleGroup>
+```
+
+**Common mistakes:**
+- ❌ `onChange={(e) => set(e.target.value)}` → onChange={(value) => set(value)} — string|null (single) or string[] (multiple)
+- ❌ `Using ToggleGroup for a single on/off setting` → Use <Switch> for on/off; ToggleGroup is for choosing among options
+- ❌ `type="multiple" with a string value` → value={['a','b']} and onChange receives string[]
+- ❌ `<ToggleItem> outside <ToggleGroup>` → Always nest ToggleItem inside ToggleGroup (or use options)
+
+---
+
+### ToggleItem
+
+A single toggle button inside <ToggleGroup>. Reads selection state from the group via context.
+
+```tsx
+import { ToggleItem } from "@usevyre/react"
+
+// Props:
+// value          = string
+// icon           = ReactNode
+// disabled       = boolean (default: false)
+
+// Examples:
+<ToggleGroup value={v} onChange={setV}>
+  <ToggleItem value="left">Left</ToggleItem>
+  <ToggleItem value="center">Center</ToggleItem>
+</ToggleGroup>
+```
+
+**Common mistakes:**
+- ❌ `Tracking selected state on ToggleItem yourself` → Only set value; the group controls selected state
+
+---
+
+### Stepper
+
+Multi-step flow indicator + controller (onboarding/checkout/wizard). CONTROLLED by a 0-based index. Compose StepperNav (with Step indicators) and StepPanel (content shown when its index == active). Step/StepPanel take an explicit 0-based `index`. Not Tabs — Stepper is an ORDERED linear flow with completed/current/upcoming states.
+
+```tsx
+import { Stepper, StepperNav, Step, StepPanel } from "@usevyre/react"
+
+// Props:
+// value          = number
+// defaultValue   = number (default: 0)
+// onChange       = function
+// orientation    = "horizontal" | "vertical" (default: horizontal)
+// clickable      = boolean (default: false)
+
+// Examples:
+const [step, setStep] = useState(0);
+
+<Stepper value={step} onChange={setStep}>
+  <StepperNav>
+    <Step index={0} label="Account" />
+    <Step index={1} label="Profile" />
+    <Step index={2} label="Done" />
+  </StepperNav>
+  <StepPanel index={0}><AccountForm /></StepPanel>
+  <StepPanel index={1}><ProfileForm /></StepPanel>
+  <StepPanel index={2}><Summary /></StepPanel>
+  <Stack direction="row" gap="sm" justify="between">
+    <Button onClick={() => setStep((s) => s - 1)} disabled={step === 0}>Back</Button>
+    <Button variant="primary" onClick={() => setStep((s) => s + 1)}>Next</Button>
+  </Stack>
+</Stepper>
+<Stepper orientation="vertical" defaultValue={1}>
+  <StepperNav>
+    <Step index={0} label="Cart" description="2 items" />
+    <Step index={1} label="Shipping" description="Enter address" />
+    <Step index={2} label="Payment" />
+  </StepperNav>
+</Stepper>
+```
+
+**Common mistakes:**
+- ❌ `Using Tabs for a wizard / checkout flow` → Use <Stepper> with StepperNav + Step + StepPanel
+- ❌ `onChange={(e) => set(e.target.value)}` → onChange={(index) => setStep(index)}
+- ❌ `Manually toggling which panel is visible` → Give each StepPanel an index; Stepper shows the active one
+- ❌ `<Step> or <StepPanel> outside <Stepper>` → Nest Step inside StepperNav, StepPanel inside Stepper
+
+---
+
+### StepperNav
+
+Container for Step indicators inside <Stepper>. Lays them out per the Stepper's orientation.
+
+```tsx
+import { Stepper, StepperNav, Step, StepPanel } from "@usevyre/react"
+
+```
+
+---
+
+### Step
+
+One step indicator inside <StepperNav>. State (completed/current/upcoming) derives from the Stepper's active index automatically.
+
+```tsx
+import { Stepper, StepperNav, Step, StepPanel } from "@usevyre/react"
+
+// Props:
+// index          = number
+// label          = ReactNode
+// description    = ReactNode
+// icon           = ReactNode
+
+```
+
+---
+
+### StepPanel
+
+Content for one step. Renders its children only when its index equals the Stepper's active step.
+
+```tsx
+import { Stepper, StepperNav, Step, StepPanel } from "@usevyre/react"
+
+// Props:
+// index          = number
+
+```
+
+---
+
+### EmptyState
+
+Presentational placeholder for empty lists, tables, and search results. No state. title/description/variant/size are props; the optional call-to-action goes in children (React) or the default slot (Vue). variant picks a preset icon (default=box, search=magnifier, error=warning); pass `icon` (or #icon slot) to override.
+
+```tsx
+import { EmptyState } from "@usevyre/react"
+
+// Props:
+// title          = string
+// description    = string
+// variant        = "default" | "search" | "error" (default: default)
+// icon           = ReactNode
+// size           = "sm" | "md" | "lg" (default: md)
+// children       = ReactNode
+
+// Examples:
+<EmptyState
+  variant="search"
+  title="No results"
+  description="Try a different search term."
+>
+  <Button variant="secondary" onClick={reset}>Clear filters</Button>
+</EmptyState>
+<EmptyState
+  size="lg"
+  title="No projects yet"
+  description="Create your first project to get started."
+>
+  <Button variant="primary">New project</Button>
+</EmptyState>
+```
+
+**Common mistakes:**
+- ❌ `Building an empty placeholder with a bare <div> + centered text` → Use <EmptyState title description variant>
+- ❌ `action / cta prop` → Put the Button as children of EmptyState
+- ❌ `Using EmptyState for a loading state` → Use <Skeleton> while loading; EmptyState when the result set is empty
+
+---
+
+### Stat
+
+Presentational dashboard KPI. No state. The arrow DIRECTION follows the sign of `delta` (the actual change: -0.4% → down arrow). The arrow/delta COLOR is set explicitly by `trend` (up=success, down=danger, neutral=muted) — so 'churn -0.4%, trend=up' shows a green DOWN arrow. Wrap several in StatGroup for an evenly-split row with dividers.
+
+```tsx
+import { Stat, StatGroup } from "@usevyre/react"
+
+// Props:
+// label          = string
+// value          = string | number
+// delta          = string | number
+// trend          = "up" | "down" | "neutral" (default: neutral)
+// deltaLabel     = string
+// icon           = ReactNode
+// size           = "sm" | "md" | "lg" (default: md)
+
+// Examples:
+<StatGroup>
+  <Stat label="Revenue" value="$48.2k" delta="+12%" trend="up" deltaLabel="vs last month" />
+  <Stat label="Churn" value="2.1%" delta="-0.4%" trend="up" deltaLabel="lower is better" />
+  <Stat label="Orders" value="1,204" delta="0%" trend="neutral" />
+</StatGroup>
+<Stat label="Active users" value="12,840" delta="+3.2%" trend="up"
+      icon={<UsersIcon />} size="lg" />
+```
+
+**Common mistakes:**
+- ❌ `Assuming trend flips the arrow direction` → delta="-0.4%" always shows a down arrow; trend="up" just colors it green
+- ❌ `Building a KPI card with Card + manual layout` → Use <Stat label value delta trend />
+- ❌ `Laying out a KPI row with custom flex + dividers` → Wrap the Stats in <StatGroup>
+
+---
+
+### StatGroup
+
+Evenly-split row of <Stat> with subtle dividers between items. Each Stat flexes to equal width.
+
+```tsx
+import { Stat, StatGroup } from "@usevyre/react"
+
+// Examples:
+<StatGroup>
+  <Stat label="MRR" value="$9.6k" delta="+5%" trend="up" />
+  <Stat label="Refunds" value="32" delta="+8" trend="down" />
+</StatGroup>
+```
+
+**Common mistakes:**
+- ❌ `Putting non-Stat children in StatGroup` → Only place <Stat> elements inside StatGroup
+
+---
+
+### Timeline
+
+Vertical activity feed for audit logs and history. Presentational — a status dot per item plus a connector line. Pass `items` for plain logs, or TimelineItem children for rich per-item content. Timeline does NOT reorder; pass items in the order you want shown.
+
+```tsx
+import { Timeline, TimelineItem } from "@usevyre/react"
+
+// Props:
+// items          = array
+// children       = ReactNode
+
+// Examples:
+<Timeline
+  items={[
+    { title: "Deployed v2.1", time: "2m ago", status: "success" },
+    { title: "Build started", time: "5m ago", status: "info" },
+    { title: "Push to main", time: "6m ago" },
+  ]}
+/>
+<Timeline>
+  <TimelineItem title="Invoice paid" time="Apr 2" status="success">
+    <Text size="sm">$1,200 — <a href="#">view receipt</a></Text>
+  </TimelineItem>
+  <TimelineItem title="Invoice sent" time="Mar 28" status="info" />
+</Timeline>
+```
+
+**Common mistakes:**
+- ❌ `Building an activity log with a <ul> + manual dots/lines` → Use <Timeline items={[...]} /> or TimelineItem children
+- ❌ `Using Stepper for a history/audit feed` → Use <Timeline> for logs/history; Stepper for wizards
+- ❌ `Expecting Timeline to sort by time` → Sort the array yourself (newest- or oldest-first)
+
+---
+
+### TimelineItem
+
+One entry in a <Timeline>. Renders a status-colored dot (or a custom icon), a title, an optional time, and optional rich content.
+
+```tsx
+import { Timeline, TimelineItem } from "@usevyre/react"
+
+// Props:
+// title          = ReactNode
+// time           = ReactNode
+// status         = "default" | "success" | "warning" | "danger" | "info" (default: default)
+// icon           = ReactNode
+// children       = ReactNode
+
+// Examples:
+<TimelineItem title="Comment added" time="1h ago" status="default">
+  <Text size="sm">“Looks good to me 👍”</Text>
+</TimelineItem>
+```
+
+**Common mistakes:**
+- ❌ `<TimelineItem> outside <Timeline>` → Always nest TimelineItem inside Timeline
+
+---
+
+### Tree
+
+Hierarchical tree view for file explorers and nested navigation. DATA-DRIVEN and CONTROLLED — pass a nested `data` array; the Tree renders recursively. Single selection. A node WITH children is a folder (click toggles expand); a leaf fires onSelect. Keyboard: ArrowUp/Down move, ArrowRight/Left expand/collapse, Enter/Space select.
+
+```tsx
+import { Tree } from "@usevyre/react"
+
+// Props:
+// data           = TreeNode[]
+// expandedIds    = string[]
+// defaultExpandedIds = string[] (default: [])
+// onExpandedChange = function
+// selectedId     = string | null
+// defaultSelectedId = string | null (default: null)
+// onSelect       = function
+
+// Examples:
+const [sel, setSel] = useState<string | null>("src/a.ts");
+
+<Tree
+  data={[
+    { id: "src", label: "src", children: [
+      { id: "src/a.ts", label: "a.ts" },
+      { id: "src/b", label: "b", children: [
+        { id: "src/b/c.ts", label: "c.ts" },
+      ]},
+    ]},
+    { id: "README.md", label: "README.md" },
+  ]}
+  selectedId={sel}
+  onSelect={setSel}
+  defaultExpandedIds={["src"]}
+/>
+const [open, setOpen] = useState<string[]>(["root"]);
+
+<Tree data={tree} expandedIds={open} onExpandedChange={setOpen} />
+```
+
+**Common mistakes:**
+- ❌ `Rendering a nested <ul> tree by hand with manual expand state` → Pass a nested `data` array to <Tree> and control expandedIds/selectedId
+- ❌ `onSelect={(e) => ...}` → onSelect={(id) => setSelected(id)}
+- ❌ `Mutating the data array to expand/collapse` → Track expandedIds in state (or use defaultExpandedIds)
+- ❌ `Using DropdownMenu submenus for a file tree` → Use <Tree> for file explorers / nested nav
+
+---
+
+### OTPInput
+
+Segmented one-time-code input for verification / 2FA. CONTROLLED. onChange emits the STRING value (not an event), and onComplete fires once when every slot is filled. Paste-aware (pasting a full code fills all slots), auto-advance on input, backspace moves to the previous slot, arrow keys navigate. Drops straight into <FormField>.
+
+```tsx
+import { OTPInput } from "@usevyre/react"
+
+// Props:
+// value          = string
+// defaultValue   = string (default: "")
+// onChange       = function
+// onComplete     = function
+// length         = number (default: 6)
+// type           = "numeric" | "alphanumeric" (default: numeric)
+// mask           = boolean (default: false)
+// size           = "sm" | "md" | "lg" (default: md)
+// disabled       = boolean (default: false)
+// autoFocus      = boolean (default: false)
+
+// Examples:
+const [code, setCode] = useState("");
+
+<OTPInput
+  value={code}
+  onChange={setCode}
+  onComplete={(c) => verify(c)}
+  autoFocus
+/>
+<FormField name="otp" label="Verification code"
+           rules={{ required: true, minLength: 6 }}>
+  <OTPInput length={6} />
+</FormField>
+```
+
+**Common mistakes:**
+- ❌ `onChange={(e) => set(e.target.value)}` → onChange={(value) => setCode(value)}
+- ❌ `Six separate <Input> boxes wired by hand` → Use <OTPInput length={6} value onChange />
+- ❌ `Reading completion by comparing length yourself` → Use onComplete={(code) => verify(code)}
+- ❌ `type="password" to hide digits` → Use mask (type stays numeric/alphanumeric)
+
+---
+
+### Carousel
+
+Accessible content slider for galleries, onboarding, and testimonials. CONTROLLED by a 0-based slide index. Compose CarouselSlide children (slide order = index). Snap scrolling, clickable dot indicators, prev/next arrows, ArrowLeft/Right keyboard, optional loop and autoPlay (autoplay pauses on hover/focus). onChange emits the index (not an event).
+
+```tsx
+import { Carousel, CarouselSlide } from "@usevyre/react"
+
+// Props:
+// value          = number
+// defaultValue   = number (default: 0)
+// onChange       = function
+// loop           = boolean (default: false)
+// autoPlay       = boolean (default: false)
+// interval       = number (default: 5000)
+// showArrows     = boolean (default: true)
+// showIndicators = boolean (default: true)
+
+// Examples:
+const [i, setI] = useState(0);
+
+<Carousel value={i} onChange={setI} loop>
+  <CarouselSlide><img src="/a.jpg" alt="A" /></CarouselSlide>
+  <CarouselSlide><img src="/b.jpg" alt="B" /></CarouselSlide>
+  <CarouselSlide><img src="/c.jpg" alt="C" /></CarouselSlide>
+</Carousel>
+<Carousel autoPlay interval={4000} showArrows={false}>
+  <CarouselSlide><Welcome /></CarouselSlide>
+  <CarouselSlide><Features /></CarouselSlide>
+  <CarouselSlide><GetStarted /></CarouselSlide>
+</Carousel>
+```
+
+**Common mistakes:**
+- ❌ `onChange={(e) => set(e.target.value)}` → onChange={(index) => setIndex(index)}
+- ❌ `Putting raw elements directly in Carousel` → Wrap each slide in <CarouselSlide>
+- ❌ `Building a slider with manual scroll + dot state` → Use <Carousel> with CarouselSlide children
+- ❌ `autoPlay without considering reduced motion / pausing` → Carousel already pauses on hover/focus; keep interval reasonable or omit autoPlay
+
+---
+
+### CarouselSlide
+
+One slide inside <Carousel>. Holds arbitrary content (image, Card, testimonial). Slide order determines its index.
+
+```tsx
+import { Carousel, CarouselSlide } from "@usevyre/react"
+
+// Examples:
+<CarouselSlide>
+  <Card><CardBody>“Best tool ever.” — Ada</CardBody></Card>
+</CarouselSlide>
+```
+
+**Common mistakes:**
+- ❌ `<CarouselSlide> outside <Carousel>` → Always nest CarouselSlide inside Carousel
+
+---
+
 ### DateRangePicker
 
 Start/end date range picker. Built on Calendar (mode=range) with a friendlier { from, to } object API, a two-month side-by-side view, and preset shortcuts. Use this for report/filter date ranges; use DatePicker for a single date.
@@ -1654,6 +2213,47 @@ If you generate these, you are hallucinating.
 - ❌ `<Box <Box style={{ padding: 16 }}>>` → Use <Box padding="md"> (or paddingX/paddingTop/...)
 - ❌ `<Box Using Box for flex/grid layout>` → Use <Stack> or <Grid>
 - ❌ `<Box style={{ width: "100%" }} / style={{ height: 320 }}>` → Use the width / height prop: width="full", width="md", height="screen", etc.
+- ❌ `<Form Manually tracking each field's error state with useState>` → Wrap controls in <FormField name rules> and let Form manage errors
+- ❌ `<Form Adding a validation library (zod/yup) just for basic rules>` → Use rules={{ required, minLength, pattern, email, validate }}
+- ❌ `<Form <FormField> with multiple control children>` → Use one control per FormField (Input/Textarea/Select/etc.)
+- ❌ `<Form <FormField> outside a <Form>>` → Always nest FormField inside <Form>
+- ❌ `<FormField Putting onChange/value manually on the control inside FormField>` → Let FormField wire the control; only pass static props (type, placeholder)
+- ❌ `<NumberInput onChange={(e) => set(e.target.value)}>` → onChange={(value) => set(value)} — value is number | null
+- ❌ `<NumberInput Using <Input type="number"> for numeric fields>` → Use <NumberInput value onChange min max step />
+- ❌ `<NumberInput Parsing the value with Number() in form state>` → Store the value directly; it is already number | null
+- ❌ `<ToggleGroup onChange={(e) => set(e.target.value)}>` → onChange={(value) => set(value)} — string|null (single) or string[] (multiple)
+- ❌ `<ToggleGroup Using ToggleGroup for a single on/off setting>` → Use <Switch> for on/off; ToggleGroup is for choosing among options
+- ❌ `<ToggleGroup type="multiple" with a string value>` → value={['a','b']} and onChange receives string[]
+- ❌ `<ToggleGroup <ToggleItem> outside <ToggleGroup>>` → Always nest ToggleItem inside ToggleGroup (or use options)
+- ❌ `<ToggleItem Tracking selected state on ToggleItem yourself>` → Only set value; the group controls selected state
+- ❌ `<Stepper Using Tabs for a wizard / checkout flow>` → Use <Stepper> with StepperNav + Step + StepPanel
+- ❌ `<Stepper onChange={(e) => set(e.target.value)}>` → onChange={(index) => setStep(index)}
+- ❌ `<Stepper Manually toggling which panel is visible>` → Give each StepPanel an index; Stepper shows the active one
+- ❌ `<Stepper <Step> or <StepPanel> outside <Stepper>>` → Nest Step inside StepperNav, StepPanel inside Stepper
+- ❌ `<EmptyState Building an empty placeholder with a bare <div> + centered text>` → Use <EmptyState title description variant>
+- ❌ `<EmptyState action / cta prop>` → Put the Button as children of EmptyState
+- ❌ `<EmptyState Using EmptyState for a loading state>` → Use <Skeleton> while loading; EmptyState when the result set is empty
+- ❌ `<Stat Assuming trend flips the arrow direction>` → delta="-0.4%" always shows a down arrow; trend="up" just colors it green
+- ❌ `<Stat Building a KPI card with Card + manual layout>` → Use <Stat label value delta trend />
+- ❌ `<Stat Laying out a KPI row with custom flex + dividers>` → Wrap the Stats in <StatGroup>
+- ❌ `<StatGroup Putting non-Stat children in StatGroup>` → Only place <Stat> elements inside StatGroup
+- ❌ `<Timeline Building an activity log with a <ul> + manual dots/lines>` → Use <Timeline items={[...]} /> or TimelineItem children
+- ❌ `<Timeline Using Stepper for a history/audit feed>` → Use <Timeline> for logs/history; Stepper for wizards
+- ❌ `<Timeline Expecting Timeline to sort by time>` → Sort the array yourself (newest- or oldest-first)
+- ❌ `<TimelineItem <TimelineItem> outside <Timeline>>` → Always nest TimelineItem inside Timeline
+- ❌ `<Tree Rendering a nested <ul> tree by hand with manual expand state>` → Pass a nested `data` array to <Tree> and control expandedIds/selectedId
+- ❌ `<Tree onSelect={(e) => ...}>` → onSelect={(id) => setSelected(id)}
+- ❌ `<Tree Mutating the data array to expand/collapse>` → Track expandedIds in state (or use defaultExpandedIds)
+- ❌ `<Tree Using DropdownMenu submenus for a file tree>` → Use <Tree> for file explorers / nested nav
+- ❌ `<OTPInput onChange={(e) => set(e.target.value)}>` → onChange={(value) => setCode(value)}
+- ❌ `<OTPInput Six separate <Input> boxes wired by hand>` → Use <OTPInput length={6} value onChange />
+- ❌ `<OTPInput Reading completion by comparing length yourself>` → Use onComplete={(code) => verify(code)}
+- ❌ `<OTPInput type="password" to hide digits>` → Use mask (type stays numeric/alphanumeric)
+- ❌ `<Carousel onChange={(e) => set(e.target.value)}>` → onChange={(index) => setIndex(index)}
+- ❌ `<Carousel Putting raw elements directly in Carousel>` → Wrap each slide in <CarouselSlide>
+- ❌ `<Carousel Building a slider with manual scroll + dot state>` → Use <Carousel> with CarouselSlide children
+- ❌ `<Carousel autoPlay without considering reduced motion / pausing>` → Carousel already pauses on hover/focus; keep interval reasonable or omit autoPlay
+- ❌ `<CarouselSlide <CarouselSlide> outside <Carousel>>` → Always nest CarouselSlide inside Carousel
 - ❌ `<DateRangePicker value={[from, to]}>` → Use value={{ from, to }} and read range.from / range.to
 - ❌ `<DateRangePicker DateRangePicker for a single date>` → Use <DatePicker /> for a single date
 - ❌ `<DateRangePicker presets="true" (string)>` → Use the bare prop: presets  (or presets={true})

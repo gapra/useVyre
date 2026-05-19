@@ -1,47 +1,135 @@
 ---
-import DocsLayout from "@/layouts/DocsLayout.astro";
+import DocsLayout         from "@/layouts/DocsLayout.astro";
+import ComponentPreview   from "@/components/docs/ComponentPreview.astro";
+import PropsTable         from "@/components/docs/PropsTable.astro";
+import AICheatSheet       from "@/components/docs/AICheatSheet.astro";
+import { TimelineDemo, TimelineRichDemo } from "@/components/demos/TimelineDemo";
+
+const codeReact = `import { Timeline } from "@usevyre/react";
+
+<Timeline
+  items={[
+    { title: "Deployed v2.1.0", time: "2m ago", status: "success" },
+    { title: "Build passed", time: "5m ago", status: "info" },
+    { title: "Tests failed (retry)", time: "8m ago", status: "danger" },
+    { title: "Pushed to main", time: "10m ago" },
+  ]}
+/>`;
+
+const codeVue = `<script setup>
+import { Timeline } from "@usevyre/vue";
+
+const items = [
+  { title: "Deployed v2.1.0", time: "2m ago", status: "success" },
+  { title: "Build passed", time: "5m ago", status: "info" },
+  { title: "Tests failed (retry)", time: "8m ago", status: "danger" },
+  { title: "Pushed to main", time: "10m ago" },
+];
+</script>
+<template>
+  <Timeline :items="items" />
+</template>`;
+
+const codeRichReact = `import { Timeline, TimelineItem, Stack, Text, Badge } from "@usevyre/react";
+
+<Timeline>
+  <TimelineItem title="Invoice paid" time="Apr 2" status="success">
+    <Text size="sm" color="muted">$1,200 — Acme Inc.</Text>
+  </TimelineItem>
+  <TimelineItem title="Plan upgraded" time="Mar 28" status="info">
+    <Stack direction="row" gap="sm" align="center">
+      <Badge variant="default">Starter</Badge>
+      <Text size="sm" color="muted">→</Text>
+      <Badge variant="accent">Pro</Badge>
+    </Stack>
+  </TimelineItem>
+  <TimelineItem title="Account created" time="Mar 1" />
+</Timeline>`;
+
+const codeRichVue = `<script setup>
+import { Timeline, TimelineItem, Stack, Text, Badge } from "@usevyre/vue";
+</script>
+<template>
+  <Timeline>
+    <TimelineItem title="Invoice paid" time="Apr 2" status="success">
+      <Text size="sm" color="muted">$1,200 — Acme Inc.</Text>
+    </TimelineItem>
+    <TimelineItem title="Plan upgraded" time="Mar 28" status="info">
+      <Stack direction="row" gap="sm" align="center">
+        <Badge variant="default">Starter</Badge>
+        <Text size="sm" color="muted">→</Text>
+        <Badge variant="accent">Pro</Badge>
+      </Stack>
+    </TimelineItem>
+    <TimelineItem title="Account created" time="Mar 1" />
+  </Timeline>
+</template>`;
+
+const props = [
+  { name: "items",    type: "TimelineItemData[]", default: "—", description: "{ title, time?, description?, status?, icon? }[] — alternative to children." },
+  { name: "children", type: "ReactNode", default: "—", description: "TimelineItem elements (use for rich per-item content)." },
+];
+
+const itemProps = [
+  { name: "title",    type: "ReactNode", default: "—", description: "Entry title (required)." },
+  { name: "time",     type: "ReactNode", default: "—", description: "Timestamp, right-aligned." },
+  { name: "status",   type: `"default" | "success" | "warning" | "danger" | "info"`, default: `"default"`, description: "Colors the marker dot." },
+  { name: "icon",     type: "ReactNode", default: "—", description: "Custom marker — overrides the status dot (Vue: #icon slot)." },
+  { name: "children", type: "ReactNode", default: "—", description: "Rich content under the title." },
+];
 ---
 
-<DocsLayout title="Timeline">
+<DocsLayout title="Timeline" component="Timeline">
   <div class="docs-header">
-    <div class="cs-title-row">
-      <h1 class="docs-title">Timeline</h1>
-      <span class="vyre-badge vyre-badge--default">Coming soon</span>
+    <div class="docs-header__meta">
+      <span class="vyre-badge vyre-badge--default">@usevyre/react</span>
+      <span class="vyre-badge vyre-badge--default">@usevyre/vue</span>
     </div>
+    <h1 class="docs-title">Timeline</h1>
     <p class="docs-lead">
-      Vertical activity feed for audit logs and history — ordered items with markers, timestamps, and rich content.
+      A vertical activity feed for audit logs and history — status-colored
+      markers, timestamps, and a connector line. Pass an
+      <code>items</code> array for plain logs, or compose
+      <code>TimelineItem</code> children for rich content. Timeline doesn’t
+      reorder — items render in the order you give them.
     </p>
   </div>
 
   <hr class="docs-divider" />
 
-  <div class="cs-body">
-    <h2 class="cs-section-title">What's coming</h2>
-    <ul class="cs-feature-list">
-      <li>Controlled, data-driven API — predictable for AI agents</li>
-      <li>React + Vue with an identical API surface</li>
-      <li>Themed entirely via useVyre CSS tokens — no external stylesheet</li>
-      <li>Inline AI context block, schema, and anti-patterns for zero-hallucination use</li>
-    </ul>
+  <h2 class="docs-h2">Audit log (items array)</h2>
+  <p class="docs-p">
+    The quickest form: an array of entries. <code>status</code> colors each
+    dot — <code>success</code> green, <code>info</code> accent,
+    <code>danger</code> red, <code>default</code> grey.
+  </p>
+  <ComponentPreview react={codeReact} vue={codeVue}>
+    <TimelineDemo client:visible />
+  </ComponentPreview>
 
-    <div class="cs-feedback">
-      <p>Have a use case in mind? Share it on GitHub and help shape the API.</p>
-      <a
-        href="https://github.com/gapra/usevyre/discussions"
-        target="_blank"
-        rel="noopener noreferrer"
-        class="vyre-btn vyre-btn--secondary vyre-btn--sm"
-      >
-        Vote or leave feedback →
-      </a>
-    </div>
+  <h2 class="docs-h2">Rich content (composable)</h2>
+  <p class="docs-p">
+    Use <code>TimelineItem</code> children when each entry needs more than
+    text — badges, links, or any markup go in the body.
+  </p>
+  <ComponentPreview react={codeRichReact} vue={codeRichVue}>
+    <TimelineRichDemo client:visible />
+  </ComponentPreview>
+
+  <h2 class="docs-h2">Timeline props</h2>
+  <PropsTable props={props} />
+
+  <h2 class="docs-h2">TimelineItem props</h2>
+  <PropsTable props={itemProps} />
+
+  <AICheatSheet component="Timeline" />
+
+  <div class="docs-pagination">
+    <a href="/docs/components/tags-input" class="docs-pagination__link docs-pagination__link--prev">
+      ← Tags Input
+    </a>
+    <a href="/docs/components/toast" class="docs-pagination__link docs-pagination__link--next">
+      Toast →
+    </a>
   </div>
 </DocsLayout>
-
-<style>
-  .cs-title-row { display: flex; align-items: center; gap: var(--vyre-spacing-3); flex-wrap: wrap; }
-  .cs-body { display: flex; flex-direction: column; gap: var(--vyre-spacing-8); margin-top: var(--vyre-spacing-6); }
-  .cs-section-title { font-size: var(--vyre-typography-font-size-lg); font-weight: var(--vyre-typography-font-weight-semibold); color: var(--vyre-color-semantic-text-primary); margin-bottom: var(--vyre-spacing-3); }
-  .cs-feature-list { display: flex; flex-direction: column; gap: var(--vyre-spacing-2); padding-left: var(--vyre-spacing-5); color: var(--vyre-color-semantic-text-secondary); font-size: var(--vyre-typography-font-size-sm); line-height: 1.6; }
-  .cs-feedback { display: flex; flex-direction: column; gap: var(--vyre-spacing-3); padding: var(--vyre-spacing-5) var(--vyre-spacing-6); background: var(--vyre-color-semantic-surface); border: 1px solid var(--vyre-color-semantic-border-subtle); border-radius: var(--vyre-border-radius-lg); font-size: var(--vyre-typography-font-size-sm); color: var(--vyre-color-semantic-text-secondary); }
-</style>

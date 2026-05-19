@@ -1,47 +1,114 @@
 ---
-import DocsLayout from "@/layouts/DocsLayout.astro";
+import DocsLayout         from "@/layouts/DocsLayout.astro";
+import ComponentPreview   from "@/components/docs/ComponentPreview.astro";
+import PropsTable         from "@/components/docs/PropsTable.astro";
+import AICheatSheet       from "@/components/docs/AICheatSheet.astro";
+import { EmptyStateDemo } from "@/components/demos/EmptyStateDemo";
+
+const codeReact = `import { EmptyState, Button } from "@usevyre/react";
+
+<EmptyState
+  title="No projects yet"
+  description="Create your first project to get started."
+>
+  <Button variant="primary">New project</Button>
+</EmptyState>
+
+<EmptyState
+  variant="search"
+  size="sm"
+  title="No results"
+  description="Try a different search term."
+>
+  <Button variant="secondary">Clear filters</Button>
+</EmptyState>
+
+<EmptyState
+  variant="error"
+  title="Couldn't load data"
+  description="Something went wrong. Please try again."
+>
+  <Button variant="secondary">Retry</Button>
+</EmptyState>`;
+
+const codeVue = `<script setup>
+import { EmptyState, Button } from "@usevyre/vue";
+</script>
+<template>
+  <EmptyState
+    title="No projects yet"
+    description="Create your first project to get started."
+  >
+    <Button variant="primary">New project</Button>
+  </EmptyState>
+
+  <EmptyState
+    variant="search"
+    size="sm"
+    title="No results"
+    description="Try a different search term."
+  >
+    <Button variant="secondary">Clear filters</Button>
+  </EmptyState>
+
+  <EmptyState
+    variant="error"
+    title="Couldn't load data"
+    description="Something went wrong. Please try again."
+  >
+    <Button variant="secondary">Retry</Button>
+  </EmptyState>
+</template>`;
+
+const props = [
+  { name: "title",       type: "string", default: "—", description: "Headline (required)." },
+  { name: "description", type: "string", default: "—", description: "Supporting text under the title." },
+  { name: "variant",     type: `"default" | "search" | "error"`, default: `"default"`, description: "Preset icon: box / magnifier / warning." },
+  { name: "icon",        type: "ReactNode", default: "—", description: "Custom icon — overrides the variant preset (Vue: #icon slot)." },
+  { name: "size",        type: `"sm" | "md" | "lg"`, default: `"md"`, description: "sm for inline/in-Card, lg for full-page." },
+  { name: "children",    type: "ReactNode", default: "—", description: "The call-to-action (a Button, or buttons in a Stack)." },
+];
 ---
 
-<DocsLayout title="Empty State">
+<DocsLayout title="Empty State" component="EmptyState">
   <div class="docs-header">
-    <div class="cs-title-row">
-      <h1 class="docs-title">Empty State</h1>
-      <span class="vyre-badge vyre-badge--default">Coming soon</span>
+    <div class="docs-header__meta">
+      <span class="vyre-badge vyre-badge--default">@usevyre/react</span>
+      <span class="vyre-badge vyre-badge--default">@usevyre/vue</span>
     </div>
+    <h1 class="docs-title">Empty State</h1>
     <p class="docs-lead">
-      A standard placeholder for empty lists, tables, and search results — icon, title, description, and an optional call-to-action.
+      A consistent placeholder for empty lists, tables, and search results.
+      Pick a <code>variant</code> for a preset icon, set
+      <code>title</code>/<code>description</code>, and compose the
+      call-to-action as children. Use it for <em>no data</em> — not loading
+      (reach for <a href="/docs/components/skeleton">Skeleton</a> there).
     </p>
   </div>
 
   <hr class="docs-divider" />
 
-  <div class="cs-body">
-    <h2 class="cs-section-title">What's coming</h2>
-    <ul class="cs-feature-list">
-      <li>Controlled, data-driven API — predictable for AI agents</li>
-      <li>React + Vue with an identical API surface</li>
-      <li>Themed entirely via useVyre CSS tokens — no external stylesheet</li>
-      <li>Inline AI context block, schema, and anti-patterns for zero-hallucination use</li>
-    </ul>
+  <h2 class="docs-h2">Default, search & error</h2>
+  <p class="docs-p">
+    <code>variant="default"</code> shows a box, <code>"search"</code> a
+    magnifier, <code>"error"</code> a warning (tinted danger). Each takes an
+    optional CTA via children.
+  </p>
+  <ComponentPreview react={codeReact} vue={codeVue}>
+    <EmptyStateDemo client:visible />
+  </ComponentPreview>
 
-    <div class="cs-feedback">
-      <p>Have a use case in mind? Share it on GitHub and help shape the API.</p>
-      <a
-        href="https://github.com/gapra/usevyre/discussions"
-        target="_blank"
-        rel="noopener noreferrer"
-        class="vyre-btn vyre-btn--secondary vyre-btn--sm"
-      >
-        Vote or leave feedback →
-      </a>
-    </div>
+  <h2 class="docs-h2">Props</h2>
+  <PropsTable props={props} />
+
+  <AICheatSheet component="EmptyState" />
+
+  <div class="docs-pagination">
+    <a href="/docs/components/dropdown-menu" class="docs-pagination__link docs-pagination__link--prev">
+      ← Dropdown Menu
+    </a>
+    <a href="/docs/components/field" class="docs-pagination__link docs-pagination__link--next">
+      Field →
+    </a>
   </div>
 </DocsLayout>
-
-<style>
-  .cs-title-row { display: flex; align-items: center; gap: var(--vyre-spacing-3); flex-wrap: wrap; }
-  .cs-body { display: flex; flex-direction: column; gap: var(--vyre-spacing-8); margin-top: var(--vyre-spacing-6); }
-  .cs-section-title { font-size: var(--vyre-typography-font-size-lg); font-weight: var(--vyre-typography-font-weight-semibold); color: var(--vyre-color-semantic-text-primary); margin-bottom: var(--vyre-spacing-3); }
-  .cs-feature-list { display: flex; flex-direction: column; gap: var(--vyre-spacing-2); padding-left: var(--vyre-spacing-5); color: var(--vyre-color-semantic-text-secondary); font-size: var(--vyre-typography-font-size-sm); line-height: 1.6; }
-  .cs-feedback { display: flex; flex-direction: column; gap: var(--vyre-spacing-3); padding: var(--vyre-spacing-5) var(--vyre-spacing-6); background: var(--vyre-color-semantic-surface); border: 1px solid var(--vyre-color-semantic-border-subtle); border-radius: var(--vyre-border-radius-lg); font-size: var(--vyre-typography-font-size-sm); color: var(--vyre-color-semantic-text-secondary); }
-</style>
