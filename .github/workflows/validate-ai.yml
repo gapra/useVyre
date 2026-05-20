@@ -27,6 +27,15 @@ jobs:
       - name: Install dependencies
         run: pnpm install --frozen-lockfile
 
+      - name: Build validator's runtime dependency (@usevyre/ai-context)
+        # validator.js imports `@usevyre/ai-context`, which resolves via the
+        # workspace symlink to packages/ai-context/dist/index.js. dist/ is
+        # git-ignored, so without an explicit build CI exits with
+        # ERR_MODULE_NOT_FOUND. `--filter "@usevyre/ai-context..."` (three
+        # dots) builds ai-context AND its workspace deps (tokens), which is
+        # the minimum needed — about 0.6s vs ~7s for `pnpm -r build`.
+        run: pnpm --filter "@usevyre/ai-context..." build
+
       - name: Validate useVyre props
         # Why this and not `npx @usevyre/validate-ai-context`:
         #
