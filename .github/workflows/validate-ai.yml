@@ -28,9 +28,23 @@ jobs:
         run: pnpm install --frozen-lockfile
 
       - name: Validate useVyre props
-        # `npx <pkg>` resolves a bin named after the package; the bin here is
-        # unscoped (`validate-ai-context`), so `-p <pkg> <bin>` is required.
+        # Why this and not `npx @usevyre/validate-ai-context`:
+        #
+        # `npx`/`pnpm exec` inside a pnpm workspace doesn't reinstall a
+        # package the workspace already provides locally — and `pnpm
+        # install` doesn't link the unscoped `validate-ai-context` bin
+        # into `node_modules/.bin/` for internal `workspace:*` consumers,
+        # so the shell can't find the command and CI exits 127. (This
+        # was the original failure 2026-05-19, and resurfaced when we
+        # widened the scan path.)
+        #
+        # Invoking the bin directly avoids the resolution problem AND
+        # makes CI test the validator code IN THE PR, not the one
+        # already published — important because we publish *after*
+        # merging, and a regression in validator.js should fail this
+        # check before it ships, not after.
+        #
         # Scans the docs site (real useVyre usage) and the eval fixtures
         # whose correctness the harness already guards.
-        run: npx -p @usevyre/validate-ai-context validate-ai-context apps/docs/src eval/fixtures/with-context --json
+        run: node packages/validate-ai-context/bin/cli.js apps/docs/src eval/fixtures/with-context --json
         # Exits non-zero if hallucinated props are found.
