@@ -1,5 +1,12 @@
 # @usevyre/docs
 
+## 1.0.9
+
+### Patch Changes
+
+- Updated dependencies [f5e0107]
+  - @usevyre/ai-context@1.4.2
+
 ## 1.0.8
 
 ### Patch Changes
