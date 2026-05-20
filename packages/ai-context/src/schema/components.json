@@ -1,14 +1,19 @@
 {
   "$schema": "http://json-schema.org/draft-07/schema#",
-  "version": "1.16.1",
+  "version": "1.16.2",
   "generatedAt": "2026-05-18",
   "package": "@usevyre/react",
-  "packageVersion": "1.16.1",
+  "packageVersion": "1.16.2",
   "validFor": [
     "@usevyre/react@1.1.0+",
     "@usevyre/vue@1.1.0+"
   ],
   "changelog": {
+    "1.16.2": {
+      "date": "2026-05-20",
+      "breaking": false,
+      "summary": "Fix schema↔code drift in 5 props: Modal/Sheet `title` (use ModalHeader/SheetHeader sub-component instead), Pagination `total`→`totalPages`, Tabs `defaultIndex/index` (number)→`defaultValue/value` (string keys). Schema now matches the shipped React/Vue prop names and types."
+    },
     "1.16.1": {
       "date": "2026-05-19",
       "breaking": false,
@@ -1105,10 +1110,6 @@
           ],
           "default": "md",
           "description": "Width of the modal dialog"
-        },
-        "title": {
-          "type": "string",
-          "description": "Accessible dialog title (also shown as heading)"
         }
       },
       "antiPatterns": [
@@ -1121,7 +1122,7 @@
       "examples": [
         {
           "description": "Confirmation modal",
-          "code": "<Modal open={isOpen} onClose={() => setIsOpen(false)} title=\"Confirm Delete\" size=\"sm\">\n  <ModalBody>Are you sure you want to delete this item?</ModalBody>\n  <ModalFooter>\n    <Button variant=\"ghost\" onClick={() => setIsOpen(false)}>Cancel</Button>\n    <Button variant=\"danger\" onClick={handleDelete}>Delete</Button>\n  </ModalFooter>\n</Modal>"
+          "code": "<Modal open={isOpen} onClose={() => setIsOpen(false)} size=\"sm\">\n  <ModalHeader>Confirm Delete</ModalHeader>\n  <ModalBody>Are you sure you want to delete this item?</ModalBody>\n  <ModalFooter>\n    <Button variant=\"ghost\" onClick={() => setIsOpen(false)}>Cancel</Button>\n    <Button variant=\"danger\" onClick={handleDelete}>Delete</Button>\n  </ModalFooter>\n</Modal>"
         }
       ]
     },
@@ -1133,7 +1134,7 @@
           "type": "number",
           "description": "Current page (1-indexed)"
         },
-        "total": {
+        "totalPages": {
           "type": "number",
           "description": "Total number of pages"
         },
@@ -1357,16 +1358,12 @@
           ],
           "default": "right",
           "description": "Which edge the sheet slides from"
-        },
-        "title": {
-          "type": "string",
-          "description": "Accessible panel title"
         }
       },
       "examples": [
         {
           "description": "Settings sheet from the right",
-          "code": "<Sheet open={isOpen} onClose={() => setIsOpen(false)} title=\"Settings\" side=\"right\">\n  <SheetBody>Settings content here.</SheetBody>\n  <SheetFooter>\n    <Button variant=\"accent\">Save</Button>\n  </SheetFooter>\n</Sheet>"
+          "code": "<Sheet open={isOpen} onClose={() => setIsOpen(false)} side=\"right\">\n  <SheetHeader>Settings</SheetHeader>\n  <SheetBody>Settings content here.</SheetBody>\n  <SheetFooter>\n    <Button variant=\"accent\">Save</Button>\n  </SheetFooter>\n</Sheet>"
         }
       ]
     },
@@ -1556,14 +1553,13 @@
         "TabPanel"
       ],
       "props": {
-        "defaultIndex": {
-          "type": "number",
-          "default": 0,
-          "description": "Index of the initially active tab (uncontrolled)"
+        "defaultValue": {
+          "type": "string",
+          "description": "Initial active tab value (uncontrolled)"
         },
-        "index": {
-          "type": "number",
-          "description": "Controlled active tab index"
+        "value": {
+          "type": "string",
+          "description": "Active tab value (controlled)"
         },
         "onChange": {
           "type": "function",
@@ -1573,7 +1569,7 @@
       "examples": [
         {
           "description": "Basic tabs",
-          "code": "<Tabs defaultIndex={0}>\n  <TabList>\n    <Tab>Overview</Tab>\n    <Tab>Settings</Tab>\n  </TabList>\n  <TabPanels>\n    <TabPanel>Overview content</TabPanel>\n    <TabPanel>Settings content</TabPanel>\n  </TabPanels>\n</Tabs>"
+          "code": "<Tabs defaultValue=\"overview\">\n  <TabList>\n    <Tab value=\"overview\">Overview</Tab>\n    <Tab value=\"settings\">Settings</Tab>\n  </TabList>\n  <TabPanels>\n    <TabPanel value=\"overview\">Overview content</TabPanel>\n    <TabPanel value=\"settings\">Settings content</TabPanel>\n  </TabPanels>\n</Tabs>"
         }
       ]
     },

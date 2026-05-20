@@ -27,18 +27,33 @@ jobs:
       - name: Install dependencies
         run: pnpm install --frozen-lockfile
 
+      - name: Build validator's runtime dependency (@usevyre/ai-context)
+        # validator.js imports `@usevyre/ai-context`, which resolves via the
+        # workspace symlink to packages/ai-context/dist/index.js. dist/ is
+        # git-ignored, so without an explicit build CI exits with
+        # ERR_MODULE_NOT_FOUND. `--filter "@usevyre/ai-context..."` (three
+        # dots) builds ai-context AND its workspace deps (tokens), which is
+        # the minimum needed — about 0.6s vs ~7s for `pnpm -r build`.
+        run: pnpm --filter "@usevyre/ai-context..." build
+
       - name: Validate useVyre props
-        # NOTE: `npx @usevyre/validate-ai-context` resolves the *bin* named
-        # "@usevyre/validate-ai-context", which doesn't exist (the bin is
-        # "validate-ai-context", unscoped) — that caused the long-standing
-        # exit-127 failure. Correct form: `npx -p <pkg> <bin>`.
+        # Why this and not `npx @usevyre/validate-ai-context`:
         #
-        # SCOPE IS A PLACEHOLDER: this scans only eval/fixtures/with-context
-        # (curated correct usage that must always stay clean, also guarded by
-        # the eval harness). The original `src/` doesn't exist in this
-        # monorepo. Validating real usage (apps/docs/src) is deferred — it
-        # currently surfaces 12 validator errors (see project memory:
-        # "Isu B" — Calendar mode drift / possible false positives) and must
-        # be triaged before widening this path.
-        run: npx -p @usevyre/validate-ai-context validate-ai-context eval/fixtures/with-context --json
+        # `npx`/`pnpm exec` inside a pnpm workspace doesn't reinstall a
+        # package the workspace already provides locally — and `pnpm
+        # install` doesn't link the unscoped `validate-ai-context` bin
+        # into `node_modules/.bin/` for internal `workspace:*` consumers,
+        # so the shell can't find the command and CI exits 127. (This
+        # was the original failure 2026-05-19, and resurfaced when we
+        # widened the scan path.)
+        #
+        # Invoking the bin directly avoids the resolution problem AND
+        # makes CI test the validator code IN THE PR, not the one
+        # already published — important because we publish *after*
+        # merging, and a regression in validator.js should fail this
+        # check before it ships, not after.
+        #
+        # Scans the docs site (real useVyre usage) and the eval fixtures
+        # whose correctness the harness already guards.
+        run: node packages/validate-ai-context/bin/cli.js apps/docs/src eval/fixtures/with-context --json
         # Exits non-zero if hallucinated props are found.
