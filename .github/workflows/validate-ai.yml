@@ -28,17 +28,9 @@ jobs:
         run: pnpm install --frozen-lockfile
 
       - name: Validate useVyre props
-        # NOTE: `npx @usevyre/validate-ai-context` resolves the *bin* named
-        # "@usevyre/validate-ai-context", which doesn't exist (the bin is
-        # "validate-ai-context", unscoped) — that caused the long-standing
-        # exit-127 failure. Correct form: `npx -p <pkg> <bin>`.
-        #
-        # SCOPE IS A PLACEHOLDER: this scans only eval/fixtures/with-context
-        # (curated correct usage that must always stay clean, also guarded by
-        # the eval harness). The original `src/` doesn't exist in this
-        # monorepo. Validating real usage (apps/docs/src) is deferred — it
-        # currently surfaces 12 validator errors (see project memory:
-        # "Isu B" — Calendar mode drift / possible false positives) and must
-        # be triaged before widening this path.
-        run: npx -p @usevyre/validate-ai-context validate-ai-context eval/fixtures/with-context --json
+        # `npx <pkg>` resolves a bin named after the package; the bin here is
+        # unscoped (`validate-ai-context`), so `-p <pkg> <bin>` is required.
+        # Scans the docs site (real useVyre usage) and the eval fixtures
+        # whose correctness the harness already guards.
+        run: npx -p @usevyre/validate-ai-context validate-ai-context apps/docs/src eval/fixtures/with-context --json
         # Exits non-zero if hallucinated props are found.
