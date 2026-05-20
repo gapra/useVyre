@@ -670,10 +670,10 @@ import { Modal, ModalHeader, ModalBody, ModalFooter } from "@usevyre/react"
 // open           = boolean
 // onClose        = function
 // size           = "sm" | "md" | "lg" | "full" (default: md)
-// title          = string
 
 // Examples:
-<Modal open={isOpen} onClose={() => setIsOpen(false)} title="Confirm Delete" size="sm">
+<Modal open={isOpen} onClose={() => setIsOpen(false)} size="sm">
+  <ModalHeader>Confirm Delete</ModalHeader>
   <ModalBody>Are you sure you want to delete this item?</ModalBody>
   <ModalFooter>
     <Button variant="ghost" onClick={() => setIsOpen(false)}>Cancel</Button>
@@ -696,7 +696,7 @@ import { Pagination } from "@usevyre/react"
 
 // Props:
 // page           = number
-// total          = number
+// totalPages     = number
 // onPageChange   = function
 
 // Examples:
@@ -811,10 +811,10 @@ import { Sheet, SheetHeader, SheetBody, SheetFooter } from "@usevyre/react"
 // onClose        = function
 // size           = "sm" | "md" | "lg" | "full" (default: md)
 // side           = "left" | "right" (default: right)
-// title          = string
 
 // Examples:
-<Sheet open={isOpen} onClose={() => setIsOpen(false)} title="Settings" side="right">
+<Sheet open={isOpen} onClose={() => setIsOpen(false)} side="right">
+  <SheetHeader>Settings</SheetHeader>
   <SheetBody>Settings content here.</SheetBody>
   <SheetFooter>
     <Button variant="accent">Save</Button>
@@ -962,19 +962,19 @@ Tabbed navigation for switching between content panels.
 import { Tabs, TabList, Tab, TabPanels, TabPanel } from "@usevyre/react"
 
 // Props:
-// defaultIndex   = number (default: 0)
-// index          = number
+// defaultValue   = string
+// value          = string
 // onChange       = function
 
 // Examples:
-<Tabs defaultIndex={0}>
+<Tabs defaultValue="overview">
   <TabList>
-    <Tab>Overview</Tab>
-    <Tab>Settings</Tab>
+    <Tab value="overview">Overview</Tab>
+    <Tab value="settings">Settings</Tab>
   </TabList>
   <TabPanels>
-    <TabPanel>Overview content</TabPanel>
-    <TabPanel>Settings content</TabPanel>
+    <TabPanel value="overview">Overview content</TabPanel>
+    <TabPanel value="settings">Settings content</TabPanel>
   </TabPanels>
 </Tabs>
 ```
