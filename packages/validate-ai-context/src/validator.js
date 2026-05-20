@@ -16,9 +16,39 @@ function parseJsxTag(tagStr) {
 
   const props = {};
 
-  // String props: prop="value"
+  // String literal props: prop="value" — enum-checkable.
   for (const m of tagStr.matchAll(/(\w+)="([^"]*)"/g)) {
     props[m[1]] = m[2];
+  }
+
+  // JSX expression props: prop={...} — the value is opaque to us (it's a
+  // runtime expression), but the prop NAME must still be validated against
+  // the schema. Marking value as null distinguishes from string literal in
+  // case callers care (current rules don't — enum-check skips non-strings
+  // and hallucinated-prop check only needs the name). Without this branch
+  // the validator silently misses real-world usage like
+  //   <Switch onChange={handler}>     // schema-callback-drift class
+  //   <Button color={brand}>          // canonical Button hallucination
+  // because agents and humans frequently bind props to variables.
+  // The brace-counting walk handles nested braces (objects, arrow bodies).
+  for (let i = 0; i < tagStr.length; i++) {
+    const propStart = tagStr.slice(i).match(/^(\w+)=\{/);
+    if (!propStart) continue;
+    const propName = propStart[1];
+    if (propName in props) { i += propStart[0].length - 1; continue; }
+    // Find the matching close-brace, respecting nesting.
+    let depth = 1;
+    let j = i + propStart[0].length;
+    while (j < tagStr.length && depth > 0) {
+      const ch = tagStr[j];
+      if (ch === "{") depth++;
+      else if (ch === "}") depth--;
+      j++;
+    }
+    if (depth === 0) {
+      props[propName] = null; // opaque value
+      i = j - 1;
+    }
   }
 
   // Boolean props: just the name (no value)
@@ -52,18 +82,34 @@ function validateTag(tagStr) {
     const propDef = propDefs[propName];
 
     if (!propDef) {
-      // Check if this is a known hallucinated prop (e.g. color= on Button)
-      const knownNonExistent = antiPatterns.rules.find(
-        r => r.component === componentName && r.pattern.includes(`${propName}=`)
+      // Prop isn't in the schema — could be a native HTML pass-through
+      // (e.g. <Input type="email">), a sibling-component prop the agent
+      // mis-aimed (e.g. variant on DropdownMenu vs DropdownItem), or a
+      // genuine hallucination. We only flag the last category, recognized
+      // by an antiPattern whose `pattern` is a bare prop declaration like
+      // `color="..."` or `icon={...}` — i.e. starts with `prop=` and has
+      // no surrounding context. Old heuristic (pattern string contains
+      // `${prop}=` anywhere) produced false positives on antiPatterns
+      // worded as guidance about a misuse of a real prop, like
+      //   "type=\"search\" for search UI"
+      //   "DropdownItem variant=\"primary\""
+      //   "value as tuple for mode=\"single\""
+      // See tests "no false positives from contextual antiPatterns".
+      const declaresPropAbsent = (pattern) => {
+        const re = new RegExp(`^${propName}=("[^"]*"|\\{[^}]*\\}|\\.\\.\\.)\\s*$`);
+        return re.test(pattern);
+      };
+      const declaredNonExistent = antiPatterns.rules.find(
+        r => r.component === componentName && declaresPropAbsent(r.pattern),
       );
-      if (knownNonExistent) {
+      if (declaredNonExistent) {
         issues.push({
           type: "hallucinated-prop",
           prop: propName,
           value,
-          message: `<${componentName}> has no "${propName}" prop. ${knownNonExistent.reason}`,
-          fix: knownNonExistent.fix,
-          severity: knownNonExistent.severity ?? "error",
+          message: `<${componentName}> has no "${propName}" prop. ${declaredNonExistent.reason}`,
+          fix: declaredNonExistent.fix,
+          severity: declaredNonExistent.severity ?? "error",
         });
       }
       continue;
@@ -102,20 +148,43 @@ export function validateSource(code, filename = "<source>") {
   for (let i = 0; i < lines.length; i++) {
     const line = lines[i];
 
-    // Match opening JSX tags: <ComponentName ...>  or <ComponentName ... />
-    for (const m of line.matchAll(/<([A-Z]\w*)([^>]*)\/?>/g)) {
-      const tagStr = m[0];
+    // Extract opening JSX tags: `<ComponentName ...>` or `<ComponentName ... />`.
+    // The previous regex `[^>]*` terminated at the first `>` even when that
+    // `>` was inside `{<Icon />}` or `{() => ...}`, truncating the tag and
+    // hiding hallucinated props (icon={<Icon />}, color={brand} after an
+    // arrow-body, etc). This walk is brace-aware and quote-aware so a `>`
+    // only closes the tag when at depth 0 outside any string.
+    for (let start = 0; start < line.length; start++) {
+      const m = line.slice(start).match(/^<([A-Z]\w*)/);
+      if (!m) continue;
+      let depth = 0;
+      let inDouble = false, inSingle = false;
+      let j = start + m[0].length;
+      let closed = false;
+      while (j < line.length) {
+        const ch = line[j];
+        if (inDouble) { if (ch === '"') inDouble = false; }
+        else if (inSingle) { if (ch === "'") inSingle = false; }
+        else if (ch === '"') inDouble = true;
+        else if (ch === "'") inSingle = true;
+        else if (ch === "{") depth++;
+        else if (ch === "}") depth--;
+        else if (ch === ">" && depth === 0) { closed = true; j++; break; }
+        j++;
+      }
+      if (!closed) { start += m[0].length - 1; continue; }
+      const tagStr = line.slice(start, j);
       const issues = validateTag(tagStr);
-
       if (issues.length > 0) {
         results.push({
           filename,
           line: i + 1,
-          col: m.index + 1,
+          col: start + 1,
           tag: tagStr,
           issues,
         });
       }
+      start = j - 1; // resume after this tag
     }
   }
 
