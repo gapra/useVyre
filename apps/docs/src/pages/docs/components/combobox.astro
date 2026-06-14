@@ -75,6 +75,7 @@ const props = [
   { name: "disabled",    type: "boolean",               default: "false",          description: "Disables the combobox." },
   { name: "size",        type: `"sm" | "md" | "lg"`,   default: `"md"`,           description: "Height scale." },
   { name: "emptyText",   type: "string",                default: `"No results"`,   description: "Text shown when the search query matches no options." },
+  { name: "disablePortal", type: "boolean",             default: "false",          description: "Render the dropdown inline instead of teleporting it to <body>. By default the dropdown portals to body so it stays visible inside Modal / overflow:hidden containers." },
   { name: "class / className", type: "string",          default: "—",             description: "Additional CSS class." },
 ];
 ---

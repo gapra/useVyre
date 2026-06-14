@@ -1,14 +1,19 @@
 {
   "$schema": "http://json-schema.org/draft-07/schema#",
-  "version": "1.16.2",
-  "generatedAt": "2026-05-18",
+  "version": "1.17.0",
+  "generatedAt": "2026-06-14",
   "package": "@usevyre/react",
-  "packageVersion": "1.16.2",
+  "packageVersion": "1.17.0",
   "validFor": [
     "@usevyre/react@1.1.0+",
     "@usevyre/vue@1.1.0+"
   ],
   "changelog": {
+    "1.17.0": {
+      "date": "2026-06-14",
+      "breaking": false,
+      "summary": "Combobox: dropdown now portals to <body> by default so it stays visible inside Modal / overflow:hidden containers (issue #18). New `disablePortal` boolean (default false) restores inline rendering."
+    },
     "1.16.2": {
       "date": "2026-05-20",
       "breaking": false,
@@ -1883,6 +1888,11 @@
           "type": "string",
           "default": "\"No results\"",
           "description": "Text shown when search matches no options"
+        },
+        "disablePortal": {
+          "type": "boolean",
+          "default": false,
+          "description": "Render the dropdown inline instead of teleporting it to <body>. Default false: the dropdown portals to body so it stays visible inside Modal / overflow:hidden containers"
         }
       },
       "antiPatterns": [

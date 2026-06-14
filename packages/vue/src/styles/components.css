@@ -2855,6 +2855,27 @@
   animation: vyre-combobox-in var(--vyre-transition-duration-fast) var(--vyre-transition-easing-out);
 }
 
+/* Portaled dropdown (default): teleported to <body>, placed via inline
+   top/left/width so it escapes Modal/overflow:hidden clipping (issue #18).
+   Clear the inline-mode offsets so they don't fight the JS positioning. */
+.vyre-combobox__dropdown--portal {
+  top: auto;
+  left: auto;
+  right: auto;
+}
+
+/* Flipped above the input when there's no room below: animate from the
+   bottom edge instead of the top. */
+.vyre-combobox__dropdown--flip {
+  transform-origin: bottom;
+  animation-name: vyre-combobox-in-flip;
+}
+
+@keyframes vyre-combobox-in-flip {
+  from { opacity: 0; transform: translateY(4px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+
 .vyre-combobox__option {
   padding: var(--vyre-spacing-2) var(--vyre-spacing-3);
   border-radius: var(--vyre-border-radius-sm);
