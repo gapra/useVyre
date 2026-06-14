@@ -37,7 +37,7 @@
     "dist"
   ],
   "scripts": {
-    "build": "vue-tsc --declaration --emitDeclarationOnly && vite build && mkdir -p dist/styles && cp src/styles/components.css dist/styles/",
+    "build": "vue-tsc --declaration --emitDeclarationOnly && vite build",
     "dev": "vite build --watch",
     "typecheck": "vue-tsc --noEmit",
     "clean": "rm -rf dist"
