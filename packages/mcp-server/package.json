@@ -1,6 +1,6 @@
 {
   "name": "@usevyre/mcp-server",
-  "version": "1.0.11",
+  "version": "1.0.12",
   "description": "useVyre MCP server — gives Claude Desktop real-time access to component context",
   "keywords": [
     "mcp",

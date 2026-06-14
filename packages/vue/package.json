@@ -1,6 +1,6 @@
 {
   "name": "@usevyre/vue",
-  "version": "1.4.0",
+  "version": "1.5.0",
   "description": "useVyre design system — Vue 3 components, AI-native, zero-runtime styling",
   "keywords": [
     "design-system",

@@ -1,5 +1,12 @@
 # @usevyre/validate-ai-context
 
+## 1.0.6
+
+### Patch Changes
+
+- Updated dependencies [6bf4ac7]
+  - @usevyre/ai-context@1.5.0
+
 ## 1.0.5
 
 ### Patch Changes
