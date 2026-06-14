@@ -1127,6 +1127,7 @@ import { Combobox } from "@usevyre/react"
 // disabled       = boolean (default: false)
 // size           = "sm" | "md" | "lg" (default: md)
 // emptyText      = string (default: "No results")
+// disablePortal  = boolean (default: false)
 
 // Examples:
 const [lang, setLang] = useState<string | null>(null);

@@ -15,6 +15,11 @@
  * │   disabled     = boolean                                │
  * │   size         = "sm"|"md"(default)|"lg"                │
  * │   emptyText    = string (default: "No results")         │
+ * │   disablePortal = boolean (default: false) — render the │
+ * │                  dropdown inline instead of teleporting  │
+ * │                  it to <body>. Teleport (default) keeps  │
+ * │                  the dropdown visible inside Modal /      │
+ * │                  overflow:hidden containers.             │
  * │                                                         │
  * │ Emits:                                                  │
  * │   update:modelValue — selected string or null           │
@@ -42,8 +47,10 @@
  * />
  */
 
-import { ref, computed, watch, nextTick } from "vue";
+import { ref, computed, watch, nextTick, onBeforeUnmount, Teleport } from "vue";
 import { cn } from "../../utils/cn";
+
+const GAP = 4;
 
 type ComboboxSize = "sm" | "md" | "lg";
 
@@ -61,9 +68,16 @@ const props = withDefaults(
     disabled?: boolean;
     size?: ComboboxSize;
     emptyText?: string;
+    disablePortal?: boolean;
     class?: string;
   }>(),
-  { placeholder: "Search…", disabled: false, size: "md", emptyText: "No results" }
+  {
+    placeholder: "Search…",
+    disabled: false,
+    size: "md",
+    emptyText: "No results",
+    disablePortal: false,
+  }
 );
 
 const emit = defineEmits<{ "update:modelValue": [value: string | null] }>();
@@ -74,6 +88,7 @@ const highlightedIndex = ref(-1);
 const wrapperRef       = ref<HTMLDivElement | null>(null);
 const dropdownRef      = ref<HTMLUListElement | null>(null);
 const inputRef         = ref<HTMLInputElement | null>(null);
+const position         = ref({ top: 0, left: 0, width: 0, flip: false });
 
 const selectedOption = computed(() =>
   props.options.find((o) => o.value === props.modelValue) ?? null
@@ -147,16 +162,54 @@ function onKeyDown(e: KeyboardEvent) {
   }
 }
 
-// Close on outside click
+// Close on outside click. The dropdown may be teleported to <body>, so a click
+// inside it is NOT a descendant of the wrapper — check both.
 function onDocClick(e: MouseEvent) {
-  if (wrapperRef.value && !wrapperRef.value.contains(e.target as Node)) {
-    closeDropdown();
-  }
+  const target = e.target as Node;
+  if (wrapperRef.value?.contains(target)) return;
+  if (dropdownRef.value?.contains(target)) return;
+  closeDropdown();
 }
 
-watch(open, (isOpen) => {
-  if (isOpen) document.addEventListener("mousedown", onDocClick);
-  else        document.removeEventListener("mousedown", onDocClick);
+// Position the teleported dropdown against the input rect.
+function computePosition() {
+  const input = inputRef.value;
+  if (!input) return;
+  const rect = input.getBoundingClientRect();
+  const dropdownHeight = dropdownRef.value?.offsetHeight ?? 0;
+  const spaceBelow = window.innerHeight - rect.bottom;
+  const flip = dropdownHeight > 0 && spaceBelow < dropdownHeight + GAP;
+  position.value = {
+    top: flip
+      ? rect.top + window.scrollY - GAP - dropdownHeight
+      : rect.bottom + window.scrollY + GAP,
+    left: rect.left + window.scrollX,
+    width: rect.width,
+    flip,
+  };
+}
+
+watch(open, async (isOpen) => {
+  if (isOpen) {
+    document.addEventListener("mousedown", onDocClick);
+    if (!props.disablePortal) {
+      await nextTick();
+      computePosition();
+      // capture:true so scrolling INSIDE a Modal body is caught, not only window.
+      window.addEventListener("scroll", computePosition, true);
+      window.addEventListener("resize", computePosition);
+    }
+  } else {
+    document.removeEventListener("mousedown", onDocClick);
+    window.removeEventListener("scroll", computePosition, true);
+    window.removeEventListener("resize", computePosition);
+  }
+});
+
+onBeforeUnmount(() => {
+  document.removeEventListener("mousedown", onDocClick);
+  window.removeEventListener("scroll", computePosition, true);
+  window.removeEventListener("resize", computePosition);
 });
 
 // Reset highlight when filtered list changes
@@ -216,35 +269,51 @@ const wrapperClasses = computed(() =>
       </svg>
     </span>
 
-    <ul
-      v-if="open"
-      ref="dropdownRef"
-      role="listbox"
-      class="vyre-combobox__dropdown"
-      aria-label="Options"
-    >
-      <template v-if="filtered.length > 0">
-        <li
-          v-for="(option, index) in filtered"
-          :key="option.value"
-          role="option"
-          :aria-selected="option.value === modelValue"
-          :aria-disabled="option.disabled"
-          :data-highlighted="index === highlightedIndex"
-          :class="[
-            'vyre-combobox__option',
-            index === highlightedIndex && 'vyre-combobox__option--highlighted',
-            option.value === modelValue && 'vyre-combobox__option--selected',
-          ]"
-          @mouseenter="!option.disabled && (highlightedIndex = index)"
-          @mousedown.prevent="selectOption(option)"
-        >
-          {{ option.label }}
+    <Teleport to="body" :disabled="disablePortal">
+      <ul
+        v-if="open"
+        ref="dropdownRef"
+        role="listbox"
+        :class="[
+          'vyre-combobox__dropdown',
+          !disablePortal && 'vyre-combobox__dropdown--portal',
+          !disablePortal && position.flip && 'vyre-combobox__dropdown--flip',
+        ]"
+        :style="
+          disablePortal
+            ? undefined
+            : {
+                position: 'absolute',
+                top: `${position.top}px`,
+                left: `${position.left}px`,
+                width: `${position.width}px`,
+              }
+        "
+        aria-label="Options"
+      >
+        <template v-if="filtered.length > 0">
+          <li
+            v-for="(option, index) in filtered"
+            :key="option.value"
+            role="option"
+            :aria-selected="option.value === modelValue"
+            :aria-disabled="option.disabled"
+            :data-highlighted="index === highlightedIndex"
+            :class="[
+              'vyre-combobox__option',
+              index === highlightedIndex && 'vyre-combobox__option--highlighted',
+              option.value === modelValue && 'vyre-combobox__option--selected',
+            ]"
+            @mouseenter="!option.disabled && (highlightedIndex = index)"
+            @mousedown.prevent="selectOption(option)"
+          >
+            {{ option.label }}
+          </li>
+        </template>
+        <li v-else class="vyre-combobox__empty" role="presentation">
+          {{ emptyText }}
         </li>
-      </template>
-      <li v-else class="vyre-combobox__empty" role="presentation">
-        {{ emptyText }}
-      </li>
-    </ul>
+      </ul>
+    </Teleport>
   </div>
 </template>
