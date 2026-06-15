@@ -17,12 +17,16 @@
  * │   readOnly?   = boolean (not editable, no toolbar)               │
  * │   toolbar?    = RichTextTool[] (which buttons; default = all)    │
  * │   minHeight?  = string (CSS, default "10rem")                    │
+ * │   sanitize?   = (html: string) => string                         │
  * │                                                                  │
  * │ RichTextTool = "bold"|"italic"|"underline"|"strike"|             │
  * │   "h1"|"h2"|"h3"|"ul"|"ol"|"quote"|"code"|"link"|"clear"         │
  * │                                                                  │
  * │ Controlled: store value in state and set it in onChange.         │
- * │ Output is sanitised-friendly semantic HTML (no inline styles).   │
+ * │ SECURITY: value is rendered as raw HTML. Sanitize untrusted      │
+ * │ HTML before passing it in — e.g. sanitize={DOMPurify.sanitize}.  │
+ * │ sanitize runs on render-in AND emit-out. The link tool blocks    │
+ * │ javascript:/data:/vbscript: URLs regardless.                     │
  * └─────────────────────────────────────────────────────────────────┘
  *
  * @example
@@ -57,6 +61,18 @@ export interface RichTextEditorProps extends BaseProps {
   readOnly?: boolean;
   toolbar?: RichTextTool[];
   minHeight?: string;
+  /**
+   * Optional sanitizer applied to the HTML on render (before it is shown) and on
+   * emit (before onChange). The component is zero-dependency by design, so it
+   * does NOT sanitize untrusted HTML on its own — pass your own sanitizer for
+   * untrusted content, e.g. `sanitize={(h) => DOMPurify.sanitize(h)}`.
+   */
+  sanitize?: (html: string) => string;
+}
+
+/** Block script-bearing URL schemes (used by the link tool). */
+function isUnsafeUrl(url: string): boolean {
+  return /^\s*(javascript|data|vbscript):/i.test(url);
 }
 
 const DEFAULT_TOOLBAR: RichTextTool[] = [
@@ -98,6 +114,7 @@ export const RichTextEditor = React.forwardRef<
       readOnly = false,
       toolbar = DEFAULT_TOOLBAR,
       minHeight = "10rem",
+      sanitize,
       className,
       ...props
     },
@@ -106,17 +123,23 @@ export const RichTextEditor = React.forwardRef<
     const editorRef = useRef<HTMLDivElement>(null);
     const editable = !disabled && !readOnly;
 
+    const applySanitize = useCallback(
+      (html: string) => (sanitize ? sanitize(html) : html),
+      [sanitize]
+    );
+
     // Sync incoming value without clobbering caret while typing.
     useEffect(() => {
       const el = editorRef.current;
-      if (el && el.innerHTML !== value) {
-        el.innerHTML = value;
+      const next = applySanitize(value);
+      if (el && el.innerHTML !== next) {
+        el.innerHTML = next;
       }
-    }, [value]);
+    }, [value, applySanitize]);
 
     const emit = useCallback(() => {
-      if (editorRef.current) onChange(editorRef.current.innerHTML);
-    }, [onChange]);
+      if (editorRef.current) onChange(applySanitize(editorRef.current.innerHTML));
+    }, [onChange, applySanitize]);
 
     const apply = useCallback(
       (fn: () => void) => {
@@ -181,7 +204,7 @@ export const RichTextEditor = React.forwardRef<
         icon: <>🔗</>,
         run: () => {
           const url = window.prompt("Link URL");
-          if (url) exec("createLink", url);
+          if (url && !isUnsafeUrl(url)) exec("createLink", url);
         },
       },
       clear: {

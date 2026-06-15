@@ -17,6 +17,12 @@
  * │   readOnly?   = boolean (no toolbar, not editable)               │
  * │   toolbar?    = RichTextTool[] (default = all)                   │
  * │   minHeight?  = string (CSS, default "10rem")                    │
+ * │   sanitize?   = (html: string) => string                         │
+ * │                                                                  │
+ * │ SECURITY: modelValue is rendered as raw HTML. Sanitize untrusted │
+ * │ HTML before binding it — e.g. :sanitize="DOMPurify.sanitize".    │
+ * │ sanitize runs on render-in AND emit-out. The link tool blocks    │
+ * │ javascript:/data:/vbscript: URLs regardless.                     │
  * │                                                                  │
  * │ Emits: update:modelValue (string)                                │
  * │ RichTextTool = "bold"|"italic"|"underline"|"strike"|"h1"|"h2"|   │
@@ -53,6 +59,12 @@ const props = withDefaults(
     readOnly?: boolean;
     toolbar?: RichTextTool[];
     minHeight?: string;
+    /**
+     * Optional sanitizer applied on render-in and emit-out. The component is
+     * zero-dependency by design and does NOT sanitize untrusted HTML on its own
+     * — pass your own for untrusted content, e.g. :sanitize="DOMPurify.sanitize".
+     */
+    sanitize?: (html: string) => string;
     class?: string;
   }>(),
   {
@@ -64,6 +76,15 @@ const props = withDefaults(
 );
 
 const emit = defineEmits<{ "update:modelValue": [html: string] }>();
+
+function applySanitize(html: string) {
+  return props.sanitize ? props.sanitize(html) : html;
+}
+
+/** Block script-bearing URL schemes (used by the link tool). */
+function isUnsafeUrl(url: string): boolean {
+  return /^\s*(javascript|data|vbscript):/i.test(url);
+}
 
 const DEFAULT_TOOLBAR: RichTextTool[] = [
   "bold", "italic", "underline", "strike",
@@ -79,7 +100,7 @@ function exec(command: string, value?: string) {
 }
 
 function emitChange() {
-  if (editorRef.value) emit("update:modelValue", editorRef.value.innerHTML);
+  if (editorRef.value) emit("update:modelValue", applySanitize(editorRef.value.innerHTML));
 }
 
 interface ToolDef {
@@ -100,7 +121,7 @@ const TOOLS: Record<RichTextTool, ToolDef> = {
   ol:        { label: "Numbered list",     icon: "1.&equiv;", run: () => exec("insertOrderedList") },
   quote:     { label: "Quote",             icon: "&ldquo;&rdquo;", run: () => exec("formatBlock", "<blockquote>") },
   code:      { label: "Code block",        icon: "&lt;/&gt;", run: () => exec("formatBlock", "<pre>") },
-  link:      { label: "Link",              icon: "&#128279;", run: () => { const u = window.prompt("Link URL"); if (u) exec("createLink", u); } },
+  link:      { label: "Link",              icon: "&#128279;", run: () => { const u = window.prompt("Link URL"); if (u && !isUnsafeUrl(u)) exec("createLink", u); } },
   clear:     { label: "Clear formatting",  icon: "&#9003;",   run: () => exec("removeFormat") },
 };
 
@@ -112,8 +133,9 @@ function apply(def: ToolDef) {
 }
 
 onMounted(() => {
-  if (editorRef.value && editorRef.value.innerHTML !== props.modelValue) {
-    editorRef.value.innerHTML = props.modelValue;
+  const next = applySanitize(props.modelValue);
+  if (editorRef.value && editorRef.value.innerHTML !== next) {
+    editorRef.value.innerHTML = next;
   }
 });
 
@@ -121,7 +143,8 @@ watch(
   () => props.modelValue,
   (v) => {
     const el = editorRef.value;
-    if (el && el.innerHTML !== v) el.innerHTML = v;
+    const next = applySanitize(v);
+    if (el && el.innerHTML !== next) el.innerHTML = next;
   }
 );
 </script>
