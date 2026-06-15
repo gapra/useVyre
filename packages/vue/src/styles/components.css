@@ -598,6 +598,27 @@
   outline: none;
 }
 
+/* Portaled dropdown (default): teleported to <body>, placed via inline
+   top/left/width so it escapes Modal/overflow:hidden clipping. Clear the
+   inline-mode offsets so they don't fight the JS positioning. */
+.vyre-select__dropdown--portal {
+  top: auto;
+  left: auto;
+  right: auto;
+}
+
+/* Flipped above the trigger when there's no room below: animate from the
+   bottom edge instead of the top. */
+.vyre-select__dropdown--flip {
+  transform-origin: bottom;
+  animation-name: vyre-select-in-flip;
+}
+
+@keyframes vyre-select-in-flip {
+  from { opacity: 0; transform: translateY(6px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+
 .vyre-select__option {
   padding: var(--vyre-spacing-2) var(--vyre-spacing-4);
   cursor: pointer;
@@ -785,6 +806,19 @@
   top: 50%;
   --_tt: translateY(-50%);
   transform-origin: center left;
+}
+
+/* Portaled (default): teleported to <body>, positioned via inline top/left in
+   JS so it escapes Modal/overflow:hidden clipping. The JS coords already account
+   for tooltip size + centering, so neutralize the CSS centering transform (keep
+   only the scale animation) and clear the inline-mode offsets. The --{placement}
+   class still drives the arrow + transform-origin. */
+.vyre-tooltip--portal {
+  --_tt: translate(0, 0);
+  top: auto;
+  right: auto;
+  bottom: auto;
+  left: auto;
 }
 
 /* Arrow */

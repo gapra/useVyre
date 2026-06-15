@@ -60,6 +60,7 @@ const props = [
   { name: "onChange",     type: "(value: string) => void", default: "—",   description: "React only. Called when selection changes." },
   { name: "disabled",     type: "boolean",               default: "false", description: "Disables the select." },
   { name: "size",         type: `"sm" | "md" | "lg"`,   default: `"md"`,  description: "Select height." },
+  { name: "disablePortal", type: "boolean",              default: "false", description: "Render the dropdown inline instead of teleporting it to <body>. By default the dropdown portals to body so it stays visible inside Modal / overflow:hidden containers." },
   { name: "class / className", type: "string",           default: "—",     description: "Additional CSS class." },
 ];
 ---

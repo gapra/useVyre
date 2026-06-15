@@ -15,6 +15,11 @@
  * │   placeholder = string                                  │
  * │   disabled    = boolean                                 │
  * │   size        = "sm"|"md"(default)|"lg"                 │
+ * │   disablePortal = boolean (default: false) — render the │
+ * │                 dropdown inline instead of portaling     │
+ * │                 it to <body>. Portaling (default) keeps  │
+ * │                 the dropdown visible inside Modal /       │
+ * │                 overflow:hidden containers.              │
  * │   + all native <div> props                              │
  * └─────────────────────────────────────────────────────────┘
  *
@@ -40,11 +45,15 @@ import React, {
   useState,
   useRef,
   useEffect,
+  useLayoutEffect,
   useCallback,
   useId,
 } from "react";
+import { createPortal } from "react-dom";
 import { cn } from "../../utils/cn";
 import type { BaseProps } from "../../types";
+
+const GAP = 4;
 
 export interface SelectOption {
   value: string;
@@ -64,6 +73,19 @@ export interface SelectProps
   placeholder?: string;
   disabled?: boolean;
   size?: SelectSize;
+  /**
+   * Render the dropdown inline inside the component instead of teleporting it
+   * to <body>. Default false: the dropdown portals to body so it stays visible
+   * inside Modal / overflow:hidden containers.
+   */
+  disablePortal?: boolean;
+}
+
+interface DropdownPosition {
+  top: number;
+  left: number;
+  width: number;
+  flip: boolean;
 }
 
 export const Select = React.forwardRef<HTMLDivElement, SelectProps>(
@@ -76,6 +98,7 @@ export const Select = React.forwardRef<HTMLDivElement, SelectProps>(
       placeholder = "Select an option",
       disabled = false,
       size = "md",
+      disablePortal = false,
       className,
       ...props
     },
@@ -87,7 +110,14 @@ export const Select = React.forwardRef<HTMLDivElement, SelectProps>(
 
     const [open, setOpen] = useState(false);
     const [highlightedIndex, setHighlightedIndex] = useState(-1);
+    const [position, setPosition] = useState<DropdownPosition>({
+      top: 0,
+      left: 0,
+      width: 0,
+      flip: false,
+    });
 
+    const wrapperRef = useRef<HTMLDivElement | null>(null);
     const triggerRef = useRef<HTMLButtonElement>(null);
     const listboxRef = useRef<HTMLUListElement>(null);
     const id = useId();
@@ -112,43 +142,89 @@ export const Select = React.forwardRef<HTMLDivElement, SelectProps>(
       [isControlled, onChange, closeDropdown]
     );
 
-    // Close on outside click
+    // Close on outside click. The dropdown may be portaled to <body>, so a
+    // click inside it is NOT a descendant of the wrapper — check both.
     useEffect(() => {
       if (!open) return;
       const handle = (e: MouseEvent) => {
-        const el = (ref as React.RefObject<HTMLDivElement>)?.current;
-        if (el && !el.contains(e.target as Node)) closeDropdown();
+        const target = e.target as Node;
+        if (wrapperRef.current?.contains(target)) return;
+        if (listboxRef.current?.contains(target)) return;
+        closeDropdown();
       };
       document.addEventListener("mousedown", handle);
       return () => document.removeEventListener("mousedown", handle);
-    }, [open, ref, closeDropdown]);
+    }, [open, closeDropdown]);
 
-    // Scroll highlighted option into view
+    // Position the portaled dropdown against the trigger rect, and keep it in
+    // sync while open (scroll inside a Modal, window resize, etc.).
+    useLayoutEffect(() => {
+      if (!open || disablePortal) return;
+      const compute = () => {
+        const trigger = triggerRef.current;
+        if (!trigger) return;
+        const rect = trigger.getBoundingClientRect();
+        const dropdownHeight = listboxRef.current?.offsetHeight ?? 0;
+        const spaceBelow = window.innerHeight - rect.bottom;
+        const flip = dropdownHeight > 0 && spaceBelow < dropdownHeight + GAP;
+        setPosition({
+          top: flip
+            ? rect.top + window.scrollY - GAP - dropdownHeight
+            : rect.bottom + window.scrollY + GAP,
+          left: rect.left + window.scrollX,
+          width: rect.width,
+          flip,
+        });
+      };
+      compute();
+      // capture:true so scrolling INSIDE a Modal body is caught, not only window.
+      window.addEventListener("scroll", compute, true);
+      window.addEventListener("resize", compute);
+      return () => {
+        window.removeEventListener("scroll", compute, true);
+        window.removeEventListener("resize", compute);
+      };
+    }, [open, disablePortal, highlightedIndex]);
+
+    // Scroll highlighted option into view WITHIN the listbox only. We adjust the
+    // listbox's own scrollTop instead of element.scrollIntoView(), because once
+    // the dropdown is portaled to <body> scrollIntoView scrolls the whole page.
     useEffect(() => {
       if (!open || highlightedIndex < 0) return;
-      const item = listboxRef.current?.children[highlightedIndex] as HTMLElement | undefined;
-      item?.scrollIntoView({ block: "nearest" });
+      const list = listboxRef.current;
+      const item = list?.children[highlightedIndex] as HTMLElement | undefined;
+      if (!list || !item) return;
+      const itemTop = item.offsetTop;
+      const itemBottom = itemTop + item.offsetHeight;
+      if (itemTop < list.scrollTop) {
+        list.scrollTop = itemTop;
+      } else if (itemBottom > list.scrollTop + list.clientHeight) {
+        list.scrollTop = itemBottom - list.clientHeight;
+      }
     }, [highlightedIndex, open]);
 
     const handleTriggerKeyDown = (e: React.KeyboardEvent) => {
+      // When open, the trigger keeps DOM focus (the listbox is portaled and not
+      // focused), so all navigation keys must be handled here, delegating to the
+      // shared list handler. When closed, these keys open the dropdown.
+      if (open) {
+        handleListKeyDown(e);
+        return;
+      }
       switch (e.key) {
         case "Enter":
         case " ":
         case "ArrowDown": {
           e.preventDefault();
-          if (!open) {
-            setOpen(true);
-            const currentIdx = options.findIndex((o) => o.value === activeValue);
-            setHighlightedIndex(currentIdx >= 0 ? currentIdx : 0);
-          }
+          setOpen(true);
+          const currentIdx = options.findIndex((o) => o.value === activeValue);
+          setHighlightedIndex(currentIdx >= 0 ? currentIdx : 0);
           break;
         }
         case "ArrowUp": {
           e.preventDefault();
-          if (!open) {
-            setOpen(true);
-            setHighlightedIndex(options.length - 1);
-          }
+          setOpen(true);
+          setHighlightedIndex(options.length - 1);
           break;
         }
         case "Escape": {
@@ -205,9 +281,63 @@ export const Select = React.forwardRef<HTMLDivElement, SelectProps>(
       }
     };
 
+    const dropdown = open ? (
+      <ul
+        ref={listboxRef}
+        id={listboxId}
+        role="listbox"
+        className={cn(
+          "vyre-select__dropdown",
+          !disablePortal && "vyre-select__dropdown--portal",
+          !disablePortal && position.flip && "vyre-select__dropdown--flip"
+        )}
+        aria-label="Options"
+        tabIndex={-1}
+        onKeyDown={handleListKeyDown}
+        style={
+          disablePortal
+            ? undefined
+            : {
+                position: "absolute",
+                top: position.top,
+                left: position.left,
+                width: position.width,
+              }
+        }
+      >
+        {options.map((option, index) => (
+          <li
+            key={option.value}
+            role="option"
+            aria-selected={option.value === activeValue}
+            aria-disabled={option.disabled}
+            data-highlighted={index === highlightedIndex}
+            className="vyre-select__option"
+            onMouseEnter={() => !option.disabled && setHighlightedIndex(index)}
+            onMouseDown={(e) => {
+              e.preventDefault();
+              selectOption(option);
+            }}
+          >
+            {option.label}
+            {option.value === activeValue && <CheckIcon />}
+          </li>
+        ))}
+        {enabledOptions.length === 0 && (
+          <li className="vyre-select__empty" role="presentation">
+            No options available
+          </li>
+        )}
+      </ul>
+    ) : null;
+
     return (
       <div
-        ref={ref}
+        ref={(node) => {
+          wrapperRef.current = node;
+          if (typeof ref === "function") ref(node);
+          else if (ref) (ref as React.MutableRefObject<HTMLDivElement | null>).current = node;
+        }}
         className={cn("vyre-select", `vyre-select--${size}`, className)}
         data-open={open}
         {...props}
@@ -241,41 +371,9 @@ export const Select = React.forwardRef<HTMLDivElement, SelectProps>(
           <ChevronIcon />
         </button>
 
-        {open && (
-          <ul
-            ref={listboxRef}
-            id={listboxId}
-            role="listbox"
-            className="vyre-select__dropdown"
-            aria-label="Options"
-            tabIndex={-1}
-            onKeyDown={handleListKeyDown}
-          >
-            {options.map((option, index) => (
-              <li
-                key={option.value}
-                role="option"
-                aria-selected={option.value === activeValue}
-                aria-disabled={option.disabled}
-                data-highlighted={index === highlightedIndex}
-                className="vyre-select__option"
-                onMouseEnter={() => !option.disabled && setHighlightedIndex(index)}
-                onMouseDown={(e) => {
-                  e.preventDefault();
-                  selectOption(option);
-                }}
-              >
-                {option.label}
-                {option.value === activeValue && <CheckIcon />}
-              </li>
-            ))}
-            {enabledOptions.length === 0 && (
-              <li className="vyre-select__empty" role="presentation">
-                No options available
-              </li>
-            )}
-          </ul>
-        )}
+        {disablePortal
+          ? dropdown
+          : dropdown && createPortal(dropdown, document.body)}
       </div>
     );
   }

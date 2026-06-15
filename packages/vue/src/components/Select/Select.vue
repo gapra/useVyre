@@ -14,6 +14,11 @@
  * │   placeholder  = string                                 │
  * │   disabled     = boolean                                │
  * │   size         = "sm"|"md"(default)|"lg"                │
+ * │   disablePortal = boolean (default: false) — render the │
+ * │                  dropdown inline instead of teleporting  │
+ * │                  it to <body>. Teleport (default) keeps  │
+ * │                  the dropdown visible inside Modal /      │
+ * │                  overflow:hidden containers.             │
  * │                                                         │
  * │ Emits:                                                  │
  * │   update:modelValue — new selected value                │
@@ -34,9 +39,11 @@
  * </Field>
  */
 
-import { ref, computed, watch, nextTick } from "vue";
+import { ref, computed, watch, nextTick, onBeforeUnmount, Teleport } from "vue";
 import { cn } from "../../utils/cn";
 import type { SelectOption } from "./types";
+
+const GAP = 4;
 
 type SelectSize = "sm" | "md" | "lg";
 
@@ -47,9 +54,16 @@ const props = withDefaults(
     placeholder?: string;
     disabled?:    boolean;
     size?:        SelectSize;
+    disablePortal?: boolean;
     class?:       string;
   }>(),
-  { placeholder: "Select an option", disabled: false, size: "md", modelValue: "" }
+  {
+    placeholder: "Select an option",
+    disabled: false,
+    size: "md",
+    modelValue: "",
+    disablePortal: false,
+  }
 );
 
 const emit = defineEmits<{ "update:modelValue": [value: string] }>();
@@ -58,6 +72,8 @@ const open             = ref(false);
 const highlightedIndex = ref(-1);
 const listboxRef       = ref<HTMLUListElement | null>(null);
 const wrapperRef       = ref<HTMLDivElement | null>(null);
+const triggerRef       = ref<HTMLButtonElement | null>(null);
+const position         = ref({ top: 0, left: 0, width: 0, flip: false });
 
 const selectedOption = computed(() =>
   props.options.find((o) => o.value === props.modelValue)
@@ -81,27 +97,82 @@ function openDropdown() {
   highlightedIndex.value = idx >= 0 ? idx : 0;
 }
 
-// Close on outside click
+// Close on outside click. The dropdown may be teleported to <body>, so a click
+// inside it is NOT a descendant of the wrapper — check both.
 function onDocClick(e: MouseEvent) {
-  if (wrapperRef.value && !wrapperRef.value.contains(e.target as Node)) {
-    closeDropdown();
-  }
+  const target = e.target as Node;
+  if (wrapperRef.value?.contains(target)) return;
+  if (listboxRef.value?.contains(target)) return;
+  closeDropdown();
 }
 
-watch(open, (isOpen) => {
-  if (isOpen) document.addEventListener("mousedown", onDocClick);
-  else        document.removeEventListener("mousedown", onDocClick);
+// Position the teleported dropdown against the trigger rect.
+function computePosition() {
+  const trigger = triggerRef.value;
+  if (!trigger) return;
+  const rect = trigger.getBoundingClientRect();
+  const dropdownHeight = listboxRef.value?.offsetHeight ?? 0;
+  const spaceBelow = window.innerHeight - rect.bottom;
+  const flip = dropdownHeight > 0 && spaceBelow < dropdownHeight + GAP;
+  position.value = {
+    top: flip
+      ? rect.top + window.scrollY - GAP - dropdownHeight
+      : rect.bottom + window.scrollY + GAP,
+    left: rect.left + window.scrollX,
+    width: rect.width,
+    flip,
+  };
+}
+
+watch(open, async (isOpen) => {
+  if (isOpen) {
+    document.addEventListener("mousedown", onDocClick);
+    if (!props.disablePortal) {
+      await nextTick();
+      computePosition();
+      // capture:true so scrolling INSIDE a Modal body is caught, not only window.
+      window.addEventListener("scroll", computePosition, true);
+      window.addEventListener("resize", computePosition);
+    }
+  } else {
+    document.removeEventListener("mousedown", onDocClick);
+    window.removeEventListener("scroll", computePosition, true);
+    window.removeEventListener("resize", computePosition);
+  }
 });
 
-// Scroll highlighted item into view
+onBeforeUnmount(() => {
+  document.removeEventListener("mousedown", onDocClick);
+  window.removeEventListener("scroll", computePosition, true);
+  window.removeEventListener("resize", computePosition);
+});
+
+// Scroll highlighted item into view WITHIN the listbox only. We adjust the
+// listbox's own scrollTop instead of element.scrollIntoView(), because once the
+// dropdown is teleported to <body> scrollIntoView scrolls the whole page.
 watch(highlightedIndex, async (idx) => {
   if (!open.value || idx < 0) return;
   await nextTick();
-  const item = listboxRef.value?.children[idx] as HTMLElement | undefined;
-  item?.scrollIntoView({ block: "nearest" });
+  const list = listboxRef.value;
+  const item = list?.children[idx] as HTMLElement | undefined;
+  if (!list || !item) return;
+  const itemTop = item.offsetTop;
+  const itemBottom = itemTop + item.offsetHeight;
+  if (itemTop < list.scrollTop) {
+    list.scrollTop = itemTop;
+  } else if (itemBottom > list.scrollTop + list.clientHeight) {
+    list.scrollTop = itemBottom - list.clientHeight;
+  }
 });
 
 function onTriggerKeydown(e: KeyboardEvent) {
+  // When open, the trigger keeps DOM focus (the listbox is teleported and not
+  // focused), so navigation keys must be handled here, delegating to the shared
+  // list handler. When closed, these keys open the dropdown.
+  if (open.value) {
+    onListKeydown(e);
+    return;
+  }
   switch (e.key) {
     case "Enter": case " ": case "ArrowDown":
       e.preventDefault(); openDropdown(); break;
@@ -161,6 +232,7 @@ const wrapperClasses = computed(() =>
 <template>
   <div ref="wrapperRef" :class="wrapperClasses" :data-open="open">
     <button
+      ref="triggerRef"
       type="button"
       class="vyre-select__trigger"
       :aria-haspopup="'listbox'"
@@ -185,40 +257,56 @@ const wrapperClasses = computed(() =>
       </svg>
     </button>
 
-    <ul
-      v-if="open"
-      ref="listboxRef"
-      role="listbox"
-      class="vyre-select__dropdown"
-      aria-label="Options"
-      tabindex="-1"
-      @keydown="onListKeydown"
-    >
-      <li
-        v-for="(option, index) in options"
-        :key="option.value"
-        role="option"
-        :aria-selected="option.value === modelValue"
-        :aria-disabled="option.disabled"
-        :data-highlighted="index === highlightedIndex"
-        class="vyre-select__option"
-        @mouseenter="!option.disabled && (highlightedIndex = index)"
-        @mousedown.prevent="selectOption(option)"
+    <Teleport to="body" :disabled="disablePortal">
+      <ul
+        v-if="open"
+        ref="listboxRef"
+        role="listbox"
+        :class="[
+          'vyre-select__dropdown',
+          !disablePortal && 'vyre-select__dropdown--portal',
+          !disablePortal && position.flip && 'vyre-select__dropdown--flip',
+        ]"
+        :style="
+          disablePortal
+            ? undefined
+            : {
+                position: 'absolute',
+                top: `${position.top}px`,
+                left: `${position.left}px`,
+                width: `${position.width}px`,
+              }
+        "
+        aria-label="Options"
+        tabindex="-1"
+        @keydown="onListKeydown"
       >
-        {{ option.label }}
-        <!-- Check icon for selected -->
-        <svg
-          v-if="option.value === modelValue"
-          class="vyre-select__check"
-          width="14" height="14" viewBox="0 0 14 14" fill="none" aria-hidden="true"
+        <li
+          v-for="(option, index) in options"
+          :key="option.value"
+          role="option"
+          :aria-selected="option.value === modelValue"
+          :aria-disabled="option.disabled"
+          :data-highlighted="index === highlightedIndex"
+          class="vyre-select__option"
+          @mouseenter="!option.disabled && (highlightedIndex = index)"
+          @mousedown.prevent="selectOption(option)"
         >
-          <path d="M2.5 7L5.5 10L11.5 4" stroke="currentColor"
-            stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
-        </svg>
-      </li>
-      <li v-if="options.every(o => o.disabled)" class="vyre-select__empty" role="presentation">
-        No options available
-      </li>
-    </ul>
+          {{ option.label }}
+          <!-- Check icon for selected -->
+          <svg
+            v-if="option.value === modelValue"
+            class="vyre-select__check"
+            width="14" height="14" viewBox="0 0 14 14" fill="none" aria-hidden="true"
+          >
+            <path d="M2.5 7L5.5 10L11.5 4" stroke="currentColor"
+              stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+          </svg>
+        </li>
+        <li v-if="options.every(o => o.disabled)" class="vyre-select__empty" role="presentation">
+          No options available
+        </li>
+      </ul>
+    </Teleport>
   </div>
 </template>
