@@ -1,5 +1,12 @@
 # @usevyre/eslint-plugin
 
+## 1.1.7
+
+### Patch Changes
+
+- Updated dependencies [988c22d]
+  - @usevyre/ai-context@1.8.0
+
 ## 1.1.6
 
 ### Patch Changes

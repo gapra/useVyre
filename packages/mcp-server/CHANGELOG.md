@@ -1,5 +1,12 @@
 # @usevyre/mcp-server
 
+## 1.0.15
+
+### Patch Changes
+
+- Updated dependencies [988c22d]
+  - @usevyre/ai-context@1.8.0
+
 ## 1.0.14
 
 ### Patch Changes
