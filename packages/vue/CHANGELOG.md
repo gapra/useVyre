@@ -1,5 +1,28 @@
 # @usevyre/vue
 
+## 1.6.0
+
+### Minor Changes
+
+- 1602947: Select: the dropdown now portals to `<body>` by default so it stays fully visible inside `Modal` and other `overflow: hidden` containers (same class of bug as the Combobox fix in #18). It is positioned against the trigger and repositions on scroll/resize, flipping above when there is no room below.
+
+  New `disablePortal` prop (boolean, default `false`) restores the previous inline rendering.
+
+- 1602947: Tooltip: now portals to `<body>` by default so it stays fully visible inside `Modal` and other `overflow: hidden` containers (same overlay-clip class as the Combobox #18 / Select fixes). It is positioned against the trigger via JS and repositions on scroll/resize; the arrow and animation are unchanged.
+
+  New `disablePortal` prop (boolean, default `false`) restores the previous inline rendering.
+
+### Patch Changes
+
+- 1602947: Command: fix keyboard navigation feedback.
+
+  - React: Arrow/Enter did nothing because the key handler was attached only to `CommandList` (a div that never receives focus); it now lives on the `Command` root so keystrokes from the focused `CommandInput` are handled.
+  - React & Vue: the active item now sets `aria-selected`, so it is visibly highlighted (the CSS for it already existed but was never triggered) and announced to assistive tech.
+  - React & Vue: navigating no longer risks scrolling the page — the active item is scrolled within the list container instead of via `element.scrollIntoView()`.
+
+- 1602947: Combobox & Select: opening the dropdown no longer scrolls the whole page. The "scroll highlighted option into view" logic used `element.scrollIntoView()`, which — now that the dropdown is portaled to `<body>` — scrolled the document instead of the dropdown. It now adjusts the dropdown's own `scrollTop`, keeping the highlighted option visible without moving the page.
+- 1602947: Select: fix keyboard navigation. Arrow/Enter/Home/End keys did nothing once the dropdown was open because the navigation handler lived on the listbox element, which never receives focus (focus stays on the trigger). The trigger now delegates navigation keys to the list handler while open, so the full keyboard flow (open, move highlight, select, close) works.
+
 ## 1.5.0
 
 ### Minor Changes
