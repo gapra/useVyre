@@ -45,9 +45,9 @@ export function AuthCardBlock() {
 export function StatsRowBlock() {
   return (
     <StatGroup>
-      <Stat label="Revenue" value="$48,200" delta={12.5} trend="up" deltaLabel="vs last month" />
-      <Stat label="Active users" value="2,340" delta={3.1} trend="up" />
-      <Stat label="Churn" value="1.8%" delta={-0.4} trend="down" deltaLabel="lower is better" />
+      <Stat label="Revenue" value="$48,200" delta={12.5} trend="up" deltaLabel="vs last month" size="lg" />
+      <Stat label="Active users" value="2,340" delta={3.1} trend="up" size="lg" />
+      <Stat label="Churn" value="1.8%" delta={-0.4} trend="down" deltaLabel="lower is better" size="lg" />
     </StatGroup>
   );
 }
