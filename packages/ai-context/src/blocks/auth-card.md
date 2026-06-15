@@ -20,7 +20,7 @@ export function AuthCard() {
         <Stack direction="column" gap="md">
           <div>
             <Heading size="lg">Sign in</Heading>
-            <Text variant="muted">Welcome back. Enter your details.</Text>
+            <Text color="muted">Welcome back. Enter your details.</Text>
           </div>
 
           <Field label="Email">
@@ -63,7 +63,7 @@ import {
       <Stack direction="column" gap="md">
         <div>
           <Heading size="lg">Sign in</Heading>
-          <Text variant="muted">Welcome back. Enter your details.</Text>
+          <Text color="muted">Welcome back. Enter your details.</Text>
         </div>
 
         <Field label="Email">

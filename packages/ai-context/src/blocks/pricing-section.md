@@ -28,7 +28,7 @@ export function PricingSection() {
                 <Heading size="md">{plan.name}</Heading>
                 {plan.featured && <Badge variant="success">Popular</Badge>}
               </Stack>
-              <Heading size="xl">{plan.price}<Text as="span" variant="muted"> /mo</Text></Heading>
+              <Heading size="xl">{plan.price}<Text as="span" color="muted"> /mo</Text></Heading>
               <Stack direction="column" gap="xs">
                 {plan.features.map((f) => <Text key={f}>{f}</Text>)}
               </Stack>
@@ -66,7 +66,7 @@ const plans = [
             <Heading size="md">{{ plan.name }}</Heading>
             <Badge v-if="plan.featured" variant="success">Popular</Badge>
           </Stack>
-          <Heading size="xl">{{ plan.price }}<Text as="span" variant="muted"> /mo</Text></Heading>
+          <Heading size="xl">{{ plan.price }}<Text as="span" color="muted"> /mo</Text></Heading>
           <Stack direction="column" gap="xs">
             <Text v-for="f in plan.features" :key="f">{{ f }}</Text>
           </Stack>

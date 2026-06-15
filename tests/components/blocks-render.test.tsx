@@ -39,7 +39,7 @@ describe("blocks render + lay out correctly", () => {
           <R.Stack direction="column" gap="md">
             <div>
               <R.Heading size="lg">Sign in</R.Heading>
-              <R.Text variant="muted">Welcome back.</R.Text>
+              <R.Text color="muted">Welcome back.</R.Text>
             </div>
             <R.Field label="Email"><R.Input type="email" /></R.Field>
             <R.Field label="Password"><R.Input type="password" /></R.Field>
