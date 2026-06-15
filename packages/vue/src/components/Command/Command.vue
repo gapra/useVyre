@@ -60,7 +60,12 @@ function setSearch(v: string) { search.value = v; activeIndex.value = 0; activeT
 function setActiveIndex(i: number) { activeIndex.value = i; activeTick.value++; }
 
 function getVisible() {
-  return Array.from(items.entries()).filter(([, v]) => !v.disabled && v.el.offsetParent !== null);
+  // Filter out hidden items. CommandItem uses v-show, which toggles inline
+  // display:none, so we check that directly instead of offsetParent — the latter
+  // needs a layout engine (always null in jsdom/SSR), which breaks testing.
+  return Array.from(items.entries()).filter(
+    ([, v]) => !v.disabled && v.el.style.display !== "none"
+  );
 }
 
 function registerItem(id: string, el: HTMLElement, disabled: boolean, onSelect?: () => void) {
