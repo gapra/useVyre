@@ -49,8 +49,7 @@
 
 import { ref, computed, watch, nextTick, onBeforeUnmount, Teleport } from "vue";
 import { cn } from "../../utils/cn";
-
-const GAP = 4;
+import { usePortalPosition } from "../../utils/usePortalPosition";
 
 type ComboboxSize = "sm" | "md" | "lg";
 
@@ -88,7 +87,10 @@ const highlightedIndex = ref(-1);
 const wrapperRef       = ref<HTMLDivElement | null>(null);
 const dropdownRef      = ref<HTMLUListElement | null>(null);
 const inputRef         = ref<HTMLInputElement | null>(null);
-const position         = ref({ top: 0, left: 0, width: 0, flip: false });
+
+// Portaled dropdown placement (below the input, flips above when needed).
+const { position, start: startPositioning, stop: stopPositioning } =
+  usePortalPosition(inputRef, dropdownRef);
 
 const selectedOption = computed(() =>
   props.options.find((o) => o.value === props.modelValue) ?? null
@@ -171,45 +173,21 @@ function onDocClick(e: MouseEvent) {
   closeDropdown();
 }
 
-// Position the teleported dropdown against the input rect.
-function computePosition() {
-  const input = inputRef.value;
-  if (!input) return;
-  const rect = input.getBoundingClientRect();
-  const dropdownHeight = dropdownRef.value?.offsetHeight ?? 0;
-  const spaceBelow = window.innerHeight - rect.bottom;
-  const flip = dropdownHeight > 0 && spaceBelow < dropdownHeight + GAP;
-  position.value = {
-    top: flip
-      ? rect.top + window.scrollY - GAP - dropdownHeight
-      : rect.bottom + window.scrollY + GAP,
-    left: rect.left + window.scrollX,
-    width: rect.width,
-    flip,
-  };
-}
-
 watch(open, async (isOpen) => {
   if (isOpen) {
     document.addEventListener("mousedown", onDocClick);
     if (!props.disablePortal) {
       await nextTick();
-      computePosition();
-      // capture:true so scrolling INSIDE a Modal body is caught, not only window.
-      window.addEventListener("scroll", computePosition, true);
-      window.addEventListener("resize", computePosition);
+      startPositioning();
     }
   } else {
     document.removeEventListener("mousedown", onDocClick);
-    window.removeEventListener("scroll", computePosition, true);
-    window.removeEventListener("resize", computePosition);
+    stopPositioning();
   }
 });
 
 onBeforeUnmount(() => {
   document.removeEventListener("mousedown", onDocClick);
-  window.removeEventListener("scroll", computePosition, true);
-  window.removeEventListener("resize", computePosition);
 });
 
 // Reset highlight when filtered list changes

@@ -45,15 +45,13 @@ import React, {
   useState,
   useRef,
   useEffect,
-  useLayoutEffect,
   useCallback,
   useId,
 } from "react";
 import { createPortal } from "react-dom";
 import { cn } from "../../utils/cn";
+import { usePortalPosition } from "../../utils/usePortalPosition";
 import type { BaseProps } from "../../types";
-
-const GAP = 4;
 
 export interface SelectOption {
   value: string;
@@ -81,13 +79,6 @@ export interface SelectProps
   disablePortal?: boolean;
 }
 
-interface DropdownPosition {
-  top: number;
-  left: number;
-  width: number;
-  flip: boolean;
-}
-
 export const Select = React.forwardRef<HTMLDivElement, SelectProps>(
   (
     {
@@ -110,18 +101,15 @@ export const Select = React.forwardRef<HTMLDivElement, SelectProps>(
 
     const [open, setOpen] = useState(false);
     const [highlightedIndex, setHighlightedIndex] = useState(-1);
-    const [position, setPosition] = useState<DropdownPosition>({
-      top: 0,
-      left: 0,
-      width: 0,
-      flip: false,
-    });
 
     const wrapperRef = useRef<HTMLDivElement | null>(null);
     const triggerRef = useRef<HTMLButtonElement>(null);
     const listboxRef = useRef<HTMLUListElement>(null);
     const id = useId();
     const listboxId = `${id}-listbox`;
+
+    // Portaled dropdown placement (below the trigger, flips above when needed).
+    const position = usePortalPosition(triggerRef, listboxRef, open, disablePortal, [highlightedIndex]);
 
     const selectedOption = options.find((o) => o.value === activeValue);
     const enabledOptions = options.filter((o) => !o.disabled);
@@ -155,36 +143,6 @@ export const Select = React.forwardRef<HTMLDivElement, SelectProps>(
       document.addEventListener("mousedown", handle);
       return () => document.removeEventListener("mousedown", handle);
     }, [open, closeDropdown]);
-
-    // Position the portaled dropdown against the trigger rect, and keep it in
-    // sync while open (scroll inside a Modal, window resize, etc.).
-    useLayoutEffect(() => {
-      if (!open || disablePortal) return;
-      const compute = () => {
-        const trigger = triggerRef.current;
-        if (!trigger) return;
-        const rect = trigger.getBoundingClientRect();
-        const dropdownHeight = listboxRef.current?.offsetHeight ?? 0;
-        const spaceBelow = window.innerHeight - rect.bottom;
-        const flip = dropdownHeight > 0 && spaceBelow < dropdownHeight + GAP;
-        setPosition({
-          top: flip
-            ? rect.top + window.scrollY - GAP - dropdownHeight
-            : rect.bottom + window.scrollY + GAP,
-          left: rect.left + window.scrollX,
-          width: rect.width,
-          flip,
-        });
-      };
-      compute();
-      // capture:true so scrolling INSIDE a Modal body is caught, not only window.
-      window.addEventListener("scroll", compute, true);
-      window.addEventListener("resize", compute);
-      return () => {
-        window.removeEventListener("scroll", compute, true);
-        window.removeEventListener("resize", compute);
-      };
-    }, [open, disablePortal, highlightedIndex]);
 
     // Scroll highlighted option into view WITHIN the listbox only. We adjust the
     // listbox's own scrollTop instead of element.scrollIntoView(), because once

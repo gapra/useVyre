@@ -41,9 +41,8 @@
 
 import { ref, computed, watch, nextTick, onBeforeUnmount, Teleport } from "vue";
 import { cn } from "../../utils/cn";
+import { usePortalPosition } from "../../utils/usePortalPosition";
 import type { SelectOption } from "./types";
-
-const GAP = 4;
 
 type SelectSize = "sm" | "md" | "lg";
 
@@ -73,7 +72,10 @@ const highlightedIndex = ref(-1);
 const listboxRef       = ref<HTMLUListElement | null>(null);
 const wrapperRef       = ref<HTMLDivElement | null>(null);
 const triggerRef       = ref<HTMLButtonElement | null>(null);
-const position         = ref({ top: 0, left: 0, width: 0, flip: false });
+
+// Portaled dropdown placement (below the trigger, flips above when needed).
+const { position, start: startPositioning, stop: stopPositioning } =
+  usePortalPosition(triggerRef, listboxRef);
 
 const selectedOption = computed(() =>
   props.options.find((o) => o.value === props.modelValue)
@@ -106,45 +108,21 @@ function onDocClick(e: MouseEvent) {
   closeDropdown();
 }
 
-// Position the teleported dropdown against the trigger rect.
-function computePosition() {
-  const trigger = triggerRef.value;
-  if (!trigger) return;
-  const rect = trigger.getBoundingClientRect();
-  const dropdownHeight = listboxRef.value?.offsetHeight ?? 0;
-  const spaceBelow = window.innerHeight - rect.bottom;
-  const flip = dropdownHeight > 0 && spaceBelow < dropdownHeight + GAP;
-  position.value = {
-    top: flip
-      ? rect.top + window.scrollY - GAP - dropdownHeight
-      : rect.bottom + window.scrollY + GAP,
-    left: rect.left + window.scrollX,
-    width: rect.width,
-    flip,
-  };
-}
-
 watch(open, async (isOpen) => {
   if (isOpen) {
     document.addEventListener("mousedown", onDocClick);
     if (!props.disablePortal) {
       await nextTick();
-      computePosition();
-      // capture:true so scrolling INSIDE a Modal body is caught, not only window.
-      window.addEventListener("scroll", computePosition, true);
-      window.addEventListener("resize", computePosition);
+      startPositioning();
     }
   } else {
     document.removeEventListener("mousedown", onDocClick);
-    window.removeEventListener("scroll", computePosition, true);
-    window.removeEventListener("resize", computePosition);
+    stopPositioning();
   }
 });
 
 onBeforeUnmount(() => {
   document.removeEventListener("mousedown", onDocClick);
-  window.removeEventListener("scroll", computePosition, true);
-  window.removeEventListener("resize", computePosition);
 });
 
 // Scroll highlighted item into view WITHIN the listbox only. We adjust the
