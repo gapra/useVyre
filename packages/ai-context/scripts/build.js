@@ -1,4 +1,4 @@
-import { readFileSync, writeFileSync, mkdirSync, existsSync } from "fs";
+import { readFileSync, writeFileSync, mkdirSync, existsSync, readdirSync } from "fs";
 import { resolve, dirname } from "path";
 import { fileURLToPath } from "url";
 
@@ -13,6 +13,23 @@ mkdirSync(dist, { recursive: true });
 
 const schema = JSON.parse(readFileSync(resolve(src, "schema/components.json"), "utf8"));
 const staticContext = readFileSync(resolve(src, "full-context.md"), "utf8");
+
+// Composition blocks: copy-paste page/section patterns built from existing
+// components. Each src/blocks/*.md is a complete reference (description + React
+// + Vue) injected into the AI context so agents compose pages correctly.
+function loadBlocks() {
+  const dir = resolve(src, "blocks");
+  if (!existsSync(dir)) return [];
+  return readdirSync(dir)
+    .filter((f) => f.endsWith(".md"))
+    .sort()
+    .map((f) => {
+      const md = readFileSync(resolve(dir, f), "utf8").trim();
+      const name = md.match(/^# (.+)$/m)?.[1] ?? f.replace(/\.md$/, "");
+      return { name, md };
+    });
+}
+const blocks = loadBlocks();
 
 // Load AI tokens from @usevyre/tokens (sibling package in monorepo)
 const tokensDistPath = resolve(__dirname, "../../tokens/dist/ai-tokens.json");
@@ -136,6 +153,24 @@ const staticStylingOnward = staticContext.includes(stylingMarker)
   ? staticContext.split(stylingMarker)[1].trimStart()
   : "";
 
+const blocksIntro =
+  "Ready-made compositions of useVyre components for whole sections/pages. " +
+  "Copy, paste, and adapt — they are a starting point, not fixed components. " +
+  "Prefer composing a page from these patterns over inventing layout from scratch.";
+
+const blocksSection = blocks.length
+  ? [
+      "## Composition Blocks",
+      "",
+      blocksIntro,
+      "",
+      blocks.map((b) => b.md).join("\n\n---\n\n"),
+      "",
+      "---",
+      "",
+    ].join("\n")
+  : "";
+
 const generatedFullContext = [
   staticUpToComponents,
   "",
@@ -144,6 +179,7 @@ const generatedFullContext = [
   componentSections,
   "---",
   "",
+  blocksSection,
   "## Hallucination Guard — Common AI Mistakes",
   "",
   "The following prop values and patterns do NOT exist in useVyre.",
@@ -161,6 +197,17 @@ const generatedFullContext = [
 // Write back to src so full-context.md stays in sync (schema is source of truth for components)
 writeFileSync(resolve(src, "full-context.md"), generatedFullContext);
 writeFileSync(resolve(dist, "full-context.md"), generatedFullContext);
+
+// Standalone blocks reference (also consumable on its own / by MCP later)
+const blocksDoc = [
+  "# useVyre Composition Blocks",
+  "",
+  blocksIntro,
+  "",
+  blocks.map((b) => b.md).join("\n\n---\n\n"),
+  "",
+].join("\n");
+writeFileSync(resolve(dist, "blocks.md"), blocksDoc);
 
 // ── cursor-rules.md ───────────────────────────────────────────────────────────
 

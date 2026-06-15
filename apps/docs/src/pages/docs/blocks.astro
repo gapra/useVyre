@@ -1,0 +1,111 @@
+---
+import DocsLayout       from "@/layouts/DocsLayout.astro";
+import ComponentPreview from "@/components/docs/ComponentPreview.astro";
+import {
+  AuthCardBlock, StatsRowBlock, EmptyStateBlock, PricingSectionBlock, SettingsPanelBlock,
+} from "@/components/demos/BlocksDemo";
+
+const authReact = `import {
+  Card, CardBody, Field, Input, Button, Checkbox, Heading, Text, Stack,
+} from "@usevyre/react";
+
+<Card variant="elevated" style={{ maxWidth: 420, margin: "0 auto" }}>
+  <CardBody>
+    <Stack gap="md">
+      <Heading size="lg">Sign in</Heading>
+      <Field label="Email"><Input type="email" /></Field>
+      <Field label="Password"><Input type="password" /></Field>
+      <label><Checkbox /> Remember me</label>
+      <Button variant="accent" style={{ width: "100%" }}>Sign in</Button>
+    </Stack>
+  </CardBody>
+</Card>`;
+
+const statsReact = `import { StatGroup, Stat } from "@usevyre/react";
+
+<StatGroup>
+  <Stat label="Revenue" value="$48,200" delta={12.5} trend="up" />
+  <Stat label="Active users" value="2,340" delta={3.1} trend="up" />
+  <Stat label="Churn" value="1.8%" delta={-0.4} trend="down" />
+</StatGroup>`;
+
+const emptyReact = `import { EmptyState, Button } from "@usevyre/react";
+
+<EmptyState title="No projects yet" description="Create your first project to get started.">
+  <Button variant="accent">New project</Button>
+</EmptyState>`;
+
+const pricingReact = `import { Grid, Card, CardBody, Badge, Heading, Text, Button, Stack } from "@usevyre/react";
+
+<Grid columns={3} gap="lg">
+  {plans.map((plan) => (
+    <Card variant={plan.featured ? "elevated" : "outlined"}>
+      <CardBody>
+        <Stack gap="md">
+          <Heading size="md">{plan.name}</Heading>
+          {plan.featured && <Badge variant="success">Popular</Badge>}
+          <Heading size="xl">{plan.price}</Heading>
+          <Button variant={plan.featured ? "accent" : "secondary"}>Choose</Button>
+        </Stack>
+      </CardBody>
+    </Card>
+  ))}
+</Grid>`;
+
+const settingsReact = `import { Card, CardBody, Heading, Field, Input, Switch, Button, Stack, Text } from "@usevyre/react";
+
+<Card variant="outlined" style={{ maxWidth: 560 }}>
+  <CardBody>
+    <Stack gap="lg">
+      <Heading size="lg">Settings</Heading>
+      <Field label="Display name"><Input /></Field>
+      <label><Text>Email notifications</Text><Switch /></label>
+      <Button variant="accent">Save changes</Button>
+    </Stack>
+  </CardBody>
+</Card>`;
+---
+
+<DocsLayout title="Blocks">
+  <div class="docs-header">
+    <h1 class="docs-title">Blocks</h1>
+    <p class="docs-lead">
+      Ready-made compositions of useVyre components for whole sections — copy,
+      paste, and adapt. They are a starting point, not fixed components. Your AI
+      agent knows these patterns too: they're part of the
+      <a href="/docs/ai-context">AI context</a>, so it composes pages correctly.
+    </p>
+  </div>
+
+  <hr class="docs-divider" />
+
+  <h2 class="docs-h2">Auth card</h2>
+  <p class="docs-p">A centered sign-in card. For a login or sign-in screen.</p>
+  <ComponentPreview react={authReact}>
+    <AuthCardBlock client:visible />
+  </ComponentPreview>
+
+  <h2 class="docs-h2">Stats row</h2>
+  <p class="docs-p">Headline KPIs for the top of a dashboard.</p>
+  <ComponentPreview react={statsReact}>
+    <StatsRowBlock client:visible />
+  </ComponentPreview>
+
+  <h2 class="docs-h2">Empty state</h2>
+  <p class="docs-p">A friendly zero-data screen with a call to action.</p>
+  <ComponentPreview react={emptyReact}>
+    <EmptyStateBlock client:visible />
+  </ComponentPreview>
+
+  <h2 class="docs-h2">Pricing section</h2>
+  <p class="docs-p">A three-tier pricing grid with a highlighted plan.</p>
+  <ComponentPreview react={pricingReact}>
+    <PricingSectionBlock client:visible />
+  </ComponentPreview>
+
+  <h2 class="docs-h2">Settings panel</h2>
+  <p class="docs-p">An account / preferences panel with fields and toggles.</p>
+  <ComponentPreview react={settingsReact}>
+    <SettingsPanelBlock client:visible />
+  </ComponentPreview>
+</DocsLayout>
