@@ -509,6 +509,7 @@ import { RichTextEditor } from "@usevyre/react"
 // readOnly       = boolean (default: false)
 // toolbar        = RichTextTool[]
 // minHeight      = string (default: 10rem)
+// sanitize       = function
 
 // Examples:
 const [html, setHtml] = useState("<p>Hello <strong>world</strong></p>");
@@ -522,6 +523,7 @@ const [html, setHtml] = useState("<p>Hello <strong>world</strong></p>");
 
 **Common mistakes:**
 - ❌ `RichTextEditor without value/onChange (React) or v-model (Vue)` → Keep the HTML string in state and update it in onChange / v-model
+- ❌ `Binding untrusted HTML to value without the sanitize prop` → Pass sanitize={DOMPurify.sanitize} (or sanitize before storing) for untrusted content
 - ❌ `Rendering value as text or with dangerouslySetInnerHTML elsewhere without sanitising` → Sanitise (e.g. DOMPurify) before re-rendering untrusted RTE output
 - ❌ `toolbar="bold" (string)` → Pass an array, e.g. toolbar={["bold","italic","link"]}
 
@@ -2158,6 +2160,7 @@ If you generate these, you are hallucinating.
 - ❌ `<RadioGroup RadioGroup without value/onChange (React) or v-model (Vue)>` → Bind value + onChange (React) or v-model (Vue); or defaultValue for uncontrolled in React
 - ❌ `<RadioGroup Using Checkbox for mutually-exclusive choices>` → Use RadioGroup + Radio (or options) for one-of-many
 - ❌ `<RichTextEditor RichTextEditor without value/onChange (React) or v-model (Vue)>` → Keep the HTML string in state and update it in onChange / v-model
+- ❌ `<RichTextEditor Binding untrusted HTML to value without the sanitize prop>` → Pass sanitize={DOMPurify.sanitize} (or sanitize before storing) for untrusted content
 - ❌ `<RichTextEditor Rendering value as text or with dangerouslySetInnerHTML elsewhere without sanitising>` → Sanitise (e.g. DOMPurify) before re-rendering untrusted RTE output
 - ❌ `<RichTextEditor toolbar="bold" (string)>` → Pass an array, e.g. toolbar={["bold","italic","link"]}
 - ❌ `<Command Using Input type="search" for search UI>` → Use Command + CommandInput + CommandList + CommandItem

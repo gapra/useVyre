@@ -1,14 +1,19 @@
 {
   "$schema": "http://json-schema.org/draft-07/schema#",
-  "version": "1.19.0",
+  "version": "1.20.0",
   "generatedAt": "2026-06-15",
   "package": "@usevyre/react",
-  "packageVersion": "1.19.0",
+  "packageVersion": "1.20.0",
   "validFor": [
     "@usevyre/react@1.1.0+",
     "@usevyre/vue@1.1.0+"
   ],
   "changelog": {
+    "1.20.0": {
+      "date": "2026-06-15",
+      "breaking": false,
+      "summary": "RichTextEditor security: new optional `sanitize` (html)=>html prop applied on render-in and emit-out (component stays zero-dependency; pass DOMPurify yourself for untrusted HTML). The link tool now always blocks javascript:/data:/vbscript: URLs. Corrected the misleading 'sanitised-friendly' doc note."
+    },
     "1.19.0": {
       "date": "2026-06-15",
       "breaking": false,
@@ -861,6 +866,10 @@
           "type": "string",
           "default": "10rem",
           "description": "CSS min-height of the editable area"
+        },
+        "sanitize": {
+          "type": "function",
+          "description": "(html: string) => string. Optional sanitizer run on render-in AND emit-out. The component is zero-dependency and does NOT sanitize untrusted HTML by itself — pass your own (e.g. DOMPurify.sanitize) for untrusted content. The link tool always blocks javascript:/data:/vbscript: URLs."
         }
       },
       "antiPatterns": [
@@ -868,6 +877,11 @@
           "pattern": "RichTextEditor without value/onChange (React) or v-model (Vue)",
           "reason": "It is fully controlled; edits won't persist",
           "fix": "Keep the HTML string in state and update it in onChange / v-model"
+        },
+        {
+          "pattern": "Binding untrusted HTML to value without the sanitize prop",
+          "reason": "value is rendered as raw HTML (innerHTML) — stored XSS risk",
+          "fix": "Pass sanitize={DOMPurify.sanitize} (or sanitize before storing) for untrusted content"
         },
         {
           "pattern": "Rendering value as text or with dangerouslySetInnerHTML elsewhere without sanitising",

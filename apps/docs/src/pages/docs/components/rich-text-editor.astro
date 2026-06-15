@@ -54,6 +54,7 @@ const props = [
   { name: "readOnly",        type: "boolean",                default: "false", description: "Not editable; toolbar hidden entirely (render-only)." },
   { name: "toolbar",         type: "RichTextTool[]",         default: "all",   description: 'Which buttons to show: "bold" | "italic" | "underline" | "strike" | "h1" | "h2" | "h3" | "ul" | "ol" | "quote" | "code" | "link" | "clear".' },
   { name: "minHeight",       type: "string",                 default: '"10rem"', description: "CSS min-height of the editable area." },
+  { name: "sanitize",        type: "(html: string) => string", default: "—",   description: "Optional sanitizer run on render-in and emit-out. The editor is zero-dependency and does NOT sanitize untrusted HTML by itself — pass your own (e.g. DOMPurify.sanitize) for untrusted content. The link tool always blocks javascript:/data:/vbscript: URLs." },
   { name: "className / class", type: "string",               default: "—",     description: "Additional CSS class on the root element." },
 ];
 ---
