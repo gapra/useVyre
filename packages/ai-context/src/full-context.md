@@ -767,6 +767,7 @@ import { Select } from "@usevyre/react"
 // size           = "sm" | "md" | "lg" (default: md)
 // placeholder    = string
 // disabled       = boolean (default: false)
+// disablePortal  = boolean (default: false)
 
 // Examples:
 <Select
@@ -1023,6 +1024,7 @@ import { Tooltip } from "@usevyre/react"
 // content        = string | ReactNode
 // placement      = "top" | "bottom" | "left" | "right" (default: top)
 // delay          = number (default: 300)
+// disablePortal  = boolean (default: false)
 
 // Examples:
 <Tooltip content="Close dialog" placement="bottom">
