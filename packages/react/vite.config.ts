@@ -31,6 +31,11 @@ export default defineConfig({
     rollupOptions: {
       external: ["react", "react-dom", "react/jsx-runtime"],
       output: {
+        // Mark the whole bundle as a Client Component so the components (33 use
+        // hooks) work out of the box in React Server Components / Next.js App
+        // Router without consumers adding "use client" themselves. Emitted as
+        // the first line, above the imports.
+        banner: '"use client";',
         globals: {
           react: "React",
           "react-dom": "ReactDOM",
