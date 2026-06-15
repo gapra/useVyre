@@ -8,7 +8,7 @@ export function FormDemo() {
   return (
     <Form
       values={values}
-      onChange={setValues}
+      onChange={(v) => setValues(v as typeof values)}
       onSubmit={() => setDone(true)}
       style={{ width: "100%", maxWidth: 360 }}
     >

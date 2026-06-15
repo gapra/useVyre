@@ -45,9 +45,11 @@ export function AuthExample() {
 
         <CardBody>
           {showHint && (
-            <Alert variant="info" style={{ marginBottom: 16 }}>
-              This is a demo — submission is stubbed.
-            </Alert>
+            <div style={{ marginBottom: 16 }}>
+              <Alert variant="info">
+                This is a demo — submission is stubbed.
+              </Alert>
+            </div>
           )}
 
           <form onSubmit={handleSubmit} className="vyre-example-auth__form">

@@ -35,7 +35,7 @@ import {
   Checkbox,
   RichTextEditor,
 } from "@usevyre/react";
-import type { KanbanColumn, ConversationMessage } from "@usevyre/react";
+import type { KanbanColumn, KanbanCard, ConversationMessage } from "@usevyre/react";
 
 // ── ButtonGroup ───────────────────────────────────────────────
 export function ButtonGroupBasicDemo() {
@@ -565,7 +565,7 @@ export function KanbanComplexDemo() {
           tags: ["backend", "security"],
           progress: 20,
           priority: "High",
-        } satisfies RichCard,
+        } as unknown as KanbanCard,
       ],
     },
     {
@@ -580,7 +580,7 @@ export function KanbanComplexDemo() {
           tags: ["design", "frontend"],
           progress: 60,
           priority: "Medium",
-        } satisfies RichCard,
+        } as unknown as KanbanCard,
       ],
     },
   ]);

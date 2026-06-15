@@ -538,9 +538,10 @@ export function CommandInlineDemo() {
   const [last, setLast] = useState<string | null>(null);
   return (
     <div style={{ padding: "24px 0", display: "flex", flexDirection: "column", gap: 12 }}>
-      <Command style={{ border: "1px solid var(--vyre-color-semantic-border)", borderRadius: "var(--vyre-border-radius-xl)", maxWidth: 400, margin: "0 auto", width: "100%" }}>
+      <div style={{ border: "1px solid var(--vyre-color-semantic-border)", borderRadius: "var(--vyre-border-radius-xl)", maxWidth: 400, margin: "0 auto", width: "100%", overflow: "hidden" }}>
+      <Command>
         <CommandInput placeholder="Search commands..." />
-        <CommandList style={{ maxHeight: 280 }}>
+        <CommandList>
           <CommandEmpty>No results found.</CommandEmpty>
           <CommandGroup heading="Navigation">
             <CommandItem icon={<FileIcon />} shortcut="⌘N" onSelect={() => setLast("New file")}>New file</CommandItem>
@@ -554,6 +555,7 @@ export function CommandInlineDemo() {
           </CommandGroup>
         </CommandList>
       </Command>
+      </div>
       {last && (
         <p style={{ margin: "0 auto", fontSize: "0.8125rem", opacity: 0.6 }}>
           Selected: <strong>{last}</strong>
@@ -778,7 +780,7 @@ export function SidebarCollapsibleDemo() {
   const [active, setActive] = useState("dashboard");
   return (
     <div style={{ height: "280px", border: "1px solid var(--vyre-color-semantic-border)", borderRadius: "var(--vyre-border-radius-lg)", overflow: "hidden" }}>
-      <AppLayout defaultCollapsed={false} style={{ height: "100%", minHeight: "unset" }}>
+      <AppLayout defaultCollapsed={false}>
         <Sidebar>
           <SidebarHeader title="App" logo={<svg width="24" height="24" viewBox="0 0 24 24" fill="var(--vyre-color-semantic-accent)"><rect width="24" height="24" rx="6"/><path d="M7 12l4 4 6-6" stroke="white" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/></svg>} />
           <SidebarContent>
@@ -825,7 +827,7 @@ export function SidebarTriggerIconDemo() {
   const [active, setActive] = useState("dashboard");
   return (
     <div style={{ height: "280px", border: "1px solid var(--vyre-color-semantic-border)", borderRadius: "var(--vyre-border-radius-lg)", overflow: "hidden" }}>
-      <AppLayout defaultCollapsed={false} style={{ height: "100%", minHeight: "unset" }}>
+      <AppLayout defaultCollapsed={false}>
         <Sidebar>
           <SidebarHeader title="App" logo={<svg width="24" height="24" viewBox="0 0 24 24" fill="var(--vyre-color-semantic-accent)"><rect width="24" height="24" rx="6"/><path d="M7 12l4 4 6-6" stroke="white" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/></svg>} />
           <SidebarContent>
@@ -868,7 +870,7 @@ export function SidebarLayoutDemo() {
   const page = pages[active];
   return (
     <div style={{ height: "400px", border: "1px solid var(--vyre-color-semantic-border)", borderRadius: "var(--vyre-border-radius-lg)", overflow: "hidden" }}>
-      <AppLayout style={{ height: "100%", minHeight: "unset" }}>
+      <AppLayout>
         <Sidebar>
           <SidebarHeader title="Workspace" logo={<AppLogo />} />
           <SidebarContent>
