@@ -55,15 +55,13 @@ import React, {
   useState,
   useRef,
   useEffect,
-  useLayoutEffect,
   useCallback,
   useId,
 } from "react";
 import { createPortal } from "react-dom";
 import { cn } from "../../utils/cn";
+import { usePortalPosition } from "../../utils/usePortalPosition";
 import type { BaseProps } from "../../types";
-
-const GAP = 4;
 
 type ComboboxSize = "sm" | "md" | "lg";
 
@@ -91,13 +89,6 @@ export interface ComboboxProps
   disablePortal?: boolean;
 }
 
-interface DropdownPosition {
-  top: number;
-  left: number;
-  width: number;
-  flip: boolean;
-}
-
 export const Combobox = React.forwardRef<HTMLDivElement, ComboboxProps>(
   (
     {
@@ -117,18 +108,15 @@ export const Combobox = React.forwardRef<HTMLDivElement, ComboboxProps>(
     const [open, setOpen] = useState(false);
     const [search, setSearch] = useState("");
     const [highlightedIndex, setHighlightedIndex] = useState(-1);
-    const [position, setPosition] = useState<DropdownPosition>({
-      top: 0,
-      left: 0,
-      width: 0,
-      flip: false,
-    });
 
     const inputRef = useRef<HTMLInputElement>(null);
     const dropdownRef = useRef<HTMLUListElement>(null);
     const wrapperRef = useRef<HTMLDivElement | null>(null);
     const id = useId();
     const listboxId = `${id}-listbox`;
+
+    // Portaled dropdown placement (below the input, flips above when needed).
+    const position = usePortalPosition(inputRef, dropdownRef, open, disablePortal, [search]);
 
     const selectedOption = options.find((o) => o.value === value) ?? null;
 
@@ -166,36 +154,6 @@ export const Combobox = React.forwardRef<HTMLDivElement, ComboboxProps>(
       document.addEventListener("mousedown", handle);
       return () => document.removeEventListener("mousedown", handle);
     }, [open, closeDropdown]);
-
-    // Position the portaled dropdown against the input rect, and keep it in
-    // sync while open (scroll inside a Modal, window resize, etc.).
-    useLayoutEffect(() => {
-      if (!open || disablePortal) return;
-      const compute = () => {
-        const input = inputRef.current;
-        if (!input) return;
-        const rect = input.getBoundingClientRect();
-        const dropdownHeight = dropdownRef.current?.offsetHeight ?? 0;
-        const spaceBelow = window.innerHeight - rect.bottom;
-        const flip = dropdownHeight > 0 && spaceBelow < dropdownHeight + GAP;
-        setPosition({
-          top: flip
-            ? rect.top + window.scrollY - GAP - dropdownHeight
-            : rect.bottom + window.scrollY + GAP,
-          left: rect.left + window.scrollX,
-          width: rect.width,
-          flip,
-        });
-      };
-      compute();
-      // capture:true so scrolling INSIDE a Modal body is caught, not only window.
-      window.addEventListener("scroll", compute, true);
-      window.addEventListener("resize", compute);
-      return () => {
-        window.removeEventListener("scroll", compute, true);
-        window.removeEventListener("resize", compute);
-      };
-    }, [open, disablePortal, search]);
 
     // Scroll highlighted option into view WITHIN the dropdown only. We adjust the
     // dropdown's own scrollTop instead of element.scrollIntoView(), because once
