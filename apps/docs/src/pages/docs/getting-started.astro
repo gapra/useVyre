@@ -29,14 +29,12 @@ pnpm add @usevyre/all`;
 
 
 const setupReact = `// main.tsx or your entry file
-import "@usevyre/tokens/css";        // ← design tokens
-import "@usevyre/react/styles";      // ← component styles
+import "@usevyre/react/styles";      // ← tokens + component styles (one import)
 
 import { Button, Badge, Card } from "@usevyre/react";`;
 
 const setupVue = `// main.ts
-import "@usevyre/tokens/css";
-import "@usevyre/vue/styles";
+import "@usevyre/vue/styles";        // ← tokens + component styles (one import)
 
 import { createApp } from "vue";
 import App from "./App.vue";
@@ -145,7 +143,8 @@ $(cat node_modules/@usevyre/tokens/dist/ai-context.md)`;
 
   <h2 class="docs-h2">Setup</h2>
   <p class="docs-p">
-    Import the tokens CSS and component styles once at your app entry point.
+    Import the styles once at your app entry point. This single file includes the
+    design tokens and all component styles.
   </p>
 
   <div class="docs-tabs" id="setup-tabs">

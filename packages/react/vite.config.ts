@@ -1,20 +1,30 @@
 import { defineConfig } from "vite";
 import react from "@vitejs/plugin-react";
 import { resolve } from "path";
-import { mkdirSync, copyFileSync } from "fs";
+import { mkdirSync, readFileSync, writeFileSync } from "fs";
 
-// Copies the component stylesheet into dist/styles after every (re)build.
-// Runs in both `vite build` and `vite build --watch` (dev), so the
-// "@usevyre/react/styles" export is never missing — unlike a separate
-// `cp` step that only runs in the full build script.
+// Builds dist/styles/components.css after every (re)build, combining the design
+// tokens (CSS variables the components depend on) with the component styles.
+// One import — `@usevyre/react/styles` — now ships everything, so consumers no
+// longer have to remember a separate `@usevyre/tokens/css` import (a common
+// "components render unstyled" footgun). Runs in both `vite build` and
+// `vite build --watch` (dev) so the export is never missing or partial.
 function copyStyles() {
   return {
     name: "vyre-copy-styles",
     writeBundle() {
-      mkdirSync(resolve(__dirname, "dist/styles"), { recursive: true });
-      copyFileSync(
+      const tokens = readFileSync(
+        resolve(__dirname, "../tokens/dist/vyre.css"),
+        "utf8"
+      );
+      const components = readFileSync(
         resolve(__dirname, "src/styles/components.css"),
-        resolve(__dirname, "dist/styles/components.css")
+        "utf8"
+      );
+      mkdirSync(resolve(__dirname, "dist/styles"), { recursive: true });
+      writeFileSync(
+        resolve(__dirname, "dist/styles/components.css"),
+        `/* @usevyre/react styles — design tokens + component styles (self-contained) */\n${tokens}\n${components}`
       );
     },
   };

@@ -19,8 +19,7 @@ Import once at your app entry point:
 
 ```ts
 // main.ts
-import "@usevyre/tokens/css";   // design tokens — required
-import "@usevyre/vue/styles";   // component styles — required
+import "@usevyre/vue/styles";   // tokens + component styles (one import)
 
 import { createApp } from "vue";
 import App from "./App.vue";
