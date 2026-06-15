@@ -1,14 +1,24 @@
 {
   "$schema": "http://json-schema.org/draft-07/schema#",
-  "version": "1.17.0",
-  "generatedAt": "2026-06-14",
+  "version": "1.19.0",
+  "generatedAt": "2026-06-15",
   "package": "@usevyre/react",
-  "packageVersion": "1.17.0",
+  "packageVersion": "1.19.0",
   "validFor": [
     "@usevyre/react@1.1.0+",
     "@usevyre/vue@1.1.0+"
   ],
   "changelog": {
+    "1.19.0": {
+      "date": "2026-06-15",
+      "breaking": false,
+      "summary": "Tooltip: now portals to <body> by default so it stays visible inside Modal / overflow:hidden containers (same overlay-clip fix as Combobox #18 / Select). New `disablePortal` boolean (default false) restores inline rendering."
+    },
+    "1.18.0": {
+      "date": "2026-06-15",
+      "breaking": false,
+      "summary": "Select: dropdown now portals to <body> by default so it stays visible inside Modal / overflow:hidden containers (same fix as Combobox #18). New `disablePortal` boolean (default false) restores inline rendering."
+    },
     "1.17.0": {
       "date": "2026-06-14",
       "breaking": false,
@@ -1287,6 +1297,11 @@
         "disabled": {
           "type": "boolean",
           "default": false
+        },
+        "disablePortal": {
+          "type": "boolean",
+          "default": false,
+          "description": "Render the dropdown inline instead of teleporting it to <body>. Default false: the dropdown portals to body so it stays visible inside Modal / overflow:hidden containers"
         }
       },
       "antiPatterns": [
@@ -1657,6 +1672,11 @@
           "type": "number",
           "default": 300,
           "description": "Delay in ms before tooltip appears"
+        },
+        "disablePortal": {
+          "type": "boolean",
+          "default": false,
+          "description": "Render the tooltip inline instead of teleporting it to <body>. Default false: the tooltip portals to body so it stays visible inside Modal / overflow:hidden containers"
         }
       },
       "antiPatterns": [

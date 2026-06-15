@@ -217,12 +217,22 @@ watch(filtered, () => {
   highlightedIndex.value = filtered.value.length > 0 ? 0 : -1;
 });
 
-// Scroll highlighted item into view
+// Scroll highlighted item into view WITHIN the dropdown only. We adjust the
+// dropdown's own scrollTop instead of element.scrollIntoView(), because once the
+// dropdown is teleported to <body> scrollIntoView scrolls the whole page.
 watch(highlightedIndex, async (idx) => {
   if (!open.value || idx < 0) return;
   await nextTick();
-  const item = dropdownRef.value?.children[idx] as HTMLElement | undefined;
-  item?.scrollIntoView({ block: "nearest" });
+  const list = dropdownRef.value;
+  const item = list?.children[idx] as HTMLElement | undefined;
+  if (!list || !item) return;
+  const itemTop = item.offsetTop;
+  const itemBottom = itemTop + item.offsetHeight;
+  if (itemTop < list.scrollTop) {
+    list.scrollTop = itemTop;
+  } else if (itemBottom > list.scrollTop + list.clientHeight) {
+    list.scrollTop = itemBottom - list.clientHeight;
+  }
 });
 
 const wrapperClasses = computed(() =>

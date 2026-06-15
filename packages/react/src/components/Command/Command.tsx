@@ -133,6 +133,41 @@ export const Command = React.forwardRef<HTMLDivElement, CommandProps>(
       selectItem, onSelectRef, visibleCount, setVisibleCount,
     }), [search, setSearch, activeIndex, registerItem, unregisterItem, selectItem, visibleCount]);
 
+    // Keyboard navigation lives on the root so it works no matter which child
+    // holds focus (the CommandInput, a sibling of CommandList, is where focus
+    // actually is). Attaching to CommandList alone never fires — that div is not
+    // focused and the input's keydown does not bubble through a sibling.
+    // Scroll the active item within the list container only — never the page.
+    // (element.scrollIntoView would scroll the document, like the Select bug.)
+    const scrollItemIntoList = (el?: HTMLElement) => {
+      const list = el?.closest<HTMLElement>(".vyre-command__list");
+      if (!el || !list) return;
+      const top = el.offsetTop;
+      const bottom = top + el.offsetHeight;
+      if (top < list.scrollTop) list.scrollTop = top;
+      else if (bottom > list.scrollTop + list.clientHeight) list.scrollTop = bottom - list.clientHeight;
+    };
+
+    const handleKeyDown = useCallback((e: React.KeyboardEvent) => {
+      const visible = Array.from(itemsRef.current.entries())
+        .filter(([, v]) => !v.disabled && !v.el.hasAttribute("data-cmd-hidden"));
+      if (e.key === "ArrowDown") {
+        e.preventDefault();
+        const next = Math.min(activeIndex + 1, visible.length - 1);
+        setActiveIndex(next);
+        scrollItemIntoList(visible[next]?.[1].el);
+      } else if (e.key === "ArrowUp") {
+        e.preventDefault();
+        const prev = Math.max(activeIndex - 1, 0);
+        setActiveIndex(prev);
+        scrollItemIntoList(visible[prev]?.[1].el);
+      } else if (e.key === "Enter") {
+        e.preventDefault();
+        const [id] = visible[activeIndex] ?? [];
+        if (id) selectItem(id);
+      }
+    }, [activeIndex, selectItem]);
+
     return (
       <CommandContext.Provider value={ctx}>
         <div
@@ -141,6 +176,7 @@ export const Command = React.forwardRef<HTMLDivElement, CommandProps>(
           role="combobox"
           aria-expanded="true"
           aria-haspopup="listbox"
+          onKeyDown={handleKeyDown}
         >
           {children}
         </div>
@@ -205,34 +241,15 @@ export interface CommandListProps {
 
 export const CommandList = React.forwardRef<HTMLDivElement, CommandListProps>(
   ({ className, children }, ref) => {
-    const { activeIndex, setActiveIndex, items, selectItem } = useCommand();
-
-    const handleKeyDown = useCallback((e: React.KeyboardEvent) => {
-      const visible = Array.from((items.current ?? new Map()).entries())
-        .filter(([, v]) => !v.disabled && v.el.closest("[data-cmd-item]") !== null && !v.el.hasAttribute("data-cmd-hidden"));
-
-      if (e.key === "ArrowDown") {
-        e.preventDefault();
-        setActiveIndex(Math.min(activeIndex + 1, visible.length - 1));
-        visible[Math.min(activeIndex + 1, visible.length - 1)]?.[1].el.scrollIntoView({ block: "nearest" });
-      } else if (e.key === "ArrowUp") {
-        e.preventDefault();
-        setActiveIndex(Math.max(activeIndex - 1, 0));
-        visible[Math.max(activeIndex - 1, 0)]?.[1].el.scrollIntoView({ block: "nearest" });
-      } else if (e.key === "Enter") {
-        e.preventDefault();
-        const [id] = visible[activeIndex] ?? [];
-        if (id) selectItem(id);
-      }
-    }, [activeIndex, setActiveIndex, items, selectItem]);
-
+    // Keyboard navigation is handled at the Command root (see Command), so it
+    // fires regardless of which child has focus. The list is just the scroll
+    // container + listbox region here.
     return (
       <div
         ref={ref}
         id="vyre-command-list"
         role="listbox"
         className={cn("vyre-command__list", className)}
-        onKeyDown={handleKeyDown}
       >
         {children}
       </div>
@@ -300,12 +317,19 @@ export interface CommandItemProps {
 export const CommandItem: React.FC<CommandItemProps> = ({
   onSelect, disabled = false, keywords, className, children, icon, shortcut,
 }) => {
-  const { search, setActiveIndex, registerItem, unregisterItem, onSelectRef, setVisibleCount } = useCommand();
+  const { search, activeIndex, setActiveIndex, items, registerItem, unregisterItem, onSelectRef, setVisibleCount } = useCommand();
   const id = useMemo(() => uid(), []);
   const ref = useRef<HTMLDivElement>(null);
 
   const textContent = typeof children === "string" ? children : "";
   const visible = matches(search, textContent, keywords);
+
+  // This item is active when its position among the enabled+visible registered
+  // items (the same list keyboard nav walks) equals activeIndex. Reflecting it
+  // via aria-selected drives the highlight CSS and assistive tech.
+  const navList = Array.from(items.current?.entries() ?? [])
+    .filter(([, v]) => !v.disabled && !v.el.hasAttribute("data-cmd-hidden"));
+  const isActive = !disabled && navList[activeIndex]?.[0] === id;
 
   useEffect(() => {
     setVisibleCount((c) => c + (visible ? 1 : 0));
@@ -326,12 +350,12 @@ export const CommandItem: React.FC<CommandItemProps> = ({
 
   if (!visible) return null;
 
-  // determine aria-selected based on activeIndex position among visible items
   return (
     <div
       ref={ref}
       data-cmd-item
       role="option"
+      aria-selected={isActive || undefined}
       aria-disabled={disabled || undefined}
       className={cn(
         "vyre-command__item",

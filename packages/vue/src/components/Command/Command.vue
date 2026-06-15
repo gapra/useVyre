@@ -51,10 +51,13 @@ const search = computed({
 });
 
 const activeIndex = ref(0);
+// Items live in a plain (non-reactive) Map; activeTick is bumped whenever the
+// active item changes so CommandItem can reactively recompute its own state.
+const activeTick = ref(0);
 const items = new Map<string, { el: HTMLElement; disabled: boolean; onSelect?: () => void }>();
 
-function setSearch(v: string) { search.value = v; activeIndex.value = 0; }
-function setActiveIndex(i: number) { activeIndex.value = i; }
+function setSearch(v: string) { search.value = v; activeIndex.value = 0; activeTick.value++; }
+function setActiveIndex(i: number) { activeIndex.value = i; activeTick.value++; }
 
 function getVisible() {
   return Array.from(items.entries()).filter(([, v]) => !v.disabled && v.el.offsetParent !== null);
@@ -73,10 +76,29 @@ function moveActive(dir: 1 | -1) {
   const visible = getVisible();
   const next = Math.max(0, Math.min(activeIndex.value + dir, visible.length - 1));
   activeIndex.value = next;
-  visible[next]?.[1].el.scrollIntoView({ block: "nearest" });
+  // Scroll the active item within the list only (never the page): adjust the
+  // list's own scrollTop instead of element.scrollIntoView().
+  const item = visible[next]?.[1].el;
+  const list = item?.closest<HTMLElement>(".vyre-command__list");
+  if (item && list) {
+    const top = item.offsetTop;
+    const bottom = top + item.offsetHeight;
+    if (top < list.scrollTop) list.scrollTop = top;
+    else if (bottom > list.scrollTop + list.clientHeight) list.scrollTop = bottom - list.clientHeight;
+  }
+  // Bump the active-id tick so items recompute their selected state.
+  activeTick.value++;
 }
 
-provide(COMMAND_KEY, { search, setSearch, activeIndex, setActiveIndex, registerItem, unregisterItem, selectActive, moveActive, visibleCount, incrementVisible, decrementVisible });
+// Items can't watch the non-reactive Map, so isItemActive depends on activeTick
+// (bumped on every active-item change) and recomputes position against registry.
+function isItemActive(id: string) {
+  void activeTick.value; // reactive dependency
+  const visible = getVisible();
+  return visible[activeIndex.value]?.[0] === id;
+}
+
+provide(COMMAND_KEY, { search, setSearch, activeIndex, setActiveIndex, registerItem, unregisterItem, selectActive, moveActive, visibleCount, incrementVisible, decrementVisible, isItemActive });
 </script>
 
 <template>

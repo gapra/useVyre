@@ -70,4 +70,17 @@ describe("Combobox — dropdown portal (issue #18)", () => {
     fireEvent.mouseDown(screen.getByText("Rust"));
     expect(onChange).toHaveBeenCalledWith("rs");
   });
+
+  it("does not scroll the page when opened (portaled option must not call scrollIntoView)", () => {
+    const spy = vi
+      .spyOn(Element.prototype, "scrollIntoView")
+      .mockImplementation(() => {});
+    try {
+      render(<R.Combobox options={OPTIONS} value="rs" onChange={() => {}} />);
+      fireEvent.focus(screen.getByRole("combobox"));
+      expect(spy).not.toHaveBeenCalled();
+    } finally {
+      spy.mockRestore();
+    }
+  });
 });

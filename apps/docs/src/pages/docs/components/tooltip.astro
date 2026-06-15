@@ -69,6 +69,7 @@ const props = [
   { name: "content",   type: "string | ReactNode",                    default: "—",      description: "Tooltip text or content." },
   { name: "placement", type: `"top" | "bottom" | "left" | "right"`,  default: `"top"`,  description: "Preferred position relative to the trigger." },
   { name: "delay",     type: "number",                                default: "300",    description: "Delay in ms before showing on hover." },
+  { name: "disablePortal", type: "boolean",                           default: "false",  description: "Render the tooltip inline instead of teleporting it to <body>. By default it portals so it stays visible inside Modal / overflow:hidden containers." },
   { name: "class / className", type: "string",                        default: "—",      description: "Additional CSS class on the tooltip bubble." },
 ];
 ---

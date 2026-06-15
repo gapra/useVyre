@@ -197,11 +197,21 @@ export const Combobox = React.forwardRef<HTMLDivElement, ComboboxProps>(
       };
     }, [open, disablePortal, search]);
 
-    // Scroll highlighted option into view
+    // Scroll highlighted option into view WITHIN the dropdown only. We adjust the
+    // dropdown's own scrollTop instead of element.scrollIntoView(), because once
+    // the dropdown is portaled to <body> scrollIntoView scrolls the whole page.
     useEffect(() => {
       if (!open || highlightedIndex < 0) return;
-      const item = dropdownRef.current?.children[highlightedIndex] as HTMLElement | undefined;
-      item?.scrollIntoView({ block: "nearest" });
+      const list = dropdownRef.current;
+      const item = list?.children[highlightedIndex] as HTMLElement | undefined;
+      if (!list || !item) return;
+      const itemTop = item.offsetTop;
+      const itemBottom = itemTop + item.offsetHeight;
+      if (itemTop < list.scrollTop) {
+        list.scrollTop = itemTop;
+      } else if (itemBottom > list.scrollTop + list.clientHeight) {
+        list.scrollTop = itemBottom - list.clientHeight;
+      }
     }, [highlightedIndex, open]);
 
     // Reset highlight when filter changes
