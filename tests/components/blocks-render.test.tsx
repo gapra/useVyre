@@ -60,13 +60,18 @@ describe("blocks render + lay out correctly", () => {
     expect(rows.length).toBe(1); // the GitHub/Google row
   });
 
-  it("StatsRow mounts", () => {
+  it("StatsRow mounts (StatGroup inside a full-width Card)", () => {
     const { container } = render(
-      <R.StatGroup>
-        <R.Stat label="Revenue" value="$48,200" delta={12.5} trend="up" deltaLabel="vs last month" />
-        <R.Stat label="Active users" value="2,340" delta={3.1} trend="up" />
-      </R.StatGroup>,
+      <R.Card style={{ width: "100%" }}>
+        <R.CardBody>
+          <R.StatGroup>
+            <R.Stat label="Revenue" value="$48,200" delta={12.5} trend="up" deltaLabel="vs last month" />
+            <R.Stat label="Active users" value="2,340" delta={3.1} trend="up" />
+          </R.StatGroup>
+        </R.CardBody>
+      </R.Card>,
     );
+    expect(container.querySelector(".vyre-card")).toBeTruthy();
     expect(container.textContent).toContain("$48,200");
   });
 
