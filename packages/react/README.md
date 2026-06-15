@@ -19,8 +19,7 @@ Import once at your app entry point:
 
 ```ts
 // main.tsx
-import "@usevyre/tokens/css";    // design tokens — required
-import "@usevyre/react/styles";  // component styles — required
+import "@usevyre/react/styles";  // tokens + component styles (one import)
 
 import { StrictMode } from "react";
 import { createRoot } from "react-dom/client";

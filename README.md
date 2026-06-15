@@ -67,8 +67,7 @@ npm install @usevyre/tokens @usevyre/vue
 
 ```ts
 // Import once at your app entry point
-import "@usevyre/tokens/css";     // design tokens (required)
-import "@usevyre/react/styles";   // component styles
+import "@usevyre/react/styles";   // tokens + component styles (one import)
 
 import { Button, Card, DataGrid } from "@usevyre/react";
 ```
