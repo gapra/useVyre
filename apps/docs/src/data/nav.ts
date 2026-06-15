@@ -26,6 +26,7 @@ export const navigation: NavSection[] = [
     title: "Examples",
     items: [
       { title: "All examples",   href: "/examples"                  },
+      { title: "Blocks",         href: "/docs/blocks"               },
       { title: "Dashboard app",  href: "/examples/dashboard-app/"   },
       { title: "Dashboard",      href: "/examples/dashboard"        },
       { title: "Sign-in",        href: "/examples/auth"             },

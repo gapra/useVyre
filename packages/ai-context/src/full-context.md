@@ -2126,6 +2126,370 @@ const [range, setRange] = useState({ from: null, to: null });
 
 ---
 
+## Composition Blocks
+
+Ready-made compositions of useVyre components for whole sections/pages. Copy, paste, and adapt — they are a starting point, not fixed components. Prefer composing a page from these patterns over inventing layout from scratch.
+
+# AuthCard
+
+A centered sign-in card: email + password fields, a primary submit, and OAuth
+options. A starting point — copy it and adjust.
+
+**Use when:** building a login or sign-in screen.
+**Components:** Card, CardBody, Field, Input, Button, Checkbox, Heading, Text, Stack
+
+## React
+
+```tsx
+import {
+  Card, CardBody, Field, Input, Button, Checkbox, Heading, Text, Stack,
+} from "@usevyre/react";
+
+export function AuthCard() {
+  return (
+    <Card variant="elevated" style={{ maxWidth: 420, margin: "0 auto" }}>
+      <CardBody>
+        <Stack direction="column" gap="md">
+          <div>
+            <Heading size="lg">Sign in</Heading>
+            <Text color="muted">Welcome back. Enter your details.</Text>
+          </div>
+
+          <Field label="Email">
+            <Input type="email" placeholder="you@example.com" />
+          </Field>
+
+          <Field label="Password">
+            <Input type="password" placeholder="••••••••" />
+          </Field>
+
+          <label style={{ display: "flex", alignItems: "center", gap: "var(--vyre-spacing-2)" }}>
+            <Checkbox /> Remember me
+          </label>
+
+          <Button variant="accent" style={{ width: "100%" }}>Sign in</Button>
+
+          <Stack direction="row" gap="sm">
+            <Button variant="secondary" style={{ flex: 1 }}>GitHub</Button>
+            <Button variant="secondary" style={{ flex: 1 }}>Google</Button>
+          </Stack>
+        </Stack>
+      </CardBody>
+    </Card>
+  );
+}
+```
+
+## Vue
+
+```vue
+<script setup lang="ts">
+import {
+  Card, CardBody, Field, Input, Button, Checkbox, Heading, Text, Stack,
+} from "@usevyre/vue";
+</script>
+
+<template>
+  <Card variant="elevated" :style="{ maxWidth: '420px', margin: '0 auto' }">
+    <CardBody>
+      <Stack direction="column" gap="md">
+        <div>
+          <Heading size="lg">Sign in</Heading>
+          <Text color="muted">Welcome back. Enter your details.</Text>
+        </div>
+
+        <Field label="Email">
+          <Input type="email" placeholder="you@example.com" />
+        </Field>
+
+        <Field label="Password">
+          <Input type="password" placeholder="••••••••" />
+        </Field>
+
+        <label :style="{ display: 'flex', alignItems: 'center', gap: 'var(--vyre-spacing-2)' }">
+          <Checkbox /> Remember me
+        </label>
+
+        <Button variant="accent" :style="{ width: '100%' }">Sign in</Button>
+
+        <Stack direction="row" gap="sm">
+          <Button variant="secondary" :style="{ flex: 1 }">GitHub</Button>
+          <Button variant="secondary" :style="{ flex: 1 }">Google</Button>
+        </Stack>
+      </Stack>
+    </CardBody>
+  </Card>
+</template>
+```
+
+---
+
+# EmptyStateBlock
+
+A friendly empty state with a primary call to action — for first-run screens or
+zero-result lists.
+
+**Use when:** a list/section has no data yet, or a search returns nothing.
+**Components:** EmptyState, Button
+
+## React
+
+```tsx
+import { EmptyState, Button } from "@usevyre/react";
+
+export function EmptyStateBlock() {
+  return (
+    <EmptyState
+      title="No projects yet"
+      description="Create your first project to get started."
+    >
+      <Button variant="accent">New project</Button>
+    </EmptyState>
+  );
+}
+```
+
+## Vue
+
+```vue
+<script setup lang="ts">
+import { EmptyState, Button } from "@usevyre/vue";
+</script>
+
+<template>
+  <EmptyState
+    title="No projects yet"
+    description="Create your first project to get started."
+  >
+    <Button variant="accent">New project</Button>
+  </EmptyState>
+</template>
+```
+
+---
+
+# PricingSection
+
+A three-tier pricing section. Each plan is a Card; the recommended one is
+highlighted with a Badge. Edit the plans array to taste.
+
+**Use when:** building a pricing or upgrade page.
+**Components:** Grid, Card, CardBody, Badge, Heading, Text, Button, Stack
+
+## React
+
+```tsx
+import { Grid, Card, CardBody, Badge, Heading, Text, Button, Stack } from "@usevyre/react";
+
+const plans = [
+  { name: "Starter", price: "$0", features: ["1 project", "Community support"], featured: false },
+  { name: "Pro", price: "$19", features: ["Unlimited projects", "Email support", "Analytics"], featured: true },
+  { name: "Team", price: "$49", features: ["Everything in Pro", "SSO", "Audit log"], featured: false },
+];
+
+export function PricingSection() {
+  return (
+    <Grid columns={3} gap="lg">
+      {plans.map((plan) => (
+        <Card key={plan.name} variant={plan.featured ? "elevated" : "outlined"}>
+          <CardBody>
+            <Stack direction="column" gap="md">
+              <Stack direction="row" gap="sm" align="center">
+                <Heading size="md">{plan.name}</Heading>
+                {plan.featured && <Badge variant="success">Popular</Badge>}
+              </Stack>
+              <Heading size="xl">{plan.price}<Text as="span" color="muted"> /mo</Text></Heading>
+              <Stack direction="column" gap="xs">
+                {plan.features.map((f) => <Text key={f}>{f}</Text>)}
+              </Stack>
+              <Button variant={plan.featured ? "accent" : "secondary"} style={{ width: "100%" }}>
+                Choose {plan.name}
+              </Button>
+            </Stack>
+          </CardBody>
+        </Card>
+      ))}
+    </Grid>
+  );
+}
+```
+
+## Vue
+
+```vue
+<script setup lang="ts">
+import { Grid, Card, CardBody, Badge, Heading, Text, Button, Stack } from "@usevyre/vue";
+
+const plans = [
+  { name: "Starter", price: "$0", features: ["1 project", "Community support"], featured: false },
+  { name: "Pro", price: "$19", features: ["Unlimited projects", "Email support", "Analytics"], featured: true },
+  { name: "Team", price: "$49", features: ["Everything in Pro", "SSO", "Audit log"], featured: false },
+];
+</script>
+
+<template>
+  <Grid :columns="3" gap="lg">
+    <Card v-for="plan in plans" :key="plan.name" :variant="plan.featured ? 'elevated' : 'outlined'">
+      <CardBody>
+        <Stack direction="column" gap="md">
+          <Stack direction="row" gap="sm" align="center">
+            <Heading size="md">{{ plan.name }}</Heading>
+            <Badge v-if="plan.featured" variant="success">Popular</Badge>
+          </Stack>
+          <Heading size="xl">{{ plan.price }}<Text as="span" color="muted"> /mo</Text></Heading>
+          <Stack direction="column" gap="xs">
+            <Text v-for="f in plan.features" :key="f">{{ f }}</Text>
+          </Stack>
+          <Button :variant="plan.featured ? 'accent' : 'secondary'" :style="{ width: '100%' }">
+            Choose {{ plan.name }}
+          </Button>
+        </Stack>
+      </CardBody>
+    </Card>
+  </Grid>
+</template>
+```
+
+---
+
+# SettingsPanel
+
+A settings card with text fields and toggle rows — the common "Account / 
+Preferences" panel.
+
+**Use when:** building a settings or preferences screen.
+**Components:** Card, CardBody, Heading, Field, Input, Switch, Button, Stack, Text
+
+## React
+
+```tsx
+import { Card, CardBody, Heading, Field, Input, Switch, Button, Stack, Text } from "@usevyre/react";
+
+export function SettingsPanel() {
+  return (
+    <Card variant="outlined" style={{ maxWidth: 560 }}>
+      <CardBody>
+        <Stack direction="column" gap="lg">
+          <Heading size="lg">Settings</Heading>
+
+          <Field label="Display name">
+            <Input placeholder="Ada Lovelace" />
+          </Field>
+          <Field label="Email">
+            <Input type="email" placeholder="ada@example.com" />
+          </Field>
+
+          <label style={{ display: "flex", alignItems: "center", justifyContent: "space-between" }}>
+            <Text>Email notifications</Text>
+            <Switch />
+          </label>
+          <label style={{ display: "flex", alignItems: "center", justifyContent: "space-between" }}>
+            <Text>Two-factor authentication</Text>
+            <Switch />
+          </label>
+
+          <Stack direction="row" gap="sm" justify="end">
+            <Button variant="ghost">Cancel</Button>
+            <Button variant="accent">Save changes</Button>
+          </Stack>
+        </Stack>
+      </CardBody>
+    </Card>
+  );
+}
+```
+
+## Vue
+
+```vue
+<script setup lang="ts">
+import { Card, CardBody, Heading, Field, Input, Switch, Button, Stack, Text } from "@usevyre/vue";
+</script>
+
+<template>
+  <Card variant="outlined" :style="{ maxWidth: '560px' }">
+    <CardBody>
+      <Stack direction="column" gap="lg">
+        <Heading size="lg">Settings</Heading>
+
+        <Field label="Display name">
+          <Input placeholder="Ada Lovelace" />
+        </Field>
+        <Field label="Email">
+          <Input type="email" placeholder="ada@example.com" />
+        </Field>
+
+        <label :style="{ display: 'flex', alignItems: 'center', justifyContent: 'space-between' }">
+          <Text>Email notifications</Text>
+          <Switch />
+        </label>
+        <label :style="{ display: 'flex', alignItems: 'center', justifyContent: 'space-between' }">
+          <Text>Two-factor authentication</Text>
+          <Switch />
+        </label>
+
+        <Stack direction="row" gap="sm" justify="end">
+          <Button variant="ghost">Cancel</Button>
+          <Button variant="accent">Save changes</Button>
+        </Stack>
+      </Stack>
+    </CardBody>
+  </Card>
+</template>
+```
+
+---
+
+# StatsRow
+
+A row of KPI stats for the top of a dashboard, inside a full-width Card so the
+StatGroup has room to split evenly.
+
+**Use when:** showing headline metrics on a dashboard or overview page.
+**Components:** Card, CardBody, StatGroup, Stat
+
+## React
+
+```tsx
+import { Card, CardBody, StatGroup, Stat } from "@usevyre/react";
+
+export function StatsRow() {
+  return (
+    <Card style={{ width: "100%" }}>
+      <CardBody>
+        <StatGroup>
+          <Stat label="Revenue" value="$48,200" delta={12.5} trend="up" deltaLabel="vs last month" />
+          <Stat label="Active users" value="2,340" delta={3.1} trend="up" />
+          <Stat label="Churn" value="1.8%" delta={-0.4} trend="down" deltaLabel="lower is better" />
+        </StatGroup>
+      </CardBody>
+    </Card>
+  );
+}
+```
+
+## Vue
+
+```vue
+<script setup lang="ts">
+import { Card, CardBody, StatGroup, Stat } from "@usevyre/vue";
+</script>
+
+<template>
+  <Card :style="{ width: '100%' }">
+    <CardBody>
+      <StatGroup>
+        <Stat label="Revenue" value="$48,200" :delta="12.5" trend="up" delta-label="vs last month" />
+        <Stat label="Active users" value="2,340" :delta="3.1" trend="up" />
+        <Stat label="Churn" value="1.8%" :delta="-0.4" trend="down" delta-label="lower is better" />
+      </StatGroup>
+    </CardBody>
+  </Card>
+</template>
+```
+
+---
+
 ## Hallucination Guard — Common AI Mistakes
 
 The following prop values and patterns do NOT exist in useVyre.

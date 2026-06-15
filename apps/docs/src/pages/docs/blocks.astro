@@ -1,0 +1,71 @@
+---
+import { readFileSync } from "node:fs";
+import { resolve } from "node:path";
+import DocsLayout       from "@/layouts/DocsLayout.astro";
+import ComponentPreview from "@/components/docs/ComponentPreview.astro";
+import {
+  AuthCardBlock, StatsRowBlock, EmptyStateBlock, PricingSectionBlock, SettingsPanelBlock,
+} from "@/components/demos/BlocksDemo";
+
+// Read the actual block source (React + Vue) so the docs always match the
+// single source of truth in @usevyre/ai-context — no hand-typed drift, and the
+// Vue tab shows the real Vue code.
+const BLOCKS_DIR = resolve(process.cwd(), "../../packages/ai-context/src/blocks");
+
+function blockCode(file: string): { react: string; vue: string } {
+  const md = readFileSync(resolve(BLOCKS_DIR, file), "utf8");
+  const react = md.match(/## React\s+```tsx\n([\s\S]*?)```/)?.[1]?.trim() ?? "";
+  const vue = md.match(/## Vue\s+```vue\n([\s\S]*?)```/)?.[1]?.trim() ?? "";
+  return { react, vue };
+}
+
+const auth     = blockCode("auth-card.md");
+const stats    = blockCode("stats-row.md");
+const empty    = blockCode("empty-state.md");
+const pricing  = blockCode("pricing-section.md");
+const settings = blockCode("settings-panel.md");
+---
+
+<DocsLayout title="Blocks">
+  <div class="docs-header">
+    <h1 class="docs-title">Blocks</h1>
+    <p class="docs-lead">
+      Ready-made compositions of useVyre components for whole sections — copy,
+      paste, and adapt. They are a starting point, not fixed components. Your AI
+      agent knows these patterns too: they're part of the
+      <a href="/docs/ai-context">AI context</a>, so it composes pages correctly.
+    </p>
+  </div>
+
+  <hr class="docs-divider" />
+
+  <h2 class="docs-h2">Auth card</h2>
+  <p class="docs-p">A centered sign-in card. For a login or sign-in screen.</p>
+  <ComponentPreview react={auth.react} vue={auth.vue}>
+    <AuthCardBlock client:visible />
+  </ComponentPreview>
+
+  <h2 class="docs-h2">Stats row</h2>
+  <p class="docs-p">Headline KPIs for the top of a dashboard.</p>
+  <ComponentPreview react={stats.react} vue={stats.vue}>
+    <StatsRowBlock client:visible />
+  </ComponentPreview>
+
+  <h2 class="docs-h2">Empty state</h2>
+  <p class="docs-p">A friendly zero-data screen with a call to action.</p>
+  <ComponentPreview react={empty.react} vue={empty.vue}>
+    <EmptyStateBlock client:visible />
+  </ComponentPreview>
+
+  <h2 class="docs-h2">Pricing section</h2>
+  <p class="docs-p">A three-tier pricing grid with a highlighted plan.</p>
+  <ComponentPreview react={pricing.react} vue={pricing.vue}>
+    <PricingSectionBlock client:visible />
+  </ComponentPreview>
+
+  <h2 class="docs-h2">Settings panel</h2>
+  <p class="docs-p">An account / preferences panel with fields and toggles.</p>
+  <ComponentPreview react={settings.react} vue={settings.vue}>
+    <SettingsPanelBlock client:visible />
+  </ComponentPreview>
+</DocsLayout>
