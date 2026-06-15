@@ -1,5 +1,12 @@
 # @usevyre/vue
 
+## 1.7.1
+
+### Patch Changes
+
+- 80e79c3: `@usevyre/react/styles` and `@usevyre/vue/styles` are now self-contained — they include the design tokens (CSS variables) plus the component styles in one file. A single `import "@usevyre/react/styles"` (or `/vue/styles`) fully styles the components; you no longer need a separate `import "@usevyre/tokens/css"`, removing a common "components render unstyled" footgun. Existing two-import setups keep working (the tokens just load twice, harmlessly).
+- 54e98b8: Internal: extract the shared portal dropdown positioning (anchor rect → below/flip-above placement + scroll/resize tracking) into a `usePortalPosition` helper used by Combobox and Select. No behavior or API change; removes duplicated logic across the two components in each framework.
+
 ## 1.7.0
 
 ### Minor Changes

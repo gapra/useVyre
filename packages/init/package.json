@@ -1,6 +1,6 @@
 {
   "name": "@usevyre/init",
-  "version": "0.0.0",
+  "version": "0.1.0",
   "description": "One-command setup for useVyre in an existing React or Vue project",
   "keywords": [
     "design-system",
