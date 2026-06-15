@@ -9,6 +9,7 @@ export interface CommandCtx {
   unregisterItem: (id: string) => void;
   selectActive: () => void;
   moveActive: (dir: 1 | -1) => void;
+  isItemActive: (id: string) => boolean;
   visibleCount: Ref<number>;
   incrementVisible: () => void;
   decrementVisible: () => void;

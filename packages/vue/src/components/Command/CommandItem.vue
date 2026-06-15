@@ -27,6 +27,8 @@ const visible = computed(() => {
   return (props.keywords ?? []).some((k) => normalize(k).includes(q));
 });
 
+const isActive = computed(() => !props.disabled && ctx.isItemActive(id));
+
 onMounted(() => {
   if (el.value && !props.disabled) {
     ctx.registerItem(id, el.value, props.disabled, () => emit("select"));
@@ -55,6 +57,7 @@ onUnmounted(() => {
     ref="el"
     data-cmd-item
     role="option"
+    :aria-selected="isActive || undefined"
     :aria-disabled="disabled || undefined"
     :class="cn('vyre-command__item', disabled && 'vyre-command__item--disabled', props.class)"
     @click="() => { if (!disabled) emit('select'); }"
