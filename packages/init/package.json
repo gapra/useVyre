@@ -1,0 +1,32 @@
+{
+  "name": "@usevyre/init",
+  "version": "0.0.0",
+  "description": "One-command setup for useVyre in an existing React or Vue project",
+  "keywords": [
+    "design-system",
+    "cli",
+    "setup",
+    "init",
+    "vyre"
+  ],
+  "homepage": "https://usevyre.com/docs/getting-started",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/gapra/usevyre"
+  },
+  "license": "MIT",
+  "type": "module",
+  "bin": {
+    "usevyre-init": "./bin/cli.js"
+  },
+  "exports": {
+    ".": "./src/index.js"
+  },
+  "files": [
+    "bin",
+    "src"
+  ],
+  "engines": {
+    "node": ">=18.0.0"
+  }
+}
