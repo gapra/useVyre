@@ -2149,7 +2149,7 @@ export function AuthCard() {
   return (
     <Card variant="elevated" style={{ maxWidth: 420, margin: "0 auto" }}>
       <CardBody>
-        <Stack gap="md">
+        <Stack direction="column" gap="md">
           <div>
             <Heading size="lg">Sign in</Heading>
             <Text variant="muted">Welcome back. Enter your details.</Text>
@@ -2192,7 +2192,7 @@ import {
 <template>
   <Card variant="elevated" :style="{ maxWidth: '420px', margin: '0 auto' }">
     <CardBody>
-      <Stack gap="md">
+      <Stack direction="column" gap="md">
         <div>
           <Heading size="lg">Sign in</Heading>
           <Text variant="muted">Welcome back. Enter your details.</Text>
@@ -2293,13 +2293,13 @@ export function PricingSection() {
       {plans.map((plan) => (
         <Card key={plan.name} variant={plan.featured ? "elevated" : "outlined"}>
           <CardBody>
-            <Stack gap="md">
+            <Stack direction="column" gap="md">
               <Stack direction="row" gap="sm" align="center">
                 <Heading size="md">{plan.name}</Heading>
                 {plan.featured && <Badge variant="success">Popular</Badge>}
               </Stack>
               <Heading size="xl">{plan.price}<Text as="span" variant="muted"> /mo</Text></Heading>
-              <Stack gap="xs">
+              <Stack direction="column" gap="xs">
                 {plan.features.map((f) => <Text key={f}>{f}</Text>)}
               </Stack>
               <Button variant={plan.featured ? "accent" : "secondary"} style={{ width: "100%" }}>
@@ -2331,13 +2331,13 @@ const plans = [
   <Grid :columns="3" gap="lg">
     <Card v-for="plan in plans" :key="plan.name" :variant="plan.featured ? 'elevated' : 'outlined'">
       <CardBody>
-        <Stack gap="md">
+        <Stack direction="column" gap="md">
           <Stack direction="row" gap="sm" align="center">
             <Heading size="md">{{ plan.name }}</Heading>
             <Badge v-if="plan.featured" variant="success">Popular</Badge>
           </Stack>
           <Heading size="xl">{{ plan.price }}<Text as="span" variant="muted"> /mo</Text></Heading>
-          <Stack gap="xs">
+          <Stack direction="column" gap="xs">
             <Text v-for="f in plan.features" :key="f">{{ f }}</Text>
           </Stack>
           <Button :variant="plan.featured ? 'accent' : 'secondary'" :style="{ width: '100%' }">
@@ -2369,7 +2369,7 @@ export function SettingsPanel() {
   return (
     <Card variant="outlined" style={{ maxWidth: 560 }}>
       <CardBody>
-        <Stack gap="lg">
+        <Stack direction="column" gap="lg">
           <Heading size="lg">Settings</Heading>
 
           <Field label="Display name">
@@ -2409,7 +2409,7 @@ import { Card, CardBody, Heading, Field, Input, Switch, Button, Stack, Text } fr
 <template>
   <Card variant="outlined" :style="{ maxWidth: '560px' }">
     <CardBody>
-      <Stack gap="lg">
+      <Stack direction="column" gap="lg">
         <Heading size="lg">Settings</Heading>
 
         <Field label="Display name">

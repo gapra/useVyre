@@ -23,13 +23,13 @@ export function PricingSection() {
       {plans.map((plan) => (
         <Card key={plan.name} variant={plan.featured ? "elevated" : "outlined"}>
           <CardBody>
-            <Stack gap="md">
+            <Stack direction="column" gap="md">
               <Stack direction="row" gap="sm" align="center">
                 <Heading size="md">{plan.name}</Heading>
                 {plan.featured && <Badge variant="success">Popular</Badge>}
               </Stack>
               <Heading size="xl">{plan.price}<Text as="span" variant="muted"> /mo</Text></Heading>
-              <Stack gap="xs">
+              <Stack direction="column" gap="xs">
                 {plan.features.map((f) => <Text key={f}>{f}</Text>)}
               </Stack>
               <Button variant={plan.featured ? "accent" : "secondary"} style={{ width: "100%" }}>
@@ -61,13 +61,13 @@ const plans = [
   <Grid :columns="3" gap="lg">
     <Card v-for="plan in plans" :key="plan.name" :variant="plan.featured ? 'elevated' : 'outlined'">
       <CardBody>
-        <Stack gap="md">
+        <Stack direction="column" gap="md">
           <Stack direction="row" gap="sm" align="center">
             <Heading size="md">{{ plan.name }}</Heading>
             <Badge v-if="plan.featured" variant="success">Popular</Badge>
           </Stack>
           <Heading size="xl">{{ plan.price }}<Text as="span" variant="muted"> /mo</Text></Heading>
-          <Stack gap="xs">
+          <Stack direction="column" gap="xs">
             <Text v-for="f in plan.features" :key="f">{{ f }}</Text>
           </Stack>
           <Button :variant="plan.featured ? 'accent' : 'secondary'" :style="{ width: '100%' }">

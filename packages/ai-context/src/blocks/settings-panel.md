@@ -15,7 +15,7 @@ export function SettingsPanel() {
   return (
     <Card variant="outlined" style={{ maxWidth: 560 }}>
       <CardBody>
-        <Stack gap="lg">
+        <Stack direction="column" gap="lg">
           <Heading size="lg">Settings</Heading>
 
           <Field label="Display name">
@@ -55,7 +55,7 @@ import { Card, CardBody, Heading, Field, Input, Switch, Button, Stack, Text } fr
 <template>
   <Card variant="outlined" :style="{ maxWidth: '560px' }">
     <CardBody>
-      <Stack gap="lg">
+      <Stack direction="column" gap="lg">
         <Heading size="lg">Settings</Heading>
 
         <Field label="Display name">

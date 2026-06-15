@@ -17,7 +17,7 @@ export function AuthCard() {
   return (
     <Card variant="elevated" style={{ maxWidth: 420, margin: "0 auto" }}>
       <CardBody>
-        <Stack gap="md">
+        <Stack direction="column" gap="md">
           <div>
             <Heading size="lg">Sign in</Heading>
             <Text variant="muted">Welcome back. Enter your details.</Text>
@@ -60,7 +60,7 @@ import {
 <template>
   <Card variant="elevated" :style="{ maxWidth: '420px', margin: '0 auto' }">
     <CardBody>
-      <Stack gap="md">
+      <Stack direction="column" gap="md">
         <div>
           <Heading size="lg">Sign in</Heading>
           <Text variant="muted">Welcome back. Enter your details.</Text>

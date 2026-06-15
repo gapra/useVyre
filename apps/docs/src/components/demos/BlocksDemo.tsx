@@ -12,7 +12,7 @@ export function AuthCardBlock() {
   return (
     <Card variant="elevated" style={{ maxWidth: 420, margin: "0 auto" }}>
       <CardBody>
-        <Stack gap="md">
+        <Stack direction="column" gap="md">
           <div>
             <Heading size="lg">Sign in</Heading>
             <Text variant="muted">Welcome back. Enter your details.</Text>
@@ -73,13 +73,13 @@ export function PricingSectionBlock() {
       {plans.map((plan) => (
         <Card key={plan.name} variant={plan.featured ? "elevated" : "outlined"}>
           <CardBody>
-            <Stack gap="md">
+            <Stack direction="column" gap="md">
               <Stack direction="row" gap="sm" align="center">
                 <Heading size="md">{plan.name}</Heading>
                 {plan.featured && <Badge variant="success">Popular</Badge>}
               </Stack>
               <Heading size="xl">{plan.price}<Text as="span" variant="muted"> /mo</Text></Heading>
-              <Stack gap="xs">{plan.features.map((f) => <Text key={f}>{f}</Text>)}</Stack>
+              <Stack direction="column" gap="xs">{plan.features.map((f) => <Text key={f}>{f}</Text>)}</Stack>
               <Button variant={plan.featured ? "accent" : "secondary"} style={{ width: "100%" }}>
                 Choose {plan.name}
               </Button>
@@ -95,7 +95,7 @@ export function SettingsPanelBlock() {
   return (
     <Card variant="outlined" style={{ maxWidth: 560 }}>
       <CardBody>
-        <Stack gap="lg">
+        <Stack direction="column" gap="lg">
           <Heading size="lg">Settings</Heading>
           <Field label="Display name"><Input placeholder="Ada Lovelace" /></Field>
           <Field label="Email"><Input type="email" placeholder="ada@example.com" /></Field>
