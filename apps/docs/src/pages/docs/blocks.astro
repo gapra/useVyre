@@ -5,6 +5,8 @@ import DocsLayout       from "@/layouts/DocsLayout.astro";
 import ComponentPreview from "@/components/docs/ComponentPreview.astro";
 import {
   AuthCardBlock, StatsRowBlock, EmptyStateBlock, PricingSectionBlock, SettingsPanelBlock,
+  PageHeaderBlock, ConfirmDialogBlock, ItemListBlock, DataTablePageBlock, FormPageBlock,
+  AppShellBlock,
 } from "@/components/demos/BlocksDemo";
 
 // Read the actual block source (React + Vue) so the docs always match the
@@ -24,6 +26,12 @@ const stats    = blockCode("stats-row.md");
 const empty    = blockCode("empty-state.md");
 const pricing  = blockCode("pricing-section.md");
 const settings = blockCode("settings-panel.md");
+const pageHeader = blockCode("page-header.md");
+const confirm    = blockCode("confirm-dialog.md");
+const itemList   = blockCode("item-list.md");
+const dataTable  = blockCode("data-table-page.md");
+const formPage   = blockCode("form-page.md");
+const appShell   = blockCode("app-shell.md");
 ---
 
 <DocsLayout title="Blocks">
@@ -67,5 +75,41 @@ const settings = blockCode("settings-panel.md");
   <p class="docs-p">An account / preferences panel with fields and toggles.</p>
   <ComponentPreview react={settings.react} vue={settings.vue}>
     <SettingsPanelBlock client:visible />
+  </ComponentPreview>
+
+  <h2 class="docs-h2">App shell</h2>
+  <p class="docs-p">The application frame — collapsible sidebar nav + an app bar over the content.</p>
+  <ComponentPreview react={appShell.react} vue={appShell.vue}>
+    <AppShellBlock client:visible />
+  </ComponentPreview>
+
+  <h2 class="docs-h2">Page header</h2>
+  <p class="docs-p">A title row with breadcrumb and primary actions — the top of most pages.</p>
+  <ComponentPreview react={pageHeader.react} vue={pageHeader.vue}>
+    <PageHeaderBlock client:visible />
+  </ComponentPreview>
+
+  <h2 class="docs-h2">Data table page</h2>
+  <p class="docs-p">Heading, search toolbar, table and pagination — the common list/CRUD screen.</p>
+  <ComponentPreview react={dataTable.react} vue={dataTable.vue}>
+    <DataTablePageBlock client:visible />
+  </ComponentPreview>
+
+  <h2 class="docs-h2">Form page</h2>
+  <p class="docs-p">A validated create/edit form in a card with submit and cancel actions.</p>
+  <ComponentPreview react={formPage.react} vue={formPage.vue}>
+    <FormPageBlock client:visible />
+  </ComponentPreview>
+
+  <h2 class="docs-h2">Item list</h2>
+  <p class="docs-p">A list of rows with media, title/description and a trailing action.</p>
+  <ComponentPreview react={itemList.react} vue={itemList.vue}>
+    <ItemListBlock client:visible />
+  </ComponentPreview>
+
+  <h2 class="docs-h2">Confirm dialog</h2>
+  <p class="docs-p">A destructive-action confirmation modal. Click to open.</p>
+  <ComponentPreview react={confirm.react} vue={confirm.vue}>
+    <ConfirmDialogBlock client:visible />
   </ComponentPreview>
 </DocsLayout>

@@ -1,6 +1,14 @@
+import { useState } from "react";
 import {
   Card, CardBody, Field, Input, Button, Checkbox, Heading, Text, Stack,
   StatGroup, Stat, EmptyState, Grid, Badge, Switch,
+  Breadcrumb, BreadcrumbItem, BreadcrumbLink, BreadcrumbSeparator,
+  Modal, ModalHeader, ModalBody, ModalFooter,
+  ItemGroup, Item, ItemMedia, ItemContent, ItemTitle, ItemDescription, ItemActions, Avatar,
+  Table, TableHead, TableBody, TableRow, TableHeader, TableCell, Pagination,
+  Form, FormField,
+  AppLayout, Sidebar, SidebarHeader, SidebarContent, SidebarSection, SidebarItem,
+  SidebarFooter, AppShell, AppBar, SidebarTrigger, PageContent,
 } from "@usevyre/react";
 
 /**
@@ -117,5 +125,170 @@ export function SettingsPanelBlock() {
         </Stack>
       </CardBody>
     </Card>
+  );
+}
+
+export function PageHeaderBlock() {
+  return (
+    <Stack direction="column" gap="sm" style={{ width: "100%" }}>
+      <Breadcrumb>
+        <BreadcrumbItem><BreadcrumbLink href="/">Home</BreadcrumbLink></BreadcrumbItem>
+        <BreadcrumbSeparator />
+        <BreadcrumbItem aria-current="page">Projects</BreadcrumbItem>
+      </Breadcrumb>
+      <Stack direction="row" align="center" justify="between">
+        <Heading size="xl">Projects</Heading>
+        <Stack direction="row" gap="sm">
+          <Button variant="secondary">Export</Button>
+          <Button variant="accent">New project</Button>
+        </Stack>
+      </Stack>
+    </Stack>
+  );
+}
+
+export function ConfirmDialogBlock() {
+  const [open, setOpen] = useState(false);
+  return (
+    <>
+      <Button variant="danger" onClick={() => setOpen(true)}>Delete project</Button>
+      <Modal open={open} onClose={() => setOpen(false)} size="sm">
+        <ModalHeader>Delete project?</ModalHeader>
+        <ModalBody>This permanently removes the project and all its data. This action cannot be undone.</ModalBody>
+        <ModalFooter>
+          <Button variant="ghost" onClick={() => setOpen(false)}>Cancel</Button>
+          <Button variant="danger" onClick={() => setOpen(false)}>Delete</Button>
+        </ModalFooter>
+      </Modal>
+    </>
+  );
+}
+
+const members = [
+  { name: "Ada Lovelace", email: "ada@example.com", initials: "AL" },
+  { name: "Alan Turing", email: "alan@example.com", initials: "AT" },
+  { name: "Grace Hopper", email: "grace@example.com", initials: "GH" },
+];
+
+export function ItemListBlock() {
+  return (
+    <Card style={{ width: "100%" }}>
+      <CardBody>
+        <ItemGroup>
+          {members.map((m) => (
+            <Item key={m.email}>
+              <ItemMedia><Avatar fallback={m.initials} size="sm" /></ItemMedia>
+              <ItemContent>
+                <ItemTitle>{m.name}</ItemTitle>
+                <ItemDescription>{m.email}</ItemDescription>
+              </ItemContent>
+              <ItemActions><Button variant="ghost" size="sm">Manage</Button></ItemActions>
+            </Item>
+          ))}
+        </ItemGroup>
+      </CardBody>
+    </Card>
+  );
+}
+
+const tableRows = [
+  { name: "Acme Inc", plan: "Pro", status: "Active" },
+  { name: "Globex", plan: "Starter", status: "Trial" },
+  { name: "Initech", plan: "Business", status: "Active" },
+];
+
+export function DataTablePageBlock() {
+  const [page, setPage] = useState(1);
+  const [query, setQuery] = useState("");
+  return (
+    <Stack direction="column" gap="md" style={{ width: "100%" }}>
+      <Stack direction="row" align="center" justify="between">
+        <Heading size="lg">Customers</Heading>
+        <Stack direction="row" gap="sm">
+          <Input placeholder="Search…" value={query} onChange={(e) => setQuery(e.target.value)} />
+          <Button variant="accent">Add customer</Button>
+        </Stack>
+      </Stack>
+      <Table>
+        <TableHead>
+          <TableRow>
+            <TableHeader>Name</TableHeader>
+            <TableHeader>Plan</TableHeader>
+            <TableHeader>Status</TableHeader>
+          </TableRow>
+        </TableHead>
+        <TableBody>
+          {tableRows.map((r) => (
+            <TableRow key={r.name}>
+              <TableCell>{r.name}</TableCell>
+              <TableCell>{r.plan}</TableCell>
+              <TableCell>
+                <Badge variant={r.status === "Active" ? "success" : "warning"}>{r.status}</Badge>
+              </TableCell>
+            </TableRow>
+          ))}
+        </TableBody>
+      </Table>
+      <Pagination page={page} totalPages={5} onPageChange={setPage} />
+    </Stack>
+  );
+}
+
+export function FormPageBlock() {
+  const [values, setValues] = useState({ name: "", email: "", role: "" });
+  return (
+    <Card style={{ width: "100%", maxWidth: 480 }}>
+      <CardBody>
+        <Stack direction="column" gap="lg">
+          <Heading size="lg">New member</Heading>
+          <Form values={values} onChange={(v) => setValues(v as typeof values)} onSubmit={() => {}}>
+            <FormField name="name" label="Full name" rules={{ required: true }}>
+              <Input placeholder="Ada Lovelace" />
+            </FormField>
+            <FormField name="email" label="Email" rules={{ required: true, email: true }}>
+              <Input type="email" placeholder="ada@example.com" />
+            </FormField>
+            <FormField name="role" label="Role">
+              <Input placeholder="Engineer" />
+            </FormField>
+            <Stack direction="row" gap="sm" justify="end">
+              <Button variant="ghost" type="button">Cancel</Button>
+              <Button variant="accent" type="submit">Create</Button>
+            </Stack>
+          </Form>
+        </Stack>
+      </CardBody>
+    </Card>
+  );
+}
+
+export function AppShellBlock() {
+  return (
+    <div style={{ height: 300, width: "100%", border: "1px solid var(--vyre-color-semantic-border)", borderRadius: "var(--vyre-border-radius-lg)", overflow: "hidden" }}>
+      <AppLayout>
+        <Sidebar>
+          <SidebarHeader title="Acme" />
+          <SidebarContent>
+            <SidebarSection>
+              <SidebarItem href="#" active>Dashboard</SidebarItem>
+              <SidebarItem href="#">Customers</SidebarItem>
+              <SidebarItem href="#" badge={3}>Billing</SidebarItem>
+            </SidebarSection>
+          </SidebarContent>
+          <SidebarFooter>
+            <SidebarItem href="#">Settings</SidebarItem>
+          </SidebarFooter>
+        </Sidebar>
+        <AppShell>
+          <AppBar>
+            <SidebarTrigger />
+            <Heading size="md">Dashboard</Heading>
+          </AppBar>
+          <PageContent>
+            <Text color="muted">Your page content goes here.</Text>
+          </PageContent>
+        </AppShell>
+      </AppLayout>
+    </div>
   );
 }
