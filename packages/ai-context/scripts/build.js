@@ -229,6 +229,7 @@ const cursorRules = [
   "- ALWAYS add aria-label to Button size=\"icon\" (no visible text)",
   "- NEVER render <Toast> directly — use useToast() hook",
   "- NEVER use <Input type=\"search\"> for search UI — use Command component",
+  "- useVyre ships NO icons — import from lucide-react (or any) and pass a node to icon/leftIcon/leftElement; never @usevyre/icons or icon=\"name\"",
   "",
   "## Component Rules",
   "",
