@@ -30,6 +30,10 @@
   cursor: pointer;
   text-decoration: none;
   white-space: nowrap;
+  /* Don't let a flex parent (toolbar, modal footer, button row) shrink the
+     button below its label — with white-space:nowrap that would spill the text
+     past the padding. Flexible siblings (e.g. a search Input) absorb the space. */
+  flex-shrink: 0;
   user-select: none;
   -webkit-user-select: none;
   transition:
