@@ -38,6 +38,44 @@ pnpm add @usevyre/vue
 
 ---
 
+## Icons
+
+useVyre does **not** ship an icon set. Components are icon-agnostic: any icon is
+just a `ReactNode` (React) / default slot or VNode (Vue) you pass in. Use a
+third-party icon library — `lucide-react` / `lucide-vue-next` is the recommended
+default, but anything works (Heroicons, Tabler, your own SVGs).
+
+Pass icons through the relevant prop, not as raw text:
+
+- `Button` → `leftIcon` / `rightIcon`
+- `Input` → `leftElement` / `rightElement`
+- `EmptyState`, `Stat`, `Step`, `ToggleItem`, `TimelineItem`, `SidebarItem` → `icon`
+
+```tsx
+// React
+import { Search, Plus } from "lucide-react";
+
+<Button leftIcon={<Plus size={16} />}>New</Button>
+<Input leftElement={<Search size={16} />} placeholder="Search…" />
+<EmptyState icon={<Search size={32} />} title="No results" />
+```
+
+```vue
+<!-- Vue -->
+<script setup>
+import { Search, Plus } from "lucide-vue-next";
+</script>
+<template>
+  <Button :left-icon="Plus">New</Button>
+  <Input :left-element="Search" placeholder="Search…" />
+</template>
+```
+
+Do NOT invent a `@usevyre/icons` import or an `icon="search"` string prop —
+neither exists. Icons are always a node/component you provide.
+
+---
+
 ## Token Naming Convention
 
 ALL tokens follow this pattern:
