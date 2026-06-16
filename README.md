@@ -26,22 +26,23 @@ Most design systems were built for humans reading documentation. useVyre is buil
 
 **Core**
 
-| Package | Version | Description |
-|---------|---------|-------------|
-| [`@usevyre/tokens`](./packages/tokens) | [![npm](https://img.shields.io/npm/v/@usevyre/tokens)](https://www.npmjs.com/package/@usevyre/tokens) | DTCG-compliant design tokens → CSS variables, JS/TS, JSON |
-| [`@usevyre/react`](./packages/react) | [![npm](https://img.shields.io/npm/v/@usevyre/react)](https://www.npmjs.com/package/@usevyre/react) | React + TypeScript components |
-| [`@usevyre/vue`](./packages/vue) | [![npm](https://img.shields.io/npm/v/@usevyre/vue)](https://www.npmjs.com/package/@usevyre/vue) | Vue 3 + TypeScript components |
-| [`@usevyre/all`](./packages/all) · [`react-all`](./packages/react-all) · [`vue-all`](./packages/vue-all) | — | Convenience meta-packages (tokens + components in one install) |
+| Package | Version | Downloads | Description |
+|---------|---------|-----------|-------------|
+| [`@usevyre/tokens`](./packages/tokens) | [![npm](https://img.shields.io/npm/v/@usevyre/tokens)](https://www.npmjs.com/package/@usevyre/tokens) | [![downloads](https://img.shields.io/npm/dt/@usevyre/tokens)](https://www.npmjs.com/package/@usevyre/tokens) | DTCG-compliant design tokens → CSS variables, JS/TS, JSON |
+| [`@usevyre/react`](./packages/react) | [![npm](https://img.shields.io/npm/v/@usevyre/react)](https://www.npmjs.com/package/@usevyre/react) | [![downloads](https://img.shields.io/npm/dt/@usevyre/react)](https://www.npmjs.com/package/@usevyre/react) | React + TypeScript components |
+| [`@usevyre/vue`](./packages/vue) | [![npm](https://img.shields.io/npm/v/@usevyre/vue)](https://www.npmjs.com/package/@usevyre/vue) | [![downloads](https://img.shields.io/npm/dt/@usevyre/vue)](https://www.npmjs.com/package/@usevyre/vue) | Vue 3 + TypeScript components |
+| [`@usevyre/init`](./packages/init) | [![npm](https://img.shields.io/npm/v/@usevyre/init)](https://www.npmjs.com/package/@usevyre/init) | [![downloads](https://img.shields.io/npm/dt/@usevyre/init)](https://www.npmjs.com/package/@usevyre/init) | One-command setup CLI (`npx @usevyre/init`) |
+| [`@usevyre/all`](./packages/all) · [`react-all`](./packages/react-all) · [`vue-all`](./packages/vue-all) | — | — | Convenience meta-packages (tokens + components in one install) |
 
 **AI tooling**
 
-| Package | Version | Description |
-|---------|---------|-------------|
-| [`@usevyre/ai-context`](./packages/ai-context) | [![npm](https://img.shields.io/npm/v/@usevyre/ai-context)](https://www.npmjs.com/package/@usevyre/ai-context) | Machine-readable component schema for LLM system prompts |
-| [`@usevyre/mcp-server`](./packages/mcp-server) | [![npm](https://img.shields.io/npm/v/@usevyre/mcp-server)](https://www.npmjs.com/package/@usevyre/mcp-server) | MCP server — gives agents live access to the component schema |
-| [`@usevyre/eslint-plugin`](./packages/eslint-plugin) | [![npm](https://img.shields.io/npm/v/@usevyre/eslint-plugin)](https://www.npmjs.com/package/@usevyre/eslint-plugin) | Lints for invalid variants, raw colors, hallucinated props |
-| [`@usevyre/validate-ai-context`](./packages/validate-ai-context) | [![npm](https://img.shields.io/npm/v/@usevyre/validate-ai-context)](https://www.npmjs.com/package/@usevyre/validate-ai-context) | CI check that the AI context stays in sync with components |
-| [`@usevyre/prompt-templates`](./packages/prompt-templates) | [![npm](https://img.shields.io/npm/v/@usevyre/prompt-templates)](https://www.npmjs.com/package/@usevyre/prompt-templates) | Ready-made prompts for generating UI with useVyre |
+| Package | Version | Downloads | Description |
+|---------|---------|-----------|-------------|
+| [`@usevyre/ai-context`](./packages/ai-context) | [![npm](https://img.shields.io/npm/v/@usevyre/ai-context)](https://www.npmjs.com/package/@usevyre/ai-context) | [![downloads](https://img.shields.io/npm/dt/@usevyre/ai-context)](https://www.npmjs.com/package/@usevyre/ai-context) | Machine-readable component schema for LLM system prompts |
+| [`@usevyre/mcp-server`](./packages/mcp-server) | [![npm](https://img.shields.io/npm/v/@usevyre/mcp-server)](https://www.npmjs.com/package/@usevyre/mcp-server) | [![downloads](https://img.shields.io/npm/dt/@usevyre/mcp-server)](https://www.npmjs.com/package/@usevyre/mcp-server) | MCP server — gives agents live access to the component schema |
+| [`@usevyre/eslint-plugin`](./packages/eslint-plugin) | [![npm](https://img.shields.io/npm/v/@usevyre/eslint-plugin)](https://www.npmjs.com/package/@usevyre/eslint-plugin) | [![downloads](https://img.shields.io/npm/dt/@usevyre/eslint-plugin)](https://www.npmjs.com/package/@usevyre/eslint-plugin) | Lints for invalid variants, raw colors, hallucinated props |
+| [`@usevyre/validate-ai-context`](./packages/validate-ai-context) | [![npm](https://img.shields.io/npm/v/@usevyre/validate-ai-context)](https://www.npmjs.com/package/@usevyre/validate-ai-context) | [![downloads](https://img.shields.io/npm/dt/@usevyre/validate-ai-context)](https://www.npmjs.com/package/@usevyre/validate-ai-context) | CI check that the AI context stays in sync with components |
+| [`@usevyre/prompt-templates`](./packages/prompt-templates) | [![npm](https://img.shields.io/npm/v/@usevyre/prompt-templates)](https://www.npmjs.com/package/@usevyre/prompt-templates) | [![downloads](https://img.shields.io/npm/dt/@usevyre/prompt-templates)](https://www.npmjs.com/package/@usevyre/prompt-templates) | Ready-made prompts for generating UI with useVyre |
 
 ---
 
