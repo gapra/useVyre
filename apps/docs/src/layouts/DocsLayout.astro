@@ -22,8 +22,24 @@ const pathname = Astro.url.pathname;
 
     const sidebar = document.querySelector(".docs-sidebar");
     if (sidebar) {
-      const saved = sessionStorage.getItem(SIDEBAR_KEY);
-      if (saved) sidebar.scrollTop = Number(saved);
+      // On a Components page, bring the (bottom) Components section into view so
+      // the user lands on the relevant nav — otherwise the restored scroll
+      // position leaves the long list parked at the top. Scroll to the active
+      // component if there is one, else to the Components heading. Elsewhere,
+      // restore the saved scroll position for continuity.
+      const onComponents = location.pathname.startsWith("/docs/components");
+      const heading = sidebar.querySelector(".sidebar__heading--link");
+      const active = sidebar.querySelector(".sidebar__link--active");
+      const target = onComponents ? (active || heading) : null;
+      if (target) {
+        // Scroll only the sidebar (not the page): position the target near the
+        // top, centering the active item so its neighbours are visible.
+        const offset = active ? sidebar.clientHeight / 2 : 0;
+        sidebar.scrollTop = Math.max(0, target.offsetTop - offset);
+      } else {
+        const saved = sessionStorage.getItem(SIDEBAR_KEY);
+        if (saved) sidebar.scrollTop = Number(saved);
+      }
     }
 
     window.addEventListener("beforeunload", () => {
