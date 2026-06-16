@@ -1,5 +1,12 @@
 ---
 import DocsLayout from "@/layouts/DocsLayout.astro";
+import { readFileSync } from "node:fs";
+import { resolve } from "node:path";
+
+// Read the live published version from the package so the badge never goes stale.
+const version = JSON.parse(
+  readFileSync(resolve(process.cwd(), "../../packages/validate-ai-context/package.json"), "utf8")
+).version;
 
 const codePackageJson = `{
   "scripts": {
@@ -62,7 +69,7 @@ validate-ai-context --json > validation-results.json`;
   <div class="docs-header">
     <div class="docs-header__meta">
       <span class="vyre-badge vyre-badge--accent">npm</span>
-      <span class="vyre-badge vyre-badge--default">v1.0.1</span>
+      <span class="vyre-badge vyre-badge--default">v{version}</span>
     </div>
     <h1 class="docs-title">validate-ai-context</h1>
     <p class="docs-lead">

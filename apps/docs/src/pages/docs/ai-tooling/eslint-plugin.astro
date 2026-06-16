@@ -1,5 +1,12 @@
 ---
 import DocsLayout from "@/layouts/DocsLayout.astro";
+import { readFileSync } from "node:fs";
+import { resolve } from "node:path";
+
+// Read the live published version from the package so the badge never goes stale.
+const version = JSON.parse(
+  readFileSync(resolve(process.cwd(), "../../packages/eslint-plugin/package.json"), "utf8")
+).version;
 
 const codeFlat = `// eslint.config.js
 import vyrePlugin from '@usevyre/eslint-plugin';
@@ -57,7 +64,7 @@ const codeInlineLayout = `// ⚠️ ESLint warning
   <div class="docs-header">
     <div class="docs-header__meta">
       <span class="vyre-badge vyre-badge--accent">npm</span>
-      <span class="vyre-badge vyre-badge--default">v1.1.0</span>
+      <span class="vyre-badge vyre-badge--default">v{version}</span>
     </div>
     <h1 class="docs-title">@usevyre/eslint-plugin</h1>
     <p class="docs-lead">
