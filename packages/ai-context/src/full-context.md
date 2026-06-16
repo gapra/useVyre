@@ -2694,23 +2694,19 @@ A page title row with a breadcrumb and primary actions — the top of most app
 pages.
 
 **Use when:** heading any content page (list, detail, settings).
-**Components:** Breadcrumb, BreadcrumbItem, BreadcrumbLink, BreadcrumbSeparator, Heading, Button, Stack
+**Components:** Breadcrumb, BreadcrumbItem, Heading, Button, Stack
 
 ## React
 
 ```tsx
-import {
-  Breadcrumb, BreadcrumbItem, BreadcrumbLink, BreadcrumbSeparator,
-  Heading, Button, Stack,
-} from "@usevyre/react";
+import { Breadcrumb, BreadcrumbItem, Heading, Button, Stack } from "@usevyre/react";
 
 export function PageHeader() {
   return (
     <Stack direction="column" gap="sm">
       <Breadcrumb>
-        <BreadcrumbItem><BreadcrumbLink href="/">Home</BreadcrumbLink></BreadcrumbItem>
-        <BreadcrumbSeparator />
-        <BreadcrumbItem aria-current="page">Projects</BreadcrumbItem>
+        <BreadcrumbItem href="/">Home</BreadcrumbItem>
+        <BreadcrumbItem current>Projects</BreadcrumbItem>
       </Breadcrumb>
       <Stack direction="row" align="center" justify="between">
         <Heading size="xl">Projects</Heading>
@@ -2728,18 +2724,14 @@ export function PageHeader() {
 
 ```vue
 <script setup lang="ts">
-import {
-  Breadcrumb, BreadcrumbItem, BreadcrumbLink, BreadcrumbSeparator,
-  Heading, Button, Stack,
-} from "@usevyre/vue";
+import { Breadcrumb, BreadcrumbItem, Heading, Button, Stack } from "@usevyre/vue";
 </script>
 
 <template>
   <Stack direction="column" gap="sm">
     <Breadcrumb>
-      <BreadcrumbItem><BreadcrumbLink href="/">Home</BreadcrumbLink></BreadcrumbItem>
-      <BreadcrumbSeparator />
-      <BreadcrumbItem aria-current="page">Projects</BreadcrumbItem>
+      <BreadcrumbItem href="/">Home</BreadcrumbItem>
+      <BreadcrumbItem current>Projects</BreadcrumbItem>
     </Breadcrumb>
     <Stack direction="row" align="center" justify="between">
       <Heading size="xl">Projects</Heading>

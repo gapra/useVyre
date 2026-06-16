@@ -2,7 +2,7 @@ import { useState } from "react";
 import {
   Card, CardBody, Field, Input, Button, Checkbox, Heading, Text, Stack,
   StatGroup, Stat, EmptyState, Grid, Badge, Switch,
-  Breadcrumb, BreadcrumbItem, BreadcrumbLink, BreadcrumbSeparator,
+  Breadcrumb, BreadcrumbItem,
   Modal, ModalHeader, ModalBody, ModalFooter,
   ItemGroup, Item, ItemMedia, ItemContent, ItemTitle, ItemDescription, ItemActions, Avatar,
   Table, TableHead, TableBody, TableRow, TableHeader, TableCell, Pagination,
@@ -132,9 +132,8 @@ export function PageHeaderBlock() {
   return (
     <Stack direction="column" gap="sm" style={{ width: "100%" }}>
       <Breadcrumb>
-        <BreadcrumbItem><BreadcrumbLink href="/">Home</BreadcrumbLink></BreadcrumbItem>
-        <BreadcrumbSeparator />
-        <BreadcrumbItem aria-current="page">Projects</BreadcrumbItem>
+        <BreadcrumbItem href="/">Home</BreadcrumbItem>
+        <BreadcrumbItem current>Projects</BreadcrumbItem>
       </Breadcrumb>
       <Stack direction="row" align="center" justify="between">
         <Heading size="xl">Projects</Heading>

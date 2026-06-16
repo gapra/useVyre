@@ -137,13 +137,13 @@ describe("blocks render + lay out correctly", () => {
     expect(container.querySelector('.vyre-stack[data-direction="column"]')).toBeTruthy();
   });
 
-  it("PageHeader mounts (breadcrumb + title + actions)", () => {
+  it("PageHeader: breadcrumb auto-inserts exactly one separator between items", () => {
     const { container } = render(
       <R.Stack direction="column" gap="sm">
         <R.Breadcrumb>
-          <R.BreadcrumbItem><R.BreadcrumbLink href="/">Home</R.BreadcrumbLink></R.BreadcrumbItem>
-          <R.BreadcrumbSeparator />
-          <R.BreadcrumbItem aria-current="page">Projects</R.BreadcrumbItem>
+          <R.BreadcrumbItem href="/">Home</R.BreadcrumbItem>
+          <R.BreadcrumbItem href="/projects">Projects</R.BreadcrumbItem>
+          <R.BreadcrumbItem current>Detail</R.BreadcrumbItem>
         </R.Breadcrumb>
         <R.Stack direction="row" align="center" justify="between">
           <R.Heading size="xl">Projects</R.Heading>
@@ -155,7 +155,12 @@ describe("blocks render + lay out correctly", () => {
       </R.Stack>,
     );
     expect(container.textContent).toContain("Projects");
-    expect(container.querySelector("nav, [aria-label]")).toBeTruthy();
+    // Breadcrumb auto-inserts separators — N items => N-1 separators.
+    // (A manual <BreadcrumbSeparator> would double them: the "Home / / / Projects" bug.)
+    const items = container.querySelectorAll(".vyre-breadcrumb__item");
+    const seps = container.querySelectorAll(".vyre-breadcrumb__separator");
+    expect(items.length).toBe(3);
+    expect(seps.length).toBe(2);
   });
 
   it("ConfirmDialog opens a modal with destructive actions", () => {
