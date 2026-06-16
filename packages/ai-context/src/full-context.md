@@ -2130,6 +2130,94 @@ const [range, setRange] = useState({ from: null, to: null });
 
 Ready-made compositions of useVyre components for whole sections/pages. Copy, paste, and adapt — they are a starting point, not fixed components. Prefer composing a page from these patterns over inventing layout from scratch.
 
+# AppShell
+
+The application frame: a collapsible Sidebar with nav + an AppBar over the main
+content area. The skeleton for any dashboard/app.
+
+**Use when:** building the top-level layout of an app or dashboard.
+**Components:** AppLayout, Sidebar, SidebarHeader, SidebarContent, SidebarSection, SidebarItem, SidebarFooter, AppShell, AppBar, SidebarTrigger, PageContent, Heading
+
+## React
+
+```tsx
+import {
+  AppLayout, Sidebar, SidebarHeader, SidebarContent, SidebarSection,
+  SidebarItem, SidebarFooter, AppShell, AppBar, SidebarTrigger, PageContent,
+  Heading,
+} from "@usevyre/react";
+
+export function AppShellLayout() {
+  return (
+    <AppLayout>
+      <Sidebar>
+        <SidebarHeader title="Acme" />
+        <SidebarContent>
+          <SidebarSection>
+            <SidebarItem href="/" active>Dashboard</SidebarItem>
+            <SidebarItem href="/customers">Customers</SidebarItem>
+            <SidebarItem href="/billing" badge={3}>Billing</SidebarItem>
+          </SidebarSection>
+        </SidebarContent>
+        <SidebarFooter>
+          <SidebarItem href="/settings">Settings</SidebarItem>
+        </SidebarFooter>
+      </Sidebar>
+      <AppShell>
+        <AppBar>
+          <SidebarTrigger />
+          <Heading size="md">Dashboard</Heading>
+        </AppBar>
+        <PageContent>
+          {/* page content goes here */}
+        </PageContent>
+      </AppShell>
+    </AppLayout>
+  );
+}
+```
+
+## Vue
+
+```vue
+<script setup lang="ts">
+import {
+  AppLayout, Sidebar, SidebarHeader, SidebarContent, SidebarSection,
+  SidebarItem, SidebarFooter, AppShell, AppBar, SidebarTrigger, PageContent,
+  Heading,
+} from "@usevyre/vue";
+</script>
+
+<template>
+  <AppLayout>
+    <Sidebar>
+      <SidebarHeader title="Acme" />
+      <SidebarContent>
+        <SidebarSection>
+          <SidebarItem href="/" active>Dashboard</SidebarItem>
+          <SidebarItem href="/customers">Customers</SidebarItem>
+          <SidebarItem href="/billing" :badge="3">Billing</SidebarItem>
+        </SidebarSection>
+      </SidebarContent>
+      <SidebarFooter>
+        <SidebarItem href="/settings">Settings</SidebarItem>
+      </SidebarFooter>
+    </Sidebar>
+    <AppShell>
+      <AppBar>
+        <SidebarTrigger />
+        <Heading size="md">Dashboard</Heading>
+      </AppBar>
+      <PageContent>
+        <!-- page content goes here -->
+      </PageContent>
+    </AppShell>
+  </AppLayout>
+</template>
+```
+
+---
+
 # AuthCard
 
 A centered sign-in card: email + password fields, a primary submit, and OAuth
@@ -2224,6 +2312,177 @@ import {
 
 ---
 
+# ConfirmDialog
+
+A destructive-action confirmation modal (delete/remove). Controlled via open
+state.
+
+**Use when:** confirming an irreversible action.
+**Components:** Modal, ModalHeader, ModalBody, ModalFooter, Button
+
+## React
+
+```tsx
+import { useState } from "react";
+import { Modal, ModalHeader, ModalBody, ModalFooter, Button } from "@usevyre/react";
+
+export function ConfirmDialog() {
+  const [open, setOpen] = useState(false);
+  return (
+    <>
+      <Button variant="danger" onClick={() => setOpen(true)}>Delete project</Button>
+      <Modal open={open} onClose={() => setOpen(false)} size="sm">
+        <ModalHeader>Delete project?</ModalHeader>
+        <ModalBody>This permanently removes the project and all its data. This action cannot be undone.</ModalBody>
+        <ModalFooter>
+          <Button variant="ghost" onClick={() => setOpen(false)}>Cancel</Button>
+          <Button variant="danger" onClick={() => setOpen(false)}>Delete</Button>
+        </ModalFooter>
+      </Modal>
+    </>
+  );
+}
+```
+
+## Vue
+
+```vue
+<script setup lang="ts">
+import { ref } from "vue";
+import { Modal, ModalHeader, ModalBody, ModalFooter, Button } from "@usevyre/vue";
+
+const open = ref(false);
+</script>
+
+<template>
+  <Button variant="danger" @click="open = true">Delete project</Button>
+  <Modal :open="open" size="sm" @close="open = false">
+    <ModalHeader>Delete project?</ModalHeader>
+    <ModalBody>This permanently removes the project and all its data. This action cannot be undone.</ModalBody>
+    <ModalFooter>
+      <Button variant="ghost" @click="open = false">Cancel</Button>
+      <Button variant="danger" @click="open = false">Delete</Button>
+    </ModalFooter>
+  </Modal>
+</template>
+```
+
+---
+
+# DataTablePage
+
+A list/CRUD page: heading, a search toolbar, a Table, and Pagination — the most
+common internal-app screen.
+
+**Use when:** showing a paginated list of records to browse/manage.
+**Components:** Stack, Heading, Input, Button, Table, TableHead, TableBody, TableRow, TableHeader, TableCell, Badge, Pagination
+
+## React
+
+```tsx
+import { useState } from "react";
+import {
+  Stack, Heading, Input, Button, Table, TableHead, TableBody, TableRow,
+  TableHeader, TableCell, Badge, Pagination,
+} from "@usevyre/react";
+
+const rows = [
+  { name: "Acme Inc", plan: "Pro", status: "Active" },
+  { name: "Globex", plan: "Starter", status: "Trial" },
+  { name: "Initech", plan: "Business", status: "Active" },
+];
+
+export function DataTablePage() {
+  const [page, setPage] = useState(1);
+  const [query, setQuery] = useState("");
+  return (
+    <Stack direction="column" gap="md">
+      <Stack direction="row" align="center" justify="between">
+        <Heading size="lg">Customers</Heading>
+        <Stack direction="row" gap="sm">
+          <Input placeholder="Search…" value={query} onChange={(e) => setQuery(e.target.value)} />
+          <Button variant="accent">Add customer</Button>
+        </Stack>
+      </Stack>
+      <Table>
+        <TableHead>
+          <TableRow>
+            <TableHeader>Name</TableHeader>
+            <TableHeader>Plan</TableHeader>
+            <TableHeader>Status</TableHeader>
+          </TableRow>
+        </TableHead>
+        <TableBody>
+          {rows.map((r) => (
+            <TableRow key={r.name}>
+              <TableCell>{r.name}</TableCell>
+              <TableCell>{r.plan}</TableCell>
+              <TableCell>
+                <Badge variant={r.status === "Active" ? "success" : "warning"}>{r.status}</Badge>
+              </TableCell>
+            </TableRow>
+          ))}
+        </TableBody>
+      </Table>
+      <Pagination page={page} totalPages={5} onPageChange={setPage} />
+    </Stack>
+  );
+}
+```
+
+## Vue
+
+```vue
+<script setup lang="ts">
+import { ref } from "vue";
+import {
+  Stack, Heading, Input, Button, Table, TableHead, TableBody, TableRow,
+  TableHeader, TableCell, Badge, Pagination,
+} from "@usevyre/vue";
+
+const page = ref(1);
+const query = ref("");
+const rows = [
+  { name: "Acme Inc", plan: "Pro", status: "Active" },
+  { name: "Globex", plan: "Starter", status: "Trial" },
+  { name: "Initech", plan: "Business", status: "Active" },
+];
+</script>
+
+<template>
+  <Stack direction="column" gap="md">
+    <Stack direction="row" align="center" justify="between">
+      <Heading size="lg">Customers</Heading>
+      <Stack direction="row" gap="sm">
+        <Input v-model="query" placeholder="Search…" />
+        <Button variant="accent">Add customer</Button>
+      </Stack>
+    </Stack>
+    <Table>
+      <TableHead>
+        <TableRow>
+          <TableHeader>Name</TableHeader>
+          <TableHeader>Plan</TableHeader>
+          <TableHeader>Status</TableHeader>
+        </TableRow>
+      </TableHead>
+      <TableBody>
+        <TableRow v-for="r in rows" :key="r.name">
+          <TableCell>{{ r.name }}</TableCell>
+          <TableCell>{{ r.plan }}</TableCell>
+          <TableCell>
+            <Badge :variant="r.status === 'Active' ? 'success' : 'warning'">{{ r.status }}</Badge>
+          </TableCell>
+        </TableRow>
+      </TableBody>
+    </Table>
+    <Pagination :page="page" :total-pages="5" @page-change="page = $event" />
+  </Stack>
+</template>
+```
+
+---
+
 # EmptyStateBlock
 
 A friendly empty state with a primary call to action — for first-run screens or
@@ -2263,6 +2522,225 @@ import { EmptyState, Button } from "@usevyre/vue";
   >
     <Button variant="accent">New project</Button>
   </EmptyState>
+</template>
+```
+
+---
+
+# FormPage
+
+A create/edit entity form in a Card: validated fields with a footer of
+submit/cancel actions.
+
+**Use when:** building a "new" or "edit" record screen.
+**Components:** Card, CardBody, Heading, Form, FormField, Input, Button, Stack
+
+## React
+
+```tsx
+import { useState } from "react";
+import { Card, CardBody, Heading, Form, FormField, Input, Button, Stack } from "@usevyre/react";
+
+export function FormPage() {
+  const [values, setValues] = useState({ name: "", email: "", role: "" });
+  return (
+    <Card style={{ width: "100%", maxWidth: 480 }}>
+      <CardBody>
+        <Stack direction="column" gap="lg">
+          <Heading size="lg">New member</Heading>
+          <Form values={values} onChange={(v) => setValues(v as typeof values)} onSubmit={() => {}}>
+            <FormField name="name" label="Full name" rules={{ required: true }}>
+              <Input placeholder="Ada Lovelace" />
+            </FormField>
+            <FormField name="email" label="Email" rules={{ required: true, email: true }}>
+              <Input type="email" placeholder="ada@example.com" />
+            </FormField>
+            <FormField name="role" label="Role">
+              <Input placeholder="Engineer" />
+            </FormField>
+            <Stack direction="row" gap="sm" justify="end">
+              <Button variant="ghost" type="button">Cancel</Button>
+              <Button variant="accent" type="submit">Create</Button>
+            </Stack>
+          </Form>
+        </Stack>
+      </CardBody>
+    </Card>
+  );
+}
+```
+
+## Vue
+
+```vue
+<script setup lang="ts">
+import { reactive } from "vue";
+import { Card, CardBody, Heading, Form, FormField, Input, Button, Stack } from "@usevyre/vue";
+
+const values = reactive({ name: "", email: "", role: "" });
+</script>
+
+<template>
+  <Card :style="{ width: '100%', maxWidth: '480px' }">
+    <CardBody>
+      <Stack direction="column" gap="lg">
+        <Heading size="lg">New member</Heading>
+        <Form :values="values" @submit="() => {}">
+          <FormField name="name" label="Full name" :rules="{ required: true }">
+            <Input placeholder="Ada Lovelace" />
+          </FormField>
+          <FormField name="email" label="Email" :rules="{ required: true, email: true }">
+            <Input type="email" placeholder="ada@example.com" />
+          </FormField>
+          <FormField name="role" label="Role">
+            <Input placeholder="Engineer" />
+          </FormField>
+          <Stack direction="row" gap="sm" justify="end">
+            <Button variant="ghost" type="button">Cancel</Button>
+            <Button variant="accent" type="submit">Create</Button>
+          </Stack>
+        </Form>
+      </Stack>
+    </CardBody>
+  </Card>
+</template>
+```
+
+---
+
+# ItemList
+
+A list of rows with media, title/description and a trailing action — settings
+toggles, notification feeds, member lists.
+
+**Use when:** showing a vertical list of records with an action per row.
+**Components:** Card, CardBody, ItemGroup, Item, ItemMedia, ItemContent, ItemTitle, ItemDescription, ItemActions, Avatar, Button
+
+## React
+
+```tsx
+import {
+  Card, CardBody, ItemGroup, Item, ItemMedia, ItemContent, ItemTitle,
+  ItemDescription, ItemActions, Avatar, Button,
+} from "@usevyre/react";
+
+const members = [
+  { name: "Ada Lovelace", email: "ada@example.com", initials: "AL" },
+  { name: "Alan Turing", email: "alan@example.com", initials: "AT" },
+  { name: "Grace Hopper", email: "grace@example.com", initials: "GH" },
+];
+
+export function ItemList() {
+  return (
+    <Card style={{ width: "100%" }}>
+      <CardBody>
+        <ItemGroup>
+          {members.map((m) => (
+            <Item key={m.email}>
+              <ItemMedia><Avatar fallback={m.initials} size="sm" /></ItemMedia>
+              <ItemContent>
+                <ItemTitle>{m.name}</ItemTitle>
+                <ItemDescription>{m.email}</ItemDescription>
+              </ItemContent>
+              <ItemActions><Button variant="ghost" size="sm">Manage</Button></ItemActions>
+            </Item>
+          ))}
+        </ItemGroup>
+      </CardBody>
+    </Card>
+  );
+}
+```
+
+## Vue
+
+```vue
+<script setup lang="ts">
+import {
+  Card, CardBody, ItemGroup, Item, ItemMedia, ItemContent, ItemTitle,
+  ItemDescription, ItemActions, Avatar, Button,
+} from "@usevyre/vue";
+
+const members = [
+  { name: "Ada Lovelace", email: "ada@example.com", initials: "AL" },
+  { name: "Alan Turing", email: "alan@example.com", initials: "AT" },
+  { name: "Grace Hopper", email: "grace@example.com", initials: "GH" },
+];
+</script>
+
+<template>
+  <Card :style="{ width: '100%' }">
+    <CardBody>
+      <ItemGroup>
+        <Item v-for="m in members" :key="m.email">
+          <ItemMedia><Avatar :fallback="m.initials" size="sm" /></ItemMedia>
+          <ItemContent>
+            <ItemTitle>{{ m.name }}</ItemTitle>
+            <ItemDescription>{{ m.email }}</ItemDescription>
+          </ItemContent>
+          <ItemActions><Button variant="ghost" size="sm">Manage</Button></ItemActions>
+        </Item>
+      </ItemGroup>
+    </CardBody>
+  </Card>
+</template>
+```
+
+---
+
+# PageHeader
+
+A page title row with a breadcrumb and primary actions — the top of most app
+pages.
+
+**Use when:** heading any content page (list, detail, settings).
+**Components:** Breadcrumb, BreadcrumbItem, Heading, Button, Stack
+
+## React
+
+```tsx
+import { Breadcrumb, BreadcrumbItem, Heading, Button, Stack } from "@usevyre/react";
+
+export function PageHeader() {
+  return (
+    <Stack direction="column" gap="sm">
+      <Breadcrumb>
+        <BreadcrumbItem href="/">Home</BreadcrumbItem>
+        <BreadcrumbItem current>Projects</BreadcrumbItem>
+      </Breadcrumb>
+      <Stack direction="row" align="center" justify="between">
+        <Heading size="xl">Projects</Heading>
+        <Stack direction="row" gap="sm">
+          <Button variant="secondary">Export</Button>
+          <Button variant="accent">New project</Button>
+        </Stack>
+      </Stack>
+    </Stack>
+  );
+}
+```
+
+## Vue
+
+```vue
+<script setup lang="ts">
+import { Breadcrumb, BreadcrumbItem, Heading, Button, Stack } from "@usevyre/vue";
+</script>
+
+<template>
+  <Stack direction="column" gap="sm">
+    <Breadcrumb>
+      <BreadcrumbItem href="/">Home</BreadcrumbItem>
+      <BreadcrumbItem current>Projects</BreadcrumbItem>
+    </Breadcrumb>
+    <Stack direction="row" align="center" justify="between">
+      <Heading size="xl">Projects</Heading>
+      <Stack direction="row" gap="sm">
+        <Button variant="secondary">Export</Button>
+        <Button variant="accent">New project</Button>
+      </Stack>
+    </Stack>
+  </Stack>
 </template>
 ```
 

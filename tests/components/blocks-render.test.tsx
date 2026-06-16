@@ -9,7 +9,7 @@
  * packages/ai-context/src/blocks/*.md and the demos in BlocksDemo.tsx.
  */
 import { describe, it, expect, beforeAll } from "vitest";
-import { render } from "@testing-library/react";
+import { render, fireEvent } from "@testing-library/react";
 import { resolve } from "node:path";
 
 const ROOT = process.cwd();
@@ -135,5 +135,130 @@ describe("blocks render + lay out correctly", () => {
     expect(container.textContent).toContain("Settings");
     expect(container.querySelector('[role="switch"]')).toBeTruthy();
     expect(container.querySelector('.vyre-stack[data-direction="column"]')).toBeTruthy();
+  });
+
+  it("PageHeader: breadcrumb auto-inserts exactly one separator between items", () => {
+    const { container } = render(
+      <R.Stack direction="column" gap="sm">
+        <R.Breadcrumb>
+          <R.BreadcrumbItem href="/">Home</R.BreadcrumbItem>
+          <R.BreadcrumbItem href="/projects">Projects</R.BreadcrumbItem>
+          <R.BreadcrumbItem current>Detail</R.BreadcrumbItem>
+        </R.Breadcrumb>
+        <R.Stack direction="row" align="center" justify="between">
+          <R.Heading size="xl">Projects</R.Heading>
+          <R.Stack direction="row" gap="sm">
+            <R.Button variant="secondary">Export</R.Button>
+            <R.Button variant="accent">New project</R.Button>
+          </R.Stack>
+        </R.Stack>
+      </R.Stack>,
+    );
+    expect(container.textContent).toContain("Projects");
+    // Breadcrumb auto-inserts separators — N items => N-1 separators.
+    // (A manual <BreadcrumbSeparator> would double them: the "Home / / / Projects" bug.)
+    const items = container.querySelectorAll(".vyre-breadcrumb__item");
+    const seps = container.querySelectorAll(".vyre-breadcrumb__separator");
+    expect(items.length).toBe(3);
+    expect(seps.length).toBe(2);
+  });
+
+  it("ConfirmDialog opens a modal with destructive actions", () => {
+    const Demo = () => {
+      const [open, setOpen] = R.useState ? R.useState(false) : require("react").useState(false);
+      return (
+        <>
+          <R.Button variant="danger" onClick={() => setOpen(true)}>Delete project</R.Button>
+          <R.Modal open={open} onClose={() => setOpen(false)} size="sm">
+            <R.ModalHeader>Delete project?</R.ModalHeader>
+            <R.ModalBody>Cannot be undone.</R.ModalBody>
+            <R.ModalFooter>
+              <R.Button variant="ghost" onClick={() => setOpen(false)}>Cancel</R.Button>
+              <R.Button variant="danger" onClick={() => setOpen(false)}>Delete</R.Button>
+            </R.ModalFooter>
+          </R.Modal>
+        </>
+      );
+    };
+    const { container, getByText } = render(<Demo />);
+    fireEvent.click(getByText("Delete project"));
+    expect(document.querySelector('[role="dialog"]')).toBeTruthy();
+    expect(document.body.textContent).toContain("Cannot be undone.");
+  });
+
+  it("ItemList renders rows with media + actions", () => {
+    const { container } = render(
+      <R.Card style={{ width: "100%" }}>
+        <R.CardBody>
+          <R.ItemGroup>
+            <R.Item>
+              <R.ItemMedia><R.Avatar fallback="AL" size="sm" /></R.ItemMedia>
+              <R.ItemContent>
+                <R.ItemTitle>Ada Lovelace</R.ItemTitle>
+                <R.ItemDescription>ada@example.com</R.ItemDescription>
+              </R.ItemContent>
+              <R.ItemActions><R.Button variant="ghost" size="sm">Manage</R.Button></R.ItemActions>
+            </R.Item>
+          </R.ItemGroup>
+        </R.CardBody>
+      </R.Card>,
+    );
+    expect(container.textContent).toContain("Ada Lovelace");
+    expect(container.querySelector("button")).toBeTruthy();
+  });
+
+  it("DataTablePage renders a table + pagination", () => {
+    const Demo = () => {
+      const { useState } = require("react");
+      const [page, setPage] = useState(1);
+      return (
+        <R.Stack direction="column" gap="md">
+          <R.Heading size="lg">Customers</R.Heading>
+          <R.Table>
+            <R.TableHead>
+              <R.TableRow><R.TableHeader>Name</R.TableHeader><R.TableHeader>Status</R.TableHeader></R.TableRow>
+            </R.TableHead>
+            <R.TableBody>
+              <R.TableRow>
+                <R.TableCell>Acme Inc</R.TableCell>
+                <R.TableCell><R.Badge variant="success">Active</R.Badge></R.TableCell>
+              </R.TableRow>
+            </R.TableBody>
+          </R.Table>
+          <R.Pagination page={page} totalPages={5} onPageChange={setPage} />
+        </R.Stack>
+      );
+    };
+    const { container } = render(<Demo />);
+    expect(container.querySelector("table")).toBeTruthy();
+    expect(container.textContent).toContain("Acme Inc");
+  });
+
+  it("FormPage renders a validated form with actions", () => {
+    const Demo = () => {
+      const { useState } = require("react");
+      const [values, setValues] = useState({ name: "", email: "" });
+      return (
+        <R.Card style={{ width: "100%" }}>
+          <R.CardBody>
+            <R.Stack direction="column" gap="lg">
+              <R.Heading size="lg">New member</R.Heading>
+              <R.Form values={values} onChange={(v: typeof values) => setValues(v)} onSubmit={() => {}}>
+                <R.FormField name="name" label="Full name" rules={{ required: true }}>
+                  <R.Input placeholder="Ada" />
+                </R.FormField>
+                <R.Stack direction="row" gap="sm" justify="end">
+                  <R.Button variant="ghost" type="button">Cancel</R.Button>
+                  <R.Button variant="accent" type="submit">Create</R.Button>
+                </R.Stack>
+              </R.Form>
+            </R.Stack>
+          </R.CardBody>
+        </R.Card>
+      );
+    };
+    const { container } = render(<Demo />);
+    expect(container.querySelector("form")).toBeTruthy();
+    expect(container.textContent).toContain("New member");
   });
 });
