@@ -27,3 +27,31 @@ describe("Sparkline", () => {
     expect(container.innerHTML).not.toMatch(/NaN|Infinity/);
   });
 });
+
+describe("LineChart", () => {
+  const data = [
+    { month: "Jan", revenue: 10, users: 5 },
+    { month: "Feb", revenue: 20, users: 8 },
+    { month: "Mar", revenue: 15, users: 12 },
+  ];
+  const config = {
+    revenue: { label: "Revenue", color: "var(--vyre-color-semantic-accent)" },
+    users: { label: "Users", color: "var(--vyre-color-semantic-teal)" },
+  };
+  it("renders an accessible svg with one line path per series", () => {
+    const { container } = render(<R.LineChart data={data} config={config} xKey="month" />);
+    const svg = container.querySelector("svg");
+    expect(svg?.getAttribute("role")).toBe("img");
+    expect(svg?.getAttribute("aria-label")).toBeTruthy();
+    // one <path> per series (2). (Grid lines are <line>, not <path>.)
+    expect(container.querySelectorAll("path.vyre-chart__line, path[data-series]").length).toBe(2);
+  });
+  it("renders a legend item per series when showLegend", () => {
+    const { container } = render(<R.LineChart data={data} config={config} xKey="month" showLegend />);
+    expect(container.querySelectorAll(".vyre-chart__legend-item").length).toBe(2);
+  });
+  it("omits the grid when showGrid is false", () => {
+    const { container } = render(<R.LineChart data={data} config={config} xKey="month" showGrid={false} />);
+    expect(container.querySelectorAll(".vyre-chart__grid").length).toBe(0);
+  });
+});
