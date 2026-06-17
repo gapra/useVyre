@@ -203,6 +203,7 @@ export { default as Tree }            from "./components/Tree/Tree.vue";
 export { default as OTPInput }        from "./components/OTPInput/OTPInput.vue";
 export { default as Carousel }        from "./components/Carousel/Carousel.vue";
 export { default as CarouselSlide }   from "./components/Carousel/CarouselSlide.vue";
+export { default as Sparkline }       from "./components/Sparkline/Sparkline.vue";
 
 // ── Composables ───────────────────────────────────────────────
 export { useToast }                 from "./composables/useToast";
