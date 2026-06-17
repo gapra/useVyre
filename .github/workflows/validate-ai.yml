@@ -7,6 +7,10 @@ on:
       - "**/*.ts"
       - "**/*.vue"
 
+# Least-privilege: this workflow only reads the repo to lint PR code.
+permissions:
+  contents: read
+
 jobs:
   validate:
     name: Check for hallucinated useVyre props

@@ -44,7 +44,18 @@ describe("RichTextEditor — security", () => {
   });
 
   it("passes value through sanitize before rendering", () => {
-    const sanitize = (html: string) => html.replace(/<script[\s\S]*?<\/script>/gi, "");
+    // Illustrative sanitizer for the test. Matches the closing tag with optional
+    // whitespace (</script >) and loops until no <script…> remains, so it does not
+    // leave a partial tag behind. (Real apps should pass DOMPurify via `sanitize`.)
+    const sanitize = (html: string) => {
+      let prev;
+      let out = html;
+      do {
+        prev = out;
+        out = out.replace(/<script\b[^>]*>[\s\S]*?<\/script\s*>/gi, "");
+      } while (out !== prev);
+      return out;
+    };
     const { container } = render(
       <R.RichTextEditor
         value="<p>ok</p><script>alert(1)</script>"
@@ -59,7 +70,18 @@ describe("RichTextEditor — security", () => {
 
   it("emits sanitized HTML through onChange", () => {
     const onChange = vi.fn();
-    const sanitize = (html: string) => html.replace(/<script[\s\S]*?<\/script>/gi, "");
+    // Illustrative sanitizer for the test. Matches the closing tag with optional
+    // whitespace (</script >) and loops until no <script…> remains, so it does not
+    // leave a partial tag behind. (Real apps should pass DOMPurify via `sanitize`.)
+    const sanitize = (html: string) => {
+      let prev;
+      let out = html;
+      do {
+        prev = out;
+        out = out.replace(/<script\b[^>]*>[\s\S]*?<\/script\s*>/gi, "");
+      } while (out !== prev);
+      return out;
+    };
     const { container } = render(
       <R.RichTextEditor value="<p>x</p>" onChange={onChange} sanitize={sanitize} />,
     );
