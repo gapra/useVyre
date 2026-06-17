@@ -33,10 +33,11 @@
  */
 
 import React, {
-  useState, useRef, useId, useCallback, useLayoutEffect,
+  useState, useRef, useId, useCallback,
 } from "react";
 import { createPortal } from "react-dom";
 import { cn } from "../../utils/cn";
+import { useIsomorphicLayoutEffect } from "../../utils/useIsomorphicLayoutEffect";
 
 export type TooltipPlacement = "top" | "bottom" | "left" | "right";
 
@@ -100,7 +101,7 @@ export const Tooltip: React.FC<TooltipProps> = ({
 
   // Position the portaled tooltip against the trigger, and keep it in sync while
   // visible (scroll inside a Modal, window resize).
-  useLayoutEffect(() => {
+  useIsomorphicLayoutEffect(() => {
     if (disablePortal || state === "hidden") return;
     const compute = () => {
       const trigger = triggerRef.current;
