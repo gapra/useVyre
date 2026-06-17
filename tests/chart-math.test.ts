@@ -1,5 +1,5 @@
 import { describe, it, expect } from "vitest";
-import { scaleLinear, niceTicks } from "../packages/react/src/utils/chart-math";
+import { scaleLinear, niceTicks, buildLinePath, buildAreaPath } from "../packages/react/src/utils/chart-math";
 
 describe("scaleLinear", () => {
   it("maps domain start to range start and domain end to range end", () => {
@@ -33,5 +33,29 @@ describe("niceTicks", () => {
     const ticks = niceTicks(10, 10, 5);
     expect(ticks.every((t) => Number.isFinite(t))).toBe(true);
     expect(ticks.length).toBeGreaterThanOrEqual(2);
+  });
+});
+
+describe("buildLinePath", () => {
+  it("builds a polyline 'd' string (linear)", () => {
+    expect(buildLinePath([[0, 0], [10, 5], [20, 0]], "linear")).toBe("M0,0 L10,5 L20,0");
+  });
+  it("returns empty string for no points", () => {
+    expect(buildLinePath([], "linear")).toBe("");
+  });
+  it("emits cubic segments for smooth curve", () => {
+    const d = buildLinePath([[0, 0], [10, 10], [20, 0]], "smooth");
+    expect(d.startsWith("M0,0")).toBe(true);
+    expect(d).toContain("C");
+  });
+});
+
+describe("buildAreaPath", () => {
+  it("closes the path down to the baseline y", () => {
+    const d = buildAreaPath([[0, 10], [10, 5]], 100, "linear");
+    expect(d.startsWith("M0,10")).toBe(true);
+    expect(d).toContain("L10,100");
+    expect(d).toContain("L0,100");
+    expect(d.trim().endsWith("Z")).toBe(true);
   });
 });
