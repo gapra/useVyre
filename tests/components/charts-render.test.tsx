@@ -85,3 +85,29 @@ describe("AreaChart", () => {
     expect(container.innerHTML).not.toMatch(/NaN|Infinity/);
   });
 });
+
+describe("BarChart", () => {
+  const data = [
+    { region: "NA", sales: 30, returns: 5 },
+    { region: "EU", sales: 25, returns: 7 },
+    { region: "APAC", sales: 40, returns: 9 },
+  ];
+  const config = {
+    sales: { label: "Sales", color: "var(--vyre-color-semantic-accent)" },
+    returns: { label: "Returns", color: "var(--vyre-color-semantic-teal)" },
+  };
+  it("renders accessible svg with one rect per datum per series (grouped)", () => {
+    const { container } = render(<R.BarChart data={data} config={config} xKey="region" />);
+    const svg = container.querySelector("svg");
+    expect(svg?.getAttribute("role")).toBe("img");
+    expect(container.querySelectorAll("rect.vyre-chart__bar").length).toBe(6);
+  });
+  it("renders legend per series when showLegend", () => {
+    const { container } = render(<R.BarChart data={data} config={config} xKey="region" showLegend />);
+    expect(container.querySelectorAll(".vyre-chart__legend-item").length).toBe(2);
+  });
+  it("renders empty svg without NaN for empty data", () => {
+    const { container } = render(<R.BarChart data={[]} config={config} xKey="region" />);
+    expect(container.innerHTML).not.toMatch(/NaN|Infinity/);
+  });
+});
