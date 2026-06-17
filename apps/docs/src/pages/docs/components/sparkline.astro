@@ -1,0 +1,139 @@
+---
+import DocsLayout       from "@/layouts/DocsLayout.astro";
+import ComponentPreview from "@/components/docs/ComponentPreview.astro";
+import PropsTable       from "@/components/docs/PropsTable.astro";
+import AICheatSheet     from "@/components/docs/AICheatSheet.astro";
+import { SparklineDemo, SparklineVariantsDemo } from "@/components/demos/ChartsDemo";
+
+const codeReact = `import { Sparkline, Stat, Card, CardBody } from "@usevyre/react";
+
+<Card>
+  <CardBody>
+    <Stat
+      label="Revenue"
+      value="$48.2k"
+      delta="+12%"
+      trend="up"
+      deltaLabel="last 8 months"
+      icon={
+        <Sparkline
+          data={[18, 22, 20, 28, 34, 31, 40, 46]}
+          color="var(--vyre-color-semantic-success)"
+          width={96}
+          height={28}
+        />
+      }
+    />
+  </CardBody>
+</Card>`;
+
+const codeVue = `<script setup>
+import { Sparkline, Stat, Card, CardBody } from "@usevyre/vue";
+</script>
+<template>
+  <Card>
+    <CardBody>
+      <Stat
+        label="Revenue"
+        value="$48.2k"
+        delta="+12%"
+        trend="up"
+        delta-label="last 8 months"
+      >
+        <template #icon>
+          <Sparkline
+            :data="[18, 22, 20, 28, 34, 31, 40, 46]"
+            color="var(--vyre-color-semantic-success)"
+            :width="96"
+            :height="28"
+          />
+        </template>
+      </Stat>
+    </CardBody>
+  </Card>
+</template>`;
+
+const codeVariantsReact = `import { Sparkline } from "@usevyre/react";
+
+<Sparkline data={[3, 7, 4, 9, 6, 11, 8, 12]} variant="line" color="var(--vyre-color-semantic-accent)" />
+<Sparkline data={[3, 7, 4, 9, 6, 11, 8, 12]} variant="area" color="var(--vyre-color-semantic-teal)" />
+<Sparkline data={[3, 7, 4, 9, 6, 11, 8, 12]} variant="bar"  color="var(--vyre-color-semantic-success)" />`;
+
+const codeVariantsVue = `<script setup>
+import { Sparkline } from "@usevyre/vue";
+</script>
+<template>
+  <Sparkline :data="[3, 7, 4, 9, 6, 11, 8, 12]" variant="line" color="var(--vyre-color-semantic-accent)" />
+  <Sparkline :data="[3, 7, 4, 9, 6, 11, 8, 12]" variant="area" color="var(--vyre-color-semantic-teal)" />
+  <Sparkline :data="[3, 7, 4, 9, 6, 11, 8, 12]" variant="bar"  color="var(--vyre-color-semantic-success)" />
+</template>`;
+
+const props = [
+  { name: "data",    type: "number[]", default: "—", description: "Series of numbers to plot (required). A flat array of numbers, not row objects.", required: true },
+  { name: "variant", type: `"line" | "area" | "bar"`, default: `"line"`, description: "Render style of the sparkline." },
+  { name: "color",   type: "string", default: "var(--vyre-color-semantic-accent)", description: "Stroke/fill color as a token string." },
+  { name: "width",   type: "number", default: "80", description: "SVG width in px." },
+  { name: "height",  type: "number", default: "24", description: "SVG height in px." },
+];
+---
+
+<DocsLayout title="Sparkline" component="Sparkline">
+  <div class="docs-header">
+    <div class="docs-header__meta">
+      <span class="vyre-badge vyre-badge--default">@usevyre/react</span>
+      <span class="vyre-badge vyre-badge--default">@usevyre/vue</span>
+    </div>
+    <h1 class="docs-title">Sparkline</h1>
+    <p class="docs-lead">
+      A tiny inline chart with no axis, legend or tooltip — for
+      <code>Stat</code> cards and table cells. It takes a flat
+      <code>number[]</code> (<strong>not</strong> <code>data</code> +
+      <code>config</code> like the larger charts). The color is a single token
+      string passed via the <code>color</code> prop; it has no <code>config</code>
+      or <code>xKey</code>.
+    </p>
+  </div>
+
+  <hr class="docs-divider" />
+
+  <h2 class="docs-h2">Inline trend in a Stat card</h2>
+  <p class="docs-p">
+    Drop a Sparkline into a <code>Stat</code> (here via the icon slot) for a
+    chrome-less trend next to the headline figure. <code>color</code> is a
+    <code>--vyre-*</code> token string.
+  </p>
+  <ComponentPreview react={codeReact} vue={codeVue}>
+    <SparklineDemo client:visible />
+  </ComponentPreview>
+
+  <h2 class="docs-h2">Variants</h2>
+  <p class="docs-p">
+    The same flat <code>number[]</code> rendered as <code>line</code>,
+    <code>area</code> and <code>bar</code>, each with its own token
+    <code>color</code>.
+  </p>
+  <ComponentPreview react={codeVariantsReact} vue={codeVariantsVue}>
+    <SparklineVariantsDemo client:visible />
+  </ComponentPreview>
+
+  <h2 class="docs-h2">Props</h2>
+  <PropsTable props={props} />
+
+  <div class="docs-callout docs-callout--accent">
+    <strong>Flat <code>number[]</code>, single <code>color</code>.</strong> Unlike
+    LineChart/BarChart, Sparkline takes a flat array of numbers and one token color
+    string — it is intentionally chrome-less, with no grid, legend or tooltip. Reach
+    for a full chart when you need axes and a tooltip.
+  </div>
+
+  <AICheatSheet component="Sparkline" />
+
+  <div class="docs-pagination">
+    <a href="/docs/components/slider" class="docs-pagination__link docs-pagination__link--prev">
+      ← Slider
+    </a>
+    <a href="/docs/components/stack" class="docs-pagination__link docs-pagination__link--next">
+      Stack →
+    </a>
+  </div>
+</DocsLayout>

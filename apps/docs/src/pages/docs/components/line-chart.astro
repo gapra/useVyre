@@ -1,0 +1,119 @@
+---
+import DocsLayout       from "@/layouts/DocsLayout.astro";
+import ComponentPreview from "@/components/docs/ComponentPreview.astro";
+import PropsTable       from "@/components/docs/PropsTable.astro";
+import AICheatSheet     from "@/components/docs/AICheatSheet.astro";
+import { LineChartDemo } from "@/components/demos/ChartsDemo";
+
+const codeReact = `import { LineChart, Card, CardBody } from "@usevyre/react";
+
+const data = [
+  { month: "Jan", revenue: 18, users: 12 },
+  { month: "Feb", revenue: 22, users: 15 },
+  { month: "Mar", revenue: 20, users: 17 },
+  { month: "Apr", revenue: 28, users: 21 },
+  { month: "May", revenue: 34, users: 26 },
+  { month: "Jun", revenue: 31, users: 29 },
+];
+
+const config = {
+  revenue: { label: "Revenue", color: "var(--vyre-color-semantic-accent)" },
+  users:   { label: "Users",   color: "var(--vyre-color-semantic-teal)" },
+};
+
+<Card>
+  <CardBody>
+    <LineChart data={data} config={config} xKey="month" curve="smooth" dots />
+  </CardBody>
+</Card>`;
+
+const codeVue = `<script setup>
+import { LineChart, Card, CardBody } from "@usevyre/vue";
+
+const data = [
+  { month: "Jan", revenue: 18, users: 12 },
+  { month: "Feb", revenue: 22, users: 15 },
+  { month: "Mar", revenue: 20, users: 17 },
+  { month: "Apr", revenue: 28, users: 21 },
+  { month: "May", revenue: 34, users: 26 },
+  { month: "Jun", revenue: 31, users: 29 },
+];
+
+const config = {
+  revenue: { label: "Revenue", color: "var(--vyre-color-semantic-accent)" },
+  users:   { label: "Users",   color: "var(--vyre-color-semantic-teal)" },
+};
+</script>
+<template>
+  <Card>
+    <CardBody>
+      <LineChart :data="data" :config="config" x-key="month" curve="smooth" dots />
+    </CardBody>
+  </Card>
+</template>`;
+
+const props = [
+  { name: "data",        type: "ChartDatum[]", default: "—", description: "Array of row objects (required), e.g. [{ month: \"Jan\", revenue: 10 }].", required: true },
+  { name: "config",      type: "ChartConfig", default: "—", description: "Per-series settings (required): { seriesKey: { label, color } }. Colors are token strings; one line per key.", required: true },
+  { name: "xKey",        type: "string", default: "—", description: "Field in each row used for the x-axis (required), e.g. \"month\".", required: true },
+  { name: "curve",       type: `"linear" | "smooth"`, default: `"linear"`, description: "Line interpolation." },
+  { name: "dots",        type: "boolean", default: "false", description: "Draw a dot at each data point." },
+  { name: "width",       type: "number", default: "480", description: "SVG width in px." },
+  { name: "height",      type: "number", default: "240", description: "SVG height in px." },
+  { name: "showGrid",    type: "boolean", default: "true", description: "Show background grid lines and axis labels." },
+  { name: "showLegend",  type: "boolean", default: "true", description: "Show the legend; clicking a legend item toggles that series." },
+  { name: "showTooltip", type: "boolean", default: "true", description: "Show the hover/arrow-key tooltip." },
+];
+---
+
+<DocsLayout title="Line Chart" component="LineChart">
+  <div class="docs-header">
+    <div class="docs-header__meta">
+      <span class="vyre-badge vyre-badge--default">@usevyre/react</span>
+      <span class="vyre-badge vyre-badge--default">@usevyre/vue</span>
+    </div>
+    <h1 class="docs-title">Line Chart</h1>
+    <p class="docs-lead">
+      A multi-series line chart driven by <code>data</code> + <code>config</code> +
+      <code>xKey</code> — <strong>not</strong> Recharts-style JSX children. Each
+      series is a key in <code>config</code> (<code>{`{ label, color }`}</code>);
+      colors come <em>only</em> from config tokens (there is no <code>color</code>
+      prop). Grid, legend and tooltip are boolean props, and the tooltip supports
+      hover and arrow-key navigation.
+    </p>
+  </div>
+
+  <hr class="docs-divider" />
+
+  <h2 class="docs-h2">Multi-series, smooth curve</h2>
+  <p class="docs-p">
+    Two series (<code>revenue</code>, <code>users</code>) defined as
+    <code>config</code> keys. Each key supplies its own <code>label</code> and a
+    <code>--vyre-*</code> token <code>color</code>; the chart draws one line per key.
+  </p>
+  <ComponentPreview react={codeReact} vue={codeVue}>
+    <LineChartDemo client:visible />
+  </ComponentPreview>
+
+  <h2 class="docs-h2">Props</h2>
+  <PropsTable props={props} />
+
+  <div class="docs-callout docs-callout--accent">
+    <strong>No <code>color</code> prop, no JSX children.</strong> Per-series color
+    lives inside <code>config</code> as a token string; series are derived from the
+    keys of <code>config</code>. Use <code>showGrid</code> / <code>showLegend</code> /
+    <code>showTooltip</code> instead of child <code>&lt;XAxis/&gt;</code> /
+    <code>&lt;Tooltip/&gt;</code> elements.
+  </div>
+
+  <AICheatSheet component="LineChart" />
+
+  <div class="docs-pagination">
+    <a href="/docs/components/label" class="docs-pagination__link docs-pagination__link--prev">
+      ← Label
+    </a>
+    <a href="/docs/components/modal" class="docs-pagination__link docs-pagination__link--next">
+      Modal →
+    </a>
+  </div>
+</DocsLayout>

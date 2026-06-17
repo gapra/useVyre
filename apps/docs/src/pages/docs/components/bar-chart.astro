@@ -1,0 +1,114 @@
+---
+import DocsLayout       from "@/layouts/DocsLayout.astro";
+import ComponentPreview from "@/components/docs/ComponentPreview.astro";
+import PropsTable       from "@/components/docs/PropsTable.astro";
+import AICheatSheet     from "@/components/docs/AICheatSheet.astro";
+import { BarChartDemo } from "@/components/demos/ChartsDemo";
+
+const codeReact = `import { BarChart, Card, CardBody } from "@usevyre/react";
+
+const data = [
+  { region: "NA",    sales: 38, returns: 6 },
+  { region: "EU",    sales: 31, returns: 5 },
+  { region: "APAC",  sales: 27, returns: 4 },
+  { region: "LATAM", sales: 14, returns: 3 },
+];
+
+const config = {
+  sales:   { label: "Sales",   color: "var(--vyre-color-semantic-accent)" },
+  returns: { label: "Returns", color: "var(--vyre-color-semantic-warning)" },
+};
+
+<Card>
+  <CardBody>
+    <BarChart data={data} config={config} xKey="region" />
+  </CardBody>
+</Card>`;
+
+const codeVue = `<script setup>
+import { BarChart, Card, CardBody } from "@usevyre/vue";
+
+const data = [
+  { region: "NA",    sales: 38, returns: 6 },
+  { region: "EU",    sales: 31, returns: 5 },
+  { region: "APAC",  sales: 27, returns: 4 },
+  { region: "LATAM", sales: 14, returns: 3 },
+];
+
+const config = {
+  sales:   { label: "Sales",   color: "var(--vyre-color-semantic-accent)" },
+  returns: { label: "Returns", color: "var(--vyre-color-semantic-warning)" },
+};
+</script>
+<template>
+  <Card>
+    <CardBody>
+      <BarChart :data="data" :config="config" x-key="region" />
+    </CardBody>
+  </Card>
+</template>`;
+
+const props = [
+  { name: "data",        type: "ChartDatum[]", default: "—", description: "Array of row objects (required), e.g. [{ region: \"NA\", sales: 30 }].", required: true },
+  { name: "config",      type: "ChartConfig", default: "—", description: "Per-series settings (required): { seriesKey: { label, color } }. Colors are token strings; one bar group per datum.", required: true },
+  { name: "xKey",        type: "string", default: "—", description: "Field in each row used for the category axis (required).", required: true },
+  { name: "orientation", type: `"vertical" | "horizontal"`, default: `"vertical"`, description: "Bar direction." },
+  { name: "stacked",     type: "boolean", default: "false", description: "Stack series per category instead of grouping them side-by-side." },
+  { name: "width",       type: "number", default: "480", description: "SVG width in px." },
+  { name: "height",      type: "number", default: "240", description: "SVG height in px." },
+  { name: "showGrid",    type: "boolean", default: "true", description: "Show background grid lines and axis labels." },
+  { name: "showLegend",  type: "boolean", default: "true", description: "Show the legend; clicking a legend item toggles that series." },
+  { name: "showTooltip", type: "boolean", default: "true", description: "Show the hover/arrow-key tooltip." },
+];
+---
+
+<DocsLayout title="Bar Chart" component="BarChart">
+  <div class="docs-header">
+    <div class="docs-header__meta">
+      <span class="vyre-badge vyre-badge--default">@usevyre/react</span>
+      <span class="vyre-badge vyre-badge--default">@usevyre/vue</span>
+    </div>
+    <h1 class="docs-title">Bar Chart</h1>
+    <p class="docs-lead">
+      A multi-series bar chart driven by <code>data</code> + <code>config</code> +
+      <code>xKey</code> — <strong>not</strong> JSX children. The x-axis is banded by
+      data index; multiple series render as grouped side-by-side bars, or
+      <code>stacked</code>. Colors come <em>only</em> from config tokens (no
+      <code>color</code> prop). Supports <code>vertical</code> and
+      <code>horizontal</code> orientation.
+    </p>
+  </div>
+
+  <hr class="docs-divider" />
+
+  <h2 class="docs-h2">Grouped bars by region</h2>
+  <p class="docs-p">
+    Two series (<code>sales</code>, <code>returns</code>) grouped side-by-side per
+    category. Each <code>config</code> key supplies its own <code>label</code> and a
+    <code>--vyre-*</code> token <code>color</code>.
+  </p>
+  <ComponentPreview react={codeReact} vue={codeVue}>
+    <BarChartDemo client:visible />
+  </ComponentPreview>
+
+  <h2 class="docs-h2">Props</h2>
+  <PropsTable props={props} />
+
+  <div class="docs-callout docs-callout--accent">
+    <strong>No <code>color</code> prop, no JSX children.</strong> Per-series color
+    lives inside <code>config</code> as a token string; series are derived from the
+    keys of <code>config</code>. Use <code>orientation</code> / <code>stacked</code>
+    and the boolean grid/legend/tooltip props rather than child elements.
+  </div>
+
+  <AICheatSheet component="BarChart" />
+
+  <div class="docs-pagination">
+    <a href="/docs/components/badge" class="docs-pagination__link docs-pagination__link--prev">
+      ← Badge
+    </a>
+    <a href="/docs/components/box" class="docs-pagination__link docs-pagination__link--next">
+      Box →
+    </a>
+  </div>
+</DocsLayout>
