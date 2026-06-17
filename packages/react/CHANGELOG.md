@@ -1,5 +1,41 @@
 # @usevyre/react
 
+## 1.7.3
+
+### Patch Changes
+
+- 3fa4a4c: Security hardening (CodeQL):
+
+  - **@usevyre/init**: build the install command as an argv array and run it with
+    `execFileSync` instead of `execSync` on an interpolated string — no shell is
+    involved, so package-manager/framework values can never be interpreted as
+    shell commands. The `--ai` flag is now validated against the known targets
+    before use.
+  - **@usevyre/react**: replace the `Form` email-validation regex with a
+    linear-time pattern (avoids polynomial ReDoS on crafted input).
+  - **@usevyre/ai-context**: the template-literal escape helper in the build
+    script now escapes backslashes first, so input containing `\` is escaped
+    correctly.
+
+- 457fe6c: Fix two DOM-correctness issues caught by React in dev:
+
+  - **DatePicker / DateRangePicker**: the trigger was a `<button>` containing the
+    clear `<button>`, which is invalid HTML (`<button>` cannot nest in `<button>`)
+    and triggered a `validateDOMNesting` warning. The trigger is now a
+    `<div role="button" tabIndex={0}>` with Enter/Space keyboard handling, so the
+    clear button nests legally and the control stays keyboard-accessible.
+  - **RadioGroup**: auto-generated group names used a module-level counter, which
+    drifts between server and client render (SSR renders many, the client hydrates
+    one) and caused a "Prop `id` did not match" hydration warning. Now uses
+    `useId()`, which is stable across server and client.
+
+- 457fe6c: Use an SSR-safe layout effect in Tooltip and the shared dropdown positioning
+  hook (Combobox/Select). They previously called `useLayoutEffect` directly,
+  which logs a "useLayoutEffect does nothing on the server" warning during SSR
+  (e.g. in Astro/Next). A new `useIsomorphicLayoutEffect` helper uses
+  `useLayoutEffect` in the browser and `useEffect` on the server — identical
+  client behavior, no SSR warning.
+
 ## 1.7.2
 
 ### Patch Changes
