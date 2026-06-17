@@ -70,8 +70,6 @@ interface RadioContextValue {
 
 const RadioContext = React.createContext<RadioContextValue | null>(null);
 
-let radioGroupSeq = 0;
-
 export interface RadioGroupProps
   extends Omit<React.HTMLAttributes<HTMLDivElement>, "onChange">,
     BaseProps {
@@ -107,10 +105,11 @@ export const RadioGroup = React.forwardRef<HTMLDivElement, RadioGroupProps>(
     const isControlled = controlledValue !== undefined;
     const value = isControlled ? controlledValue : uncontrolled;
 
-    const autoName = React.useMemo(
-      () => name ?? `vyre-radio-${++radioGroupSeq}`,
-      [name]
-    );
+    // useId is SSR-stable (same value on server and client), unlike a module
+    // counter which drifts when the server renders several groups but the client
+    // hydrates one — that caused a "Prop id did not match" hydration warning.
+    const generatedName = React.useId();
+    const autoName = name ?? `vyre-radio-${generatedName}`;
 
     const handleChange = React.useCallback(
       (next: string) => {

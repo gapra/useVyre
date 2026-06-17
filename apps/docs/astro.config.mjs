@@ -11,6 +11,11 @@ export default defineConfig({
     // let it resolve them directly from TypeScript source.
     optimizeDeps: {
       exclude: ["@usevyre/react", "@usevyre/vue"],
+      // Force the React JSX runtimes to be pre-bundled in dev mode. Without this,
+      // Astro 6 / Vite 7 optimizes them alongside the prebuilt (production)
+      // @usevyre/react dist and bakes NODE_ENV=production into react/jsx-dev-runtime,
+      // leaving jsxDEV undefined → dev demos crash with "jsxDEV is not a function".
+      include: ["react/jsx-dev-runtime", "react/jsx-runtime", "react", "react-dom"],
     },
     ssr: {
       // Allow Vite SSR to process workspace TS source

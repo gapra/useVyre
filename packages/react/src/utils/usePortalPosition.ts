@@ -1,4 +1,5 @@
-import { useLayoutEffect, useState, type RefObject } from "react";
+import { useState, type RefObject } from "react";
+import { useIsomorphicLayoutEffect } from "./useIsomorphicLayoutEffect";
 
 /**
  * Position a portaled dropdown panel against an anchor element.
@@ -39,7 +40,7 @@ export function usePortalPosition(
     flip: false,
   });
 
-  useLayoutEffect(() => {
+  useIsomorphicLayoutEffect(() => {
     if (!open || disablePortal) return;
     const compute = () => {
       const anchor = anchorRef.current;
