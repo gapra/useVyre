@@ -8,14 +8,14 @@
     "preview": "astro preview"
   },
   "dependencies": {
-    "@astrojs/react": "^3.6.0",
-    "@astrojs/vue": "^4.5.0",
+    "@astrojs/react": "^5.0.7",
+    "@astrojs/vue": "^6.0.1",
     "@usevyre/ai-context": "workspace:*",
     "@usevyre/react": "workspace:*",
     "@usevyre/tokens": "workspace:*",
     "@usevyre/vue": "workspace:*",
     "@vercel/analytics": "^2.0.1",
-    "astro": "^4.15.0",
+    "astro": "^6.4.7",
     "react": "^18.3.0",
     "react-dom": "^18.3.0",
     "vue": "^3.4.0"

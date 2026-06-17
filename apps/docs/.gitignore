@@ -1,0 +1,3 @@
+# Astro build output and generated cache (regenerated on every build)
+dist/
+.astro/
