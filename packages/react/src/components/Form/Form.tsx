@@ -87,7 +87,9 @@ interface FormContextValue {
 
 const FormContext = React.createContext<FormContextValue | null>(null);
 
-const EMAIL_RE = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+// Linear-time email check: each segment forbids "@" and ".", so the engine
+// never has overlapping alternatives to backtrack over (avoids polynomial ReDoS).
+const EMAIL_RE = /^[^\s@.]+(?:\.[^\s@.]+)*@[^\s@.]+(?:\.[^\s@.]+)+$/;
 
 function runRules(
   value: unknown,

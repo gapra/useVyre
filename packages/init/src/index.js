@@ -71,13 +71,17 @@ export function ensureStylesImport(content, framework) {
   return { content: `${importLine}\n${content}`, changed: true };
 }
 
-/** The install command for a given package manager. */
+/**
+ * The install command for a given package manager, as an argv array
+ * (`[command, ...args]`) so callers can use execFileSync without a shell —
+ * no string interpolation reaches a shell, so there is no injection surface.
+ */
 export function installCommand(pm, framework) {
   const pkg = `@usevyre/${framework}`;
   switch (pm) {
-    case "pnpm": return `pnpm add ${pkg}`;
-    case "yarn": return `yarn add ${pkg}`;
-    case "bun": return `bun add ${pkg}`;
-    default: return `npm install ${pkg}`;
+    case "pnpm": return ["pnpm", "add", pkg];
+    case "yarn": return ["yarn", "add", pkg];
+    case "bun": return ["bun", "add", pkg];
+    default: return ["npm", "install", pkg];
   }
 }

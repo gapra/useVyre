@@ -67,6 +67,27 @@ describe("findEntryFile", () => {
   });
 });
 
+describe("installCommand (argv array — no shell string)", () => {
+  it("returns an argv array for pnpm", () => {
+    expect(mod.installCommand("pnpm", "react")).toEqual(["pnpm", "add", "@usevyre/react"]);
+  });
+  it("returns an argv array for yarn / bun", () => {
+    expect(mod.installCommand("yarn", "vue")).toEqual(["yarn", "add", "@usevyre/vue"]);
+    expect(mod.installCommand("bun", "react")).toEqual(["bun", "add", "@usevyre/react"]);
+  });
+  it("defaults to npm install", () => {
+    expect(mod.installCommand("npm", "vue")).toEqual(["npm", "install", "@usevyre/vue"]);
+    expect(mod.installCommand("unknown", "react")).toEqual(["npm", "install", "@usevyre/react"]);
+  });
+  it("keeps the package name as a single argv element (not shell-splittable)", () => {
+    const argv = mod.installCommand("pnpm", "react");
+    // The package spec is one discrete arg — execFileSync passes it verbatim,
+    // so there is no shell to interpret metacharacters.
+    expect(argv[argv.length - 1]).toBe("@usevyre/react");
+    expect(argv).toHaveLength(3);
+  });
+});
+
 describe("ensureStylesImport (idempotent, pure)", () => {
   it("prepends the styles import when absent", () => {
     const { content, changed } = mod.ensureStylesImport("const x = 1;\n", "react");

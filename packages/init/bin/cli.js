@@ -9,7 +9,7 @@
 
 import { readFileSync, writeFileSync, existsSync } from "node:fs";
 import { join, relative } from "node:path";
-import { execSync } from "node:child_process";
+import { execFileSync } from "node:child_process";
 import {
   detectFramework,
   detectPackageManager,
@@ -72,20 +72,23 @@ function run() {
   }
 
   const pm = detectPackageManager(cwd);
-  const install = installCommand(pm, framework);
+  const [installCmd, ...installArgs] = installCommand(pm, framework);
+  const installStr = [installCmd, ...installArgs].join(" ");
   const dry = flags.dryRun;
 
   info(`Project: ${framework} · package manager: ${pm}${dry ? " · dry-run" : ""}`);
 
-  // 1. Install the package.
+  // 1. Install the package. execFileSync (no shell) — argv is built from a
+  //    closed set of package-manager names and the "react"/"vue" literal, so
+  //    nothing user-controlled is ever interpolated into a shell command.
   if (dry) {
-    info(`Would run: ${install}`);
+    info(`Would run: ${installStr}`);
   } else {
     try {
-      execSync(install, { cwd, stdio: "inherit" });
+      execFileSync(installCmd, installArgs, { cwd, stdio: "inherit" });
       ok(`Installed @usevyre/${framework}`);
     } catch {
-      warn(`Install failed — run it yourself: ${install}`);
+      warn(`Install failed — run it yourself: ${installStr}`);
     }
   }
 
@@ -124,14 +127,23 @@ function run() {
 
   // 4. AI context — run if asked, else suggest.
   if (flags.ai) {
-    const cmd = `npx @usevyre/ai-context init --${flags.ai}`;
-    if (dry) {
-      info(`Would run: ${cmd}`);
+    // flags.ai is user input — validate against the known targets and pass it
+    // as a single argv element via execFileSync (no shell), so an arbitrary
+    // --ai value can never be interpreted as a shell command.
+    const AI_TARGETS = ["claude", "cursor", "windsurf", "copilot"];
+    if (!AI_TARGETS.includes(flags.ai)) {
+      warn(`Unknown --ai target "${flags.ai}". Expected one of: ${AI_TARGETS.join(", ")}`);
     } else {
-      try {
-        execSync(cmd, { cwd, stdio: "inherit" });
-      } catch {
-        warn(`AI context setup failed — run it yourself: ${cmd}`);
+      const aiArgs = ["@usevyre/ai-context", "init", `--${flags.ai}`];
+      const cmdStr = `npx ${aiArgs.join(" ")}`;
+      if (dry) {
+        info(`Would run: ${cmdStr}`);
+      } else {
+        try {
+          execFileSync("npx", aiArgs, { cwd, stdio: "inherit" });
+        } catch {
+          warn(`AI context setup failed — run it yourself: ${cmdStr}`);
+        }
       }
     }
   } else {

@@ -410,7 +410,10 @@ writeFileSync(resolve(dist, "anti-patterns.json"), JSON.stringify(antiPatternsEx
 
 // ── index.js — JS entry exporting all context strings + structured data ───────
 
-const escape = (s) => s.replace(/`/g, "\\`").replace(/\$/g, "\\$");
+// Escape backslash FIRST, otherwise the backslashes we add below would
+// themselves be double-counted / mis-escaped on input containing "\".
+const escape = (s) =>
+  s.replace(/\\/g, "\\\\").replace(/`/g, "\\`").replace(/\$/g, "\\$");
 
 // Build cheat sheets map for index.js export
 const cheatSheetsMap = Object.fromEntries(
