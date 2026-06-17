@@ -10,6 +10,7 @@ import {
   Sparkline,
   LineChart,
   AreaChart,
+  BarChart,
 } from "../../packages/vue/src";
 
 const hasNoBadNumbers = (html: string) =>
@@ -113,6 +114,29 @@ describe("AreaChart", () => {
 
   it("empty data renders no NaN", () => {
     const w = mount(AreaChart, {
+      props: { data: [], config: twoSeriesConfig, xKey: "month" },
+    });
+    expect(hasNoBadNumbers(w.html())).toBe(true);
+  });
+});
+
+describe("BarChart", () => {
+  it("grouped: renders one rect per series per datum (3x2 = 6 bars)", () => {
+    const w = mount(BarChart, {
+      props: { data: lineData, config: twoSeriesConfig, xKey: "month" },
+    });
+    expect(w.findAll("rect.vyre-chart__bar")).toHaveLength(6);
+  });
+
+  it("renders one legend item per series", () => {
+    const w = mount(BarChart, {
+      props: { data: lineData, config: twoSeriesConfig, xKey: "month" },
+    });
+    expect(w.findAll(".vyre-chart__legend-item")).toHaveLength(2);
+  });
+
+  it("empty data renders no NaN", () => {
+    const w = mount(BarChart, {
       props: { data: [], config: twoSeriesConfig, xKey: "month" },
     });
     expect(hasNoBadNumbers(w.html())).toBe(true);
