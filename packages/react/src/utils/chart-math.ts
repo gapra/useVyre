@@ -67,3 +67,27 @@ export function buildAreaPath(points: readonly Point[], baselineY: number, curve
   const firstX = points[0][0];
   return `${top} L${lastX},${baselineY} L${firstX},${baselineY} Z`;
 }
+
+function polar(cx: number, cy: number, r: number, angle: number): [number, number] {
+  return [cx + r * Math.sin(angle), cy - r * Math.cos(angle)];
+}
+
+/** SVG path for a pie slice (innerR omitted) or donut slice (innerR set). */
+export function arcPath(
+  cx: number,
+  cy: number,
+  r: number,
+  startAngle: number,
+  endAngle: number,
+  innerR = 0,
+): string {
+  const large = endAngle - startAngle > Math.PI ? 1 : 0;
+  const [ox0, oy0] = polar(cx, cy, r, startAngle);
+  const [ox1, oy1] = polar(cx, cy, r, endAngle);
+  if (innerR <= 0) {
+    return `M${cx},${cy} L${ox0},${oy0} A${r},${r} 0 ${large} 1 ${ox1},${oy1} Z`;
+  }
+  const [ix1, iy1] = polar(cx, cy, innerR, endAngle);
+  const [ix0, iy0] = polar(cx, cy, innerR, startAngle);
+  return `M${ox0},${oy0} A${r},${r} 0 ${large} 1 ${ox1},${oy1} L${ix1},${iy1} A${innerR},${innerR} 0 ${large} 0 ${ix0},${iy0} Z`;
+}

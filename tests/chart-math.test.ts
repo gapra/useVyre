@@ -1,5 +1,5 @@
 import { describe, it, expect } from "vitest";
-import { scaleLinear, niceTicks, buildLinePath, buildAreaPath } from "../packages/react/src/utils/chart-math";
+import { scaleLinear, niceTicks, buildLinePath, buildAreaPath, arcPath } from "../packages/react/src/utils/chart-math";
 
 describe("scaleLinear", () => {
   it("maps domain start to range start and domain end to range end", () => {
@@ -57,5 +57,19 @@ describe("buildAreaPath", () => {
     expect(d).toContain("L10,100");
     expect(d).toContain("L0,100");
     expect(d.trim().endsWith("Z")).toBe(true);
+  });
+});
+
+describe("arcPath", () => {
+  it("produces an SVG arc 'd' for a pie slice (no inner radius)", () => {
+    const d = arcPath(50, 50, 40, 0, Math.PI / 2);
+    expect(d.startsWith("M")).toBe(true);
+    expect(d).toContain("A40,40");
+    expect(d.trim().endsWith("Z")).toBe(true);
+  });
+  it("produces a donut slice when innerR is given", () => {
+    const d = arcPath(50, 50, 40, 0, Math.PI / 2, 20);
+    expect(d).toContain("A40,40");
+    expect(d).toContain("A20,20");
   });
 });
