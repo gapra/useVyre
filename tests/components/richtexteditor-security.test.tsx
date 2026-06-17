@@ -44,17 +44,14 @@ describe("RichTextEditor — security", () => {
   });
 
   it("passes value through sanitize before rendering", () => {
-    // Illustrative sanitizer for the test. Matches the closing tag with optional
-    // whitespace (</script >) and loops until no <script…> remains, so it does not
-    // leave a partial tag behind. (Real apps should pass DOMPurify via `sanitize`.)
+    // Illustrative sanitizer for the test. Parses the HTML and removes <script>
+    // elements via the DOM rather than a regex — regex HTML sanitization can't
+    // reliably match every closing-tag form (e.g. `</script foo>`). Real apps
+    // should pass a hardened sanitizer like DOMPurify via `sanitize`.
     const sanitize = (html: string) => {
-      let prev;
-      let out = html;
-      do {
-        prev = out;
-        out = out.replace(/<script\b[^>]*>[\s\S]*?<\/script\s*>/gi, "");
-      } while (out !== prev);
-      return out;
+      const doc = new DOMParser().parseFromString(html, "text/html");
+      doc.querySelectorAll("script").forEach((el) => el.remove());
+      return doc.body.innerHTML;
     };
     const { container } = render(
       <R.RichTextEditor
@@ -70,17 +67,14 @@ describe("RichTextEditor — security", () => {
 
   it("emits sanitized HTML through onChange", () => {
     const onChange = vi.fn();
-    // Illustrative sanitizer for the test. Matches the closing tag with optional
-    // whitespace (</script >) and loops until no <script…> remains, so it does not
-    // leave a partial tag behind. (Real apps should pass DOMPurify via `sanitize`.)
+    // Illustrative sanitizer for the test. Parses the HTML and removes <script>
+    // elements via the DOM rather than a regex — regex HTML sanitization can't
+    // reliably match every closing-tag form (e.g. `</script foo>`). Real apps
+    // should pass a hardened sanitizer like DOMPurify via `sanitize`.
     const sanitize = (html: string) => {
-      let prev;
-      let out = html;
-      do {
-        prev = out;
-        out = out.replace(/<script\b[^>]*>[\s\S]*?<\/script\s*>/gi, "");
-      } while (out !== prev);
-      return out;
+      const doc = new DOMParser().parseFromString(html, "text/html");
+      doc.querySelectorAll("script").forEach((el) => el.remove());
+      return doc.body.innerHTML;
     };
     const { container } = render(
       <R.RichTextEditor value="<p>x</p>" onChange={onChange} sanitize={sanitize} />,
