@@ -11,6 +11,7 @@ import {
   LineChart,
   AreaChart,
   BarChart,
+  PieChart,
 } from "../../packages/vue/src";
 
 const hasNoBadNumbers = (html: string) =>
@@ -139,6 +140,32 @@ describe("BarChart", () => {
     const w = mount(BarChart, {
       props: { data: [], config: twoSeriesConfig, xKey: "month" },
     });
+    expect(hasNoBadNumbers(w.html())).toBe(true);
+  });
+});
+
+const pieData = [
+  { name: "Chrome", value: 60 },
+  { name: "Safari", value: 25 },
+  { name: "Firefox", value: 15 },
+];
+
+describe("PieChart", () => {
+  it("renders one slice path per datum", () => {
+    const w = mount(PieChart, { props: { data: pieData } });
+    const svg = w.find("svg");
+    expect(svg.attributes("role")).toBe("img");
+    expect(w.findAll("path.vyre-chart__slice")).toHaveLength(3);
+  });
+
+  it("renders one legend item per datum", () => {
+    const w = mount(PieChart, { props: { data: pieData } });
+    expect(w.findAll(".vyre-chart__legend-item")).toHaveLength(3);
+  });
+
+  it("empty data renders no NaN and zero slices", () => {
+    const w = mount(PieChart, { props: { data: [] } });
+    expect(w.findAll("path.vyre-chart__slice")).toHaveLength(0);
     expect(hasNoBadNumbers(w.html())).toBe(true);
   });
 });
