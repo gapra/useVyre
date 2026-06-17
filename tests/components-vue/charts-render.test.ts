@@ -47,3 +47,46 @@ describe("Sparkline", () => {
     expect(hasNoBadNumbers(w.html())).toBe(true);
   });
 });
+
+const lineData = [
+  { month: "Jan", revenue: 10, cost: 4 },
+  { month: "Feb", revenue: 20, cost: 8 },
+  { month: "Mar", revenue: 15, cost: 6 },
+];
+const twoSeriesConfig = {
+  revenue: { label: "Revenue", color: "var(--vyre-color-semantic-accent)" },
+  cost: { label: "Cost", color: "var(--vyre-color-semantic-teal)" },
+};
+
+describe("LineChart", () => {
+  it("renders an svg role=img with one line path per series", () => {
+    const w = mount(LineChart, {
+      props: { data: lineData, config: twoSeriesConfig, xKey: "month" },
+    });
+    const svg = w.find("svg");
+    expect(svg.exists()).toBe(true);
+    expect(svg.attributes("role")).toBe("img");
+    expect(w.findAll("path.vyre-chart__line")).toHaveLength(2);
+  });
+
+  it("renders one legend item per series", () => {
+    const w = mount(LineChart, {
+      props: { data: lineData, config: twoSeriesConfig, xKey: "month" },
+    });
+    expect(w.findAll(".vyre-chart__legend-item")).toHaveLength(2);
+  });
+
+  it("omits the grid when showGrid=false", () => {
+    const w = mount(LineChart, {
+      props: { data: lineData, config: twoSeriesConfig, xKey: "month", showGrid: false },
+    });
+    expect(w.findAll(".vyre-chart__grid")).toHaveLength(0);
+  });
+
+  it("empty data renders no NaN", () => {
+    const w = mount(LineChart, {
+      props: { data: [], config: twoSeriesConfig, xKey: "month" },
+    });
+    expect(hasNoBadNumbers(w.html())).toBe(true);
+  });
+});
