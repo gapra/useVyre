@@ -4868,3 +4868,15 @@
   outline: none;
   box-shadow: 0 0 0 3px var(--vyre-color-semantic-accent-subtle);
 }
+/* ── Charts ───────────────────────────────────────────────────────── */
+.vyre-chart { position: relative; width: 100%; font-size: var(--vyre-typography-font-size-xs); }
+.vyre-chart svg { display: block; width: 100%; height: auto; overflow: visible; }
+.vyre-chart__grid line { stroke: var(--vyre-color-semantic-border); stroke-width: 1; }
+.vyre-chart__axis-label { fill: var(--vyre-color-semantic-text-muted); font-size: 11px; }
+.vyre-chart__legend { display: flex; flex-wrap: wrap; gap: var(--vyre-spacing-3); margin-top: var(--vyre-spacing-2); }
+.vyre-chart__legend-item { display: inline-flex; align-items: center; gap: var(--vyre-spacing-1); cursor: pointer; color: var(--vyre-color-semantic-text-primary); background: none; border: 0; font: inherit; padding: 0; }
+.vyre-chart__legend-item[aria-pressed="false"] { opacity: 0.4; }
+.vyre-chart__legend-swatch { width: 10px; height: 10px; border-radius: 2px; flex-shrink: 0; }
+.vyre-chart__tooltip { position: absolute; pointer-events: none; background: var(--vyre-color-semantic-surface); border: 1px solid var(--vyre-color-semantic-border); border-radius: var(--vyre-border-radius-md); padding: var(--vyre-spacing-2); box-shadow: var(--vyre-shadow-md); font-size: 12px; z-index: 10; }
+.vyre-chart__dot { stroke: var(--vyre-color-semantic-surface); stroke-width: 2; }
+.vyre-sparkline { display: inline-block; vertical-align: middle; }
