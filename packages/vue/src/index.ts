@@ -205,6 +205,7 @@ export { default as Carousel }        from "./components/Carousel/Carousel.vue";
 export { default as CarouselSlide }   from "./components/Carousel/CarouselSlide.vue";
 export { default as Sparkline }       from "./components/Sparkline/Sparkline.vue";
 export { default as LineChart }       from "./components/LineChart/LineChart.vue";
+export { default as AreaChart }       from "./components/AreaChart/AreaChart.vue";
 
 // ── Composables ───────────────────────────────────────────────
 export { useToast }                 from "./composables/useToast";

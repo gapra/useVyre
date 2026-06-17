@@ -10,8 +10,6 @@ import {
   Sparkline,
   LineChart,
   AreaChart,
-  BarChart,
-  PieChart,
 } from "../../packages/vue/src";
 
 const hasNoBadNumbers = (html: string) =>
@@ -85,6 +83,36 @@ describe("LineChart", () => {
 
   it("empty data renders no NaN", () => {
     const w = mount(LineChart, {
+      props: { data: [], config: twoSeriesConfig, xKey: "month" },
+    });
+    expect(hasNoBadNumbers(w.html())).toBe(true);
+  });
+});
+
+describe("AreaChart", () => {
+  it("renders one area path per series", () => {
+    const w = mount(AreaChart, {
+      props: { data: lineData, config: twoSeriesConfig, xKey: "month" },
+    });
+    expect(w.findAll("path.vyre-chart__area")).toHaveLength(2);
+  });
+
+  it("renders >=2 linearGradient defs by default (gradient=true)", () => {
+    const w = mount(AreaChart, {
+      props: { data: lineData, config: twoSeriesConfig, xKey: "month" },
+    });
+    expect(w.findAll("linearGradient").length).toBeGreaterThanOrEqual(2);
+  });
+
+  it("renders 0 linearGradient when gradient=false", () => {
+    const w = mount(AreaChart, {
+      props: { data: lineData, config: twoSeriesConfig, xKey: "month", gradient: false },
+    });
+    expect(w.findAll("linearGradient")).toHaveLength(0);
+  });
+
+  it("empty data renders no NaN", () => {
+    const w = mount(AreaChart, {
       props: { data: [], config: twoSeriesConfig, xKey: "month" },
     });
     expect(hasNoBadNumbers(w.html())).toBe(true);
