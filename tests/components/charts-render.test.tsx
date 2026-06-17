@@ -18,4 +18,12 @@ describe("Sparkline", () => {
     const { container } = render(<R.Sparkline data={[1, 2, 3]} variant="bar" />);
     expect(container.querySelectorAll("rect").length).toBe(3);
   });
+  it("renders a valid empty svg for empty data (no NaN)", () => {
+    const { container } = render(<R.Sparkline data={[]} variant="bar" />);
+    const svg = container.querySelector("svg");
+    expect(svg).toBeTruthy();
+    expect(container.querySelectorAll("rect").length).toBe(0);
+    // no NaN/Infinity leaked into any attribute
+    expect(container.innerHTML).not.toMatch(/NaN|Infinity/);
+  });
 });

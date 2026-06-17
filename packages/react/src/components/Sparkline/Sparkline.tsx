@@ -31,6 +31,14 @@ export const Sparkline: React.FC<SparklineProps> = ({
   data, variant = "line", color = "var(--vyre-color-semantic-accent)",
   width = 80, height = 24, className,
 }) => {
+  if (data.length === 0) {
+    return (
+      <span className={cn("vyre-sparkline", className)}>
+        <svg width={width} height={height} role="img" aria-label="Sparkline, no data" />
+      </span>
+    );
+  }
+
   const max = Math.max(...data, 0);
   const min = Math.min(...data, 0);
   const x = scaleLinear([0, Math.max(data.length - 1, 1)], [1, width - 1]);
