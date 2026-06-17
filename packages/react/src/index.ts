@@ -157,6 +157,8 @@ export { Sparkline }                                        from "./components/S
 export type { SparklineProps }                              from "./components/Sparkline/Sparkline";
 export { LineChart }                                        from "./components/LineChart/LineChart";
 export type { LineChartProps }                              from "./components/LineChart/LineChart";
+export { AreaChart }                                        from "./components/AreaChart/AreaChart";
+export type { AreaChartProps }                              from "./components/AreaChart/AreaChart";
 export { Timeline, TimelineItem }                           from "./components/Timeline/Timeline";
 export type { TimelineProps, TimelineItemProps, TimelineItemData, TimelineStatus } from "./components/Timeline/Timeline";
 export { Tree }                                             from "./components/Tree/Tree";

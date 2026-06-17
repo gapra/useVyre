@@ -55,3 +55,33 @@ describe("LineChart", () => {
     expect(container.querySelectorAll(".vyre-chart__grid").length).toBe(0);
   });
 });
+
+describe("AreaChart", () => {
+  const data = [
+    { month: "Jan", a: 10, b: 4 },
+    { month: "Feb", a: 20, b: 8 },
+    { month: "Mar", a: 15, b: 6 },
+  ];
+  const config = {
+    a: { label: "A", color: "var(--vyre-color-semantic-accent)" },
+    b: { label: "B", color: "var(--vyre-color-semantic-teal)" },
+  };
+  it("renders an accessible svg with an area path per series", () => {
+    const { container } = render(<R.AreaChart data={data} config={config} xKey="month" />);
+    const svg = container.querySelector("svg");
+    expect(svg?.getAttribute("role")).toBe("img");
+    expect(container.querySelectorAll("path.vyre-chart__area").length).toBe(2);
+  });
+  it("defines gradient stops when gradient (default)", () => {
+    const { container } = render(<R.AreaChart data={data} config={config} xKey="month" />);
+    expect(container.querySelectorAll("linearGradient").length).toBeGreaterThanOrEqual(2);
+  });
+  it("no gradient defs when gradient={false}", () => {
+    const { container } = render(<R.AreaChart data={data} config={config} xKey="month" gradient={false} />);
+    expect(container.querySelectorAll("linearGradient").length).toBe(0);
+  });
+  it("renders empty svg without NaN for empty data", () => {
+    const { container } = render(<R.AreaChart data={[]} config={config} xKey="month" />);
+    expect(container.innerHTML).not.toMatch(/NaN|Infinity/);
+  });
+});
