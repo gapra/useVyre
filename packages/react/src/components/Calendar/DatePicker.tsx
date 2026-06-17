@@ -68,7 +68,7 @@ function formatPickerValue(props: CalendarProps): string {
 export const DatePicker = React.forwardRef<HTMLDivElement, DatePickerProps>(
   ({ placeholder = "Pick a date", inputClassName, ...calendarProps }, ref) => {
     const [open, setOpen] = useState(false);
-    const triggerRef = useRef<HTMLButtonElement>(null);
+    const triggerRef = useRef<HTMLDivElement>(null);
     const popoverRef = useRef<HTMLDivElement>(null);
     const [pos, setPos] = useState({ top: 0, left: 0, width: 0 });
 
@@ -140,11 +140,22 @@ export const DatePicker = React.forwardRef<HTMLDivElement, DatePickerProps>(
 
     return (
       <div ref={ref} className="vyre-datepicker">
-        <button
+        {/* role="button" div (not <button>) so the optional clear <button> can
+            nest without invalid <button>-in-<button> DOM. Keyboard support via
+            onKeyDown keeps it operable. */}
+        <div
           ref={triggerRef}
-          type="button"
+          role="button"
+          tabIndex={0}
           className={cn("vyre-datepicker__trigger", !displayValue && "vyre-datepicker__trigger--placeholder", inputClassName)}
           onClick={() => { updatePos(); setOpen((o) => !o); }}
+          onKeyDown={(e) => {
+            if (e.key === "Enter" || e.key === " ") {
+              e.preventDefault();
+              updatePos();
+              setOpen((o) => !o);
+            }
+          }}
           aria-expanded={open}
           aria-haspopup="dialog"
         >
@@ -170,7 +181,7 @@ export const DatePicker = React.forwardRef<HTMLDivElement, DatePickerProps>(
               </svg>
             </button>
           )}
-        </button>
+        </div>
 
         {open && ReactDOM.createPortal(
           <div
