@@ -161,6 +161,8 @@ export { AreaChart }                                        from "./components/A
 export type { AreaChartProps }                              from "./components/AreaChart/AreaChart";
 export { BarChart }                                         from "./components/BarChart/BarChart";
 export type { BarChartProps }                               from "./components/BarChart/BarChart";
+export { PieChart }                                         from "./components/PieChart/PieChart";
+export type { PieChartProps, PieDatum }                     from "./components/PieChart/PieChart";
 export { Timeline, TimelineItem }                           from "./components/Timeline/Timeline";
 export type { TimelineProps, TimelineItemProps, TimelineItemData, TimelineStatus } from "./components/Timeline/Timeline";
 export { Tree }                                             from "./components/Tree/Tree";

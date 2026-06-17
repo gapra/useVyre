@@ -111,3 +111,26 @@ describe("BarChart", () => {
     expect(container.innerHTML).not.toMatch(/NaN|Infinity/);
   });
 });
+
+describe("PieChart", () => {
+  const data = [
+    { name: "Chrome", value: 60 },
+    { name: "Safari", value: 25 },
+    { name: "Firefox", value: 15 },
+  ];
+  it("renders accessible svg with one slice path per datum", () => {
+    const { container } = render(<R.PieChart data={data} />);
+    const svg = container.querySelector("svg");
+    expect(svg?.getAttribute("role")).toBe("img");
+    expect(container.querySelectorAll("path.vyre-chart__slice").length).toBe(3);
+  });
+  it("renders a legend item per segment when showLegend", () => {
+    const { container } = render(<R.PieChart data={data} showLegend />);
+    expect(container.querySelectorAll(".vyre-chart__legend-item").length).toBe(3);
+  });
+  it("renders empty svg without NaN for empty data", () => {
+    const { container } = render(<R.PieChart data={[]} />);
+    expect(container.innerHTML).not.toMatch(/NaN|Infinity/);
+    expect(container.querySelectorAll("path.vyre-chart__slice").length).toBe(0);
+  });
+});
