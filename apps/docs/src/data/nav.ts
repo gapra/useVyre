@@ -56,6 +56,7 @@ export const navigation: NavSection[] = [
       { title: "Calendar",          href: "/docs/components/calendar"          },
       { title: "Card",              href: "/docs/components/card"              },
       { title: "Carousel",          href: "/docs/components/carousel"          },
+      { title: "Charts",            href: "/docs/components/charts"            },
       { title: "Checkbox",          href: "/docs/components/checkbox"          },
       { title: "Combobox",          href: "/docs/components/combobox"                          },
       { title: "Command",           href: "/docs/components/command"           },

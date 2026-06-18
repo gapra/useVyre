@@ -1,14 +1,19 @@
 {
   "$schema": "http://json-schema.org/draft-07/schema#",
-  "version": "1.20.0",
-  "generatedAt": "2026-06-15",
+  "version": "1.21.0",
+  "generatedAt": "2026-06-17",
   "package": "@usevyre/react",
-  "packageVersion": "1.20.0",
+  "packageVersion": "1.21.0",
   "validFor": [
     "@usevyre/react@1.1.0+",
     "@usevyre/vue@1.1.0+"
   ],
   "changelog": {
+    "1.21.0": {
+      "date": "2026-06-17",
+      "breaking": false,
+      "summary": "Added 5 chart components: Sparkline (tiny inline chart, data=number[], variant line/area/bar), and the data+config driven LineChart, AreaChart, BarChart and PieChart. Charts are data + config + xKey driven (NOT Recharts-style JSX children); colors come from config tokens, not a color prop. PieChart takes flat {name,value}[] data. Includes anti-patterns steering agents away from series={...}, color=\"blue\", <XAxis/>/<Tooltip/>/<Pie>/<Cell> children, and numeric pie data."
+    },
     "1.20.0": {
       "date": "2026-06-15",
       "breaking": false,
@@ -4010,6 +4015,381 @@
         {
           "description": "Single month, no presets",
           "code": "<DateRangePicker value={range} onChange={setRange} numberOfMonths={1} />"
+        }
+      ]
+    },
+    "Sparkline": {
+      "description": "Tiny inline chart with no axis, legend or tooltip — for Stat cards and table cells. Takes a flat number[] (NOT data + config like the larger charts). The color is a single token string passed via the `color` prop (it has no `config` or `xKey`).",
+      "import": "import { Sparkline } from \"@usevyre/react\"",
+      "props": {
+        "data": {
+          "type": "number[]",
+          "description": "Series of numbers to plot (required). A flat array of numbers, not row objects."
+        },
+        "variant": {
+          "type": "enum",
+          "values": [
+            "line",
+            "area",
+            "bar"
+          ],
+          "default": "line",
+          "description": "Render style of the sparkline."
+        },
+        "color": {
+          "type": "string",
+          "default": "var(--vyre-color-semantic-accent)",
+          "description": "Stroke/fill color as a token string (e.g. \"var(--vyre-color-semantic-success)\")."
+        },
+        "width": {
+          "type": "number",
+          "default": 80,
+          "description": "SVG width in px."
+        },
+        "height": {
+          "type": "number",
+          "default": 24,
+          "description": "SVG height in px."
+        }
+      },
+      "antiPatterns": [
+        {
+          "pattern": "Passing row objects: data={[{ name, value }]}",
+          "reason": "Sparkline takes a flat number[], not the {name,value}[] PieChart wants or the row objects LineChart/BarChart want",
+          "fix": "data={[3, 7, 4, 9, 6]}"
+        },
+        {
+          "pattern": "Expecting an axis, legend or tooltip",
+          "reason": "Sparkline is intentionally chrome-less for inline use; it has no showGrid/showLegend/showTooltip props",
+          "fix": "Use LineChart/AreaChart/BarChart for a full chart with axes and tooltip"
+        }
+      ],
+      "examples": [
+        {
+          "description": "Inline trend in a Stat card",
+          "code": "<Sparkline data={[3, 7, 4, 9, 6, 11]} />"
+        },
+        {
+          "description": "Bar variant with a success token color",
+          "code": "<Sparkline data={[2, 4, 3, 8]} variant=\"bar\" color=\"var(--vyre-color-semantic-success)\" />"
+        }
+      ]
+    },
+    "LineChart": {
+      "description": "Multi-series line chart. Data + config + xKey driven (NOT Recharts-style JSX children). Each series is a key in `config` ({ label, color }); colors come ONLY from config tokens — there is no `color` prop. Grid/legend/tooltip are boolean props; the tooltip supports hover and arrow-key navigation.",
+      "import": "import { LineChart } from \"@usevyre/react\"",
+      "props": {
+        "data": {
+          "type": "ChartDatum[]",
+          "description": "Array of row objects (required), e.g. [{ month: \"Jan\", revenue: 10 }]."
+        },
+        "config": {
+          "type": "ChartConfig",
+          "description": "Per-series settings (required): { seriesKey: { label, color } }. Colors are token strings; one line is drawn per key."
+        },
+        "xKey": {
+          "type": "string",
+          "description": "Name of the field in each row used for the x-axis (required), e.g. \"month\"."
+        },
+        "curve": {
+          "type": "enum",
+          "values": [
+            "linear",
+            "smooth"
+          ],
+          "default": "linear",
+          "description": "Line interpolation."
+        },
+        "dots": {
+          "type": "boolean",
+          "default": false,
+          "description": "Draw a dot at each data point."
+        },
+        "width": {
+          "type": "number",
+          "default": 480,
+          "description": "SVG width in px."
+        },
+        "height": {
+          "type": "number",
+          "default": 240,
+          "description": "SVG height in px."
+        },
+        "showGrid": {
+          "type": "boolean",
+          "default": true,
+          "description": "Show background grid lines and axis labels."
+        },
+        "showLegend": {
+          "type": "boolean",
+          "default": true,
+          "description": "Show the legend; clicking a legend item toggles that series."
+        },
+        "showTooltip": {
+          "type": "boolean",
+          "default": true,
+          "description": "Show the hover/arrow-key tooltip."
+        }
+      },
+      "antiPatterns": [
+        {
+          "pattern": "Passing series via series={...}",
+          "reason": "There is no `series` prop; LineChart derives its series from the keys of `config`",
+          "fix": "Use data (row objects) + config ({ key: { label, color } }) + xKey"
+        },
+        {
+          "pattern": "Setting a single color with color=\"blue\"",
+          "reason": "There is no `color` prop; per-series color is a token inside config",
+          "fix": "config={{ revenue: { label: \"Revenue\", color: \"var(--vyre-color-semantic-accent)\" } }}"
+        },
+        {
+          "pattern": "Recharts-style children like <XAxis/> or <Tooltip/>",
+          "reason": "LineChart is not composed from JSX children; grid/legend/tooltip are boolean props",
+          "fix": "Use showGrid / showLegend / showTooltip props instead of child elements"
+        }
+      ],
+      "examples": [
+        {
+          "description": "Single-series revenue line",
+          "code": "<LineChart\n  data={[{ month: \"Jan\", revenue: 10 }, { month: \"Feb\", revenue: 20 }]}\n  config={{ revenue: { label: \"Revenue\", color: \"var(--vyre-color-semantic-accent)\" } }}\n  xKey=\"month\"\n/>"
+        },
+        {
+          "description": "Smooth curve with dots, no legend",
+          "code": "<LineChart data={data} config={config} xKey=\"month\" curve=\"smooth\" dots showLegend={false} />"
+        }
+      ]
+    },
+    "AreaChart": {
+      "description": "Multi-series area chart (line + filled area). Data + config + xKey driven (NOT JSX children). Series come from `config` keys; colors are config tokens (no `color` prop). Supports a fade-to-transparent gradient and stacking.",
+      "import": "import { AreaChart } from \"@usevyre/react\"",
+      "props": {
+        "data": {
+          "type": "ChartDatum[]",
+          "description": "Array of row objects (required), e.g. [{ month: \"Jan\", revenue: 10 }]."
+        },
+        "config": {
+          "type": "ChartConfig",
+          "description": "Per-series settings (required): { seriesKey: { label, color } }. Colors are token strings."
+        },
+        "xKey": {
+          "type": "string",
+          "description": "Name of the field in each row used for the x-axis (required)."
+        },
+        "curve": {
+          "type": "enum",
+          "values": [
+            "linear",
+            "smooth"
+          ],
+          "default": "linear",
+          "description": "Line/area interpolation."
+        },
+        "gradient": {
+          "type": "boolean",
+          "default": true,
+          "description": "Fill each area with a fade-to-transparent gradient (false = flat low-opacity fill)."
+        },
+        "stacked": {
+          "type": "boolean",
+          "default": false,
+          "description": "Stack series on top of each other instead of overlaying."
+        },
+        "width": {
+          "type": "number",
+          "default": 480,
+          "description": "SVG width in px."
+        },
+        "height": {
+          "type": "number",
+          "default": 240,
+          "description": "SVG height in px."
+        },
+        "showGrid": {
+          "type": "boolean",
+          "default": true,
+          "description": "Show background grid lines and axis labels."
+        },
+        "showLegend": {
+          "type": "boolean",
+          "default": true,
+          "description": "Show the legend; clicking a legend item toggles that series."
+        },
+        "showTooltip": {
+          "type": "boolean",
+          "default": true,
+          "description": "Show the hover/arrow-key tooltip."
+        }
+      },
+      "antiPatterns": [
+        {
+          "pattern": "Passing series via series={...}",
+          "reason": "There is no `series` prop; AreaChart derives its series from the keys of `config`",
+          "fix": "Use data (row objects) + config ({ key: { label, color } }) + xKey"
+        },
+        {
+          "pattern": "Setting a single color with color=\"blue\"",
+          "reason": "There is no `color` prop; per-series color is a token inside config",
+          "fix": "config={{ revenue: { label: \"Revenue\", color: \"var(--vyre-color-semantic-accent)\" } }}"
+        },
+        {
+          "pattern": "Recharts-style children like <XAxis/> or <Tooltip/>",
+          "reason": "AreaChart is not composed from JSX children; grid/legend/tooltip are boolean props",
+          "fix": "Use showGrid / showLegend / showTooltip props instead of child elements"
+        }
+      ],
+      "examples": [
+        {
+          "description": "Single-series revenue area",
+          "code": "<AreaChart\n  data={[{ month: \"Jan\", revenue: 10 }, { month: \"Feb\", revenue: 20 }]}\n  config={{ revenue: { label: \"Revenue\", color: \"var(--vyre-color-semantic-accent)\" } }}\n  xKey=\"month\"\n/>"
+        },
+        {
+          "description": "Stacked, flat fill",
+          "code": "<AreaChart data={data} config={config} xKey=\"month\" stacked gradient={false} />"
+        }
+      ]
+    },
+    "BarChart": {
+      "description": "Multi-series bar chart. Data + config + xKey driven (NOT JSX children). The x-axis is banded by data index; multiple series render as grouped side-by-side bars, or stacked when `stacked`. Colors come ONLY from config tokens (no `color` prop). Supports vertical and horizontal orientation.",
+      "import": "import { BarChart } from \"@usevyre/react\"",
+      "props": {
+        "data": {
+          "type": "ChartDatum[]",
+          "description": "Array of row objects (required), e.g. [{ region: \"NA\", sales: 30 }]."
+        },
+        "config": {
+          "type": "ChartConfig",
+          "description": "Per-series settings (required): { seriesKey: { label, color } }. Colors are token strings; one bar group per datum."
+        },
+        "xKey": {
+          "type": "string",
+          "description": "Name of the field in each row used for the category axis (required)."
+        },
+        "orientation": {
+          "type": "enum",
+          "values": [
+            "vertical",
+            "horizontal"
+          ],
+          "default": "vertical",
+          "description": "Bar direction."
+        },
+        "stacked": {
+          "type": "boolean",
+          "default": false,
+          "description": "Stack series per category instead of grouping them side-by-side."
+        },
+        "width": {
+          "type": "number",
+          "default": 480,
+          "description": "SVG width in px."
+        },
+        "height": {
+          "type": "number",
+          "default": 240,
+          "description": "SVG height in px."
+        },
+        "showGrid": {
+          "type": "boolean",
+          "default": true,
+          "description": "Show background grid lines and axis labels."
+        },
+        "showLegend": {
+          "type": "boolean",
+          "default": true,
+          "description": "Show the legend; clicking a legend item toggles that series."
+        },
+        "showTooltip": {
+          "type": "boolean",
+          "default": true,
+          "description": "Show the hover/arrow-key tooltip."
+        }
+      },
+      "antiPatterns": [
+        {
+          "pattern": "Passing series via series={...}",
+          "reason": "There is no `series` prop; BarChart derives its series from the keys of `config`",
+          "fix": "Use data (row objects) + config ({ key: { label, color } }) + xKey"
+        },
+        {
+          "pattern": "Setting a single color with color=\"blue\"",
+          "reason": "There is no `color` prop; per-series color is a token inside config",
+          "fix": "config={{ sales: { label: \"Sales\", color: \"var(--vyre-color-semantic-accent)\" } }}"
+        },
+        {
+          "pattern": "Recharts-style children like <XAxis/> or <Tooltip/>",
+          "reason": "BarChart is not composed from JSX children; grid/legend/tooltip are boolean props",
+          "fix": "Use showGrid / showLegend / showTooltip props instead of child elements"
+        }
+      ],
+      "examples": [
+        {
+          "description": "Single-series bar chart by region",
+          "code": "<BarChart\n  data={[{ region: \"NA\", sales: 30 }, { region: \"EU\", sales: 25 }]}\n  config={{ sales: { label: \"Sales\", color: \"var(--vyre-color-semantic-accent)\" } }}\n  xKey=\"region\"\n/>"
+        },
+        {
+          "description": "Horizontal, stacked two-series bars",
+          "code": "<BarChart data={data} config={config} xKey=\"region\" orientation=\"horizontal\" stacked />"
+        }
+      ]
+    },
+    "PieChart": {
+      "description": "Single-level pie/donut chart. Takes FLAT data — an array of { name, value } objects (NOT multi-series rows, and NOT a list of numbers). `config` is optional ({ name: { label, color } }); names without a config entry fall back to a built-in token color cycle. There is no `color` prop and no <Pie>/<Cell> children.",
+      "import": "import { PieChart } from \"@usevyre/react\"",
+      "props": {
+        "data": {
+          "type": "PieDatum[]",
+          "description": "Flat array of { name: string; value: number } objects (required), e.g. [{ name: \"Chrome\", value: 60 }]."
+        },
+        "config": {
+          "type": "ChartConfig",
+          "description": "Optional per-segment settings: { name: { label, color } }. Unmatched names use a token color cycle."
+        },
+        "donut": {
+          "type": "boolean",
+          "default": false,
+          "description": "Render a hollow-center donut instead of a full pie."
+        },
+        "size": {
+          "type": "number",
+          "default": 240,
+          "description": "SVG width AND height in px (the chart is square)."
+        },
+        "showLegend": {
+          "type": "boolean",
+          "default": true,
+          "description": "Show the legend; clicking a legend item toggles that segment."
+        },
+        "showTooltip": {
+          "type": "boolean",
+          "default": true,
+          "description": "Show the hover tooltip."
+        }
+      },
+      "antiPatterns": [
+        {
+          "pattern": "Passing numbers: data={[1, 2, 3]}",
+          "reason": "PieChart needs named segments to label and color them",
+          "fix": "data={[{ name: \"Chrome\", value: 60 }, { name: \"Safari\", value: 25 }]}"
+        },
+        {
+          "pattern": "Setting a single color with color=\"blue\"",
+          "reason": "There is no `color` prop; per-segment color comes from config or the built-in token cycle",
+          "fix": "Omit color (auto token cycle) or config={{ Chrome: { label: \"Chrome\", color: \"var(--vyre-color-semantic-accent)\" } }}"
+        },
+        {
+          "pattern": "Recharts-style <Pie>/<Cell> children",
+          "reason": "PieChart is not composed from JSX children",
+          "fix": "Use the data prop (and donut for a ring) instead of child elements"
+        }
+      ],
+      "examples": [
+        {
+          "description": "Donut from flat name/value data (auto colors)",
+          "code": "<PieChart\n  data={[\n    { name: \"Chrome\", value: 60 },\n    { name: \"Safari\", value: 25 },\n    { name: \"Firefox\", value: 15 },\n  ]}\n  donut\n/>"
+        },
+        {
+          "description": "Explicit per-segment colors via config",
+          "code": "<PieChart\n  data={[{ name: \"Chrome\", value: 60 }, { name: \"Safari\", value: 40 }]}\n  config={{ Chrome: { label: \"Chrome\", color: \"var(--vyre-color-semantic-accent)\" } }}\n/>"
         }
       ]
     }

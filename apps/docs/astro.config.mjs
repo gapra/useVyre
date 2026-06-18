@@ -6,6 +6,15 @@ export default defineConfig({
   integrations: [react(), vue()],
   site: "https://usevyre.com",
   output: "static",
+  // The 5 chart components are documented as sections on a single /charts page.
+  // Keep the old per-chart URLs alive by redirecting them to the matching anchor.
+  redirects: {
+    "/docs/components/line-chart":  "/docs/components/charts#line-chart",
+    "/docs/components/area-chart":  "/docs/components/charts#area-chart",
+    "/docs/components/bar-chart":   "/docs/components/charts#bar-chart",
+    "/docs/components/pie-chart":   "/docs/components/charts#pie-chart",
+    "/docs/components/sparkline":   "/docs/components/charts#sparkline",
+  },
   vite: {
     // Prevent Vite from pre-bundling workspace packages —
     // let it resolve them directly from TypeScript source.

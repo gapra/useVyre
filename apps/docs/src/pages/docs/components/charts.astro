@@ -1,0 +1,462 @@
+---
+import DocsLayout       from "@/layouts/DocsLayout.astro";
+import ComponentPreview from "@/components/docs/ComponentPreview.astro";
+import PropsTable       from "@/components/docs/PropsTable.astro";
+import AICheatSheet     from "@/components/docs/AICheatSheet.astro";
+import {
+  LineChartDemo,
+  AreaChartDemo,
+  BarChartDemo,
+  PieChartDemo,
+  SparklineDemo,
+  SparklineVariantsDemo,
+} from "@/components/demos/ChartsDemo";
+
+// ── Line ──────────────────────────────────────────────────────────────
+const lineReact = `import { LineChart, Card, CardBody } from "@usevyre/react";
+
+const data = [
+  { month: "Jan", revenue: 18, users: 12 },
+  { month: "Feb", revenue: 22, users: 15 },
+  { month: "Mar", revenue: 20, users: 17 },
+  { month: "Apr", revenue: 28, users: 21 },
+  { month: "May", revenue: 34, users: 26 },
+  { month: "Jun", revenue: 31, users: 29 },
+];
+
+const config = {
+  revenue: { label: "Revenue", color: "var(--vyre-color-semantic-accent)" },
+  users:   { label: "Users",   color: "var(--vyre-color-semantic-teal)" },
+};
+
+<Card>
+  <CardBody>
+    <LineChart data={data} config={config} xKey="month" curve="smooth" dots />
+  </CardBody>
+</Card>`;
+const lineVue = `<script setup>
+import { LineChart, Card, CardBody } from "@usevyre/vue";
+
+const data = [
+  { month: "Jan", revenue: 18, users: 12 },
+  { month: "Feb", revenue: 22, users: 15 },
+  { month: "Mar", revenue: 20, users: 17 },
+  { month: "Apr", revenue: 28, users: 21 },
+  { month: "May", revenue: 34, users: 26 },
+  { month: "Jun", revenue: 31, users: 29 },
+];
+
+const config = {
+  revenue: { label: "Revenue", color: "var(--vyre-color-semantic-accent)" },
+  users:   { label: "Users",   color: "var(--vyre-color-semantic-teal)" },
+};
+</script>
+<template>
+  <Card>
+    <CardBody>
+      <LineChart :data="data" :config="config" x-key="month" curve="smooth" dots />
+    </CardBody>
+  </Card>
+</template>`;
+const lineProps = [
+  { name: "data",        type: "ChartDatum[]", default: "—", description: "Array of row objects (required), e.g. [{ month: \"Jan\", revenue: 10 }].", required: true },
+  { name: "config",      type: "ChartConfig", default: "—", description: "Per-series settings (required): { seriesKey: { label, color } }. Colors are token strings; one line per key.", required: true },
+  { name: "xKey",        type: "string", default: "—", description: "Field in each row used for the x-axis (required), e.g. \"month\".", required: true },
+  { name: "curve",       type: `"linear" | "smooth"`, default: `"linear"`, description: "Line interpolation." },
+  { name: "dots",        type: "boolean", default: "false", description: "Draw a dot at each data point." },
+  { name: "width",       type: "number", default: "480", description: "SVG width in px." },
+  { name: "height",      type: "number", default: "240", description: "SVG height in px." },
+  { name: "showGrid",    type: "boolean", default: "true", description: "Show background grid lines and axis labels." },
+  { name: "showLegend",  type: "boolean", default: "true", description: "Show the legend; clicking a legend item toggles that series." },
+  { name: "showTooltip", type: "boolean", default: "true", description: "Show the hover/arrow-key tooltip." },
+];
+
+// ── Area ──────────────────────────────────────────────────────────────
+const areaReact = `import { AreaChart, Card, CardBody } from "@usevyre/react";
+
+const data = [
+  { month: "Jan", revenue: 18, users: 12 },
+  { month: "Feb", revenue: 22, users: 15 },
+  { month: "Mar", revenue: 20, users: 17 },
+  { month: "Apr", revenue: 28, users: 21 },
+  { month: "May", revenue: 34, users: 26 },
+  { month: "Jun", revenue: 31, users: 29 },
+];
+
+const config = {
+  revenue: { label: "Revenue", color: "var(--vyre-color-semantic-accent)" },
+  users:   { label: "Users",   color: "var(--vyre-color-semantic-teal)" },
+};
+
+<Card>
+  <CardBody>
+    <AreaChart data={data} config={config} xKey="month" curve="smooth" stacked />
+  </CardBody>
+</Card>`;
+const areaVue = `<script setup>
+import { AreaChart, Card, CardBody } from "@usevyre/vue";
+
+const data = [
+  { month: "Jan", revenue: 18, users: 12 },
+  { month: "Feb", revenue: 22, users: 15 },
+  { month: "Mar", revenue: 20, users: 17 },
+  { month: "Apr", revenue: 28, users: 21 },
+  { month: "May", revenue: 34, users: 26 },
+  { month: "Jun", revenue: 31, users: 29 },
+];
+
+const config = {
+  revenue: { label: "Revenue", color: "var(--vyre-color-semantic-accent)" },
+  users:   { label: "Users",   color: "var(--vyre-color-semantic-teal)" },
+};
+</script>
+<template>
+  <Card>
+    <CardBody>
+      <AreaChart :data="data" :config="config" x-key="month" curve="smooth" stacked />
+    </CardBody>
+  </Card>
+</template>`;
+const areaProps = [
+  { name: "data",        type: "ChartDatum[]", default: "—", description: "Array of row objects (required).", required: true },
+  { name: "config",      type: "ChartConfig", default: "—", description: "Per-series settings (required): { seriesKey: { label, color } }. Colors are token strings.", required: true },
+  { name: "xKey",        type: "string", default: "—", description: "Field in each row used for the x-axis (required).", required: true },
+  { name: "curve",       type: `"linear" | "smooth"`, default: `"linear"`, description: "Line/area interpolation." },
+  { name: "gradient",    type: "boolean", default: "true", description: "Fill each area with a fade-to-transparent gradient (false = flat low-opacity fill)." },
+  { name: "stacked",     type: "boolean", default: "false", description: "Stack series on top of each other instead of overlaying." },
+  { name: "width",       type: "number", default: "480", description: "SVG width in px." },
+  { name: "height",      type: "number", default: "240", description: "SVG height in px." },
+  { name: "showGrid",    type: "boolean", default: "true", description: "Show background grid lines and axis labels." },
+  { name: "showLegend",  type: "boolean", default: "true", description: "Show the legend; clicking a legend item toggles that series." },
+  { name: "showTooltip", type: "boolean", default: "true", description: "Show the hover/arrow-key tooltip." },
+];
+
+// ── Bar ───────────────────────────────────────────────────────────────
+const barReact = `import { BarChart, Card, CardBody } from "@usevyre/react";
+
+const data = [
+  { region: "NA",    sales: 38, returns: 6 },
+  { region: "EU",    sales: 31, returns: 5 },
+  { region: "APAC",  sales: 27, returns: 4 },
+  { region: "LATAM", sales: 14, returns: 3 },
+];
+
+const config = {
+  sales:   { label: "Sales",   color: "var(--vyre-color-semantic-accent)" },
+  returns: { label: "Returns", color: "var(--vyre-color-semantic-warning)" },
+};
+
+<Card>
+  <CardBody>
+    <BarChart data={data} config={config} xKey="region" />
+  </CardBody>
+</Card>`;
+const barVue = `<script setup>
+import { BarChart, Card, CardBody } from "@usevyre/vue";
+
+const data = [
+  { region: "NA",    sales: 38, returns: 6 },
+  { region: "EU",    sales: 31, returns: 5 },
+  { region: "APAC",  sales: 27, returns: 4 },
+  { region: "LATAM", sales: 14, returns: 3 },
+];
+
+const config = {
+  sales:   { label: "Sales",   color: "var(--vyre-color-semantic-accent)" },
+  returns: { label: "Returns", color: "var(--vyre-color-semantic-warning)" },
+};
+</script>
+<template>
+  <Card>
+    <CardBody>
+      <BarChart :data="data" :config="config" x-key="region" />
+    </CardBody>
+  </Card>
+</template>`;
+const barProps = [
+  { name: "data",        type: "ChartDatum[]", default: "—", description: "Array of row objects (required), e.g. [{ region: \"NA\", sales: 30 }].", required: true },
+  { name: "config",      type: "ChartConfig", default: "—", description: "Per-series settings (required): { seriesKey: { label, color } }. One bar group per datum.", required: true },
+  { name: "xKey",        type: "string", default: "—", description: "Field in each row used for the category axis (required).", required: true },
+  { name: "orientation", type: `"vertical" | "horizontal"`, default: `"vertical"`, description: "Bar direction." },
+  { name: "stacked",     type: "boolean", default: "false", description: "Stack series per category instead of grouping them side-by-side." },
+  { name: "width",       type: "number", default: "480", description: "SVG width in px." },
+  { name: "height",      type: "number", default: "240", description: "SVG height in px." },
+  { name: "showGrid",    type: "boolean", default: "true", description: "Show background grid lines and axis labels." },
+  { name: "showLegend",  type: "boolean", default: "true", description: "Show the legend; clicking a legend item toggles that series." },
+  { name: "showTooltip", type: "boolean", default: "true", description: "Show the hover/arrow-key tooltip." },
+];
+
+// ── Pie ───────────────────────────────────────────────────────────────
+const pieReact = `import { PieChart, Card, CardBody } from "@usevyre/react";
+
+const data = [
+  { name: "Chrome",  value: 62 },
+  { name: "Safari",  value: 19 },
+  { name: "Firefox", value: 9 },
+  { name: "Edge",    value: 7 },
+  { name: "Other",   value: 3 },
+];
+
+const config = {
+  Chrome:  { label: "Chrome",  color: "var(--vyre-color-semantic-accent)" },
+  Safari:  { label: "Safari",  color: "var(--vyre-color-semantic-teal)" },
+  Firefox: { label: "Firefox", color: "var(--vyre-color-semantic-warning)" },
+  Edge:    { label: "Edge",    color: "var(--vyre-color-semantic-success)" },
+  Other:   { label: "Other",   color: "var(--vyre-color-semantic-danger)" },
+};
+
+<Card>
+  <CardBody>
+    <PieChart data={data} config={config} donut />
+  </CardBody>
+</Card>`;
+const pieVue = `<script setup>
+import { PieChart, Card, CardBody } from "@usevyre/vue";
+
+const data = [
+  { name: "Chrome",  value: 62 },
+  { name: "Safari",  value: 19 },
+  { name: "Firefox", value: 9 },
+  { name: "Edge",    value: 7 },
+  { name: "Other",   value: 3 },
+];
+
+const config = {
+  Chrome:  { label: "Chrome",  color: "var(--vyre-color-semantic-accent)" },
+  Safari:  { label: "Safari",  color: "var(--vyre-color-semantic-teal)" },
+  Firefox: { label: "Firefox", color: "var(--vyre-color-semantic-warning)" },
+  Edge:    { label: "Edge",    color: "var(--vyre-color-semantic-success)" },
+  Other:   { label: "Other",   color: "var(--vyre-color-semantic-danger)" },
+};
+</script>
+<template>
+  <Card>
+    <CardBody>
+      <PieChart :data="data" :config="config" donut />
+    </CardBody>
+  </Card>
+</template>`;
+const pieProps = [
+  { name: "data",        type: "PieDatum[]", default: "—", description: "Flat array of { name: string; value: number } objects (required).", required: true },
+  { name: "config",      type: "ChartConfig", default: "—", description: "Optional per-segment settings: { name: { label, color } }. Unmatched names use a token color cycle." },
+  { name: "donut",       type: "boolean", default: "false", description: "Render a hollow-center donut instead of a full pie." },
+  { name: "size",        type: "number", default: "240", description: "SVG width AND height in px (the chart is square)." },
+  { name: "showLegend",  type: "boolean", default: "true", description: "Show the legend; clicking a legend item toggles that segment." },
+  { name: "showTooltip", type: "boolean", default: "true", description: "Show the hover tooltip." },
+];
+
+// ── Sparkline ─────────────────────────────────────────────────────────
+const sparkReact = `import { Sparkline, Stat, Card, CardBody } from "@usevyre/react";
+
+<Card>
+  <CardBody>
+    <Stat
+      label="Revenue"
+      value="$48.2k"
+      delta="+12%"
+      trend="up"
+      deltaLabel="last 8 months"
+      icon={
+        <Sparkline
+          data={[18, 22, 20, 28, 34, 31, 40, 46]}
+          color="var(--vyre-color-semantic-success)"
+          width={96}
+          height={28}
+        />
+      }
+    />
+  </CardBody>
+</Card>`;
+const sparkVue = `<script setup>
+import { Sparkline, Stat, Card, CardBody } from "@usevyre/vue";
+</script>
+<template>
+  <Card>
+    <CardBody>
+      <Stat label="Revenue" value="$48.2k" delta="+12%" trend="up" delta-label="last 8 months">
+        <template #icon>
+          <Sparkline
+            :data="[18, 22, 20, 28, 34, 31, 40, 46]"
+            color="var(--vyre-color-semantic-success)"
+            :width="96"
+            :height="28"
+          />
+        </template>
+      </Stat>
+    </CardBody>
+  </Card>
+</template>`;
+const sparkVariantsReact = `import { Sparkline } from "@usevyre/react";
+
+<Sparkline data={[3, 7, 4, 9, 6, 11, 8]} variant="line" />
+<Sparkline data={[3, 7, 4, 9, 6, 11, 8]} variant="area" />
+<Sparkline data={[3, 7, 4, 9, 6, 11, 8]} variant="bar" />`;
+const sparkVariantsVue = `<script setup>
+import { Sparkline } from "@usevyre/vue";
+</script>
+<template>
+  <Sparkline :data="[3, 7, 4, 9, 6, 11, 8]" variant="line" />
+  <Sparkline :data="[3, 7, 4, 9, 6, 11, 8]" variant="area" />
+  <Sparkline :data="[3, 7, 4, 9, 6, 11, 8]" variant="bar" />
+</template>`;
+const sparkProps = [
+  { name: "data",    type: "number[]", default: "—", description: "Series of numbers to plot (required). A flat array of numbers, not row objects.", required: true },
+  { name: "variant", type: `"line" | "area" | "bar"`, default: `"line"`, description: "Render style of the sparkline." },
+  { name: "color",   type: "string", default: "var(--vyre-color-semantic-accent)", description: "Stroke/fill color as a token string." },
+  { name: "width",   type: "number", default: "80", description: "SVG width in px." },
+  { name: "height",  type: "number", default: "24", description: "SVG height in px." },
+];
+
+const guide = [
+  { title: "Line Chart",  anchor: "line-chart",  use: "Trends over time (revenue, signups). Multiple series, smooth curves." },
+  { title: "Area Chart",  anchor: "area-chart",  use: "Volume / cumulative trends. Like Line but filled; gradient and stacked modes." },
+  { title: "Bar Chart",   anchor: "bar-chart",   use: "Compare categories (sales per region). Grouped or stacked, vertical or horizontal." },
+  { title: "Pie Chart",   anchor: "pie-chart",   use: "Parts of a whole (browser share). Pie or donut." },
+  { title: "Sparkline",   anchor: "sparkline",   use: "Tiny inline chart for Stat cards and table cells. No axis/legend/tooltip." },
+];
+---
+
+<DocsLayout title="Charts">
+  <div class="docs-header">
+    <div class="docs-header__meta">
+      <span class="vyre-badge vyre-badge--default">@usevyre/react</span>
+      <span class="vyre-badge vyre-badge--default">@usevyre/vue</span>
+    </div>
+    <h1 class="docs-title">Charts</h1>
+    <p class="docs-lead">
+      Five zero-dependency SVG charts — <strong>no Recharts, no D3</strong>. All are
+      data-driven (<code>data</code> + a <code>config</code> map of
+      <code>{`{ label, color }`}</code> per series), token-locked (colors come only
+      from <code>--vyre-*</code> tokens), and ship gridlines, a hover tooltip, a
+      click-to-toggle legend, and keyboard-accessible tooltips. Jump to a chart from
+      the list below or the "On this page" rail.
+    </p>
+  </div>
+
+  <hr class="docs-divider" />
+
+  <h2 class="docs-h2">Which chart should I use?</h2>
+  <div class="docs-table-wrapper">
+    <table class="docs-table">
+      <thead>
+        <tr><th>Chart</th><th>Use it for</th></tr>
+      </thead>
+      <tbody>
+        {guide.map((c) => (
+          <tr>
+            <td><a href={`#${c.anchor}`} class="docs-link">{c.title}</a></td>
+            <td>{c.use}</td>
+          </tr>
+        ))}
+      </tbody>
+    </table>
+  </div>
+
+  <div class="docs-callout docs-callout--accent">
+    <strong>Shared API.</strong> Every chart (except Sparkline) takes
+    <code>data</code>, a <code>config</code> object mapping each series key to
+    <code>{`{ label, color }`}</code>, and <code>xKey</code>. Grid, legend and
+    tooltip are boolean props (<code>showGrid</code> / <code>showLegend</code> /
+    <code>showTooltip</code>). There is no <code>color</code> prop and no
+    Recharts-style JSX children (<code>&lt;XAxis/&gt;</code>, <code>&lt;Tooltip/&gt;</code>) —
+    colors live in <code>config</code> as <code>--vyre-*</code> tokens.
+  </div>
+
+  <hr class="docs-divider" />
+
+  {/* ── Line ─────────────────────────────────────── */}
+  <h2 class="docs-h2" id="line-chart">Line Chart</h2>
+  <p class="docs-p">
+    Multi-series trends over time. Two series (<code>revenue</code>, <code>users</code>)
+    defined as <code>config</code> keys; one line per key, colors from
+    <code>--vyre-*</code> tokens.
+  </p>
+  <ComponentPreview react={lineReact} vue={lineVue}>
+    <LineChartDemo client:visible />
+  </ComponentPreview>
+  <PropsTable props={lineProps} />
+
+  {/* ── Area ─────────────────────────────────────── */}
+  <h2 class="docs-h2" id="area-chart">Area Chart</h2>
+  <p class="docs-p">
+    Filled trends (line + area). Supports a fade-to-transparent <code>gradient</code>
+    (default) and <code>stacked</code> series.
+  </p>
+  <ComponentPreview react={areaReact} vue={areaVue}>
+    <AreaChartDemo client:visible />
+  </ComponentPreview>
+  <PropsTable props={areaProps} />
+
+  {/* ── Bar ──────────────────────────────────────── */}
+  <h2 class="docs-h2" id="bar-chart">Bar Chart</h2>
+  <p class="docs-p">
+    Category comparison. Multiple series render as grouped side-by-side bars or
+    <code>stacked</code>; supports <code>vertical</code> and <code>horizontal</code>
+    orientation.
+  </p>
+  <ComponentPreview react={barReact} vue={barVue}>
+    <BarChartDemo client:visible />
+  </ComponentPreview>
+  <PropsTable props={barProps} />
+
+  {/* ── Pie ──────────────────────────────────────── */}
+  <h2 class="docs-h2" id="pie-chart">Pie Chart</h2>
+  <p class="docs-p">
+    Parts of a whole. Takes <strong>flat</strong> <code>{`{ name, value }`}</code>
+    data (not multi-series rows, not numbers). <code>config</code> is optional;
+    unmatched names use a built-in token color cycle. Set <code>donut</code> for a
+    hollow center.
+  </p>
+  <ComponentPreview react={pieReact} vue={pieVue}>
+    <PieChartDemo client:visible />
+  </ComponentPreview>
+  <PropsTable props={pieProps} />
+
+  {/* ── Sparkline ────────────────────────────────── */}
+  <h2 class="docs-h2" id="sparkline">Sparkline</h2>
+  <p class="docs-p">
+    A tiny inline chart — no axis, legend, or tooltip — for Stat cards and table
+    cells. Takes a flat <code>number[]</code> and a <code>variant</code>.
+  </p>
+  <ComponentPreview react={sparkReact} vue={sparkVue}>
+    <SparklineDemo client:visible />
+  </ComponentPreview>
+  <p class="docs-p">Three variants: <code>line</code>, <code>area</code>, <code>bar</code>.</p>
+  <ComponentPreview react={sparkVariantsReact} vue={sparkVariantsVue}>
+    <SparklineVariantsDemo client:visible />
+  </ComponentPreview>
+  <PropsTable props={sparkProps} />
+
+  <hr class="docs-divider" />
+
+  {/* ── AI Context for all five ──────────────────── */}
+  <h2 class="docs-h2">AI Context</h2>
+  <p class="docs-p">
+    Copy-paste context per chart for Claude, Cursor, Copilot, Windsurf, and Gemini.
+    Each block is labelled with its component.
+  </p>
+
+  <h3 class="docs-h3">LineChart</h3>
+  <AICheatSheet component="LineChart" />
+
+  <h3 class="docs-h3">AreaChart</h3>
+  <AICheatSheet component="AreaChart" />
+
+  <h3 class="docs-h3">BarChart</h3>
+  <AICheatSheet component="BarChart" />
+
+  <h3 class="docs-h3">PieChart</h3>
+  <AICheatSheet component="PieChart" />
+
+  <h3 class="docs-h3">Sparkline</h3>
+  <AICheatSheet component="Sparkline" />
+
+  <div class="docs-pagination">
+    <a href="/docs/components/carousel" class="docs-pagination__link docs-pagination__link--prev">
+      ← Carousel
+    </a>
+    <a href="/docs/components/checkbox" class="docs-pagination__link docs-pagination__link--next">
+      Checkbox →
+    </a>
+  </div>
+</DocsLayout>

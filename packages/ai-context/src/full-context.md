@@ -2164,6 +2164,174 @@ const [range, setRange] = useState({ from: null, to: null });
 
 ---
 
+### Sparkline
+
+Tiny inline chart with no axis, legend or tooltip — for Stat cards and table cells. Takes a flat number[] (NOT data + config like the larger charts). The color is a single token string passed via the `color` prop (it has no `config` or `xKey`).
+
+```tsx
+import { Sparkline } from "@usevyre/react"
+
+// Props:
+// data           = number[]
+// variant        = "line" | "area" | "bar" (default: line)
+// color          = string (default: var(--vyre-color-semantic-accent))
+// width          = number (default: 80)
+// height         = number (default: 24)
+
+// Examples:
+<Sparkline data={[3, 7, 4, 9, 6, 11]} />
+<Sparkline data={[2, 4, 3, 8]} variant="bar" color="var(--vyre-color-semantic-success)" />
+```
+
+**Common mistakes:**
+- ❌ `Passing row objects: data={[{ name, value }]}` → data={[3, 7, 4, 9, 6]}
+- ❌ `Expecting an axis, legend or tooltip` → Use LineChart/AreaChart/BarChart for a full chart with axes and tooltip
+
+---
+
+### LineChart
+
+Multi-series line chart. Data + config + xKey driven (NOT Recharts-style JSX children). Each series is a key in `config` ({ label, color }); colors come ONLY from config tokens — there is no `color` prop. Grid/legend/tooltip are boolean props; the tooltip supports hover and arrow-key navigation.
+
+```tsx
+import { LineChart } from "@usevyre/react"
+
+// Props:
+// data           = ChartDatum[]
+// config         = ChartConfig
+// xKey           = string
+// curve          = "linear" | "smooth" (default: linear)
+// dots           = boolean (default: false)
+// width          = number (default: 480)
+// height         = number (default: 240)
+// showGrid       = boolean (default: true)
+// showLegend     = boolean (default: true)
+// showTooltip    = boolean (default: true)
+
+// Examples:
+<LineChart
+  data={[{ month: "Jan", revenue: 10 }, { month: "Feb", revenue: 20 }]}
+  config={{ revenue: { label: "Revenue", color: "var(--vyre-color-semantic-accent)" } }}
+  xKey="month"
+/>
+<LineChart data={data} config={config} xKey="month" curve="smooth" dots showLegend={false} />
+```
+
+**Common mistakes:**
+- ❌ `Passing series via series={...}` → Use data (row objects) + config ({ key: { label, color } }) + xKey
+- ❌ `Setting a single color with color="blue"` → config={{ revenue: { label: "Revenue", color: "var(--vyre-color-semantic-accent)" } }}
+- ❌ `Recharts-style children like <XAxis/> or <Tooltip/>` → Use showGrid / showLegend / showTooltip props instead of child elements
+
+---
+
+### AreaChart
+
+Multi-series area chart (line + filled area). Data + config + xKey driven (NOT JSX children). Series come from `config` keys; colors are config tokens (no `color` prop). Supports a fade-to-transparent gradient and stacking.
+
+```tsx
+import { AreaChart } from "@usevyre/react"
+
+// Props:
+// data           = ChartDatum[]
+// config         = ChartConfig
+// xKey           = string
+// curve          = "linear" | "smooth" (default: linear)
+// gradient       = boolean (default: true)
+// stacked        = boolean (default: false)
+// width          = number (default: 480)
+// height         = number (default: 240)
+// showGrid       = boolean (default: true)
+// showLegend     = boolean (default: true)
+// showTooltip    = boolean (default: true)
+
+// Examples:
+<AreaChart
+  data={[{ month: "Jan", revenue: 10 }, { month: "Feb", revenue: 20 }]}
+  config={{ revenue: { label: "Revenue", color: "var(--vyre-color-semantic-accent)" } }}
+  xKey="month"
+/>
+<AreaChart data={data} config={config} xKey="month" stacked gradient={false} />
+```
+
+**Common mistakes:**
+- ❌ `Passing series via series={...}` → Use data (row objects) + config ({ key: { label, color } }) + xKey
+- ❌ `Setting a single color with color="blue"` → config={{ revenue: { label: "Revenue", color: "var(--vyre-color-semantic-accent)" } }}
+- ❌ `Recharts-style children like <XAxis/> or <Tooltip/>` → Use showGrid / showLegend / showTooltip props instead of child elements
+
+---
+
+### BarChart
+
+Multi-series bar chart. Data + config + xKey driven (NOT JSX children). The x-axis is banded by data index; multiple series render as grouped side-by-side bars, or stacked when `stacked`. Colors come ONLY from config tokens (no `color` prop). Supports vertical and horizontal orientation.
+
+```tsx
+import { BarChart } from "@usevyre/react"
+
+// Props:
+// data           = ChartDatum[]
+// config         = ChartConfig
+// xKey           = string
+// orientation    = "vertical" | "horizontal" (default: vertical)
+// stacked        = boolean (default: false)
+// width          = number (default: 480)
+// height         = number (default: 240)
+// showGrid       = boolean (default: true)
+// showLegend     = boolean (default: true)
+// showTooltip    = boolean (default: true)
+
+// Examples:
+<BarChart
+  data={[{ region: "NA", sales: 30 }, { region: "EU", sales: 25 }]}
+  config={{ sales: { label: "Sales", color: "var(--vyre-color-semantic-accent)" } }}
+  xKey="region"
+/>
+<BarChart data={data} config={config} xKey="region" orientation="horizontal" stacked />
+```
+
+**Common mistakes:**
+- ❌ `Passing series via series={...}` → Use data (row objects) + config ({ key: { label, color } }) + xKey
+- ❌ `Setting a single color with color="blue"` → config={{ sales: { label: "Sales", color: "var(--vyre-color-semantic-accent)" } }}
+- ❌ `Recharts-style children like <XAxis/> or <Tooltip/>` → Use showGrid / showLegend / showTooltip props instead of child elements
+
+---
+
+### PieChart
+
+Single-level pie/donut chart. Takes FLAT data — an array of { name, value } objects (NOT multi-series rows, and NOT a list of numbers). `config` is optional ({ name: { label, color } }); names without a config entry fall back to a built-in token color cycle. There is no `color` prop and no <Pie>/<Cell> children.
+
+```tsx
+import { PieChart } from "@usevyre/react"
+
+// Props:
+// data           = PieDatum[]
+// config         = ChartConfig
+// donut          = boolean (default: false)
+// size           = number (default: 240)
+// showLegend     = boolean (default: true)
+// showTooltip    = boolean (default: true)
+
+// Examples:
+<PieChart
+  data={[
+    { name: "Chrome", value: 60 },
+    { name: "Safari", value: 25 },
+    { name: "Firefox", value: 15 },
+  ]}
+  donut
+/>
+<PieChart
+  data={[{ name: "Chrome", value: 60 }, { name: "Safari", value: 40 }]}
+  config={{ Chrome: { label: "Chrome", color: "var(--vyre-color-semantic-accent)" } }}
+/>
+```
+
+**Common mistakes:**
+- ❌ `Passing numbers: data={[1, 2, 3]}` → data={[{ name: "Chrome", value: 60 }, { name: "Safari", value: 25 }]}
+- ❌ `Setting a single color with color="blue"` → Omit color (auto token cycle) or config={{ Chrome: { label: "Chrome", color: "var(--vyre-color-semantic-accent)" } }}
+- ❌ `Recharts-style <Pie>/<Cell> children` → Use the data prop (and donut for a ring) instead of child elements
+
+---
+
 ## Composition Blocks
 
 Ready-made compositions of useVyre components for whole sections/pages. Copy, paste, and adapt — they are a starting point, not fixed components. Prefer composing a page from these patterns over inventing layout from scratch.
@@ -3143,6 +3311,20 @@ If you generate these, you are hallucinating.
 - ❌ `<DateRangePicker value={[from, to]}>` → Use value={{ from, to }} and read range.from / range.to
 - ❌ `<DateRangePicker DateRangePicker for a single date>` → Use <DatePicker /> for a single date
 - ❌ `<DateRangePicker presets="true" (string)>` → Use the bare prop: presets  (or presets={true})
+- ❌ `<Sparkline Passing row objects: data={[{ name, value }]}>` → data={[3, 7, 4, 9, 6]}
+- ❌ `<Sparkline Expecting an axis, legend or tooltip>` → Use LineChart/AreaChart/BarChart for a full chart with axes and tooltip
+- ❌ `<LineChart Passing series via series={...}>` → Use data (row objects) + config ({ key: { label, color } }) + xKey
+- ❌ `<LineChart Setting a single color with color="blue">` → config={{ revenue: { label: "Revenue", color: "var(--vyre-color-semantic-accent)" } }}
+- ❌ `<LineChart Recharts-style children like <XAxis/> or <Tooltip/>>` → Use showGrid / showLegend / showTooltip props instead of child elements
+- ❌ `<AreaChart Passing series via series={...}>` → Use data (row objects) + config ({ key: { label, color } }) + xKey
+- ❌ `<AreaChart Setting a single color with color="blue">` → config={{ revenue: { label: "Revenue", color: "var(--vyre-color-semantic-accent)" } }}
+- ❌ `<AreaChart Recharts-style children like <XAxis/> or <Tooltip/>>` → Use showGrid / showLegend / showTooltip props instead of child elements
+- ❌ `<BarChart Passing series via series={...}>` → Use data (row objects) + config ({ key: { label, color } }) + xKey
+- ❌ `<BarChart Setting a single color with color="blue">` → config={{ sales: { label: "Sales", color: "var(--vyre-color-semantic-accent)" } }}
+- ❌ `<BarChart Recharts-style children like <XAxis/> or <Tooltip/>>` → Use showGrid / showLegend / showTooltip props instead of child elements
+- ❌ `<PieChart Passing numbers: data={[1, 2, 3]}>` → data={[{ name: "Chrome", value: 60 }, { name: "Safari", value: 25 }]}
+- ❌ `<PieChart Setting a single color with color="blue">` → Omit color (auto token cycle) or config={{ Chrome: { label: "Chrome", color: "var(--vyre-color-semantic-accent)" } }}
+- ❌ `<PieChart Recharts-style <Pie>/<Cell> children>` → Use the data prop (and donut for a ring) instead of child elements
 
 ---
 

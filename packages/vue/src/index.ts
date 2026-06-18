@@ -62,6 +62,11 @@
  * - Tree           — Hierarchical view (file explorer/nested nav): nested :data[], v-model expanded/selected, recursive, keyboard
  * - OTPInput       — Segmented one-time-code input (2FA/verification): v-model string, paste-aware, auto-advance, @complete
  * - Carousel       — Accessible content slider: v-model index, snap scroll, dots, arrows, keyboard, loop/autoPlay (+ CarouselSlide)
+ * - Sparkline      — Tiny inline chart (line/area/bar) for Stat cards and table cells; data=number[]
+ * - LineChart      — Multi-series line chart: data + config + xKey driven; grid/legend/tooltip; keyboard arrows
+ * - AreaChart      — Multi-series area chart (line + filled gradient area); stacked option
+ * - BarChart       — Multi-series bar chart: vertical/horizontal, grouped or stacked
+ * - PieChart       — Pie/donut chart from flat {name,value}[]; optional config + token color cycle
  *
  * CSS must be imported separately:
  * import "@usevyre/tokens/css";           ← design tokens (required)
@@ -203,6 +208,11 @@ export { default as Tree }            from "./components/Tree/Tree.vue";
 export { default as OTPInput }        from "./components/OTPInput/OTPInput.vue";
 export { default as Carousel }        from "./components/Carousel/Carousel.vue";
 export { default as CarouselSlide }   from "./components/Carousel/CarouselSlide.vue";
+export { default as Sparkline }       from "./components/Sparkline/Sparkline.vue";
+export { default as LineChart }       from "./components/LineChart/LineChart.vue";
+export { default as AreaChart }       from "./components/AreaChart/AreaChart.vue";
+export { default as BarChart }        from "./components/BarChart/BarChart.vue";
+export { default as PieChart }        from "./components/PieChart/PieChart.vue";
 
 // ── Composables ───────────────────────────────────────────────
 export { useToast }                 from "./composables/useToast";
