@@ -195,7 +195,7 @@ export const BarChart: React.FC<BarChartProps> = ({
     const clamped = Math.max(0, Math.min(data.length - 1, index));
     setActiveIndex(clamped);
     const px = pixelForIndex(clamped);
-    if (px) tooltip.show(px.x + 12, px.y + 12, rowsForIndex(clamped));
+    if (px) tooltip.show(px.x + 12, px.y + 12, rowsForIndex(clamped), xLabels[clamped]);
   };
 
   const handleMouseMove = (e: React.MouseEvent<SVGSVGElement>) => {
@@ -211,7 +211,7 @@ export const BarChart: React.FC<BarChartProps> = ({
     const index = Math.floor((posView - bandStart) / bandSpan);
     const clamped = Math.max(0, Math.min(data.length - 1, index));
     setActiveIndex(clamped);
-    tooltip.show(mxPx + 12, myPx + 12, rowsForIndex(clamped));
+    tooltip.show(mxPx + 12, myPx + 12, rowsForIndex(clamped), xLabels[clamped]);
   };
 
   const handleMouseLeave = () => {
@@ -279,7 +279,7 @@ export const BarChart: React.FC<BarChartProps> = ({
         <ChartLegend config={config} hidden={hidden} onToggle={onToggle} />
       )}
       {showTooltip && tooltip.active && tooltip.data && (
-        <ChartTooltip x={tooltip.data.x} y={tooltip.data.y} rows={tooltip.data.rows} />
+        <ChartTooltip x={tooltip.data.x} y={tooltip.data.y} rows={tooltip.data.rows} title={tooltip.data.title} />
       )}
     </div>
   );

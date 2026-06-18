@@ -152,7 +152,7 @@ const handleMouseMove = (e: MouseEvent) => {
   const rect = (e.currentTarget as SVGSVGElement).getBoundingClientRect();
   const mxPx = e.clientX - rect.left;
   const myPx = e.clientY - rect.top;
-  tooltip.show(mxPx + 12, myPx + 12, rowsForName(activeName.value));
+  tooltip.show(mxPx + 12, myPx + 12, rowsForName(activeName.value), activeName.value);
 };
 </script>
 
@@ -190,6 +190,7 @@ const handleMouseMove = (e: MouseEvent) => {
       :x="tooltip.data.value.x"
       :y="tooltip.data.value.y"
       :rows="tooltip.data.value.rows"
+      :title="tooltip.data.value.title"
     />
   </div>
 </template>

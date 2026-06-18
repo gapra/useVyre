@@ -163,7 +163,7 @@ export const PieChart: React.FC<PieChartProps> = ({
     const rect = e.currentTarget.getBoundingClientRect();
     const mxPx = e.clientX - rect.left;
     const myPx = e.clientY - rect.top;
-    tooltip.show(mxPx + 12, myPx + 12, rowsForName(activeName));
+    tooltip.show(mxPx + 12, myPx + 12, rowsForName(activeName), activeName);
   };
 
   return (
@@ -194,7 +194,7 @@ export const PieChart: React.FC<PieChartProps> = ({
         <ChartLegend config={legendConfig} hidden={hidden} onToggle={onToggle} />
       )}
       {showTooltip && tooltip.active && tooltip.data && (
-        <ChartTooltip x={tooltip.data.x} y={tooltip.data.y} rows={tooltip.data.rows} />
+        <ChartTooltip x={tooltip.data.x} y={tooltip.data.y} rows={tooltip.data.rows} title={tooltip.data.title} />
       )}
     </div>
   );

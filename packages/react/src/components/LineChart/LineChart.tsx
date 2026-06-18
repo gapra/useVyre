@@ -140,7 +140,7 @@ export const LineChart: React.FC<LineChartProps> = ({
     const clamped = Math.max(0, Math.min(data.length - 1, index));
     setActiveIndex(clamped);
     const px = pixelForIndex(clamped);
-    if (px) tooltip.show(px.x + 12, px.y + 12, rowsForIndex(clamped));
+    if (px) tooltip.show(px.x + 12, px.y + 12, rowsForIndex(clamped), xLabels[clamped]);
   };
 
   const handleMouseMove = (e: React.MouseEvent<SVGSVGElement>) => {
@@ -154,7 +154,7 @@ export const LineChart: React.FC<LineChartProps> = ({
     const clamped = Math.max(0, Math.min(data.length - 1, Math.round(invert(mxView))));
     setActiveIndex(clamped);
     // tooltip follows the cursor in PIXEL space, with a small offset.
-    tooltip.show(mxPx + 12, myPx + 12, rowsForIndex(clamped));
+    tooltip.show(mxPx + 12, myPx + 12, rowsForIndex(clamped), xLabels[clamped]);
   };
 
   const handleMouseLeave = () => {
@@ -237,7 +237,7 @@ export const LineChart: React.FC<LineChartProps> = ({
         <ChartLegend config={config} hidden={hidden} onToggle={onToggle} />
       )}
       {showTooltip && tooltip.active && tooltip.data && (
-        <ChartTooltip x={tooltip.data.x} y={tooltip.data.y} rows={tooltip.data.rows} />
+        <ChartTooltip x={tooltip.data.x} y={tooltip.data.y} rows={tooltip.data.rows} title={tooltip.data.title} />
       )}
     </div>
   );

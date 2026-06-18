@@ -16,13 +16,19 @@ interface ChartTooltipData {
   x: number;
   y: number;
   rows: ChartTooltipRow[];
+  title?: string;
 }
 
 export function useChartTooltip() {
   const data = ref<ChartTooltipData | null>(null);
 
-  const show = (x: number, y: number, rows: ChartTooltipRow[]) => {
-    data.value = { x, y, rows };
+  const show = (
+    x: number,
+    y: number,
+    rows: ChartTooltipRow[],
+    title?: string,
+  ) => {
+    data.value = { x, y, rows, title };
   };
 
   const hide = () => {

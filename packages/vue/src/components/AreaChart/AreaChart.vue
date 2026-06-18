@@ -188,7 +188,7 @@ const showTooltipAt = (index: number) => {
   const clamped = Math.max(0, Math.min(props.data.length - 1, index));
   activeIndex.value = clamped;
   const px = pixelForIndex(clamped);
-  if (px) tooltip.show(px.x + 12, px.y + 12, rowsForIndex(clamped));
+  if (px) tooltip.show(px.x + 12, px.y + 12, rowsForIndex(clamped), xLabels.value[clamped]);
 };
 
 const handleMouseMove = (e: MouseEvent) => {
@@ -200,7 +200,7 @@ const handleMouseMove = (e: MouseEvent) => {
   const invert = scaleLinear([PAD.left, props.width - PAD.right], [0, Math.max(props.data.length - 1, 1)]);
   const clamped = Math.max(0, Math.min(props.data.length - 1, Math.round(invert(mxView))));
   activeIndex.value = clamped;
-  tooltip.show(mxPx + 12, myPx + 12, rowsForIndex(clamped));
+  tooltip.show(mxPx + 12, myPx + 12, rowsForIndex(clamped), xLabels.value[clamped]);
 };
 
 const handleMouseLeave = () => {
@@ -296,6 +296,7 @@ const handleKeyDown = (e: KeyboardEvent) => {
       :x="tooltip.data.value.x"
       :y="tooltip.data.value.y"
       :rows="tooltip.data.value.rows"
+      :title="tooltip.data.value.title"
     />
   </div>
 </template>
