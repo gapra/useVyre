@@ -1,5 +1,14 @@
 # @usevyre/vue
 
+## 1.8.0
+
+### Minor Changes
+
+- 8f49bf3: Add chart components: LineChart, AreaChart, BarChart, PieChart, and Sparkline.
+  Zero-dependency inline SVG, token-locked colors via ChartConfig, with gridlines,
+  hover tooltip, legend (click to toggle series), and keyboard-accessible tooltips.
+  React and Vue in sync.
+
 ## 1.7.2
 
 ### Patch Changes

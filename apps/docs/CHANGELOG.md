@@ -1,5 +1,14 @@
 # @usevyre/docs
 
+## 1.0.17
+
+### Patch Changes
+
+- Updated dependencies [8f49bf3]
+  - @usevyre/react@1.8.0
+  - @usevyre/vue@1.8.0
+  - @usevyre/ai-context@1.10.0
+
 ## 1.0.16
 
 ### Patch Changes
