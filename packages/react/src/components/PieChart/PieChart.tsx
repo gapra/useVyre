@@ -80,7 +80,9 @@ export const PieChart: React.FC<PieChartProps> = ({
   className,
 }) => {
   const [hidden, setHidden] = React.useState<Record<string, boolean>>({});
+  const [activeName, setActiveName] = React.useState<string | null>(null);
   const tooltip = useChartTooltip();
+  const svgRef = React.useRef<SVGSVGElement | null>(null);
 
   const onToggle = (name: string) =>
     setHidden((prev) => ({ ...prev, [name]: !prev[name] }));
@@ -142,19 +144,41 @@ export const PieChart: React.FC<PieChartProps> = ({
     ];
   };
 
+  // Track which slice the cursor is over (per-slice enter).
   const handleEnter = (name: string) => {
     if (!showTooltip) return;
-    tooltip.show(cx, cy, rowsForName(name));
+    setActiveName(name);
   };
 
   const handleLeave = () => {
     if (!showTooltip) return;
+    setActiveName(null);
     tooltip.hide();
   };
 
+  // A single svg-level mousemove keeps the tooltip glued to the cursor in
+  // PIXEL space, using the currently-hovered slice's data.
+  const handleMouseMove = (e: React.MouseEvent<SVGSVGElement>) => {
+    if (!showTooltip || !activeName) return;
+    const rect = e.currentTarget.getBoundingClientRect();
+    const mxPx = e.clientX - rect.left;
+    const myPx = e.clientY - rect.top;
+    tooltip.show(mxPx + 12, myPx + 12, rowsForName(activeName));
+  };
+
   return (
-    <div className={cn("vyre-chart", className)}>
-      <svg width={size} height={size} role="img" aria-label={ariaLabel}>
+    <div className={cn("vyre-chart vyre-chart--pie", className)}>
+      <svg
+        ref={svgRef}
+        width={size}
+        height={size}
+        viewBox={`0 0 ${size} ${size}`}
+        role="img"
+        aria-label={ariaLabel}
+        style={{ maxWidth: size }}
+        onMouseMove={showTooltip ? handleMouseMove : undefined}
+        onMouseLeave={showTooltip ? handleLeave : undefined}
+      >
         {slices.map((slice, i) => (
           <path
             key={`${slice.name}-${i}`}
@@ -163,7 +187,6 @@ export const PieChart: React.FC<PieChartProps> = ({
             d={slice.d}
             fill={slice.color}
             onMouseEnter={showTooltip ? () => handleEnter(slice.name) : undefined}
-            onMouseLeave={showTooltip ? handleLeave : undefined}
           />
         ))}
       </svg>

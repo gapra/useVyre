@@ -65,6 +65,7 @@ const PAD = { left: 32, right: 8, top: 8, bottom: 24 };
 const hidden = ref<Record<string, boolean>>({});
 const activeIndex = ref<number | null>(null);
 const tooltip = useChartTooltip();
+const svgRef = ref<SVGSVGElement | null>(null);
 
 const seriesKeys = computed(() => Object.keys(props.config));
 const visibleKeys = computed(() => seriesKeys.value.filter((k) => !hidden.value[k]));
@@ -132,21 +133,41 @@ const rowsForIndex = (index: number): ChartTooltipRow[] =>
     color: props.config[key].color,
   }));
 
+// Convert a data index to PIXEL coords inside the rendered svg (= the
+// .vyre-chart container box, since the svg is width:100% of it). Uses the
+// first visible series' value for the y position.
+const pixelForIndex = (index: number): { x: number; y: number } | null => {
+  const rect = svgRef.value?.getBoundingClientRect();
+  if (!rect || rect.width === 0) return null;
+  const firstKey = visibleKeys.value[0];
+  const v = firstKey ? props.data[index]?.[firstKey] : undefined;
+  const yVal = typeof v === "number" ? v : domain.value.yMax;
+  return {
+    x: (xScale.value(index) / props.width) * rect.width,
+    y: (yScale.value(yVal) / props.height) * rect.height,
+  };
+};
+
+// Place the tooltip at the data point (keyboard nav).
 const showTooltipAt = (index: number) => {
   if (props.data.length === 0) return;
   const clamped = Math.max(0, Math.min(props.data.length - 1, index));
   activeIndex.value = clamped;
-  const px = xScale.value(clamped);
-  const py = yScale.value(domain.value.yMax);
-  tooltip.show(px, py, rowsForIndex(clamped));
+  const px = pixelForIndex(clamped);
+  if (px) tooltip.show(px.x + 12, px.y + 12, rowsForIndex(clamped));
 };
 
 const handleMouseMove = (e: MouseEvent) => {
   if (!props.showTooltip || props.data.length === 0) return;
   const rect = (e.currentTarget as SVGSVGElement).getBoundingClientRect();
-  const mx = e.clientX - rect.left;
+  const mxPx = e.clientX - rect.left;
+  const myPx = e.clientY - rect.top;
+  // invert in viewBox space: convert pixel x back to viewBox x first.
+  const mxView = rect.width === 0 ? mxPx : (mxPx / rect.width) * props.width;
   const invert = scaleLinear([PAD.left, props.width - PAD.right], [0, Math.max(props.data.length - 1, 1)]);
-  showTooltipAt(Math.round(invert(mx)));
+  const clamped = Math.max(0, Math.min(props.data.length - 1, Math.round(invert(mxView))));
+  activeIndex.value = clamped;
+  tooltip.show(mxPx + 12, myPx + 12, rowsForIndex(clamped));
 };
 
 const handleMouseLeave = () => {
@@ -170,8 +191,10 @@ const handleKeyDown = (e: KeyboardEvent) => {
 <template>
   <div :class="cn('vyre-chart', props.class)">
     <svg
+      ref="svgRef"
       :width="width"
       :height="height"
+      :view-box="`0 0 ${width} ${height}`"
       role="img"
       :aria-label="ariaLabel"
       :tabindex="showTooltip ? 0 : undefined"

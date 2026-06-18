@@ -68,6 +68,7 @@ const BAND_INNER_PAD = 0.2;
 const hidden = ref<Record<string, boolean>>({});
 const activeIndex = ref<number | null>(null);
 const tooltip = useChartTooltip();
+const svgRef = ref<SVGSVGElement | null>(null);
 
 const seriesKeys = computed(() => Object.keys(props.config));
 const visibleKeys = computed(() => seriesKeys.value.filter((k) => !hidden.value[k]));
@@ -165,22 +166,43 @@ const rowsForIndex = (index: number): ChartTooltipRow[] =>
     color: props.config[key].color,
   }));
 
+// Convert a data index to PIXEL coords inside the rendered svg (= the
+// .vyre-chart container box, since the svg is width:100% of it).
+const pixelForIndex = (index: number): { x: number; y: number } | null => {
+  const rect = svgRef.value?.getBoundingClientRect();
+  if (!rect || rect.width === 0) return null;
+  const center = bandCenter(index);
+  const xView = isVertical.value ? center : valueScale.value(domain.value.vMax);
+  const yView = isVertical.value ? valueScale.value(domain.value.vMax) : center;
+  return {
+    x: (xView / props.width) * rect.width,
+    y: (yView / props.height) * rect.height,
+  };
+};
+
+// Place the tooltip at the data point (keyboard nav).
 const showTooltipAt = (index: number) => {
   if (props.data.length === 0) return;
   const clamped = Math.max(0, Math.min(props.data.length - 1, index));
   activeIndex.value = clamped;
-  const center = bandCenter(clamped);
-  const px = isVertical.value ? center : valueScale.value(domain.value.vMax);
-  const py = isVertical.value ? valueScale.value(domain.value.vMax) : center;
-  tooltip.show(px, py, rowsForIndex(clamped));
+  const px = pixelForIndex(clamped);
+  if (px) tooltip.show(px.x + 12, px.y + 12, rowsForIndex(clamped));
 };
 
 const handleMouseMove = (e: MouseEvent) => {
   if (!props.showTooltip || props.data.length === 0) return;
   const rect = (e.currentTarget as SVGSVGElement).getBoundingClientRect();
-  const pos = isVertical.value ? e.clientX - rect.left : e.clientY - rect.top;
-  const index = Math.floor((pos - bandStart.value) / bandSpan.value);
-  showTooltipAt(index);
+  const mxPx = e.clientX - rect.left;
+  const myPx = e.clientY - rect.top;
+  // band detection happens in viewBox space along the category axis.
+  const posPx = isVertical.value ? mxPx : myPx;
+  const renderedSpan = isVertical.value ? rect.width : rect.height;
+  const viewSpan = isVertical.value ? props.width : props.height;
+  const posView = renderedSpan === 0 ? posPx : (posPx / renderedSpan) * viewSpan;
+  const index = Math.floor((posView - bandStart.value) / bandSpan.value);
+  const clamped = Math.max(0, Math.min(props.data.length - 1, index));
+  activeIndex.value = clamped;
+  tooltip.show(mxPx + 12, myPx + 12, rowsForIndex(clamped));
 };
 
 const handleMouseLeave = () => {
@@ -204,8 +226,10 @@ const handleKeyDown = (e: KeyboardEvent) => {
 <template>
   <div :class="cn('vyre-chart', props.class)">
     <svg
+      ref="svgRef"
       :width="width"
       :height="height"
+      :view-box="`0 0 ${width} ${height}`"
       role="img"
       :aria-label="ariaLabel"
       :tabindex="showTooltip ? 0 : undefined"

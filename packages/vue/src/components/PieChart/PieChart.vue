@@ -67,7 +67,9 @@ const COLOR_CYCLE = [
 ];
 
 const hidden = ref<Record<string, boolean>>({});
+const activeName = ref<string | null>(null);
 const tooltip = useChartTooltip();
+const svgRef = ref<SVGSVGElement | null>(null);
 
 const onToggle = (name: string) => {
   hidden.value = { ...hidden.value, [name]: !hidden.value[name] };
@@ -131,20 +133,42 @@ const rowsForName = (name: string): ChartTooltipRow[] => {
   ];
 };
 
+// Track which slice the cursor is over (per-slice enter).
 const handleEnter = (name: string) => {
   if (!props.showTooltip) return;
-  tooltip.show(cx.value, cy.value, rowsForName(name));
+  activeName.value = name;
 };
 
 const handleLeave = () => {
   if (!props.showTooltip) return;
+  activeName.value = null;
   tooltip.hide();
+};
+
+// A single svg-level mousemove keeps the tooltip glued to the cursor in
+// PIXEL space, using the currently-hovered slice's data.
+const handleMouseMove = (e: MouseEvent) => {
+  if (!props.showTooltip || !activeName.value) return;
+  const rect = (e.currentTarget as SVGSVGElement).getBoundingClientRect();
+  const mxPx = e.clientX - rect.left;
+  const myPx = e.clientY - rect.top;
+  tooltip.show(mxPx + 12, myPx + 12, rowsForName(activeName.value));
 };
 </script>
 
 <template>
-  <div :class="cn('vyre-chart', props.class)">
-    <svg :width="size" :height="size" role="img" :aria-label="ariaLabel">
+  <div :class="cn('vyre-chart vyre-chart--pie', props.class)">
+    <svg
+      ref="svgRef"
+      :width="size"
+      :height="size"
+      :view-box="`0 0 ${size} ${size}`"
+      role="img"
+      :aria-label="ariaLabel"
+      :style="{ maxWidth: `${size}px` }"
+      @mousemove="showTooltip ? handleMouseMove($event) : undefined"
+      @mouseleave="showTooltip ? handleLeave() : undefined"
+    >
       <path
         v-for="(slice, i) in slices"
         :key="`${slice.name}-${i}`"
@@ -153,7 +177,6 @@ const handleLeave = () => {
         :d="slice.d"
         :fill="slice.color"
         @mouseenter="showTooltip ? handleEnter(slice.name) : undefined"
-        @mouseleave="showTooltip ? handleLeave() : undefined"
       />
     </svg>
     <ChartLegend

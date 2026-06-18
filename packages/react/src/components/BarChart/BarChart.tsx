@@ -80,6 +80,7 @@ export const BarChart: React.FC<BarChartProps> = ({
   const [hidden, setHidden] = React.useState<Record<string, boolean>>({});
   const [activeIndex, setActiveIndex] = React.useState<number | null>(null);
   const tooltip = useChartTooltip();
+  const svgRef = React.useRef<SVGSVGElement | null>(null);
 
   const onToggle = (key: string) =>
     setHidden((prev) => ({ ...prev, [key]: !prev[key] }));
@@ -174,22 +175,43 @@ export const BarChart: React.FC<BarChartProps> = ({
   const bandCenter = (index: number) =>
     bandStart + index * bandSpan + bandSpan / 2;
 
+  // Convert a data index to PIXEL coords inside the rendered svg (= the
+  // .vyre-chart container box, since the svg is width:100% of it).
+  const pixelForIndex = (index: number): { x: number; y: number } | null => {
+    const rect = svgRef.current?.getBoundingClientRect();
+    if (!rect || rect.width === 0) return null;
+    const center = bandCenter(index);
+    const xView = isVertical ? center : valueScale(vMax);
+    const yView = isVertical ? valueScale(vMax) : center;
+    return {
+      x: (xView / width) * rect.width,
+      y: (yView / height) * rect.height,
+    };
+  };
+
+  // Place the tooltip at the data point (keyboard nav).
   const showTooltipAt = (index: number) => {
     if (data.length === 0) return;
     const clamped = Math.max(0, Math.min(data.length - 1, index));
     setActiveIndex(clamped);
-    const center = bandCenter(clamped);
-    const px = isVertical ? center : valueScale(vMax);
-    const py = isVertical ? valueScale(vMax) : center;
-    tooltip.show(px, py, rowsForIndex(clamped));
+    const px = pixelForIndex(clamped);
+    if (px) tooltip.show(px.x + 12, px.y + 12, rowsForIndex(clamped));
   };
 
   const handleMouseMove = (e: React.MouseEvent<SVGSVGElement>) => {
     if (!showTooltip || data.length === 0) return;
     const rect = e.currentTarget.getBoundingClientRect();
-    const pos = isVertical ? e.clientX - rect.left : e.clientY - rect.top;
-    const index = Math.floor((pos - bandStart) / bandSpan);
-    showTooltipAt(index);
+    const mxPx = e.clientX - rect.left;
+    const myPx = e.clientY - rect.top;
+    // band detection happens in viewBox space along the category axis.
+    const posPx = isVertical ? mxPx : myPx;
+    const renderedSpan = isVertical ? rect.width : rect.height;
+    const viewSpan = isVertical ? width : height;
+    const posView = renderedSpan === 0 ? posPx : (posPx / renderedSpan) * viewSpan;
+    const index = Math.floor((posView - bandStart) / bandSpan);
+    const clamped = Math.max(0, Math.min(data.length - 1, index));
+    setActiveIndex(clamped);
+    tooltip.show(mxPx + 12, myPx + 12, rowsForIndex(clamped));
   };
 
   const handleMouseLeave = () => {
@@ -212,8 +234,10 @@ export const BarChart: React.FC<BarChartProps> = ({
   return (
     <div className={cn("vyre-chart", className)}>
       <svg
+        ref={svgRef}
         width={width}
         height={height}
+        viewBox={`0 0 ${width} ${height}`}
         role="img"
         aria-label={ariaLabel}
         tabIndex={showTooltip ? 0 : undefined}

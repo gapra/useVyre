@@ -77,6 +77,7 @@ export const LineChart: React.FC<LineChartProps> = ({
   const [hidden, setHidden] = React.useState<Record<string, boolean>>({});
   const [activeIndex, setActiveIndex] = React.useState<number | null>(null);
   const tooltip = useChartTooltip();
+  const svgRef = React.useRef<SVGSVGElement | null>(null);
 
   const onToggle = (key: string) =>
     setHidden((prev) => ({ ...prev, [key]: !prev[key] }));
@@ -118,21 +119,42 @@ export const LineChart: React.FC<LineChartProps> = ({
       color: config[key].color,
     }));
 
+  // Convert a data index to PIXEL coords inside the rendered svg (= the
+  // .vyre-chart container box, since the svg is width:100% of it). Uses the
+  // first visible series' value for the y position.
+  const pixelForIndex = (index: number): { x: number; y: number } | null => {
+    const rect = svgRef.current?.getBoundingClientRect();
+    if (!rect || rect.width === 0) return null;
+    const firstKey = visibleKeys[0];
+    const v = firstKey ? data[index]?.[firstKey] : undefined;
+    const yVal = typeof v === "number" ? v : yMax;
+    return {
+      x: (xScale(index) / width) * rect.width,
+      y: (yScale(yVal) / height) * rect.height,
+    };
+  };
+
+  // Place the tooltip at the data point (keyboard nav).
   const showTooltipAt = (index: number) => {
     if (data.length === 0) return;
     const clamped = Math.max(0, Math.min(data.length - 1, index));
     setActiveIndex(clamped);
-    const px = xScale(clamped);
-    const py = yScale(yMax);
-    tooltip.show(px, py, rowsForIndex(clamped));
+    const px = pixelForIndex(clamped);
+    if (px) tooltip.show(px.x + 12, px.y + 12, rowsForIndex(clamped));
   };
 
   const handleMouseMove = (e: React.MouseEvent<SVGSVGElement>) => {
     if (!showTooltip || data.length === 0) return;
     const rect = e.currentTarget.getBoundingClientRect();
-    const mx = e.clientX - rect.left;
+    const mxPx = e.clientX - rect.left;
+    const myPx = e.clientY - rect.top;
+    // invert in viewBox space: convert pixel x back to viewBox x first.
+    const mxView = rect.width === 0 ? mxPx : (mxPx / rect.width) * width;
     const invert = scaleLinear([PAD.left, width - PAD.right], [0, Math.max(data.length - 1, 1)]);
-    showTooltipAt(Math.round(invert(mx)));
+    const clamped = Math.max(0, Math.min(data.length - 1, Math.round(invert(mxView))));
+    setActiveIndex(clamped);
+    // tooltip follows the cursor in PIXEL space, with a small offset.
+    tooltip.show(mxPx + 12, myPx + 12, rowsForIndex(clamped));
   };
 
   const handleMouseLeave = () => {
@@ -155,8 +177,10 @@ export const LineChart: React.FC<LineChartProps> = ({
   return (
     <div className={cn("vyre-chart", className)}>
       <svg
+        ref={svgRef}
         width={width}
         height={height}
+        viewBox={`0 0 ${width} ${height}`}
         role="img"
         aria-label={ariaLabel}
         tabIndex={showTooltip ? 0 : undefined}
