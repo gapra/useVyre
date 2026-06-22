@@ -49,7 +49,7 @@ const pathname = Astro.url.pathname;
     });
   </script>
   <div class="docs-root">
-    <TopNav />
+    <TopNav currentPath={pathname} />
 
     <div class:list={["docs-body", { "docs-body--wide": wide }]}>
       <aside class="docs-sidebar">

@@ -135,7 +135,7 @@ pre code { background: none; padding: 0; color: inherit; font-size: inherit; }
   background: var(--vyre-color-semantic-surface-raised);
 }
 
-.topnav__actions { margin-left: auto; display: flex; align-items: center; }
+.topnav__actions { margin-left: auto; display: flex; align-items: center; gap: var(--vyre-spacing-1); }
 
 .topnav__icon-btn {
   display: flex;
@@ -160,6 +160,95 @@ pre code { background: none; padding: 0; color: inherit; font-size: inherit; }
   outline: 2px solid var(--vyre-color-semantic-accent);
   outline-offset: 2px;
 }
+
+/* Hamburger is mobile-only; primary links collapse into the drawer there.
+   Declared after .topnav__icon-btn so its display rule wins (equal specificity). */
+.topnav__menu-btn { display: none; }
+@media (max-width: 768px) {
+  .topnav__menu-btn { display: flex; }
+  .topnav__links    { display: none; }
+}
+
+/* ── MOBILE NAV DRAWER ───────────────────────────────────────── */
+.mobile-nav-overlay {
+  position: fixed;
+  inset: 0;
+  z-index: 200;
+  background: color-mix(in srgb, var(--vyre-color-semantic-text-primary) 45%, transparent);
+  opacity: 0;
+  transition: opacity var(--vyre-transition-duration-normal) var(--vyre-transition-easing-out);
+}
+.mobile-nav-overlay.is-open { opacity: 1; }
+
+.mobile-drawer {
+  position: fixed;
+  top: 0;
+  right: 0;
+  z-index: 201;
+  width: min(82vw, 320px);
+  height: 100dvh;
+  background: var(--vyre-color-semantic-background);
+  border-left: 1px solid var(--vyre-color-semantic-border-subtle);
+  box-shadow: var(--vyre-shadow-lg, -8px 0 32px rgba(0, 0, 0, 0.18));
+  display: flex;
+  flex-direction: column;
+  overflow-y: auto;
+  overscroll-behavior: contain;
+  -webkit-overflow-scrolling: touch;
+  transform: translateX(100%);
+  transition: transform var(--vyre-transition-duration-normal) var(--vyre-transition-easing-out);
+}
+.mobile-drawer.is-open { transform: translateX(0); }
+
+.mobile-drawer__head {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: var(--vyre-spacing-3) var(--vyre-spacing-4);
+  height: 56px;
+  border-bottom: 1px solid var(--vyre-color-semantic-border-subtle);
+  position: sticky;
+  top: 0;
+  background: var(--vyre-color-semantic-background);
+  z-index: 1;
+}
+.mobile-drawer__title {
+  font-size: var(--vyre-typography-font-size-xs);
+  font-weight: var(--vyre-typography-font-weight-semibold);
+  color: var(--vyre-color-semantic-text-muted);
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  font-family: var(--vyre-typography-font-family-mono);
+}
+
+.mobile-drawer__links {
+  display: flex;
+  flex-direction: column;
+  padding: var(--vyre-spacing-3) var(--vyre-spacing-3) var(--vyre-spacing-2);
+  gap: 2px;
+  border-bottom: 1px solid var(--vyre-color-semantic-border-subtle);
+}
+.mobile-drawer__link {
+  display: flex;
+  align-items: center;
+  min-height: 44px;
+  padding: var(--vyre-spacing-2) var(--vyre-spacing-3);
+  font-size: var(--vyre-typography-font-size-md);
+  font-weight: var(--vyre-typography-font-weight-medium);
+  color: var(--vyre-color-semantic-text-primary);
+  border-radius: var(--vyre-border-radius-md);
+  transition: background var(--vyre-transition-duration-fast) var(--vyre-transition-easing-out);
+}
+.mobile-drawer__link:hover,
+.mobile-drawer__link:active {
+  background: var(--vyre-color-semantic-surface-raised);
+}
+
+.mobile-drawer__sidebar {
+  padding: var(--vyre-spacing-5) var(--vyre-spacing-2) var(--vyre-spacing-8);
+}
+/* Roomier tap targets for the docs nav inside the drawer. */
+.mobile-drawer__sidebar .sidebar__link { min-height: 40px; }
 
 /* ── DOCS LAYOUT ─────────────────────────────────────────────── */
 .docs-root {
@@ -564,6 +653,20 @@ pre code { background: none; padding: 0; color: inherit; font-size: inherit; }
 .props-table__required { color: var(--vyre-color-semantic-danger); margin-left: 2px; }
 .props-table__empty    { color: var(--vyre-color-semantic-text-muted); }
 .props-table__desc     { font-size: var(--vyre-typography-font-size-xs); }
+
+/* On mobile, let the table size to its content and scroll horizontally
+   rather than cramming four fixed columns into a phone width. */
+@media (max-width: 768px) {
+  .props-table {
+    table-layout: auto;
+    min-width: 560px;
+  }
+  .props-table-scroll {
+    -webkit-overflow-scrolling: touch;
+    /* Hint that the table scrolls sideways. */
+    border-radius: var(--vyre-border-radius-md);
+  }
+}
 
 /* ── LANDING — HERO ──────────────────────────────────────────── */
 .hero {

@@ -1,4 +1,13 @@
 ---
+import Sidebar from "@/components/layout/Sidebar.astro";
+
+export interface Props {
+  /** When set, the mobile drawer also renders the docs sidebar for this path. */
+  currentPath?: string;
+}
+
+const { currentPath } = Astro.props;
+
 const links = [
   { label: "Docs",       href: "/docs/getting-started" },
   { label: "AI Context",       href: "/docs/ai-context" },
@@ -48,6 +57,22 @@ const links = [
 
     <!-- Right actions -->
     <div class="topnav__actions">
+      <!-- Mobile menu toggle -->
+      <button
+        id="mobile-nav-toggle"
+        class="topnav__icon-btn topnav__menu-btn"
+        aria-label="Open menu"
+        aria-expanded="false"
+        aria-controls="mobile-drawer"
+        type="button"
+      >
+        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+          <line x1="3" y1="6" x2="21" y2="6"/>
+          <line x1="3" y1="12" x2="21" y2="12"/>
+          <line x1="3" y1="18" x2="21" y2="18"/>
+        </svg>
+      </button>
+
       <!-- Theme toggle -->
       <button
         id="theme-toggle"
@@ -96,6 +121,45 @@ const links = [
   </div>
 </header>
 
+<!-- Mobile navigation drawer -->
+<div id="mobile-nav-overlay" class="mobile-nav-overlay" hidden></div>
+<aside
+  id="mobile-drawer"
+  class="mobile-drawer"
+  aria-label="Mobile navigation"
+  aria-hidden="true"
+  hidden
+>
+  <div class="mobile-drawer__head">
+    <span class="mobile-drawer__title">Menu</span>
+    <button id="mobile-nav-close" class="topnav__icon-btn" aria-label="Close menu" type="button">
+      <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+        <line x1="18" y1="6" x2="6" y2="18"/>
+        <line x1="6" y1="6" x2="18" y2="18"/>
+      </svg>
+    </button>
+  </div>
+
+  <nav class="mobile-drawer__links" aria-label="Primary">
+    {links.map((link) => (
+      <a
+        href={link.href}
+        class="mobile-drawer__link"
+        target={link.external ? "_blank" : undefined}
+        rel={link.external ? "noopener noreferrer" : undefined}
+      >
+        {link.label}
+      </a>
+    ))}
+  </nav>
+
+  {currentPath && (
+    <div class="mobile-drawer__sidebar">
+      <Sidebar currentPath={currentPath} />
+    </div>
+  )}
+</aside>
+
 <style>
   /* Show correct icon based on current theme */
   :root:not([data-theme="dark"]) .theme-icon--sun,
@@ -127,6 +191,60 @@ const links = [
       const next = effectiveDark ? "light" : "dark";
       html.setAttribute("data-theme", next);
       try { localStorage.setItem("vyre-theme", next); } catch {}
+    });
+  }
+
+  // ── Mobile navigation drawer ──────────────────────────────────
+  const drawer  = document.getElementById("mobile-drawer");
+  const overlay = document.getElementById("mobile-nav-overlay");
+  const openBtn = document.getElementById("mobile-nav-toggle");
+  const closeBtn = document.getElementById("mobile-nav-close");
+
+  if (drawer && overlay && openBtn) {
+    const openDrawer = () => {
+      drawer.hidden = false;
+      overlay.hidden = false;
+      // Next frame so the transition runs from the hidden state.
+      requestAnimationFrame(() => {
+        drawer.classList.add("is-open");
+        overlay.classList.add("is-open");
+      });
+      drawer.setAttribute("aria-hidden", "false");
+      openBtn.setAttribute("aria-expanded", "true");
+      document.body.style.overflow = "hidden";
+    };
+
+    const closeDrawer = () => {
+      drawer.classList.remove("is-open");
+      overlay.classList.remove("is-open");
+      drawer.setAttribute("aria-hidden", "true");
+      openBtn.setAttribute("aria-expanded", "false");
+      document.body.style.overflow = "";
+      // Hide after the slide-out transition so it can't be tab-focused.
+      const onEnd = () => {
+        drawer.hidden = true;
+        overlay.hidden = true;
+        drawer.removeEventListener("transitionend", onEnd);
+      };
+      drawer.addEventListener("transitionend", onEnd);
+    };
+
+    openBtn.addEventListener("click", openDrawer);
+    closeBtn?.addEventListener("click", closeDrawer);
+    overlay.addEventListener("click", closeDrawer);
+
+    // Close when any link inside the drawer is tapped.
+    drawer.querySelectorAll("a").forEach((a) =>
+      a.addEventListener("click", closeDrawer)
+    );
+
+    document.addEventListener("keydown", (e) => {
+      if (e.key === "Escape" && !drawer.hidden) closeDrawer();
+    });
+
+    // Reset if the viewport grows past the mobile breakpoint while open.
+    window.matchMedia("(min-width: 769px)").addEventListener("change", (e) => {
+      if (e.matches && !drawer.hidden) closeDrawer();
     });
   }
 </script>
