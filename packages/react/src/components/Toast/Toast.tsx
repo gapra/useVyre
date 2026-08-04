@@ -41,6 +41,7 @@ import React, {
   useReducer,
   useCallback,
   useEffect,
+  useState,
 } from "react";
 import ReactDOM from "react-dom";
 import { cn } from "../../utils/cn";
@@ -90,6 +91,13 @@ const genId = () => `vyre-t-${++_counter}`;
 export function ToastProvider({ children }: { children: React.ReactNode }) {
   const [toasts, dispatch] = useReducer(reducer, []);
 
+  // The viewport is portalled into document.body, which does not exist on the
+  // server. Gating on `typeof document` alone makes the FIRST client render
+  // disagree with the server HTML → hydration mismatch (and a null parentNode
+  // crash). Mounting after the first effect keeps both passes identical.
+  const [mounted, setMounted] = useState(false);
+  useEffect(() => setMounted(true), []);
+
   const toast = useCallback((input: ToastInput): string => {
     const id = genId();
     dispatch({ type: "ADD", payload: { ...input, id } });
@@ -103,7 +111,7 @@ export function ToastProvider({ children }: { children: React.ReactNode }) {
   return (
     <ToastContext.Provider value={{ toast, dismiss }}>
       {children}
-      {typeof document !== "undefined" &&
+      {mounted &&
         ReactDOM.createPortal(
           <div
             className="vyre-toast-viewport"

@@ -149,6 +149,17 @@
 .vyre-btn__icon--left  { margin-right: calc(-1 * var(--vyre-spacing-1)); }
 .vyre-btn__icon--right { margin-left: calc(-1 * var(--vyre-spacing-1)); }
 
+/* size="icon" puts the SVG inside __label. flex:1 stretches that wrapper and
+   the SVG's baseline alignment then pushes the glyph off-centre (FABs, close
+   buttons). Shrink-wrap the wrapper and take the icon out of baseline flow. */
+.vyre-btn--icon .vyre-btn__label {
+  flex: none;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+}
+.vyre-btn--icon svg { display: block; }
+
 .vyre-btn--loading .vyre-btn__label { opacity: 0.7; }
 
 /* Spinner animation */
@@ -4193,7 +4204,11 @@
 /* ── NumberInput ────────────────────────────────────────────── */
 /* Stepper buttons + numeric field. Same token palette as Input. */
 .vyre-number-input {
-  display: inline-flex;
+  /* Full-width like Input: an inline-flex root shrink-to-fits the native
+     input's ~170px preferred width plus both steppers, which overflows narrow
+     grid columns and mobile. */
+  display: flex;
+  width: 100%;
   align-items: stretch;
   background: var(--vyre-color-semantic-surface-raised);
   border: 1px solid var(--vyre-color-semantic-border);
@@ -4218,8 +4233,10 @@
 }
 
 .vyre-number-input__field {
+  /* min-width:0 lets the field shrink below the native input's intrinsic
+     width; without it a flex item never goes under its content size. */
   flex: 1;
-  min-width: 3rem;
+  min-width: 0;
   border: none;
   outline: none;
   background: transparent;
