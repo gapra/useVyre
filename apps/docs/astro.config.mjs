@@ -16,24 +16,19 @@ export default defineConfig({
     "/docs/components/sparkline":   "/docs/components/charts#sparkline",
   },
   vite: {
-    // Prevent Vite from pre-bundling workspace packages —
-    // let it resolve them directly from TypeScript source.
-    optimizeDeps: {
-      exclude: ["@usevyre/react", "@usevyre/vue"],
-      // Force the React JSX runtimes to be pre-bundled in dev mode. Without this,
-      // Astro 6 / Vite 7 optimizes them alongside the prebuilt (production)
-      // @usevyre/react dist and bakes NODE_ENV=production into react/jsx-dev-runtime,
-      // leaving jsxDEV undefined → dev demos crash with "jsxDEV is not a function".
-      include: ["react/jsx-dev-runtime", "react/jsx-runtime", "react", "react-dom"],
-    },
-    ssr: {
-      // Allow Vite SSR to process workspace TS source
-      noExternal: ["@usevyre/react", "@usevyre/vue"],
-    },
     resolve: {
-      // Deduplicate React — prevents two React copies when @usevyre/react
-      // source is processed via /@fs/ and resolves its own packages/react/node_modules/react
+      // Deduplicate React — guards against two React copies being loaded when
+      // the workspace @usevyre/react is resolved from a nested node_modules.
       dedupe: ["react", "react-dom"],
     },
   },
 });
+
+// NOTE: this config previously carried optimizeDeps.exclude/include and
+// ssr.noExternal for @usevyre/react|vue. Those were Vite 6/7-era workarounds
+// (forcing resolution from TS source, and pre-bundling the JSX runtimes to
+// avoid a "jsxDEV is not a function" crash in dev). Astro 7 ships Vite 8,
+// which replaces Rollup with Rolldown — and Rolldown does NOT honour
+// optimizeDeps.exclude for workspace packages, so those options actively broke
+// the build ("failed to resolve import @usevyre/react"). Vite 8 resolves the
+// workspace packages correctly on its own. Do not reinstate them.
