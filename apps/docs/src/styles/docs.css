@@ -732,22 +732,38 @@ pre code { background: none; padding: 0; color: inherit; font-size: inherit; }
   margin-bottom: var(--vyre-spacing-5);
 }
 
+/* Single source of truth — this used to be split across two .hero__install
+   rules, and the later `display: inline-block` silently killed the flex `gap`,
+   leaving "…tokensOR" with no space around the separator. */
 .hero__install {
   margin: 0;
+  /* Column, so the "or" always sits BETWEEN the two commands. As a wrapping
+     row it got stranded at the end of the first line ("…tokens  OR"), which
+     reads as if it belongs to that command. */
   display: flex;
-  align-items: center;
-  gap: var(--vyre-spacing-2);
-  flex-wrap: wrap;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: var(--vyre-spacing-1);
+  font-family: var(--vyre-typography-font-family-mono);
+  font-size: var(--vyre-typography-font-size-xs);
+  color: var(--vyre-color-semantic-text-muted);
+  padding: var(--vyre-spacing-3) var(--vyre-spacing-4);
+  background: var(--vyre-color-semantic-surface-raised);
+  border: 1px solid var(--vyre-color-semantic-border-subtle);
+  border-radius: var(--vyre-border-radius-md);
 }
+/* The install line is one bordered panel, so the individual code chips carry
+   no chrome of their own — this resets the global `code` rule (teal pill). */
 .hero__install code {
   display: inline-block;
   font-family: var(--vyre-typography-font-family-mono);
   font-size: var(--vyre-typography-font-size-xs);
   color: var(--vyre-color-semantic-text-secondary);
-  background: var(--vyre-color-semantic-surface-raised);
-  border: 1px solid var(--vyre-color-semantic-border-subtle);
-  border-radius: var(--vyre-border-radius-md);
-  padding: var(--vyre-spacing-2) var(--vyre-spacing-3);
+  white-space: nowrap;
+  background: none;
+  border: none;
+  border-radius: 0;
+  padding: 0;
 }
 .hero__install-sep {
   font-family: var(--vyre-typography-font-family-mono);
@@ -757,18 +773,6 @@ pre code { background: none; padding: 0; color: inherit; font-size: inherit; }
   letter-spacing: 0.06em;
 }
 
-.hero__install {
-  font-family: var(--vyre-typography-font-family-mono);
-  font-size: var(--vyre-typography-font-size-xs);
-  color: var(--vyre-color-semantic-text-muted);
-  margin: 0;
-  padding: var(--vyre-spacing-3) var(--vyre-spacing-4);
-  background: var(--vyre-color-semantic-surface-raised);
-  border: 1px solid var(--vyre-color-semantic-border-subtle);
-  border-radius: var(--vyre-border-radius-md);
-  display: inline-block;
-}
-.hero__install code { background: none; padding: 0; color: var(--vyre-color-semantic-text-secondary); }
 
 .hero__visual {
   display: flex;
